@@ -3,9 +3,9 @@ package model.world;
 import javax.imageio.ImageIO;
 
 import engine.Block;
+import entity.Entity;
+import entity.Player;
 import graphics.Texture;
-import model.entity.Entity;
-import model.entity.Player;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -65,7 +65,7 @@ public class World {
         Entity[] entities = new Entity[3];
 
         // player
-        entities[0] = new Player(player, 10.5, 10.5, 2);// chacune
+        entities[0] = new Player(player, 12.5, 12.5, 2);// chacune
 
         return new World(blocks, entities);
 

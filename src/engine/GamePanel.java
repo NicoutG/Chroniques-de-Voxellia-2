@@ -2,8 +2,8 @@ package engine;
 
 import javax.swing.*;
 
+import entity.Player;
 import graphics.Renderer;
-import model.entity.Player;
 import model.world.World;
 
 import java.awt.*;

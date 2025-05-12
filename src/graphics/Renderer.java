@@ -7,8 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import engine.Block;
-
-import model.entity.Entity;
+import entity.Entity;
 import model.world.World;
 
 public class Renderer {

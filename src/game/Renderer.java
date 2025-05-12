@@ -2,7 +2,6 @@ package game;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -17,14 +16,15 @@ public class Renderer {
         this.world = world;
     }
 
-    public void render(Graphics2D g2, int screenWidth, int screenHeight) {
+    public void render(Graphics2D g2, int w, int h, long tick) {
         Block[][][] blocks = world.getBlocks();
         Entity[] entities = world.getEntities();
-        if (blocks == null) return;
+        if (blocks == null)
+            return;
 
         // ---- Trouver le joueur pour centrer ----
-        double originX = screenWidth / 2.0;
-        double originY = screenHeight / 2.0;
+        double originX = w / 2.0;
+        double originY = h / 2.0;
 
         Entity player = world.getPlayer();
         if (player != null) {
@@ -32,11 +32,11 @@ public class Renderer {
             originX -= p.getX();
             originY -= p.getY();
         } else {
-            originY = screenHeight / 4.0;
+            originY = h / 4.0;
         }
 
         g2.setColor(Color.BLACK);
-        g2.fillRect(0, 0, screenWidth, screenHeight);
+        g2.fillRect(0, 0, w, h);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 
@@ -48,8 +48,10 @@ public class Renderer {
             for (int y = 0; y < blocks[0].length; y++) {
                 for (int x = 0; x < blocks.length; x++) {
                     Block b = blocks[x][y][z];
-                    if (b == null || b.texture == null) continue;
-                    drawables.add(new Drawable(b.texture, x, y, z));
+                    if (b == null)
+                        continue;
+                    drawables.add(new Drawable(
+                            b.getTexture().full(tick), x, y, z));
                 }
             }
         }
@@ -57,8 +59,10 @@ public class Renderer {
         // Entités
         if (entities != null) {
             for (Entity e : entities) {
-                if (e == null || e.getTexture() == null) continue;
-                drawables.add(new Drawable(e.getTexture(), e.getX(), e.getY(), e.getZ()));
+                if (e == null || e.getTexture() == null)
+                    continue;
+                drawables.add(new Drawable(
+                        e.getTexture().full(tick), e.getX(), e.getY(), e.getZ()));
             }
         }
 
@@ -85,19 +89,4 @@ public class Renderer {
         return new Point2D.Double(isoX, isoY);
     }
 
-    private static class Drawable {
-        final BufferedImage texture;
-        final double x, y, z;
-
-        Drawable(BufferedImage texture, double x, double y, double z) {
-            this.texture = texture;
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        double getSortKey() {
-            return x + y + z * 2; // pondère légèrement la hauteur
-        }
-    }
 }

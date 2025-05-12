@@ -1,25 +1,35 @@
 package game;
 
-import java.awt.image.BufferedImage;
-
 public class Entity {
-    protected final BufferedImage texture;
+    protected final Texture tex;
     protected double x, y, z;
 
-    public Entity(BufferedImage texture, double x, double y, double z) {
-        this.texture = texture;
+    public Entity(Texture tex, double x, double y, double z) {
+        this.tex = tex;
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public BufferedImage getTexture() { return texture; }
+    public Texture getTexture() {
+        return tex;
+    }
 
-    public double getX() { return x; }
-    public double getY() { return y; }
-    public double getZ() { return z; }
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getZ() {
+        return z;
+    }
 
     public void setPosition(double x, double y, double z) {
-        this.x = x; this.y = y; this.z = z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 }

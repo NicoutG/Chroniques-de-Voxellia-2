@@ -1,10 +1,8 @@
 package game;
 
-import java.awt.image.BufferedImage;
-
 public class Player extends Entity {
 
-    public Player(BufferedImage texture, double x, double y, double z) {
+    public Player(Texture texture, double x, double y, double z) {
         super(texture, x, y, z);
     }
 

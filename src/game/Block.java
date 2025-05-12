@@ -1,15 +1,7 @@
 package game;
 
-import java.awt.image.BufferedImage;
-
 public class Block {
-    public final BufferedImage texture;
-
-    public Block(BufferedImage texture) {
-        this.texture = texture;
-    }
-
-    public BufferedImage getTexture() {
-        return texture;
-    }
+    private final Texture tex;
+    public Block(Texture tex) { this.tex = tex; }
+    public Texture getTexture() { return tex; }
 }

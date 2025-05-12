@@ -32,18 +32,19 @@ public class World {
 
     public static World createDemoWorld() {
         int sx = 20, sy = 20, sz = 2;
-        Block[][][] blocks = new Block[sx][sy][sz + 1];
+        Block[][][] blocks = new Block[sx][sy][sz + 2];
 
-        BufferedImage blue, red, playerImg;
         try {
-            playerImg = ImageIO.read(World.class.getResource("/resource/texture/purple-block.png"));
-            blue = ImageIO.read(World.class.getResource("/resource/texture/blue-block.png"));
-            red = ImageIO.read(World.class.getResource("/resource/texture/red-block.png"));
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load block textures", e);
-        }
+            BufferedImage blueImg = ImageIO.read(World.class.getResource("/resource/texture/blue-block.png"));
+            BufferedImage redImg = ImageIO.read(World.class.getResource("/resource/texture/red-block.png"));
+            BufferedImage player0 = ImageIO.read(World.class.getResource("/resource/texture/purple-block.png"));
+            BufferedImage player1 = ImageIO.read(World.class.getResource("/resource/texture/blue-block.png"));
 
-        for (int z = 0; z < sz; z++) {
+            Texture blue = new Texture(blueImg); // bloc statique
+            Texture red = new Texture(redImg);
+            Texture player = new Texture(new BufferedImage[] { player0, player1 }, 6); // animé : 2 frames, 6 ticks
+                   
+             for (int z = 0; z < sz; z++) {
             for (int y = 0; y < sy; y++) {
                 for (int x = 0; x < sx; x++) {
                     blocks[x][y][z] = new Block((z % 2 == 0) ? blue : red);
@@ -58,8 +59,13 @@ public class World {
         Entity[] entities = new Entity[3];
 
         // player
-        entities[0] = new Player(playerImg, 10.5, 10.5, 2);
+        entities[0] = new Player(player, 10.5, 10.5, 2);// chacune
 
         return new World(blocks, entities);
+
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load block textures", e);
+        }
     }
 }

@@ -10,6 +10,7 @@ public class Block {
     private BlockType blockType;
     private ArrayList<BlockBehavior> blockBehaviors = new ArrayList<>();
     private HashMap<String, Object> states = new HashMap<>();
+    private HashMap<String, Object> stateModifications = null;
 
     public Block(BlockType blockType) {
         this.blockType = blockType;
@@ -43,5 +44,25 @@ public class Block {
 
     public boolean existingState(String stateName) {
         return states.containsKey(stateName);
+    }
+
+    public boolean setStateModification(String stateName, Object value) {
+        if (stateModifications == null)
+            stateModifications = new HashMap<>();
+        if(stateModifications.containsKey(stateName)) {
+            stateModifications.replace(stateName, value);
+            return true;
+        }
+        stateModifications.put(stateName, value);
+        return false;
+    }
+
+    public boolean updateStates() {
+        if (stateModifications.isEmpty())
+            return false;
+        for (var entrySet : stateModifications.entrySet())
+            setState(entrySet.getKey(), entrySet.getValue());
+        stateModifications = null;
+        return true;
     }
 }

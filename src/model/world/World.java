@@ -41,10 +41,10 @@ public class World {
         Block[][][] blocks = new Block[sx][sy][sz + 2];
 
         try {
-            BufferedImage blueImg = ImageIO.read(World.class.getResource("/resource/texture/blue-block.png"));
-            BufferedImage redImg = ImageIO.read(World.class.getResource("/resource/texture/red-block.png"));
-            BufferedImage player0 = ImageIO.read(World.class.getResource("/resource/texture/purple-block.png"));
-            BufferedImage player1 = ImageIO.read(World.class.getResource("/resource/texture/blue-block.png"));
+            BufferedImage blueImg = ImageIO.read(World.class.getResource("/resources/textures/blue-block.png"));
+            BufferedImage redImg = ImageIO.read(World.class.getResource("/resources/textures/red-block.png"));
+            BufferedImage player0 = ImageIO.read(World.class.getResource("/resources/textures/purple-block.png"));
+            BufferedImage player1 = ImageIO.read(World.class.getResource("/resources/textures/blue-block.png"));
 
             Texture blue = new Texture(blueImg); // bloc statique
             Texture red = new Texture(redImg);

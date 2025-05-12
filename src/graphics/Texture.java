@@ -16,9 +16,9 @@ import java.util.Objects;
 public final class Texture {
 
     /* ----------- masques statiques partagés (une seule fois) ------------- */
-    private static final BufferedImage LEFT_MASK  = loadMask("/resource/mask/mask-left.png");
-    private static final BufferedImage TOP_MASK   = loadMask("/resource/mask/mask-top.png");
-    private static final BufferedImage RIGHT_MASK = loadMask("/resource/mask/mask-right.png");
+    private static final BufferedImage LEFT_MASK  = loadMask("/resources/masks/mask-left.png");
+    private static final BufferedImage TOP_MASK   = loadMask("/resources/masks/mask-top.png");
+    private static final BufferedImage RIGHT_MASK = loadMask("/resources/masks/mask-right.png");
 
     /* ----------- frames & faces pré-calculées ---------------------------- */
     private final BufferedImage[] full;          // frame complète

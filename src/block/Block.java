@@ -2,9 +2,12 @@ package block;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 import block.blockBehavior.BlockBehavior;
 import block.blockProperty.BlockProperty;
+import entity.Entity;
+import game.Game;
 
 public class Block {
     private BlockType blockType;
@@ -65,4 +68,42 @@ public class Block {
         stateModifications = null;
         return true;
     }
+
+    //#region behavior events
+
+    private void executeEvent(Consumer<BlockBehavior> fonction) {
+        for (BlockBehavior blockBehavior : blockBehaviors)
+            fonction.accept(blockBehavior);
+        updateStates();
+    }
+
+    public void onUpdate(Game game) {
+        executeEvent(b -> b.onUpdate(game,this));
+    }
+
+    public void onInteraction(Game game,Entity entity) {
+        executeEvent(b -> b.onInteraction(game,this,entity));
+    }
+
+    public void onPush(Game game, Entity entity) {
+        executeEvent(b -> b.onEntityIn(game,this,entity));
+    }
+
+    public void onActivated(Game game, int network) {
+        executeEvent(b -> b.onActivated(game,this,network));
+    }
+
+    public void onDesactivated(Game game, int network) {
+        executeEvent(b -> b.onDesactivated(game,this,network));
+    }
+
+    public void onEntityIn(Game game, Entity entity) {
+        executeEvent(b -> b.onEntityIn(game,this,entity));
+    }
+
+    public void onEntityCollision(Game game, Entity entity) {
+        executeEvent(b -> b.onEntityCollision(game,this,entity));
+    }
+
+    //#endregion
 }

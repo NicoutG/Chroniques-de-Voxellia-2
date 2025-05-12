@@ -2,6 +2,8 @@ package collision;
 
 import java.util.ArrayList;
 
+import tools.*;;
+
 public class ComplexCollision extends Collision {
     private ArrayList<BoundingCollision> collisions = new ArrayList<>();
 
@@ -9,20 +11,24 @@ public class ComplexCollision extends Collision {
         return collisions;
     }
 
+    public void addCollision(BoundingCollision collision) {
+        collisions.add(collision);
+    }
+
     @Override
-    public boolean collision(double x1, double y1, double z1, Collision collision, double x2, double y2, double z2) {
+    public boolean collision(Vector position1, Collision collision, Vector position2) {
         for (BoundingCollision collision1 : collisions) {
-            if (collision1.collision(x1, y1, z1, collision, x2, y2, z2))
+            if (collision1.collision(position1, collision, position2))
                 return true;
         }
         return false;
     }
 
     @Override
-    public boolean collision(double x1, double y1, double z1, ComplexCollision collision, double x2, double y2, double z2) {
+    public boolean collision(Vector position1, ComplexCollision collision, Vector position2) {
         for (BoundingCollision collision1 : collisions) {
             for (BoundingCollision collision2 : collision.getCollisions())
-                if (collision1.collision(x1, y1, z1, collision2, x2, y2, z2))
+                if (collision1.collision(position1, collision2, position2))
                     return true;
         }
         return false;

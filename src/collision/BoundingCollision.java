@@ -1,5 +1,7 @@
 package collision;
 
+import tools.*;;
+
 public class BoundingCollision extends Collision {
     public double xMin;
     public double xMax;
@@ -9,7 +11,7 @@ public class BoundingCollision extends Collision {
     public double zMax;
 
     @Override
-    public double[] getBounds(double x, double y, double z) {
-        return new double[] {x + xMin, x+xMax, y+yMin, y+yMax, z+zMin, z+zMax};
+    public double[] getBounds(Vector position) {
+        return new double[] {position.x + xMin, position.x+xMax, position.y+yMin, position.y+yMax, position.z+zMin, position.z+zMax};
     }
 }

@@ -8,6 +8,7 @@ import block.blockBehavior.BlockBehavior;
 import block.blockProperty.BlockProperty;
 import entity.Entity;
 import game.Game;
+import tools.*;;
 
 public class Block {
     private BlockType blockType;
@@ -81,28 +82,28 @@ public class Block {
         executeEvent(b -> b.onUpdate(game,this));
     }
 
-    public void onInteraction(Game game,Entity entity) {
-        executeEvent(b -> b.onInteraction(game,this,entity));
+    public void onInteraction(Game game, Vector position, Entity entity) {
+        executeEvent(b -> b.onInteraction(game,this,position,entity));
     }
 
-    public void onPush(Game game, Entity entity) {
-        executeEvent(b -> b.onEntityIn(game,this,entity));
+    public void onPush(Game game, Vector position, int depX, int depY, int depZ) {
+        executeEvent(b -> b.onPush(game,this,position,depX,depY,depZ));
     }
 
-    public void onActivated(Game game, int network) {
-        executeEvent(b -> b.onActivated(game,this,network));
+    public void onActivated(Game game, Vector position, int network) {
+        executeEvent(b -> b.onActivated(game,this,position,network));
     }
 
-    public void onDesactivated(Game game, int network) {
-        executeEvent(b -> b.onDesactivated(game,this,network));
+    public void onDesactivated(Game game, Vector position, int network) {
+        executeEvent(b -> b.onDesactivated(game,this,position,network));
     }
 
-    public void onEntityIn(Game game, Entity entity) {
-        executeEvent(b -> b.onEntityIn(game,this,entity));
+    public void onEntityIn(Game game, Vector position, Entity entity) {
+        executeEvent(b -> b.onEntityIn(game,this,position,entity));
     }
 
-    public void onEntityCollision(Game game, Entity entity) {
-        executeEvent(b -> b.onEntityCollision(game,this,entity));
+    public void onEntityCollision(Game game, Vector position, Entity entity) {
+        executeEvent(b -> b.onEntityCollision(game,this,position,entity));
     }
 
     //#endregion

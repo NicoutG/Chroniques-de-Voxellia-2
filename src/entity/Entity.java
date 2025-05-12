@@ -1,16 +1,16 @@
 package entity;
 
 import graphics.Texture;
+import tools.*;;
 
 public class Entity {
     protected final Texture tex;
-    protected double x, y, z;
+    protected Vector position;
 
     public Entity(Texture tex, double x, double y, double z) {
         this.tex = tex;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        position = new Vector();
+        setPosition(x,y,z);
     }
 
     public Texture getTexture() {
@@ -18,20 +18,20 @@ public class Entity {
     }
 
     public double getX() {
-        return x;
+        return position.x;
     }
 
     public double getY() {
-        return y;
+        return position.y;
     }
 
     public double getZ() {
-        return z;
+        return position.z;
     }
 
     public void setPosition(double x, double y, double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.position.x = x;
+        this.position.y = y;
+        this.position.z = z;
     }
 }

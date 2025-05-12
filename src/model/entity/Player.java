@@ -1,4 +1,6 @@
-package game;
+package model.entity;
+
+import graphics.Texture;
 
 public class Player extends Entity {
 

@@ -1,7 +1,7 @@
-package block.blockBehavior;
+package model.block.blockBehavior;
 
-import block.Block;
-import entity.Entity;
+import model.block.Block;
+import model.entity.Entity;
 
 public abstract class BlockBehavior {
 

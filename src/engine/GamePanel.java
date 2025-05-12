@@ -1,6 +1,11 @@
-package game;
+package engine;
 
 import javax.swing.*;
+
+import graphics.Renderer;
+import model.entity.Player;
+import model.world.World;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

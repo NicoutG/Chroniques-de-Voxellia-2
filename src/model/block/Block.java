@@ -1,10 +1,10 @@
-package block;
+package model.block;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import block.blockBehavior.BlockBehavior;
-import block.blockProperty.BlockProperty;
+import model.block.blockBehavior.BlockBehavior;
+import model.block.blockProperty.BlockProperty;
 
 public class Block {
     private BlockType blockType;

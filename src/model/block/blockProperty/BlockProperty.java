@@ -1,4 +1,4 @@
-package block.blockProperty;
+package model.block.blockProperty;
 
 public class BlockProperty {
     public final String name;

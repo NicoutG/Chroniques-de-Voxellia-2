@@ -1,6 +1,12 @@
-package game;
+package model.world;
 
 import javax.imageio.ImageIO;
+
+import engine.Block;
+import graphics.Texture;
+import model.entity.Entity;
+import model.entity.Player;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 

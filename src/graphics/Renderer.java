@@ -1,10 +1,15 @@
-package game;
+package graphics;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import engine.Block;
+
+import model.entity.Entity;
+import model.world.World;
 
 public class Renderer {
 

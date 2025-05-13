@@ -5,19 +5,11 @@ import game.Game;
 import tools.*;
 
 
-public abstract class BlockBehaviorActivable extends BlockBehavior {
-    protected final static String ACTIVATION_STATE = "activated";
-    protected final static String NETWORK = "network";
+public abstract class BlockBehaviorActivable extends BlockBehaviorConnected {
 
     public abstract void activate(Game game, Block block, Vector position, int network);
 
     public abstract void desactivate(Game game, Block block, Vector position, int network);
-
-    @Override
-    public void onAttachToBlock(Block block) {
-        block.setState(ACTIVATION_STATE, false);
-        block.setState(NETWORK, 0);
-    }
 
     @Override
     public void onActivated(Game game, Block block, Vector position, int network) {
@@ -35,17 +27,5 @@ public abstract class BlockBehaviorActivable extends BlockBehavior {
         }
     }
 
-    public boolean getActivationState(Block block) {
-        Object state = block.getState(ACTIVATION_STATE);
-        if (state != null && state instanceof Boolean)
-            return (boolean)state;
-        return false;
-    }
-
-    public int getNetwork(Block block) {
-        Object state = block.getState(NETWORK);
-        if (state != null && state instanceof Integer)
-            return (int)state;
-        return -1;
-    }
+    
 }

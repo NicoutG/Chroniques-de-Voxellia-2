@@ -1,7 +1,7 @@
 /*  graphics/Renderer.java  */
 package graphics;
 
-import engine.Block;
+import block.Block;
 import entity.Entity;
 import graphics.shape.Face;
 import model.world.World;
@@ -36,7 +36,7 @@ public final class Renderer {
 
     public void render(Graphics2D g2, int w, int h, long tick) {
         Block[][][] blocks = world.getBlocks();
-        Entity[] entities = world.getEntities();
+        ArrayList<Entity> entities = world.getEntities();
         if (blocks == null)
             return;
 

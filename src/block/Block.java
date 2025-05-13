@@ -7,7 +7,8 @@ import java.util.function.Consumer;
 import block.blockBehavior.BlockBehavior;
 import block.blockProperty.BlockProperty;
 import entity.Entity;
-import game.Game;
+import graphics.Texture;
+import model.world.World;
 import tools.*;;
 
 public class Block {
@@ -70,6 +71,10 @@ public class Block {
         return true;
     }
 
+    public Texture getTexture() { 
+        return blockType.getTexture();
+    }
+
     //#region behavior events
 
     private void executeEvent(Consumer<BlockBehavior> fonction) {
@@ -78,32 +83,32 @@ public class Block {
         updateStates();
     }
 
-    public void onUpdate(Game game) {
-        executeEvent(b -> b.onUpdate(game,this));
+    public void onUpdate(World world) {
+        executeEvent(b -> b.onUpdate(world,this));
     }
 
-    public void onInteraction(Game game, Vector position, Entity entity) {
-        executeEvent(b -> b.onInteraction(game,this,position,entity));
+    public void onInteraction(World world, Vector position, Entity entity) {
+        executeEvent(b -> b.onInteraction(world,this,position,entity));
     }
 
-    public void onPush(Game game, Vector position, int depX, int depY, int depZ) {
-        executeEvent(b -> b.onPush(game,this,position,depX,depY,depZ));
+    public void onPush(World world, Vector position, int depX, int depY, int depZ) {
+        executeEvent(b -> b.onPush(world,this,position,depX,depY,depZ));
     }
 
-    public void onActivated(Game game, Vector position, int network) {
-        executeEvent(b -> b.onActivated(game,this,position,network));
+    public void onActivated(World world, Vector position, int network) {
+        executeEvent(b -> b.onActivated(world,this,position,network));
     }
 
-    public void onDesactivated(Game game, Vector position, int network) {
-        executeEvent(b -> b.onDesactivated(game,this,position,network));
+    public void onDesactivated(World world, Vector position, int network) {
+        executeEvent(b -> b.onDesactivated(world,this,position,network));
     }
 
-    public void onEntityIn(Game game, Vector position, Entity entity) {
-        executeEvent(b -> b.onEntityIn(game,this,position,entity));
+    public void onEntityIn(World world, Vector position, Entity entity) {
+        executeEvent(b -> b.onEntityIn(world,this,position,entity));
     }
 
-    public void onEntityCollision(Game game, Vector position, Entity entity) {
-        executeEvent(b -> b.onEntityCollision(game,this,position,entity));
+    public void onEntityCollision(World world, Vector position, Entity entity) {
+        executeEvent(b -> b.onEntityCollision(world,this,position,entity));
     }
 
     //#endregion

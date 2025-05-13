@@ -5,9 +5,11 @@ import java.util.HashMap;
 
 import block.blockBehavior.*;
 import block.blockProperty.*;
+import graphics.Texture;
 
 public class BlockType {
     private String name;
+    private Texture tex;
     private HashMap<String, BlockProperty> blockProperties = new HashMap<>();
     private ArrayList<BlockBehavior> blockBehaviors = new ArrayList<>();
 
@@ -17,6 +19,14 @@ public class BlockType {
 
     public String getName() {
         return name;
+    }
+
+    public Texture getTexture() { 
+        return tex;
+    }
+
+    public void setTexture(Texture tex) { 
+        this.tex = tex;
     }
 
     public boolean addBlockProperty(BlockProperty blockProperty) {

@@ -69,9 +69,6 @@ public final class Renderer {
         final int maxY = blocks[0].length - 1;
         final int maxZ = blocks[0][0].length - 1;
 
-        int c = 0;
-        int total = 0;
-
         for (int z = 0; z <= maxZ; z++) {
             for (int y = 0; y <= maxY; y++) {
                 for (int x = 0; x <= maxX; x++) {
@@ -80,10 +77,8 @@ public final class Renderer {
                     if (b == null)
                         continue;
 
-                    total++;
                     if (!isExposed(blocks, x, y, z, maxX, maxY, maxZ))
                         continue;
-                    c++;
 
                     /* --- screen-space cull before allocating Drawable --- */
                     IsoMath.toScreen(x, y, z, scratchPoint);
@@ -99,8 +94,6 @@ public final class Renderer {
                 }
             }
         }
-
-        System.out.println("Blocks renderer : " + c + " - Total : " + total);
 
         /*
          * =================================================================

@@ -3,6 +3,7 @@ package graphics.ligth;
 import java.util.ArrayDeque;
 
 import block.Block;
+import block.blockProperty.BlockPropertyLight;
 import graphics.shape.Face;
 
 public final class LightingEngine {
@@ -11,7 +12,7 @@ public final class LightingEngine {
 
         int X = blocks.length, Y = blocks[0].length, Z = blocks[0][0].length;
         FaceLighting[][][] out = new FaceLighting[X][Y][Z];
-        float[][][] best = new float[X][Y][Z];           // intensité max déjà visitée
+        double[][][] best = new double[X][Y][Z];           // intensité max déjà visitée
 
         // init tableau résultat
         for (int x=0;x<X;++x)
@@ -28,8 +29,10 @@ public final class LightingEngine {
             for (int y=0;y<Y;++y)
                 for (int z=0;z<Z;++z) {
                     Block b = blocks[x][y][z];
-                    if (b == null || b.light()==null) continue;
-                    LightSource l = b.light();
+                    BlockPropertyLight lightProp = (BlockPropertyLight) b.getBlockProperty("light");
+                    if (b == null || lightProp == null) continue;
+                    LightSource l = lightProp.getLight();
+
                     out[x][y][z].inject(l.color().mul(l.intensity())); // éclaire soi-même
                     best[x][y][z] = l.intensity();
                     q.add(new Node(x,y,z,l.color().mul(l.intensity())));
@@ -43,7 +46,9 @@ public final class LightingEngine {
         while (!q.isEmpty()) {
             Node n = q.removeFirst();
             Block from = blocks[n.x][n.y][n.z];
-            float falloff = (from.light()!=null)?from.light().falloff():0.8f;
+            BlockPropertyLight fromLightProp = (BlockPropertyLight) from.getBlockProperty("light");
+
+            double falloff = (fromLightProp!=null) ? fromLightProp.getLight().falloff():0.9f;
 
             for (int[] d: DIRS) {
                 int nx=n.x+d[0], ny=n.y+d[1], nz=n.z+d[2];
@@ -61,10 +66,10 @@ public final class LightingEngine {
                 out[nx][ny][nz].accumulate(face, nextCol);
 
                 /* Stop si le bloc est opaque */
-                if (to.isOpaque()) continue;
+                if (to.getOpacity() == 1) continue;
 
                 /* Propager plus loin ? */
-                float nextI = Math.max(nextCol.r(),Math.max(nextCol.g(),nextCol.b()));
+                double nextI = Math.max(nextCol.r(),Math.max(nextCol.g(),nextCol.b()));
                 if (nextI > best[nx][ny][nz]) {
                     best[nx][ny][nz] = nextI;
                     q.add(new Node(nx,ny,nz,nextCol));

@@ -74,6 +74,10 @@ public class Block {
     public Texture getTexture() { 
         return blockType.getTexture();
     }
+    
+    public double getOpacity() { 
+        return blockType.getOpacity();
+    }
 
     //#region behavior events
 

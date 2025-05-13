@@ -1,10 +1,10 @@
 package graphics.ligth;
 
-public record ColorRGB(float r, float g, float b) {
+public record ColorRGB(double r, double g, double b) {
 
     public static final ColorRGB BLACK = new ColorRGB(0,0,0);
 
-    public ColorRGB mul(float s) {               // brightness scaling
+    public ColorRGB mul(double s) {               // brightness scaling
         return new ColorRGB(r*s, g*s, b*s);
     }
 

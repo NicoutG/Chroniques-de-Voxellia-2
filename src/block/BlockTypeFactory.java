@@ -5,7 +5,9 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import block.blockProperty.*;
 import graphics.Texture;
+import graphics.ligth.*;
 import graphics.shape.Cube;
 import model.world.World;
 import graphics.shape.*;
@@ -55,6 +57,9 @@ public class BlockTypeFactory {
         Shape shape = new Cube();
         Texture text = new Texture(shape, img);
         blockType.setTexture(text);
+        LightSource light = new LightSource(new ColorRGB(1,1,1), 1, 0.95);
+        BlockProperty propLight = new BlockPropertyLight(light);
+        blockType.addBlockProperty(propLight);
         return blockType;
     }
 }

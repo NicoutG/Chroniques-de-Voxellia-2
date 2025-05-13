@@ -7,4 +7,12 @@ public enum Face {
 
     public final int index;
     Face(int idx) { this.index = idx; }
+
+    public static Face fromDir(int dx,int dy,int dz){
+        if (dx== 1) return LEFT;
+        if (dx==-1) return RIGHT;
+        if (dy== 1) return TOP;
+        // faces non visibles dans iso -> optionnel
+        return LEFT;
+    }
 }

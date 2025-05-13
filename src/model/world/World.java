@@ -64,10 +64,12 @@ public class World {
             blocks[10][12][2] = blockTypes.get(0).createBlock();
             blocks[10][13][2] = blockTypes.get(0).createBlock();
 
+            blocks[14][12][2] = blockTypes.get(2).createBlock();
+
             ArrayList<Entity> entities = new ArrayList<>();
 
             // player
-            entities.add(new Player(player, 12.5, 12.5, 2));// chacune
+            entities.add(new Player(player, 14, 8, 2));// chacune
 
             return new World(blocks, entities);
 

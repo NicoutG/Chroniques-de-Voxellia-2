@@ -2,9 +2,9 @@ package graphics.ligth;
 
 public final class LightSource {
     private final ColorRGB color;
-    private final float intensity, falloff;
+    private final double intensity, falloff;
 
-    public LightSource(ColorRGB color, float intensity, float falloff) {
+    public LightSource(ColorRGB color, double intensity, double falloff) {
         this.color = color;
         this.intensity = intensity;
         this.falloff = falloff;
@@ -14,11 +14,11 @@ public final class LightSource {
         return color;
     }
 
-    public float intensity() {
+    public double intensity() {
         return intensity;
     }
 
-    public float falloff() {
+    public double falloff() {
         return falloff;
     }
 }

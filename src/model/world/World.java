@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class World {
-
+    private static ArrayList<BlockType> blockTypes = WorldLoader.loadBlockTypes();
     private Block[][][] blocks;
     private ArrayList<Entity> entities;
 
@@ -46,32 +46,23 @@ public class World {
         Block[][][] blocks = new Block[sx][sy][sz + 2];
 
         try {
-            BufferedImage blueImg = ImageIO.read(World.class.getResource("/resources/textures/blue-block.png"));
-            BufferedImage redImg = ImageIO.read(World.class.getResource("/resources/textures/red-block.png"));
             BufferedImage player0 = ImageIO.read(World.class.getResource("/resources/textures/purple-block.png"));
             BufferedImage player1 = ImageIO.read(World.class.getResource("/resources/textures/blue-block.png"));
 
             Shape cube = new Cube();
-            Texture blue = new Texture(cube, blueImg); // bloc statique
-            Texture red = new Texture(cube, redImg);
             Texture player = new Texture(cube, new BufferedImage[] { player0, player1 }, 6); // animé : 2 frames, 6 ticks
-               
-            BlockType blockTypeBlue = new BlockType("blue");
-            blockTypeBlue.setTexture(blue);
-            BlockType blockTypeRed = new BlockType("red");
-            blockTypeRed.setTexture(red);
+
             for (int z = 0; z < sz; z++) {
                 for (int y = 0; y < sy; y++) {
                     for (int x = 0; x < sx; x++) {
-                        
-                        blocks[x][y][z] = z%2 == 0 ? blockTypeBlue.createBlock() : blockTypeRed.createBlock();
+                        blocks[x][y][z] = blockTypes.get(z%2).createBlock();
                     }
                 }
             }
 
-            blocks[10][11][2] = blockTypeBlue.createBlock();
-            blocks[10][12][2] = blockTypeBlue.createBlock();
-            blocks[10][13][2] = blockTypeBlue.createBlock();
+            blocks[10][11][2] = blockTypes.get(0).createBlock();
+            blocks[10][12][2] = blockTypes.get(0).createBlock();
+            blocks[10][13][2] = blockTypes.get(0).createBlock();
 
             ArrayList<Entity> entities = new ArrayList<>();
 

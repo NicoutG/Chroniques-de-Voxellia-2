@@ -42,7 +42,7 @@ public class World {
     }
 
     public static World createDemoWorld() {
-        int sx = 20, sy = 20, sz = 10;
+        int sx = 20, sy = 20, sz = 2;
         Block[][][] blocks = new Block[sx][sy][sz + 2];
 
         try {

@@ -10,6 +10,7 @@ import graphics.Texture;
 public class BlockType {
     private String name;
     private Texture tex;
+    private double opacity;
     private HashMap<String, BlockProperty> blockProperties = new HashMap<>();
     private ArrayList<BlockBehavior> blockBehaviors = new ArrayList<>();
 
@@ -27,6 +28,14 @@ public class BlockType {
 
     public void setTexture(Texture tex) { 
         this.tex = tex;
+    }
+
+    public double getOpacity() { 
+        return opacity;
+    }
+
+    public void setOpacity(double opacity) { 
+        this.opacity = opacity;
     }
 
     public boolean addBlockProperty(BlockProperty blockProperty) {

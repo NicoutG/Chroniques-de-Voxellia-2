@@ -39,7 +39,7 @@ public class World {
     }
 
     public static World createDemoWorld() {
-        int sx = 20, sy = 20, sz = 2;
+        int sx = 20, sy = 20, sz = 10;
         Block[][][] blocks = new Block[sx][sy][sz + 2];
 
         try {
@@ -68,7 +68,7 @@ public class World {
         Entity[] entities = new Entity[3];
 
         // player
-        entities[0] = new Player(player, 12.5, 12.5, 2);// chacune
+        entities[0] = new Player(player, 12.5, 12.5, 11);// chacune
 
         return new World(blocks, entities);
 

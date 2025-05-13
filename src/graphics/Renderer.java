@@ -3,6 +3,7 @@ package graphics;
 
 import engine.Block;
 import entity.Entity;
+import graphics.shape.Face;
 import model.world.World;
 
 import java.awt.*;
@@ -62,7 +63,7 @@ public final class Renderer {
 
         /*
          * =================================================================
-         * 1) BLOCKS – add only when “exposed” AND visible on screen
+         * 1) BLOCKS – add only when visible
          * ==================================================================
          */
         final int maxX = blocks.length - 1;
@@ -77,8 +78,12 @@ public final class Renderer {
                     if (b == null)
                         continue;
 
-                    if (!isExposed(blocks, x, y, z, maxX, maxY, maxZ))
+                    boolean[] visibleFaces = getVisibleFaces(blocks, x, y, z, maxX, maxY, maxZ, originX, originY, w, h);
+                    if (!visibleFaces[Face.LEFT.index] &&
+                            !visibleFaces[Face.RIGHT.index] &&
+                            !visibleFaces[Face.TOP.index]) {
                         continue;
+                    }
 
                     /* --- screen-space cull before allocating Drawable --- */
                     IsoMath.toScreen(x, y, z, scratchPoint);
@@ -89,8 +94,19 @@ public final class Renderer {
                         continue; // quad never reaches the viewport
                     }
 
-                    drawables.add(new Drawable(
-                            b.getTexture().full(tick), x, y, z));
+                    if (visibleFaces[Face.LEFT.index]) {
+                        drawables.add(new Drawable(
+                                b.getTexture().left(tick), x, y, z));
+                    }
+                    if (visibleFaces[Face.RIGHT.index]) {
+                        drawables.add(new Drawable(
+                                b.getTexture().right(tick), x, y, z));
+                    }
+                    if (visibleFaces[Face.TOP.index]) {
+                        drawables.add(new Drawable(
+                                b.getTexture().top(tick), x, y, z));
+                    }
+
                 }
             }
         }
@@ -135,12 +151,34 @@ public final class Renderer {
 
     /* =================================================================== */
 
-    /** “Interior” test: true if at least one of the 6 neighbours is empty. */
-    private static boolean isExposed(Block[][][] b, int x, int y, int z,
-            int maxX, int maxY, int maxZ) {
+    private boolean isInScreenRange(int x, int y, int z,
+            double originX, double originY,
+            int screenW, int screenH) {
 
-        return (x == maxX || (b[x + 1][y][z] == null || !b[x + 1][y][z].getTexture().takesFullSpace())) ||
-                (y == maxY || b[x][y + 1][z] == null || !b[x + 1][y][z].getTexture().takesFullSpace()) ||
-                (z == maxZ || b[x][y][z + 1] == null || !b[x + 1][y][z].getTexture().takesFullSpace());
+        // project the tile’s centre to 2-D screen space
+        IsoMath.toScreen(x, y, z, scratchPoint);
+        double drawX = originX + scratchPoint.x;
+        double drawY = originY + scratchPoint.y;
+
+        // the tile is a fixed DRAW_TILE_SIZE × DRAW_TILE_SIZE quad; it is visible
+        // iff that quad overlaps the viewport bounds in either axis
+        return drawX + IsoMath.DRAW_TILE_SIZE >= 0 && // not completely left
+                drawX <= screenW && // not completely right
+                drawY + IsoMath.DRAW_TILE_SIZE >= 0 && // not completely above
+                drawY <= screenH; // not completely below
+    }
+
+    private boolean[] getVisibleFaces(Block[][][] b, int x, int y, int z,
+            int maxX, int maxY, int maxZ, double originX, double originY, int w, int h) {
+        boolean[] faces = new boolean[] { false, false, false };
+        if (!isInScreenRange(x, y, z, originX, originY, w, h))
+            return faces;
+        if (x == maxX || (b[x + 1][y][z] == null || !b[x + 1][y][z].getTexture().takesFullSpace()))
+            faces[Face.RIGHT.index] = true;
+        if (y == maxY || b[x][y + 1][z] == null || !b[x][y + 1][z].getTexture().takesFullSpace())
+            faces[Face.LEFT.index] = true;
+        if (z == maxZ || b[x][y][z + 1] == null || !b[x][y][z + 1].getTexture().takesFullSpace())
+            faces[Face.TOP.index] = true;
+        return faces;
     }
 }

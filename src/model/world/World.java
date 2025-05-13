@@ -4,7 +4,6 @@ import javax.imageio.ImageIO;
 
 import block.Block;
 import block.BlockType;
-import block.BlockTypeFactory;
 import entity.Entity;
 import entity.Player;
 import graphics.Texture;
@@ -17,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class World {
-    private static ArrayList<BlockType> blockTypes = BlockTypeFactory.loadBlockTypes();
+    private static ArrayList<BlockType> blockTypes = WorldLoader.loadBlockTypes();
     private Block[][][] blocks;
     private ArrayList<Entity> entities;
 
@@ -52,7 +51,7 @@ public class World {
 
             Shape cube = new Cube();
             Texture player = new Texture(cube, new BufferedImage[] { player0, player1 }, 6); // animé : 2 frames, 6 ticks
-            
+
             for (int z = 0; z < sz; z++) {
                 for (int y = 0; y < sy; y++) {
                     for (int x = 0; x < sx; x++) {

@@ -3,11 +3,15 @@ package graphics;
 
 import block.Block;
 import entity.Entity;
+import graphics.ligth.ColorRGB;
+import graphics.ligth.FaceLighting;
+import graphics.ligth.LightingEngine;
 import graphics.shape.Face;
 import model.world.World;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -23,6 +27,7 @@ public final class Renderer {
     private static final Comparator<Drawable> DEPTH = Comparator.comparingDouble(Drawable::getSortKey);
 
     private final World world;
+    private final LightingEngine lighthinEngine;
 
     /* ---- reusable scratch objects to avoid GC thrash ---- */
     private final List<Drawable> drawables = new ArrayList<>(1024);
@@ -30,12 +35,15 @@ public final class Renderer {
 
     public Renderer(World world) {
         this.world = world;
+        this.lighthinEngine = new LightingEngine();
     }
 
     /* =================================================================== */
 
     public void render(Graphics2D g2, int w, int h, long tick) {
         Block[][][] blocks = world.getBlocks();
+        FaceLighting[][][] faceLightings = lighthinEngine.compute(blocks);
+
         ArrayList<Entity> entities = world.getEntities();
         if (blocks == null)
             return;
@@ -94,17 +102,16 @@ public final class Renderer {
                         continue; // quad never reaches the viewport
                     }
 
+                    FaceLighting faceLighting = faceLightings[x][y][z];
+
                     if (visibleFaces[Face.LEFT.index]) {
-                        drawables.add(new Drawable(
-                                b.getTexture().left(tick), x, y, z));
+                        drawables.add(new Drawable(shade(b.getTexture().left(tick), faceLighting.left()), x, y, z));
                     }
                     if (visibleFaces[Face.RIGHT.index]) {
-                        drawables.add(new Drawable(
-                                b.getTexture().right(tick), x, y, z));
+                        drawables.add(new Drawable(shade(b.getTexture().right(tick), faceLighting.right()), x, y, z));
                     }
                     if (visibleFaces[Face.TOP.index]) {
-                        drawables.add(new Drawable(
-                                b.getTexture().top(tick), x, y, z));
+                        drawables.add(new Drawable(shade(b.getTexture().top(tick), faceLighting.top()), x, y, z));
                     }
 
                 }
@@ -128,8 +135,23 @@ public final class Renderer {
                         drawY + IsoMath.DRAW_TILE_SIZE < 0 || drawY > h) {
                     continue;
                 }
+
                 drawables.add(new Drawable(
                         e.getTexture().full(tick), e.getX(), e.getY(), e.getZ()));
+
+                // FaceLighting faceLighting = sampleLighting(faceLightings, e.getX(), e.getY(),
+                // e.getZ());
+
+                // drawables.add(new Drawable(shade(e.getTexture().left(tick),
+                // faceLighting.left()), e.getX(), e.getY(),
+                // e.getZ()));
+                // drawables.add(new Drawable(shade(e.getTexture().right(tick),
+                // faceLighting.right()), e.getX(), e.getY(),
+                // e.getZ()));
+                // drawables.add(new Drawable(shade(e.getTexture().top(tick),
+                // faceLighting.top()), e.getX(), e.getY(),
+                // e.getZ()));
+
             }
         }
 
@@ -181,4 +203,88 @@ public final class Renderer {
             faces[Face.TOP.index] = true;
         return faces;
     }
+
+    /* ---------- modulation couleur (logiciel) ----------------------- */
+    private BufferedImage shade(BufferedImage src, ColorRGB c) {
+        BufferedImage dst = new BufferedImage(src.getWidth(),
+                src.getHeight(),
+                BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < src.getHeight(); ++y)
+            for (int x = 0; x < src.getWidth(); ++x) {
+                int argb = src.getRGB(x, y);
+                int a = argb >>> 24;
+                int r = (int) (((argb >> 16) & 0xFF) * c.r());
+                int g = (int) (((argb >> 8) & 0xFF) * c.g());
+                int b = (int) (((argb) & 0xFF) * c.b());
+                dst.setRGB(x, y, (a << 24) | (r << 16) | (g << 8) | b);
+            }
+        return dst;
+    }
+
+    /**
+     * Returns the lighting at an arbitrary (x,y,z) position by trilinear
+     * interpolation of the surrounding 8 grid cells.
+     */
+    private static FaceLighting sampleLighting(FaceLighting[][][] grid,
+            double x, double y, double z) {
+        /* --- integer cell corners --- */
+        int x0 = (int) Math.floor(x);
+        int y0 = (int) Math.floor(y);
+        int z0 = (int) Math.floor(z);
+
+        int x1 = Math.min(x0 + 1, grid.length - 1);
+        int y1 = Math.min(y0 + 1, grid[0].length - 1);
+        int z1 = Math.min(z0 + 1, grid[0][0].length - 1);
+
+        /* --- fractional part inside the cell --- */
+        double fx = x - x0, ux = 1.0 - fx; // weights along X
+        double fy = y - y0, uy = 1.0 - fy; // weights along Y
+        double fz = z - z0, uz = 1.0 - fz; // weights along Z
+
+        /* --- accumulators for the three faces we shade --- */
+        double lR = 0, lG = 0, lB = 0; // left face
+        double rR = 0, rG = 0, rB = 0; // right face
+        double tR = 0, tG = 0, tB = 0; // top face
+
+        /* --- walk through the eight corners --- */
+        for (int xi = 0; xi <= 1; xi++) {
+            double wx = (xi == 0) ? ux : fx;
+            int gx = (xi == 0) ? x0 : x1;
+
+            for (int yi = 0; yi <= 1; yi++) {
+                double wy = (yi == 0) ? uy : fy;
+                int gy = (yi == 0) ? y0 : y1;
+
+                for (int zi = 0; zi <= 1; zi++) {
+                    double wz = (zi == 0) ? uz : fz;
+                    int gz = (zi == 0) ? z0 : z1;
+
+                    double w = wx * wy * wz; // full weight
+                    FaceLighting fl = grid[gx][gy][gz];
+                    if (fl == null) // air -> black contribution
+                        continue;
+
+                    ColorRGB cL = fl.left();
+                    ColorRGB cR = fl.right();
+                    ColorRGB cT = fl.top();
+
+                    lR += cL.r() * w;
+                    lG += cL.g() * w;
+                    lB += cL.b() * w;
+                    rR += cR.r() * w;
+                    rG += cR.g() * w;
+                    rB += cR.b() * w;
+                    tR += cT.r() * w;
+                    tG += cT.g() * w;
+                    tB += cT.b() * w;
+                }
+            }
+        }
+
+        return new FaceLighting(
+                new ColorRGB(lR, lG, lB),
+                new ColorRGB(rR, rG, rB),
+                new ColorRGB(tR, tG, tB));
+    }
+
 }

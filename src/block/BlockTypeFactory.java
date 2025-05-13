@@ -20,6 +20,7 @@ public class BlockTypeFactory {
         blockTypes.add(loadBlueBlock());
         blockTypes.add(loadRedBlock());
         blockTypes.add(loadPurpleBlock());
+        blockTypes.add(loadPurpleBlock2());
         return blockTypes;
     }
 
@@ -57,7 +58,19 @@ public class BlockTypeFactory {
         Shape shape = new Cube();
         Texture text = new Texture(shape, img);
         blockType.setTexture(text);
-        LightSource light = new LightSource(new ColorRGB(1,1,1), 1, 0.95);
+        LightSource light = new LightSource(new ColorRGB(1,0,0), 1, 0.9, 0.1);
+        BlockProperty propLight = new BlockPropertyLight(light);
+        blockType.addBlockProperty(propLight);
+        return blockType;
+    }
+
+    private static BlockType loadPurpleBlock2() {
+        BlockType blockType = new BlockType("purpleBlock2");
+        BufferedImage img = getImage("purple-block.png");
+        Shape shape = new Cube();
+        Texture text = new Texture(shape, img);
+        blockType.setTexture(text);
+        LightSource light = new LightSource(new ColorRGB(0,0,1), 1, 0.9, 0);
         BlockProperty propLight = new BlockPropertyLight(light);
         blockType.addBlockProperty(propLight);
         return blockType;

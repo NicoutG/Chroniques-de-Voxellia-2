@@ -63,8 +63,16 @@ public class World {
             blocks[10][11][2] = blockTypes.get(0).createBlock();
             blocks[10][12][2] = blockTypes.get(0).createBlock();
             blocks[10][13][2] = blockTypes.get(0).createBlock();
-
+            blocks[10][3][2] = blockTypes.get(0).createBlock();
+            blocks[10][4][2] = blockTypes.get(0).createBlock();
+            blocks[10][5][2] = blockTypes.get(0).createBlock();
+            
             blocks[14][12][2] = blockTypes.get(2).createBlock();
+            blocks[14][2][2] = blockTypes.get(3).createBlock();
+            
+            blocks[18][11][2] = blockTypes.get(0).createBlock();
+            blocks[18][12][2] = blockTypes.get(0).createBlock();
+            blocks[18][13][2] = blockTypes.get(0).createBlock();
 
             ArrayList<Entity> entities = new ArrayList<>();
 

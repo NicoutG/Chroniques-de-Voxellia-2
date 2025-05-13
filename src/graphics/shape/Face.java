@@ -1,18 +1,18 @@
-/*  graphics/shape/Face.java  */
 package graphics.shape;
 
-/** Logical ordering shared by every isometric shape. */
 public enum Face {
-    LEFT (0), TOP (1), RIGHT (2);
+    LEFT (0),   // +Y
+    RIGHT(1),   // +X
+    TOP  (2);   // +Z
 
     public final int index;
-    Face(int idx) { this.index = idx; }
+    Face(int i){ index = i; }
 
+    /** Visible faces only : +X, +Y, +Z. Others return {@code null}. */
     public static Face fromDir(int dx,int dy,int dz){
-        if (dx== 1) return LEFT;
-        if (dx==-1) return RIGHT;
-        if (dy== 1) return TOP;
-        // faces non visibles dans iso -> optionnel
-        return LEFT;
+        if (dx == +1) return RIGHT;   // +X  → right face
+        if (dy == +1) return LEFT;    // +Y  → left  face
+        if (dz == +1) return TOP;     // +Z  → top   face
+        return null;                  // faces we never draw
     }
 }

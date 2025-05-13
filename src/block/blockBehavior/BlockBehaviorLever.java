@@ -2,23 +2,19 @@ package block.blockBehavior;
 
 import block.Block;
 import entity.Entity;
-import game.Game;
+import model.world.World;
 import tools.Vector;
 
 public class BlockBehaviorLever extends BlockBehaviorConnected {
 
-    public BlockBehavior clone() {
-        return this;
-    }
-
     @Override
-    public void onInteraction(Game game, Block block, Vector position, Entity entity) {
+    public void onInteraction(World world, Block block, Vector position, Entity entity) {
         boolean activationState = getActivationState(block);
         block.setStateModification(ACTIVATION_STATE, !activationState);
         int network = getNetwork(block);
         if (activationState)
-            game.desactivateBlocks(network);
+            world.desactivateBlocks(network);
         else
-            game.activateBlocks(network);
+            world.activateBlocks(network);
     }
 }

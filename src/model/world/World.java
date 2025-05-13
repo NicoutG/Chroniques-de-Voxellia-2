@@ -2,22 +2,25 @@ package model.world;
 
 import javax.imageio.ImageIO;
 
-import engine.Block;
+import block.Block;
+import block.BlockType;
 import entity.Entity;
 import entity.Player;
 import graphics.Texture;
 import graphics.shape.Cube;
 import graphics.shape.Shape;
+import tools.Vector;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class World {
 
-    private final Block[][][] blocks;
-    private final Entity[] entities;
+    private Block[][][] blocks;
+    private ArrayList<Entity> entities;
 
-    public World(Block[][][] blocks, Entity[] entities) {
+    public World(Block[][][] blocks, ArrayList<Entity> entities) {
         this.blocks = blocks;
         this.entities = entities;
     }
@@ -26,7 +29,7 @@ public class World {
         return blocks;
     }
 
-    public Entity[] getEntities() {
+    public ArrayList<Entity> getEntities() {
         return entities;
     }
 
@@ -52,29 +55,54 @@ public class World {
             Texture blue = new Texture(cube, blueImg); // bloc statique
             Texture red = new Texture(cube, redImg);
             Texture player = new Texture(cube, new BufferedImage[] { player0, player1 }, 6); // animé : 2 frames, 6 ticks
-                   
-             for (int z = 0; z < sz; z++) {
-            for (int y = 0; y < sy; y++) {
-                for (int x = 0; x < sx; x++) {
-                    blocks[x][y][z] = new Block((z % 2 == 0) ? blue : red);
+               
+            BlockType blockTypeBlue = new BlockType("blue");
+            blockTypeBlue.setTexture(blue);
+            BlockType blockTypeRed = new BlockType("red");
+            blockTypeRed.setTexture(red);
+            for (int z = 0; z < sz; z++) {
+                for (int y = 0; y < sy; y++) {
+                    for (int x = 0; x < sx; x++) {
+                        
+                        blocks[x][y][z] = z%2 == 0 ? blockTypeBlue.createBlock() : blockTypeRed.createBlock();
+                    }
                 }
             }
-        }
 
-        blocks[10][11][2] = new Block(blue);
-        blocks[10][12][2] = new Block(blue);
-        blocks[10][13][2] = new Block(blue);
+            blocks[10][11][2] = blockTypeBlue.createBlock();
+            blocks[10][12][2] = blockTypeBlue.createBlock();
+            blocks[10][13][2] = blockTypeBlue.createBlock();
 
-        Entity[] entities = new Entity[3];
+            ArrayList<Entity> entities = new ArrayList<>();
 
-        // player
-        entities[0] = new Player(player, 12.5, 12.5, 2);// chacune
+            // player
+            entities.add(new Player(player, 12.5, 12.5, 2));// chacune
 
-        return new World(blocks, entities);
+            return new World(blocks, entities);
 
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to load block textures", e);
         }
+    }
+
+    public void activateBlocks(int network) {
+        for (int z = 0; z < blocks[0][0].length; z++)
+            for (int y = 0; y < blocks[0].length; y++)
+                for (int x = 0; x < blocks.length; x++) {
+                    Block block = blocks[x][y][z];
+                    if (block != null)
+                        block.onActivated(this, new Vector(x+0.5,y+0.5,z+0.5), network);
+                }
+    }
+
+    public void desactivateBlocks(int network) {
+        for (int z = 0; z < blocks[0][0].length; z++)
+            for (int y = 0; y < blocks[0].length; y++)
+                for (int x = 0; x < blocks.length; x++) {
+                    Block block = blocks[x][y][z];
+                    if (block != null)
+                        block.onDesactivated(this, new Vector(x+0.5,y+0.5,z+0.5), network);
+                }
     }
 }

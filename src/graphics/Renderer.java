@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import engine.Block;
+import block.Block;
 import entity.Entity;
 import model.world.World;
 
@@ -22,7 +22,7 @@ public class Renderer {
 
     public void render(Graphics2D g2, int w, int h, long tick) {
         Block[][][] blocks = world.getBlocks();
-        Entity[] entities = world.getEntities();
+        ArrayList<Entity> entities = world.getEntities();
         if (blocks == null)
             return;
 

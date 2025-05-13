@@ -1,28 +1,28 @@
 package block.blockBehavior;
 
 import block.Block;
-import game.Game;
+import model.world.World;
 import tools.*;
 
 
 public abstract class BlockBehaviorActivable extends BlockBehaviorConnected {
 
-    public abstract void activate(Game game, Block block, Vector position, int network);
+    public abstract void activate(World world, Block block, Vector position, int network);
 
-    public abstract void desactivate(Game game, Block block, Vector position, int network);
+    public abstract void desactivate(World world, Block block, Vector position, int network);
 
     @Override
-    public void onActivated(Game game, Block block, Vector position, int network) {
+    public void onActivated(World world, Block block, Vector position, int network) {
         if (network == getNetwork(block)) {
-            activate(game, block, position, network);
+            activate(world, block, position, network);
             block.setStateModification(ACTIVATION_STATE, true);
         }
     }
 
     @Override
-    public void onDesactivated(Game game, Block block, Vector position, int network) {
+    public void onDesactivated(World world, Block block, Vector position, int network) {
         if (network == getNetwork(block)) {
-            desactivate(game, block, position, network);
+            desactivate(world, block, position, network);
             block.setStateModification(ACTIVATION_STATE, false);
         }
     }

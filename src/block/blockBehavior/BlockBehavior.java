@@ -2,7 +2,7 @@ package block.blockBehavior;
 
 import block.Block;
 import entity.Entity;
-import game.Game;
+import model.world.World;
 import tools.*;;
 
 public abstract class BlockBehavior {
@@ -14,25 +14,25 @@ public abstract class BlockBehavior {
         return this;
     }
 
-    public void onUpdate(Game game, Block block) {
+    public void onUpdate(World world, Block block) {
     }
 
-    public void onInteraction(Game game, Block block, Vector position, Entity entity) {
+    public void onInteraction(World world, Block block, Vector position, Entity entity) {
     }
 
-    public void onPush(Game game, Block block, Vector position, int depX, int depY, int depZ) {
+    public void onPush(World world, Block block, Vector position, int depX, int depY, int depZ) {
     }
 
-    public void onActivated(Game game, Block block, Vector position, int network) {
+    public void onActivated(World world, Block block, Vector position, int network) {
     }
 
-    public void onDesactivated(Game game, Block block, Vector position, int network) {
+    public void onDesactivated(World world, Block block, Vector position, int network) {
     }
 
-    public void onEntityIn(Game game, Block block, Vector position, Entity entity) {
+    public void onEntityIn(World world, Block block, Vector position, Entity entity) {
     }
 
-    public void onEntityCollision(Game game, Block block, Vector position, Entity entity) {
+    public void onEntityCollision(World world, Block block, Vector position, Entity entity) {
     }
 
 

@@ -7,9 +7,12 @@ import tools.*;;
 
 public abstract class BlockBehavior {
 
-    public abstract void onAttachToBlock(Block block);
+    public void onAttachToBlock(Block block) {
+    }
 
-    public abstract BlockBehavior clone();
+    public BlockBehavior clone() {
+        return this;
+    }
 
     public void onUpdate(Game game, Block block) {
     }

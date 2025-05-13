@@ -12,7 +12,7 @@ public final class CustomShape extends Shape {
                        BufferedImage rightMask,
                        BufferedImage topMask) {
 
-        super(leftMask, rightMask, topMask);
+        super(leftMask, rightMask, topMask, false);
     }
 
     /* ------------------------------------------------------------------
@@ -24,7 +24,8 @@ public final class CustomShape extends Shape {
 
         super(Cache.get(leftResource),
               Cache.get(rightResource),
-              Cache.get(topResource));
+              Cache.get(topResource),
+              false);
     }
 
     /* ---------- Tiny (thread-safe) one-liner cache ---------- */

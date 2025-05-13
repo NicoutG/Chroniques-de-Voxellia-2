@@ -20,6 +20,6 @@ public final class Cube extends Shape {
     }
 
     public Cube() {
-        super(LEFT_MASK, RIGHT_MASK, TOP_MASK);
+        super(LEFT_MASK, RIGHT_MASK, TOP_MASK, true);
     }
 }

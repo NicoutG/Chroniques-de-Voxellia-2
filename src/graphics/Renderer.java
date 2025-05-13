@@ -69,7 +69,7 @@ public final class Renderer {
         final int maxY = blocks[0].length - 1;
         final int maxZ = blocks[0][0].length - 1;
 
-        int c= 0;
+        int c = 0;
         int total = 0;
 
         for (int z = 0; z <= maxZ; z++) {
@@ -80,7 +80,7 @@ public final class Renderer {
                     if (b == null)
                         continue;
 
-                    total ++; 
+                    total++;
                     if (!isExposed(blocks, x, y, z, maxX, maxY, maxZ))
                         continue;
                     c++;
@@ -146,11 +146,8 @@ public final class Renderer {
     private static boolean isExposed(Block[][][] b, int x, int y, int z,
             int maxX, int maxY, int maxZ) {
 
-        return (x == 0 || b[x - 1][y][z] == null) ||
-                (x == maxX || b[x + 1][y][z] == null) ||
-                (y == 0 || b[x][y - 1][z] == null) ||
-                (y == maxY || b[x][y + 1][z] == null) ||
-                (z == 0 || b[x][y][z - 1] == null) ||
-                (z == maxZ || b[x][y][z + 1] == null);
+        return (x == maxX || (b[x + 1][y][z] == null || !b[x + 1][y][z].getTexture().takesFullSpace())) ||
+                (y == maxY || b[x][y + 1][z] == null || !b[x + 1][y][z].getTexture().takesFullSpace()) ||
+                (z == maxZ || b[x][y][z + 1] == null || !b[x + 1][y][z].getTexture().takesFullSpace());
     }
 }

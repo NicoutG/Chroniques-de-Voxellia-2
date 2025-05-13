@@ -1,96 +1,108 @@
+/*  graphics/texture/Texture.java  */
 package graphics;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
+import graphics.shape.Face;
+import graphics.shape.Shape;
+
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Objects;
 
 /**
- * Texture isométrique 64×64 :
- * • Peut contenir 1 ou N frames (animation bouclée).
- * • Pré-découpe chaque frame en trois faces (gauche / dessus / droite) via masques.
- * • Aucune image rechargée deux fois : les masques sont statiques et
- *   les faces sont calculées une seule fois dans le constructeur.
+ * Isometric texture (64×64) with an attached {@link Shape}.
+ *
+ * <p>
+ * • Handles one-frame sprites *or* looped animations.<br>
+ * • Cuts every frame into three faces (left / top / right) using
+ * the masks supplied by the <em>shape</em>.<br>
+ * • No mask or face ever recalculated twice.
+ * </p>
  */
 public final class Texture {
 
-    /* ----------- masques statiques partagés (une seule fois) ------------- */
-    private static final BufferedImage LEFT_MASK  = loadMask("/resources/masks/mask-left.png");
-    private static final BufferedImage TOP_MASK   = loadMask("/resources/masks/mask-top.png");
-    private static final BufferedImage RIGHT_MASK = loadMask("/resources/masks/mask-right.png");
+    /* -------------------------- immutable state -------------------------- */
+    private final Shape shape; // the geometry
+    private final BufferedImage[] full; // original frames
+    private final BufferedImage[][] faces; // [frame][Face.index]
+    private final int ticksPerFrame;
 
-    /* ----------- frames & faces pré-calculées ---------------------------- */
-    private final BufferedImage[] full;          // frame complète
-    private final BufferedImage[][] faces;       // faces[frameIdx][0=left,1=top,2=right]
+    /* =========================== CTORS ================================= */
 
-    private final int ticksPerFrame;             // vitesse d’anim (1 = 60 fps, 4 = 15 fps, …)
-
-    /* =====================  CONSTRUCTEURS  =============================== */
-
-    /** Texture statique (1 seule frame, pas d’animation). */
-    public Texture(BufferedImage img) {
-        this(new BufferedImage[]{img}, Integer.MAX_VALUE);
+    /** Static sprite – one frame, no animation. */
+    public Texture(Shape shape, BufferedImage frame) {
+        this(shape, new BufferedImage[] { frame }, Integer.MAX_VALUE);
     }
 
     /**
-     * Texture animée.
+     * Animated sprite.
      *
-     * @param frames         tableau de frames (64×64)
-     * @param ticksPerFrame  nbre de ticks entre 2 frames (GamePanel.tick)
+     * @param shape         geometry that supplies the three masks
+     * @param frames        64×64 frames (must be ≥ 1)
+     * @param ticksPerFrame game ticks between two frames (≥ 1)
      */
-    public Texture(BufferedImage[] frames, int ticksPerFrame) {
-        Objects.requireNonNull(frames);
-        if (frames.length == 0) throw new IllegalArgumentException("frames.length == 0");
+    public Texture(Shape shape, BufferedImage[] frames, int ticksPerFrame) {
+        this.shape = Objects.requireNonNull(shape, "shape");
+        Objects.requireNonNull(frames, "frames");
+        if (frames.length == 0)
+            throw new IllegalArgumentException("frames.length == 0");
+        if (ticksPerFrame < 1)
+            throw new IllegalArgumentException("ticksPerFrame < 1");
 
         this.full = frames.clone();
-        this.ticksPerFrame = Math.max(1, ticksPerFrame);
+        this.ticksPerFrame = ticksPerFrame;
 
-        // pré-découpe toutes les faces une seule fois
-        faces = new BufferedImage[frames.length][3];
+        /* ---- pre-cut all faces exactly once ---- */
+        faces = new BufferedImage[frames.length][Face.values().length];
         for (int i = 0; i < frames.length; i++) {
-            faces[i][0] = applyMask(frames[i], LEFT_MASK);
-            faces[i][1] = applyMask(frames[i], TOP_MASK);
-            faces[i][2] = applyMask(frames[i], RIGHT_MASK);
+            faces[i][Face.LEFT.index] = applyMask(frames[i], shape.getLeftMask());
+            faces[i][Face.TOP.index] = applyMask(frames[i], shape.getTopMask());
+            faces[i][Face.RIGHT.index] = applyMask(frames[i], shape.getRightMask());
         }
     }
 
-    /* =====================  ACCÈS RUNTIME  =============================== */
+    /* ======================== RUNTIME ACCESS =========================== */
 
     private int frameIndex(long tick) {
         return (int) ((tick / ticksPerFrame) % full.length);
     }
 
-    /** Frame complète adaptée au tick courant. */
+    /** Whole 64×64 frame suitable for the given game tick. */
     public BufferedImage full(long tick) {
         return full[frameIndex(tick)];
     }
 
-    /** Faces individuelles (left/top/right) adaptées au tick courant. */
-    public BufferedImage left(long tick)  { return faces[frameIndex(tick)][0]; }
-    public BufferedImage top(long tick)   { return faces[frameIndex(tick)][1]; }
-    public BufferedImage right(long tick) { return faces[frameIndex(tick)][2]; }
-
-    /* ====================  HELPERS PRIVÉS  =============================== */
-
-    private static BufferedImage loadMask(String path) {
-        try {
-            return ImageIO.read(
-                    Objects.requireNonNull(Texture.class.getResource(path),
-                            () -> "Missing resource " + path));
-        } catch (IOException e) {
-            throw new IllegalStateException("Can't load mask " + path, e);
-        }
+    /** A single face of the current frame. */
+    public BufferedImage face(Face f, long tick) {
+        return faces[frameIndex(tick)][f.index];
     }
 
+    public BufferedImage left(long tick) {
+        return face(Face.LEFT, tick);
+    }
+
+    public BufferedImage top(long tick) {
+        return face(Face.TOP, tick);
+    }
+
+    public BufferedImage right(long tick) {
+        return face(Face.RIGHT, tick);
+    }
+
+    /* ============================ HELPERS ================================ */
+
+    /** AND-the-alpha of tex with mask. */
     private static BufferedImage applyMask(BufferedImage tex, BufferedImage mask) {
+
         int w = tex.getWidth(), h = tex.getHeight();
         BufferedImage out = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 
         int[] tp = tex.getRGB(0, 0, w, h, null, 0, w);
         int[] mp = mask.getRGB(0, 0, w, h, null, 0, w);
+
         for (int i = 0; i < tp.length; i++) {
-            out.setRGB(i % w, i / w, (mp[i] >>> 24 == 0) ? 0 : tp[i]);
+            int alpha = (mp[i] >>> 24); // 0-255
+            // si le masque n’est pas transparent, on garde la couleur de la texture
+            out.setRGB(i % w, i / w,
+                    (alpha == 0) ? 0 : tp[i]);
         }
         return out;
     }

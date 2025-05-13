@@ -1,7 +1,7 @@
-package block.blockBehavior;
+package objects.block.blockBehavior;
 
-import block.Block;
 import model.world.World;
+import objects.block.Block;
 import tools.*;
 
 

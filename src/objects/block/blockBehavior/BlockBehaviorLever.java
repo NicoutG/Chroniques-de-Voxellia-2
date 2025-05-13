@@ -1,8 +1,8 @@
-package block.blockBehavior;
+package objects.block.blockBehavior;
 
-import block.Block;
-import entity.Entity;
 import model.world.World;
+import objects.block.Block;
+import objects.entity.Entity;
 import tools.Vector;
 
 public class BlockBehaviorLever extends BlockBehaviorConnected {

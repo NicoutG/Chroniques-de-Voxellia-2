@@ -1,13 +1,13 @@
 /*  graphics/Renderer.java  */
 package graphics;
 
-import block.Block;
-import entity.Entity;
 import graphics.ligth.ColorRGB;
 import graphics.ligth.FaceLighting;
 import graphics.ligth.LightingEngine;
 import graphics.shape.Face;
 import model.world.World;
+import objects.block.Block;
+import objects.entity.Entity;
 
 import java.awt.*;
 import java.awt.geom.Point2D;

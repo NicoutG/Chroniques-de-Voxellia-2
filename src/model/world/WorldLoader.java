@@ -4,7 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import block.*;
+import objects.block.*;
 
 public class WorldLoader {
     private static final String WORLD_PATH = "src/resources/worlds/"; 
@@ -60,7 +60,7 @@ public class WorldLoader {
         if (exp.equals("."))
             return null;
         String[] blockAndStates = exp.split("/");
-        Block block = blockTypes.get(Integer.parseInt(blockAndStates[0])).createBlock();
+        Block block = blockTypes.get(Integer.parseInt(blockAndStates[0])).getInstance();
         for (int i = 1; i < blockAndStates.length; i++) {
             String[] nameAndValue = blockAndStates[i].split("=");
             String name = nameAndValue[0];

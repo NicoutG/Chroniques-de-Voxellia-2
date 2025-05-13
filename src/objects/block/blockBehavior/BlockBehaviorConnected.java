@@ -1,6 +1,6 @@
-package block.blockBehavior;
+package objects.block.blockBehavior;
 
-import block.Block;
+import objects.block.Block;
 
 public abstract class BlockBehaviorConnected extends BlockBehavior {
     protected final static String ACTIVATION_STATE = "activated";

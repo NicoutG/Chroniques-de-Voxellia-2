@@ -1,11 +1,9 @@
-package entity;
-
-import graphics.Texture;
+package objects.entity;
 
 public class Player extends Entity {
 
-    public Player(Texture texture, double x, double y, double z) {
-        super(texture, x, y, z);
+    public Player(EntityType type, double x, double y, double z) {
+        super(type, x, y, z);
     }
 
     // Déplacement simple (par pas de 0.1)

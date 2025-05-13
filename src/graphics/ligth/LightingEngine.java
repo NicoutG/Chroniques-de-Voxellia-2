@@ -3,9 +3,9 @@ package graphics.ligth;
 
 import java.util.ArrayDeque;
 
-import block.Block;
-import block.blockProperty.BlockPropertyLight;
 import graphics.shape.Face;
+import objects.block.Block;
+import objects.property.PropertyLight;
 
 /**
  * Simple flood-fill light mapper.
@@ -68,7 +68,7 @@ public final class LightingEngine {
                     Block b = blocks[x][y][z];
                     if (b == null)
                         continue;
-                    BlockPropertyLight lp = (BlockPropertyLight) b.getBlockProperty("light");
+                    PropertyLight lp = (PropertyLight) b.getProperty("light");
                     if (lp == null)
                         continue;
 
@@ -98,7 +98,7 @@ public final class LightingEngine {
 
             /* falloff depends on the block the light is travelling through */
             double falloff = .9;
-            BlockPropertyLight lp = (BlockPropertyLight) from.getBlockProperty("light");
+            PropertyLight lp = (PropertyLight) from.getProperty("light");
             if (lp != null)
                 falloff = lp.getLight().falloff();
 

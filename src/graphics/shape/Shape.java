@@ -10,14 +10,17 @@ public abstract class Shape {
     private final BufferedImage leftMask;
     private final BufferedImage rightMask;
     private final BufferedImage topMask;
+    private final boolean fullSpace;
 
     protected Shape(BufferedImage leftMask,
                     BufferedImage rightMask,
-                    BufferedImage topMask) {
+                    BufferedImage topMask,
+                    boolean fullSpace) {
 
         this.leftMask  = Objects.requireNonNull(leftMask,  "leftMask");
         this.rightMask = Objects.requireNonNull(rightMask, "rightMask");
         this.topMask   = Objects.requireNonNull(topMask,   "topMask");
+        this.fullSpace = fullSpace;
     }
 
     /* ---------- Accessors ---------- */
@@ -25,6 +28,7 @@ public abstract class Shape {
     public final BufferedImage getLeftMask()  { return leftMask;  }
     public final BufferedImage getRightMask() { return rightMask; }
     public final BufferedImage getTopMask()   { return topMask;   }
+    public final boolean takesFullSpace() {return fullSpace;}
 
     /* ---------- Util for subclasses ---------- */
 

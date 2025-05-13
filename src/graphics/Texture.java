@@ -87,6 +87,10 @@ public final class Texture {
         return face(Face.RIGHT, tick);
     }
 
+    public boolean takesFullSpace() {
+        return shape.takesFullSpace();
+    }
+
     /* ============================ HELPERS ================================ */
 
     /** AND-the-alpha of tex with mask. */

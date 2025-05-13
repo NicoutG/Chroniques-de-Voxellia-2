@@ -6,6 +6,8 @@ import engine.Block;
 import entity.Entity;
 import entity.Player;
 import graphics.Texture;
+import graphics.shape.Cube;
+import graphics.shape.Shape;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -46,9 +48,10 @@ public class World {
             BufferedImage player0 = ImageIO.read(World.class.getResource("/resources/textures/purple-block.png"));
             BufferedImage player1 = ImageIO.read(World.class.getResource("/resources/textures/blue-block.png"));
 
-            Texture blue = new Texture(blueImg); // bloc statique
-            Texture red = new Texture(redImg);
-            Texture player = new Texture(new BufferedImage[] { player0, player1 }, 6); // animé : 2 frames, 6 ticks
+            Shape cube = new Cube();
+            Texture blue = new Texture(cube, blueImg); // bloc statique
+            Texture red = new Texture(cube, redImg);
+            Texture player = new Texture(cube, new BufferedImage[] { player0, player1 }, 6); // animé : 2 frames, 6 ticks
                    
              for (int z = 0; z < sz; z++) {
             for (int y = 0; y < sy; y++) {

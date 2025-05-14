@@ -53,16 +53,22 @@ public class World {
         Block[][][] blocks = new Block[sx][sy][sz + 10];
 
         try {
-            BufferedImage player0 = ImageIO.read(World.class.getResource("/resources/textures/purple-block.png"));
-            BufferedImage player1 = ImageIO.read(World.class.getResource("/resources/textures/blue-block.png"));
+            BufferedImage player0 = ImageIO.read(World.class.getResource("/resources/textures/outlined/purple-block.png"));
+            // BufferedImage player1 = ImageIO.read(World.class.getResource("/resources/textures/outlined/blue-block.png"));
 
             Shape cube = new Cube();
-            Texture player = new Texture(cube, new BufferedImage[] { player0, player1 }, 6); // animé : 2 frames, 6 ticks
+            Texture player = new Texture(cube,  player0); // animé : 2 frames, 6 ticks
 
             for (int z = 0; z < sz; z++) {
                 for (int y = 0; y < sy; y++) {
                     for (int x = 0; x < sx; x++) {
-                        blocks[x][y][z] = blockTypes.get(0).getInstance();
+                        if(x >= 14 && x <= 16 && z== 1 && y == 9 ) {
+
+                            blocks[x][y][z] = blockTypes.get(5).getInstance();
+                        } else {
+
+                            blocks[x][y][z] = blockTypes.get(z%2).getInstance();
+                        }
                     }
                 }
             }
@@ -79,8 +85,7 @@ public class World {
             blocks[12][7][2] = blockTypes.get(4).getInstance();
             blocks[13][7][2] = blockTypes.get(4).getInstance();
 
-            blocks[15][12][2] = blockTypes.get(3).getInstance();
-
+            // blocks[15][12][2] = blockTypes.get(3).getInstance();
 
             blocks[13][19][2] = blockTypes.get(3).getInstance();
             

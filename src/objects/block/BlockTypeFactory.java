@@ -12,7 +12,7 @@ import objects.property.*;
 import graphics.shape.*;
 
 public class BlockTypeFactory {
-    private static final String TEXTURE_PATH = "/resources/textures/";
+    private static final String TEXTURE_PATH = "/resources/textures/outlined/";
     
     public static ArrayList<BlockType> loadBlockTypes() {
         ArrayList<BlockType> blockTypes = new ArrayList<>();
@@ -21,6 +21,7 @@ public class BlockTypeFactory {
         blockTypes.add(loadPurpleBlock());
         blockTypes.add(loadBlockFire());
         blockTypes.add(loadBlueStairsRight());
+        blockTypes.add(loadBlockLava());
         return blockTypes;
     }
 
@@ -83,6 +84,17 @@ public class BlockTypeFactory {
         Shape shape = new StairsRight();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        return blockType;
+    }
+
+    private static BlockType loadBlockLava() {
+        BlockType blockType = new BlockType("lava");
+        Shape shape = new Rectangle();
+        Texture text = new Texture(shape, getImage("lava.png"));
+        blockType.addTexture(text);
+        LightSource light = new LightSource(new ColorRGB(1,0.6,0.4), 1.5, 0.5, 0.05);
+        Property propLight = new PropertyLight(light);
+        blockType.addProperty(propLight);
         return blockType;
     }
 

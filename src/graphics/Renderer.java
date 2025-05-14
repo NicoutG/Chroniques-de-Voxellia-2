@@ -139,17 +139,17 @@ public final class Renderer {
                         e.getTexture().full(tick), e.getX(), e.getY(), e.getZ()));
 
                 FaceLighting faceLighting = sampleLighting(faceLightings, e.getX(), e.getY(),
-                e.getZ());
+                        e.getZ());
 
                 drawables.add(new Drawable(shade(e.getTexture().left(tick),
-                faceLighting.left()), e.getX(), e.getY(),
-                e.getZ()));
+                        faceLighting.left()), e.getX(), e.getY(),
+                        e.getZ()));
                 drawables.add(new Drawable(shade(e.getTexture().right(tick),
-                faceLighting.right()), e.getX(), e.getY(),
-                e.getZ()));
+                        faceLighting.right()), e.getX(), e.getY(),
+                        e.getZ()));
                 drawables.add(new Drawable(shade(e.getTexture().top(tick),
-                faceLighting.top()), e.getX(), e.getY(),
-                e.getZ()));
+                        faceLighting.top()), e.getX(), e.getY(),
+                        e.getZ()));
 
             }
         }
@@ -221,69 +221,78 @@ public final class Renderer {
     }
 
     /**
-     * Returns the lighting at an arbitrary (x,y,z) position by trilinear
-     * interpolation of the surrounding 8 grid cells.
+     * Returns the lighting for an entity by rounding its position to the
+     * nearest voxel and sampling the cube that sits next to it in the
+     * direction of each rendered face.
+     *
+     * Right face → cube at (x , y+1 , z) → use its Face.RIGHT colour
+     * Left face → cube at (x+1 , y , z) → use its Face.LEFT colour
+     * Top face → cube at (x , y , z+1) → use its Face.TOP colour
+     *
+     * Out-of-bounds or air blocks contribute BLACK.
      */
     private static FaceLighting sampleLighting(FaceLighting[][][] grid,
             double x, double y, double z) {
-        /* --- integer cell corners --- */
-        int x0 = (int) Math.floor(x);
-        int y0 = (int) Math.floor(y);
-        int z0 = (int) Math.floor(z);
 
-        int x1 = Math.min(x0 + 1, grid.length - 1);
-        int y1 = Math.min(y0 + 1, grid[0].length - 1);
-        int z1 = Math.min(z0 + 1, grid[0][0].length - 1);
+        /* ----- round the entity position ----- */
+        int xr = (int) Math.round(x);
+        int yr = (int) Math.round(y);
+        int zr = (int) Math.round(z);
 
-        /* --- fractional part inside the cell --- */
-        double fx = x - x0, ux = 1.0 - fx; // weights along X
-        double fy = y - y0, uy = 1.0 - fy; // weights along Y
-        double fz = z - z0, uz = 1.0 - fz; // weights along Z
+        int maxX = grid.length - 1;
+        int maxY = grid[0].length - 1;
+        int maxZ = grid[0][0].length - 1;
 
-        /* --- accumulators for the three faces we shade --- */
-        double lR = 0, lG = 0, lB = 0; // left face
-        double rR = 0, rG = 0, rB = 0; // right face
-        double tR = 0, tG = 0, tB = 0; // top face
+        /* clamp to valid voxel indices */
+        xr = Math.max(0, Math.min(xr, maxX));
+        yr = Math.max(0, Math.min(yr, maxY));
+        zr = Math.max(0, Math.min(zr, maxZ));
 
-        /* --- walk through the eight corners --- */
-        for (int xi = 0; xi <= 1; xi++) {
-            double wx = (xi == 0) ? ux : fx;
-            int gx = (xi == 0) ? x0 : x1;
+        /* ----- neighbour coordinates for each face ----- */
+        int nxR = (yr < maxY) ? yr + 1 : yr; // +Y (Right face)
+        int nxL = (xr < maxX) ? xr + 1 : xr; // +X (Left face)
+        int nzT = (zr < maxZ) ? zr + 1 : zr; // +Z (Top face)
 
-            for (int yi = 0; yi <= 1; yi++) {
-                double wy = (yi == 0) ? uy : fy;
-                int gy = (yi == 0) ? y0 : y1;
-
-                for (int zi = 0; zi <= 1; zi++) {
-                    double wz = (zi == 0) ? uz : fz;
-                    int gz = (zi == 0) ? z0 : z1;
-
-                    double w = wx * wy * wz; // full weight
-                    FaceLighting fl = grid[gx][gy][gz];
-                    if (fl == null) // air -> black contribution
-                        continue;
-
-                    ColorRGB cL = fl.left();
-                    ColorRGB cR = fl.right();
-                    ColorRGB cT = fl.top();
-
-                    lR += cL.r() * w;
-                    lG += cL.g() * w;
-                    lB += cL.b() * w;
-                    rR += cR.r() * w;
-                    rG += cR.g() * w;
-                    rB += cR.b() * w;
-                    tR += cT.r() * w;
-                    tG += cT.g() * w;
-                    tB += cT.b() * w;
+        /* ----- fetch colours, defaulting to black on air/out-of-range ----- */
+        ColorRGB cRight = ColorRGB.BLACK;
+        FaceLighting fl = grid[xr][nxR][zr];
+        if (fl != null) {
+            if (fl.right().isBlack()) {
+                fl = grid[xr][yr][zr];
+                if (fl != null) {
+                    cRight = fl.right();
                 }
+            } else {
+                cRight = fl.right();
             }
         }
 
-        return new FaceLighting(
-                new ColorRGB(lR, lG, lB),
-                new ColorRGB(rR, rG, rB),
-                new ColorRGB(tR, tG, tB));
+        ColorRGB cLeft = ColorRGB.BLACK;
+        fl = grid[nxL][yr][zr];
+        if (fl != null) {
+            if (fl.left().isBlack()) {
+                fl = grid[xr][yr][zr];
+                if (fl != null) {
+                    cLeft = fl.left();
+                }
+            } else {
+                cLeft = fl.left();
+            }
+        }
+
+        ColorRGB cTop = ColorRGB.BLACK;
+        fl = grid[xr][yr][nzT];
+        if (fl != null)
+            if (fl.top().isBlack()) {
+                fl = grid[xr][yr][zr];
+                if (fl != null) {
+                    cTop = fl.top();
+                }
+            } else {
+                cTop = fl.top();
+            }
+
+        return new FaceLighting(cRight, cLeft, cTop);
     }
 
 }

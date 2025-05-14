@@ -7,7 +7,7 @@ public class Player extends Entity {
     }
 
     // Déplacement simple (par pas de 0.1)
-    public void move(double dx, double dy, double dz) {
-        setPosition(getX() + dx, getY() + dy, getZ() + dz);
-    }
+    // public void move(double dx, double dy, double dz) {
+    //     setPosition(getX() + dx, getY() + dy, getZ() + dz);
+    // }
 }

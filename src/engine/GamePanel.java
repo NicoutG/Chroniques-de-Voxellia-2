@@ -34,10 +34,10 @@ public class GamePanel extends JPanel {
                 }
 
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_UP -> player.move(0, -0.1, 0);
-                    case KeyEvent.VK_DOWN -> player.move(0, 0.1, 0);
-                    case KeyEvent.VK_LEFT -> player.move(-0.1, 0, 0);
-                    case KeyEvent.VK_RIGHT -> player.move(0.1, 0, 0);
+                    case KeyEvent.VK_UP -> player.move(world, 0, -0.1, 0);
+                    case KeyEvent.VK_DOWN -> player.move(world, 0, 0.1, 0);
+                    case KeyEvent.VK_LEFT -> player.move(world, -0.1, 0, 0);
+                    case KeyEvent.VK_RIGHT -> player.move(world, 0.1, 0, 0);
                 }
             }
         });

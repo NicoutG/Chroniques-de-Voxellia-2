@@ -1,7 +1,6 @@
 package objects.block;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.function.Consumer;
 
 import model.world.World;
@@ -12,8 +11,6 @@ import tools.*;
 
 public class Block extends ObjectInstance<BlockType>{
     private ArrayList<BlockBehavior> blockBehaviors = new ArrayList<>();
-    private HashMap<String, Object> states = new HashMap<>();
-    private HashMap<String, Object> stateModifications = null;
 
     public Block(BlockType blockType) {
         super(blockType);
@@ -22,43 +19,6 @@ public class Block extends ObjectInstance<BlockType>{
     public void addBlockBehavior(BlockBehavior blockBehavior) {
         blockBehaviors.add(blockBehavior);
         blockBehavior.onAttachToBlock(this);
-    }
-
-    public Object getState(String stateName) {
-        return states.get(stateName);
-    }
-
-    public boolean setState(String stateName, Object value) {
-        if(existingState(stateName)) {
-            states.replace(stateName, value);
-            return true;
-        }
-        states.put(stateName, value);
-        return false;
-    }
-
-    public boolean existingState(String stateName) {
-        return states.containsKey(stateName);
-    }
-
-    public boolean setStateModification(String stateName, Object value) {
-        if (stateModifications == null)
-            stateModifications = new HashMap<>();
-        if(stateModifications.containsKey(stateName)) {
-            stateModifications.replace(stateName, value);
-            return true;
-        }
-        stateModifications.put(stateName, value);
-        return false;
-    }
-
-    public boolean updateStates() {
-        if (stateModifications.isEmpty())
-            return false;
-        for (var entrySet : stateModifications.entrySet())
-            setState(entrySet.getKey(), entrySet.getValue());
-        stateModifications = null;
-        return true;
     }
 
     //#region behavior events

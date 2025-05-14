@@ -81,7 +81,6 @@ public final class Renderer {
         for (int z = 0; z <= maxZ; z++) {
             for (int y = 0; y <= maxY; y++) {
                 for (int x = 0; x <= maxX; x++) {
-
                     Block b = blocks[x][y][z];
                     if (b == null)
                         continue;

@@ -4,6 +4,10 @@ public record ColorRGB(double r, double g, double b) {
 
     public static final ColorRGB BLACK = new ColorRGB(0, 0, 0);
 
+    public boolean isBlack() {
+        return r == 0 && g == 0 && b == 0;
+    }
+
     /* --- scalar multiplier ------------------------------------------------ */
     public ColorRGB mul(double s) {
         return new ColorRGB(r * s, g * s, b * s);

@@ -32,9 +32,23 @@ public final class FaceLighting {
         }
     }
 
+      public void add(Face f, ColorRGB c){
+        switch (f) {
+            case LEFT  -> left  = left.add(c);
+            case RIGHT -> right = right.add(c);
+            case TOP   -> top   = top.add(c);
+        }
+    }
+
     /* pour qu’un bloc source éclaire toutes ses faces à fond */
     public void inject(ColorRGB c){
         left = right = top = c.clamp();
+    }
+
+    public void clamp() {
+        left = left.clamp();
+        right = right.clamp();
+        top = top.clamp();
     }
 
     /* ---------- getters attendus par Renderer ---------- */

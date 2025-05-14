@@ -42,8 +42,8 @@ public class World {
     }
 
     public static World createDemoWorld() {
-        int sx = 20, sy = 20, sz = 2;
-        Block[][][] blocks = new Block[sx][sy][sz + 2];
+        int sx = 100, sy = 100, sz = 2;
+        Block[][][] blocks = new Block[sx][sy][sz + 10];
 
         try {
             BufferedImage player0 = ImageIO.read(World.class.getResource("/resources/textures/purple-block.png"));
@@ -69,6 +69,12 @@ public class World {
             
             blocks[14][12][2] = blockTypes.get(2).createBlock();
             blocks[14][2][2] = blockTypes.get(3).createBlock();
+            blocks[30][30][2] = blockTypes.get(2).createBlock();
+            blocks[40][20][2] = blockTypes.get(3).createBlock();
+            blocks[20][30][2] = blockTypes.get(2).createBlock();
+            blocks[20][20][2] = blockTypes.get(3).createBlock();
+            blocks[35][35][2] = blockTypes.get(2).createBlock();
+            blocks[10][20][2] = blockTypes.get(3).createBlock();
             
             blocks[18][11][2] = blockTypes.get(0).createBlock();
             blocks[18][12][2] = blockTypes.get(0).createBlock();

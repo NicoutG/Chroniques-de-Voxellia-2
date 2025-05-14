@@ -29,8 +29,8 @@ public class Block extends ObjectInstance<BlockType>{
         updateStates();
     }
 
-    public void onUpdate(World world) {
-        executeEvent(b -> b.onUpdate(world,this));
+    public void onUpdate(World world,Vector position) {
+        executeEvent(b -> b.onUpdate(world,this,position));
     }
 
     public void onInteraction(World world, Vector position, Entity entity) {
@@ -49,12 +49,8 @@ public class Block extends ObjectInstance<BlockType>{
         executeEvent(b -> b.onDesactivated(world,this,position,network));
     }
 
-    public void onEntityIn(World world, Vector position, Entity entity) {
-        executeEvent(b -> b.onEntityIn(world,this,position,entity));
-    }
-
-    public void onEntityCollision(World world, Vector position, Entity entity) {
-        executeEvent(b -> b.onEntityCollision(world,this,position,entity));
+    public void onEntityClose(World world, Vector position, Entity entity) {
+        executeEvent(b -> b.onEntityClose(world,this,position,entity));
     }
 
     //#endregion

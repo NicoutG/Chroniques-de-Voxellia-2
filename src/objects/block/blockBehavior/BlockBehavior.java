@@ -14,7 +14,7 @@ public abstract class BlockBehavior {
         return this;
     }
 
-    public void onUpdate(World world, Block block) {
+    public void onUpdate(World world, Block block, Vector position) {
     }
 
     public void onInteraction(World world, Block block, Vector position, Entity entity) {
@@ -29,10 +29,7 @@ public abstract class BlockBehavior {
     public void onDesactivated(World world, Block block, Vector position, int network) {
     }
 
-    public void onEntityIn(World world, Block block, Vector position, Entity entity) {
-    }
-
-    public void onEntityCollision(World world, Block block, Vector position, Entity entity) {
+    public void onEntityClose(World world, Block block, Vector position, Entity entity) {
     }
 
 

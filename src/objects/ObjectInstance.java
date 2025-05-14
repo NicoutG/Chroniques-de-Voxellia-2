@@ -74,7 +74,7 @@ public class ObjectInstance<T extends ObjectType> {
     }
 
     public boolean updateStates() {
-        if (stateModifications.isEmpty())
+        if (stateModifications == null || stateModifications.isEmpty())
             return false;
         for (var entrySet : stateModifications.entrySet())
             setState(entrySet.getKey(), entrySet.getValue());

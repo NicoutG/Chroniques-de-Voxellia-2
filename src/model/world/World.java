@@ -98,7 +98,7 @@ public class World {
             // player
             EntityType playerType = new EntityType("player");
             playerType.addTexture(player);
-            entities.add(new Player(playerType, 14, 8, 2));// chacune
+            entities.add(new Player(playerType, 14.5, 8.5, 2.5));// chacune
 
             return new World(blocks, entities);
 
@@ -106,6 +106,28 @@ public class World {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load block textures", e);
         }
+    }
+
+    public void update() {
+        // update blocks
+        Vector positionBlock = new Vector();
+        for (int z = 0; z < blocks[0][0].length; z++) {
+            positionBlock.z = z + 0.5;
+            for (int y = 0; y < blocks[0].length; y++) {
+                positionBlock.y = y + 0.5;
+                for (int x = 0; x < blocks.length; x++) {
+                    Block block = blocks[x][y][z];
+                    if (block != null) {
+                        positionBlock.x = x + 0.5;
+                        block.onUpdate(this,positionBlock);
+                    }
+                }
+            }
+        }
+
+        // update entities
+        for (Entity entity : entities)
+            entity.onUpdate(this);
     }
 
     public void activateBlocks(int network) {

@@ -1,14 +1,13 @@
 package objects.entity;
 
-import java.util.ArrayList;
-import tools.Vector;
-
 import model.world.World;
 import objects.ObjectInstance;
 import objects.block.Block;
 import tools.*;
 
 public class Entity extends ObjectInstance<EntityType>{
+    protected static final double MAX_VELOCITY = 2.5;
+
     protected Vector position;
     protected Vector velocity = new Vector();
 
@@ -30,10 +29,64 @@ public class Entity extends ObjectInstance<EntityType>{
         return position.z;
     }
 
+    public Vector getPosition() {
+        return position;
+    }
+
     public void setPosition(double x, double y, double z) {
-        this.position.x = x;
-        this.position.y = y;
-        this.position.z = z;
+        position.x = x;
+        position.y = y;
+        position.z = z;
+    }
+
+    public Vector getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(double x, double y, double z) {
+        velocity.x = x;
+        if (x < -MAX_VELOCITY)
+            velocity.x = -MAX_VELOCITY;
+        else
+            if (MAX_VELOCITY < x)
+                velocity.x = MAX_VELOCITY;
+        velocity.y = y;
+        if (y < -MAX_VELOCITY)
+            velocity.y = -MAX_VELOCITY;
+        else
+            if (MAX_VELOCITY < y)
+                velocity.y = MAX_VELOCITY;
+        velocity.z = z;
+        if (z < -MAX_VELOCITY)
+            velocity.z = -MAX_VELOCITY;
+        else
+            if (MAX_VELOCITY < z)
+                velocity.z = MAX_VELOCITY;
+    }
+
+    public void addVelocity(double x, double y, double z) {
+        setVelocity(velocity.x + x, velocity.y + y, velocity.z + z);
+    }
+
+    public void onUpdate(World world) {
+        double coef = 0.9;
+        setVelocity(coef * velocity.x, coef * velocity.y, coef * velocity.z -0.4);
+        addVelocity(0, 0, 0.1);
+        move(world, velocity.x, velocity.y, velocity.z);
+        notifyCloseBlocks(world);
+    }
+
+    public void notifyCloseBlocks(World world) {
+        int x = (int)position.x;
+        int y = (int)position.y;
+        int z = (int)position.z;
+        for (int i = x - 1; i <= x + 1; i++)
+            for (int j = y - 1; j <= y + 1; j++)
+                for (int k = z - 1; k <= z + 1; k++) {
+                    Block block = world.getBlock(i, j, k);
+                    if (block != null)
+                        block.onEntityClose(world, new Vector(i + 0.5, j + 0.5, k + 0.5), this);
+                }
     }
 
     public void move(World world, double moveX, double moveY, double moveZ) {
@@ -66,6 +119,12 @@ public class Entity extends ObjectInstance<EntityType>{
                 position.x -= stepX;
                 position.y -= stepY;
                 position.z -= stepZ;
+                if (dx != 0)
+                    velocity.x = 0;
+                if (dy != 0)
+                    velocity.y = 0;
+                if (dz != 0)
+                    velocity.z = 0;
                 break;
             }
         }
@@ -83,7 +142,7 @@ public class Entity extends ObjectInstance<EntityType>{
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
                     Block block = world.getBlock(x, y, z);
-                    if (block != null) {
+                    if (block != null  && block.getProperty("noCollision") == null) {
                         Vector blockPos = new Vector(x + 0.5, y + 0.5, z + 0.5);
                         if (getCollision().collision(position, block.getCollision(), blockPos))
                             return true;

@@ -38,6 +38,7 @@ public class GamePanel extends JPanel {
                     case KeyEvent.VK_DOWN -> player.move(world, 0, 0.1, 0);
                     case KeyEvent.VK_LEFT -> player.move(world, -0.1, 0, 0);
                     case KeyEvent.VK_RIGHT -> player.move(world, 0.1, 0, 0);
+                    case KeyEvent.VK_SPACE -> player.addVelocity(0,0,1.5);
                 }
             }
         });
@@ -45,6 +46,7 @@ public class GamePanel extends JPanel {
 
     public void tick() {
         tick++;
+        world.update();
     }
 
     @Override

@@ -4,7 +4,7 @@ package graphics.ligth;          // same package name
 import java.util.ArrayList;
 import java.util.List;
 
-import block.Block;
+import objects.block.Block;
 
 public final class Voxel {
 

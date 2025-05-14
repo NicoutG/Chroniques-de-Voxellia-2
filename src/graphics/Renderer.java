@@ -256,18 +256,41 @@ public final class Renderer {
         /* ----- fetch colours, defaulting to black on air/out-of-range ----- */
         ColorRGB cRight = ColorRGB.BLACK;
         FaceLighting fl = grid[xr][nxR][zr];
-        if (fl != null)
-            cRight = fl.right();
+        if (fl != null) {
+            if (fl.right().isBlack()) {
+                fl = grid[xr][yr][zr];
+                if (fl != null) {
+                    cRight = fl.right();
+                }
+            } else {
+                cRight = fl.right();
+            }
+        }
 
         ColorRGB cLeft = ColorRGB.BLACK;
         fl = grid[nxL][yr][zr];
-        if (fl != null)
-            cLeft = fl.left();
+        if (fl != null) {
+            if (fl.left().isBlack()) {
+                fl = grid[xr][yr][zr];
+                if (fl != null) {
+                    cLeft = fl.left();
+                }
+            } else {
+                cLeft = fl.left();
+            }
+        }
 
         ColorRGB cTop = ColorRGB.BLACK;
         fl = grid[xr][yr][nzT];
         if (fl != null)
-            cTop = fl.top();
+            if (fl.top().isBlack()) {
+                fl = grid[xr][yr][zr];
+                if (fl != null) {
+                    cTop = fl.top();
+                }
+            } else {
+                cTop = fl.top();
+            }
 
         return new FaceLighting(cRight, cLeft, cTop);
     }

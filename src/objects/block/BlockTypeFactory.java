@@ -71,7 +71,7 @@ public class BlockTypeFactory {
         Shape shape = new Cube();
         Texture text = new Texture(shape, frames, 1);
         blockType.addTexture(text);
-        LightSource light = new LightSource(new ColorRGB(1,0.9,0.6), 1.25, 0.8, 0.1);
+        LightSource light = new LightSource(new ColorRGB(1,0.9,0.6), 1.2, 0.8, 0.1);
         Property propLight = new PropertyLight(light);
         blockType.addProperty(propLight);
         return blockType;

@@ -7,7 +7,6 @@ import javax.imageio.ImageIO;
 
 import graphics.Texture;
 import graphics.ligth.*;
-import graphics.shape.Cube;
 import model.world.World;
 import objects.property.*;
 import graphics.shape.*;
@@ -21,6 +20,7 @@ public class BlockTypeFactory {
         blockTypes.add(loadRedBlock());
         blockTypes.add(loadPurpleBlock());
         blockTypes.add(loadBlockFire());
+        blockTypes.add(loadBlueStairsRight());
         return blockTypes;
     }
 
@@ -76,4 +76,14 @@ public class BlockTypeFactory {
         blockType.addProperty(propLight);
         return blockType;
     }
+    
+    private static BlockType loadBlueStairsRight() {
+        BlockType blockType = new BlockType("blueStairsRight");
+        BufferedImage img = getImage("blue-stairs-right.png");
+        Shape shape = new StairsRight();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
+    }
+
 }

@@ -56,7 +56,7 @@ public class World {
             for (int z = 0; z < sz; z++) {
                 for (int y = 0; y < sy; y++) {
                     for (int x = 0; x < sx; x++) {
-                        blocks[x][y][z] = blockTypes.get(z%2).getInstance();
+                        blocks[x][y][z] = blockTypes.get(0).getInstance();
                     }
                 }
             }
@@ -67,9 +67,16 @@ public class World {
             blocks[10][3][2] = blockTypes.get(0).getInstance();
             blocks[10][4][2] = blockTypes.get(0).getInstance();
             blocks[10][5][2] = blockTypes.get(0).getInstance();
+            blocks[10][14][2] = blockTypes.get(4).getInstance();
             
-            blocks[15][4][2] = blockTypes.get(2).getInstance();
+            blocks[14][7][2] = blockTypes.get(4).getInstance();
+            blocks[12][7][2] = blockTypes.get(4).getInstance();
+            blocks[13][7][2] = blockTypes.get(4).getInstance();
+
             blocks[15][12][2] = blockTypes.get(3).getInstance();
+
+
+            blocks[13][19][2] = blockTypes.get(3).getInstance();
             
             blocks[18][11][2] = blockTypes.get(0).getInstance();
             blocks[18][12][2] = blockTypes.get(0).getInstance();

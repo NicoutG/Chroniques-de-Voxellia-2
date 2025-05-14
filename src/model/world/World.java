@@ -48,10 +48,10 @@ public class World {
 
         try {
             BufferedImage player0 = ImageIO.read(World.class.getResource("/resources/textures/outlined/purple-block.png"));
-            BufferedImage player1 = ImageIO.read(World.class.getResource("/resources/textures/outlined/blue-block.png"));
+            // BufferedImage player1 = ImageIO.read(World.class.getResource("/resources/textures/outlined/blue-block.png"));
 
             Shape cube = new Cube();
-            Texture player = new Texture(cube, new BufferedImage[] { player0, player1 }, 6); // animé : 2 frames, 6 ticks
+            Texture player = new Texture(cube,  player0); // animé : 2 frames, 6 ticks
 
             for (int z = 0; z < sz; z++) {
                 for (int y = 0; y < sy; y++) {

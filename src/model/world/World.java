@@ -56,7 +56,13 @@ public class World {
             for (int z = 0; z < sz; z++) {
                 for (int y = 0; y < sy; y++) {
                     for (int x = 0; x < sx; x++) {
-                        blocks[x][y][z] = blockTypes.get(z%2).getInstance();
+                        if(x >= 14 && x <= 16 && z== 1 && y == 9 ) {
+
+                            blocks[x][y][z] = blockTypes.get(5).getInstance();
+                        } else {
+
+                            blocks[x][y][z] = blockTypes.get(z%2).getInstance();
+                        }
                     }
                 }
             }
@@ -73,8 +79,7 @@ public class World {
             blocks[12][7][2] = blockTypes.get(4).getInstance();
             blocks[13][7][2] = blockTypes.get(4).getInstance();
 
-            blocks[15][12][2] = blockTypes.get(3).getInstance();
-
+            // blocks[15][12][2] = blockTypes.get(3).getInstance();
 
             blocks[13][19][2] = blockTypes.get(3).getInstance();
             

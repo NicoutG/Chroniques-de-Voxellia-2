@@ -30,6 +30,12 @@ public class World {
         return blocks;
     }
 
+    public Block getBlock(int x, int y, int z) {
+        if (0 <= x && x < blocks.length && 0 <= y && y < blocks[x].length && 0 <= z && z < blocks[x][y].length)
+            return blocks[x][y][z];
+        return null;
+    }
+
     public ArrayList<Entity> getEntities() {
         return entities;
     }

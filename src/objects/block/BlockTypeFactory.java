@@ -12,7 +12,7 @@ import objects.property.*;
 import graphics.shape.*;
 
 public class BlockTypeFactory {
-    private static final String TEXTURE_PATH = "/resources/textures/";
+    private static final String TEXTURE_PATH = "/resources/textures/outlined/";
     
     public static ArrayList<BlockType> loadBlockTypes() {
         ArrayList<BlockType> blockTypes = new ArrayList<>();

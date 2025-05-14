@@ -47,8 +47,8 @@ public class World {
         Block[][][] blocks = new Block[sx][sy][sz + 10];
 
         try {
-            BufferedImage player0 = ImageIO.read(World.class.getResource("/resources/textures/purple-block.png"));
-            BufferedImage player1 = ImageIO.read(World.class.getResource("/resources/textures/blue-block.png"));
+            BufferedImage player0 = ImageIO.read(World.class.getResource("/resources/textures/outlined/purple-block.png"));
+            BufferedImage player1 = ImageIO.read(World.class.getResource("/resources/textures/outlined/blue-block.png"));
 
             Shape cube = new Cube();
             Texture player = new Texture(cube, new BufferedImage[] { player0, player1 }, 6); // animé : 2 frames, 6 ticks
@@ -56,7 +56,7 @@ public class World {
             for (int z = 0; z < sz; z++) {
                 for (int y = 0; y < sy; y++) {
                     for (int x = 0; x < sx; x++) {
-                        blocks[x][y][z] = blockTypes.get(0).getInstance();
+                        blocks[x][y][z] = blockTypes.get(z%2).getInstance();
                     }
                 }
             }

@@ -17,7 +17,7 @@ public class GameApp extends JFrame {
                 .getDefaultScreenDevice();
         gd.setFullScreenWindow(this);
 
-        int delayMs = 1000 / 20;
+        int delayMs = 1000 / 24;
         new Timer(delayMs, e -> {
             panel.tick();
             panel.repaint();

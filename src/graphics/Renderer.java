@@ -138,18 +138,18 @@ public final class Renderer {
                 drawables.add(new Drawable(
                         e.getTexture().full(tick), e.getX(), e.getY(), e.getZ()));
 
-                // FaceLighting faceLighting = sampleLighting(faceLightings, e.getX(), e.getY(),
-                // e.getZ());
+                FaceLighting faceLighting = sampleLighting(faceLightings, e.getX(), e.getY(),
+                e.getZ());
 
-                // drawables.add(new Drawable(shade(e.getTexture().left(tick),
-                // faceLighting.left()), e.getX(), e.getY(),
-                // e.getZ()));
-                // drawables.add(new Drawable(shade(e.getTexture().right(tick),
-                // faceLighting.right()), e.getX(), e.getY(),
-                // e.getZ()));
-                // drawables.add(new Drawable(shade(e.getTexture().top(tick),
-                // faceLighting.top()), e.getX(), e.getY(),
-                // e.getZ()));
+                drawables.add(new Drawable(shade(e.getTexture().left(tick),
+                faceLighting.left()), e.getX(), e.getY(),
+                e.getZ()));
+                drawables.add(new Drawable(shade(e.getTexture().right(tick),
+                faceLighting.right()), e.getX(), e.getY(),
+                e.getZ()));
+                drawables.add(new Drawable(shade(e.getTexture().top(tick),
+                faceLighting.top()), e.getX(), e.getY(),
+                e.getZ()));
 
             }
         }

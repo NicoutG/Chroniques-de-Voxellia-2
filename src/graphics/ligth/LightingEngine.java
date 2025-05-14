@@ -3,8 +3,9 @@ package graphics.ligth;
 
 import java.util.ArrayDeque;
 import java.util.List;
-import block.Block;
-import block.blockProperty.BlockPropertyLight;
+import objects.block.Block;
+import objects.property.PropertyLight;
+
 import graphics.shape.Face;
 
 public final class LightingEngine {
@@ -49,7 +50,7 @@ public final class LightingEngine {
                     Block b = blocks[x][y][z];
                     if (b == null) continue;
 
-                    BlockPropertyLight lp = (BlockPropertyLight)b.getBlockProperty("light");
+                    PropertyLight lp = (PropertyLight)b.getProperty("light");
                     if (lp == null) continue;
 
                     LightSource s = lp.getLight();

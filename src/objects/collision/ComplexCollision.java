@@ -1,4 +1,4 @@
-package collision;
+package objects.collision;
 
 import java.util.ArrayList;
 

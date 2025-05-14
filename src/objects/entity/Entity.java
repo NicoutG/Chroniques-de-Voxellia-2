@@ -1,20 +1,15 @@
-package entity;
+package objects.entity;
 
-import graphics.Texture;
-import tools.*;;
+import objects.ObjectInstance;
+import tools.*;
 
-public class Entity {
-    protected final Texture tex;
+public class Entity extends ObjectInstance<EntityType>{
     protected Vector position;
 
-    public Entity(Texture tex, double x, double y, double z) {
-        this.tex = tex;
+    public Entity(EntityType type,double x, double y, double z) {
+        super(type);
         position = new Vector();
         setPosition(x,y,z);
-    }
-
-    public Texture getTexture() {
-        return tex;
     }
 
     public double getX() {

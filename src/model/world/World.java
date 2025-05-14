@@ -2,13 +2,14 @@ package model.world;
 
 import javax.imageio.ImageIO;
 
-import block.Block;
-import block.BlockType;
-import entity.Entity;
-import entity.Player;
 import graphics.Texture;
 import graphics.shape.Cube;
 import graphics.shape.Shape;
+import objects.block.Block;
+import objects.block.BlockType;
+import objects.entity.Entity;
+import objects.entity.EntityType;
+import objects.entity.Player;
 import tools.Vector;
 
 import java.awt.image.BufferedImage;
@@ -55,35 +56,30 @@ public class World {
             for (int z = 0; z < sz; z++) {
                 for (int y = 0; y < sy; y++) {
                     for (int x = 0; x < sx; x++) {
-                        blocks[x][y][z] = blockTypes.get(z%2).createBlock();
+                        blocks[x][y][z] = blockTypes.get(z%2).getInstance();
                     }
                 }
             }
 
-            blocks[10][11][2] = blockTypes.get(0).createBlock();
-            blocks[10][12][2] = blockTypes.get(0).createBlock();
-            blocks[10][13][2] = blockTypes.get(0).createBlock();
-            blocks[10][3][2] = blockTypes.get(0).createBlock();
-            blocks[10][4][2] = blockTypes.get(0).createBlock();
-            blocks[10][5][2] = blockTypes.get(0).createBlock();
+            blocks[10][11][2] = blockTypes.get(0).getInstance();
+            blocks[10][12][2] = blockTypes.get(0).getInstance();
+            blocks[10][13][2] = blockTypes.get(0).getInstance();
+            blocks[10][3][2] = blockTypes.get(0).getInstance();
+            blocks[10][4][2] = blockTypes.get(0).getInstance();
+            blocks[10][5][2] = blockTypes.get(0).getInstance();
             
-            blocks[14][12][2] = blockTypes.get(2).createBlock();
-            blocks[14][2][2] = blockTypes.get(3).createBlock();
-            blocks[30][30][2] = blockTypes.get(2).createBlock();
-            blocks[40][20][2] = blockTypes.get(3).createBlock();
-            blocks[20][30][2] = blockTypes.get(2).createBlock();
-            blocks[20][20][2] = blockTypes.get(3).createBlock();
-            blocks[35][35][2] = blockTypes.get(2).createBlock();
-            blocks[10][20][2] = blockTypes.get(3).createBlock();
+            blocks[15][8][2] = blockTypes.get(2).getInstance();
             
-            blocks[18][11][2] = blockTypes.get(0).createBlock();
-            blocks[18][12][2] = blockTypes.get(0).createBlock();
-            blocks[18][13][2] = blockTypes.get(0).createBlock();
+            blocks[18][11][2] = blockTypes.get(0).getInstance();
+            blocks[18][12][2] = blockTypes.get(0).getInstance();
+            blocks[18][13][2] = blockTypes.get(0).getInstance();
 
             ArrayList<Entity> entities = new ArrayList<>();
 
             // player
-            entities.add(new Player(player, 14, 8, 2));// chacune
+            EntityType playerType = new EntityType("player");
+            playerType.addTexture(player);
+            entities.add(new Player(playerType, 14, 8, 2));// chacune
 
             return new World(blocks, entities);
 

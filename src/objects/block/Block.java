@@ -1,37 +1,27 @@
-package block;
+package objects.block;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-import block.blockBehavior.BlockBehavior;
-import block.blockProperty.BlockProperty;
-import entity.Entity;
-import graphics.Texture;
 import model.world.World;
-import tools.*;;
+import objects.ObjectInstance;
+import objects.block.blockBehavior.BlockBehavior;
+import objects.entity.Entity;
+import tools.*;
 
-public class Block {
-    private BlockType blockType;
+public class Block extends ObjectInstance<BlockType>{
     private ArrayList<BlockBehavior> blockBehaviors = new ArrayList<>();
     private HashMap<String, Object> states = new HashMap<>();
     private HashMap<String, Object> stateModifications = null;
 
     public Block(BlockType blockType) {
-        this.blockType = blockType;
-    }
-
-    public String getName() {
-        return blockType.getName();
+        super(blockType);
     }
 
     public void addBlockBehavior(BlockBehavior blockBehavior) {
         blockBehaviors.add(blockBehavior);
         blockBehavior.onAttachToBlock(this);
-    }
-
-    public BlockProperty getBlockProperty(String propertyName) {
-        return blockType.getBlockProperty(propertyName);
     }
 
     public Object getState(String stateName) {
@@ -69,14 +59,6 @@ public class Block {
             setState(entrySet.getKey(), entrySet.getValue());
         stateModifications = null;
         return true;
-    }
-
-    public Texture getTexture() { 
-        return blockType.getTexture();
-    }
-    
-    public double getOpacity() { 
-        return blockType.getOpacity();
     }
 
     //#region behavior events

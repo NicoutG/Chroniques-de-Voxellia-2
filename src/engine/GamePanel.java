@@ -2,9 +2,9 @@ package engine;
 
 import javax.swing.*;
 
-import entity.Player;
 import graphics.Renderer;
 import model.world.World;
+import objects.entity.Player;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;

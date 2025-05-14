@@ -1,15 +1,15 @@
-package block;
+package objects.block;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import block.blockProperty.*;
 import graphics.Texture;
 import graphics.ligth.*;
 import graphics.shape.Cube;
 import model.world.World;
+import objects.property.*;
 import graphics.shape.*;
 
 public class BlockTypeFactory {
@@ -39,7 +39,7 @@ public class BlockTypeFactory {
         BufferedImage img = getImage("blue-block.png");
         Shape shape = new Cube();
         Texture text = new Texture(shape, img);
-        blockType.setTexture(text);
+        blockType.addTexture(text);
         return blockType;
     }
 
@@ -48,7 +48,7 @@ public class BlockTypeFactory {
         BufferedImage img = getImage("red-block.png");
         Shape shape = new Cube();
         Texture text = new Texture(shape, img);
-        blockType.setTexture(text);
+        blockType.addTexture(text);
         return blockType;
     }
 
@@ -57,10 +57,10 @@ public class BlockTypeFactory {
         BufferedImage img = getImage("purple-block.png");
         Shape shape = new Cube();
         Texture text = new Texture(shape, img);
-        blockType.setTexture(text);
+        blockType.addTexture(text);
         LightSource light = new LightSource(new ColorRGB(1,0,0), 1, 0.9, 0.1);
-        BlockProperty propLight = new BlockPropertyLight(light);
-        blockType.addBlockProperty(propLight);
+        Property propLight = new PropertyLight(light);
+        blockType.addProperty(propLight);
         return blockType;
     }
 
@@ -69,10 +69,10 @@ public class BlockTypeFactory {
         BufferedImage img = getImage("purple-block.png");
         Shape shape = new Cube();
         Texture text = new Texture(shape, img);
-        blockType.setTexture(text);
+        blockType.addTexture(text);
         LightSource light = new LightSource(new ColorRGB(0,0,1), 1, 0.9, 0);
-        BlockProperty propLight = new BlockPropertyLight(light);
-        blockType.addBlockProperty(propLight);
+        Property propLight = new PropertyLight(light);
+        blockType.addProperty(propLight);
         return blockType;
     }
 }

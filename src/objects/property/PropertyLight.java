@@ -1,12 +1,12 @@
-package block.blockProperty;
+package objects.property;
 
 import graphics.ligth.LightSource;
 
-public class BlockPropertyLight extends BlockProperty {
+public class PropertyLight extends Property {
 
     private LightSource light;
 
-    public BlockPropertyLight(LightSource lightSource) {
+    public PropertyLight(LightSource lightSource) {
         super("light");
         light = lightSource;
     }

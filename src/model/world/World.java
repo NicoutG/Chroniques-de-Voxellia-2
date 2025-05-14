@@ -68,7 +68,8 @@ public class World {
             blocks[10][4][2] = blockTypes.get(0).getInstance();
             blocks[10][5][2] = blockTypes.get(0).getInstance();
             
-            blocks[15][8][2] = blockTypes.get(2).getInstance();
+            blocks[15][4][2] = blockTypes.get(2).getInstance();
+            blocks[15][12][2] = blockTypes.get(3).getInstance();
             
             blocks[18][11][2] = blockTypes.get(0).getInstance();
             blocks[18][12][2] = blockTypes.get(0).getInstance();

@@ -16,6 +16,7 @@ public abstract class ObjectType {
 
     public ObjectType(String name) {
         this.name = name;
+        this.opacity = 1;
     }
 
     public String getName() {

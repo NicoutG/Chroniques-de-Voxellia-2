@@ -5,7 +5,6 @@ import java.util.ArrayDeque;
 import java.util.List;
 import objects.block.Block;
 import objects.property.PropertyLight;
-
 import graphics.shape.Face;
 
 public final class LightingEngine {
@@ -50,7 +49,7 @@ public final class LightingEngine {
                     Block b = blocks[x][y][z];
                     if (b == null) continue;
 
-                    PropertyLight lp = (PropertyLight)b.getProperty("light");
+                    PropertyLight lp = (PropertyLight) b.getProperty("light");
                     if (lp == null) continue;
 
                     LightSource s = lp.getLight();

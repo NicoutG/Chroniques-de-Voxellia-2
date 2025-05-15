@@ -73,13 +73,13 @@ public class World {
                 }
             }
 
-            blocks[10][10][9] = blockTypes.get(6).getInstance();
+            blocks[10][10][9] = blockTypes.get(6).getInstance(); // sun
 
             blocks[10][11][2] = blockTypes.get(0).getInstance();
-            blocks[10][12][2] = blockTypes.get(0).getInstance();
+            blocks[10][12][2] = blockTypes.get(7).getInstance();
             blocks[10][13][2] = blockTypes.get(0).getInstance();
             blocks[10][3][2] = blockTypes.get(0).getInstance();
-            blocks[10][4][2] = blockTypes.get(0).getInstance();
+            blocks[10][4][2] = blockTypes.get(7).getInstance();
             blocks[10][5][2] = blockTypes.get(0).getInstance();
             blocks[10][14][2] = blockTypes.get(4).getInstance();
             
@@ -89,7 +89,19 @@ public class World {
 
             // blocks[15][12][2] = blockTypes.get(3).getInstance();
 
-            blocks[13][19][2] = blockTypes.get(3).getInstance();
+            blocks[13][19][2] = blockTypes.get(3).getInstance(); // fire
+
+            blocks[11][21][2] = blockTypes.get(0).getInstance();
+            blocks[12][21][2] = blockTypes.get(0).getInstance();
+            blocks[13][21][2] = blockTypes.get(7).getInstance(); // glass
+            blocks[14][21][2] = blockTypes.get(0).getInstance();
+            blocks[15][21][2] = blockTypes.get(0).getInstance();
+           
+            blocks[11][21][3] = blockTypes.get(0).getInstance();
+            blocks[12][21][3] = blockTypes.get(0).getInstance();
+            blocks[13][21][3] = blockTypes.get(0).getInstance(); 
+            blocks[14][21][3] = blockTypes.get(0).getInstance();
+            blocks[15][21][3] = blockTypes.get(0).getInstance();
             
             blocks[18][11][2] = blockTypes.get(0).getInstance();
             blocks[18][12][2] = blockTypes.get(0).getInstance();

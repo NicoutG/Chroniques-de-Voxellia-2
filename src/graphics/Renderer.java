@@ -192,20 +192,31 @@ public final class Renderer {
                 drawY <= screenH; // not completely below
     }
 
+    private boolean visibilityChecker(Block b) {
+        if (b == null || b.getTexture() == null || b.getOpacity() < 1
+                || (b.getTexture() != null && !b.getTexture().takesFullSpace())) {
+            return true;
+        }
+        return false;
+
+    }
+
     private boolean[] getVisibleFaces(Block[][][] b, int x, int y, int z,
             int maxX, int maxY, int maxZ, double originX, double originY, int w, int h) {
         boolean[] faces = new boolean[] { false, false, false };
         if (!isInScreenRange(x, y, z, originX, originY, w, h))
             return faces;
-        if (x == maxX || (b[x + 1][y][z] == null || b[x + 1][y][z].getTexture() == null
-                || (b[x + 1][y][z].getTexture() != null && !b[x + 1][y][z].getTexture().takesFullSpace())))
+
+        if (x == maxX || visibilityChecker(b[x + 1][y][z])) {
             faces[Face.RIGHT.index] = true;
-        if (y == maxY || b[x][y + 1][z] == null || b[x][y + 1][z].getTexture() == null
-                || (b[x][y + 1][z].getTexture() != null && !b[x][y + 1][z].getTexture().takesFullSpace()))
+        }
+        if (y == maxY || visibilityChecker(b[x][y + 1][z])) {
             faces[Face.LEFT.index] = true;
-        if (z == maxZ || b[x][y][z + 1] == null || b[x][y][z + 1].getTexture() == null
-                || (b[x][y][z + 1].getTexture() != null && !b[x][y][z + 1].getTexture().takesFullSpace()))
+        }
+        if (z == maxZ || visibilityChecker(b[x][y][z + 1])) {
             faces[Face.TOP.index] = true;
+        }
+
         return faces;
     }
 

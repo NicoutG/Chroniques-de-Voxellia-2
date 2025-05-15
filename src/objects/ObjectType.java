@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import graphics.Texture;
+import graphics.ligth.ColorRGB;
 import objects.collision.Collision;
 import objects.property.Property;
 
 public abstract class ObjectType {
     private String name;
     private double opacity;
+    private ColorRGB color; // When 0 < opacity < 1
     private ArrayList<Texture> textures = new ArrayList<>();
     private ArrayList<Collision> collisions = new ArrayList<>();
     private HashMap<String, Property> properties = new HashMap<>();
@@ -29,6 +31,14 @@ public abstract class ObjectType {
 
     public void setOpacity(double opacity) { 
         this.opacity = opacity;
+    }
+    
+    public ColorRGB getColor() { 
+        return color;
+    }
+
+    public void setColor(ColorRGB color) { 
+        this.color = color;
     }
 
     public Texture getTexture(int index) {

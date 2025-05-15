@@ -21,10 +21,11 @@ public class BlockTypeFactory {
         blockTypes.add(loadBlueBlock());
         blockTypes.add(loadRedBlock());
         blockTypes.add(loadPurpleBlock());
-        blockTypes.add(loadBlockFire());
+        blockTypes.add(loadFireBlock());
         blockTypes.add(loadBlueStairsRight());
-        blockTypes.add(loadBlockLava());
-        blockTypes.add(loadBlockSun());
+        blockTypes.add(loadLavaBlock());
+        blockTypes.add(loadSunBlock());
+        blockTypes.add(loadGlassBlock());
         return blockTypes;
     }
 
@@ -64,7 +65,7 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    private static BlockType loadBlockFire() {
+    private static BlockType loadFireBlock() {
         BlockType blockType = new BlockType("fire");
         BufferedImage[] frames = new BufferedImage[] {
                 getImage("fire-0.png"),
@@ -95,18 +96,19 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    private static BlockType loadBlockLava() {
+    private static BlockType loadLavaBlock() {
         BlockType blockType = new BlockType("lava");
         Shape shape = new Rectangle();
         Texture text = new Texture(shape, getImage("lava.png"));
         blockType.addTexture(text);
         LightSource light = new LightSource(new ColorRGB(1, 0.6, 0.4), 1.5, 0.5, 0.05);
         Property propLight = new PropertyLight(light);
+        blockType.setOpacity(0);
         blockType.addProperty(propLight);
         return blockType;
     }
 
-    private static BlockType loadBlockSun() {
+    private static BlockType loadSunBlock() {
         BlockType blockType = new BlockType("sun");
         ColorRGB[] pulse = {
             new ColorRGB(1, 1, 1), // plain day (white)
@@ -130,4 +132,12 @@ public class BlockTypeFactory {
         return blockType;
     }
 
+      private static BlockType loadGlassBlock() {
+        BlockType blockType = new BlockType("glassBlock");
+        Shape shape = new Cube();
+        Texture text = new Texture(shape, getImage("glass-block.png"));
+        blockType.addTexture(text);
+        blockType.setOpacity(0.2);
+        return blockType;
+    }
 }

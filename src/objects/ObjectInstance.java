@@ -3,6 +3,7 @@ package objects;
 import java.util.HashMap;
 
 import graphics.Texture;
+import graphics.ligth.ColorRGB;
 import objects.collision.Collision;
 import objects.property.Property;
 
@@ -31,6 +32,14 @@ public class ObjectInstance<T extends ObjectType> {
 
     public Texture getTexture() {
         return type.getTexture(indexTexture);
+    }
+    
+    public ColorRGB getColor() {
+        Object state = getState("color");
+        if (state == null || !(state instanceof ColorRGB))
+            return type.getColor();
+        else
+            return (ColorRGB) state;
     }
 
     public Collision getCollision() {

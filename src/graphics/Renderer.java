@@ -49,17 +49,27 @@ public final class Renderer {
             return;
 
         /* ---------- compute camera offset ---------- */
-        double originX = w / 2.0;
-        double originY = h / 2.0;
+        /* ---------- compute camera offset ---------- */
+double camX = w / 2.0;
+double camY = h / 2.0;
 
-        Entity player = world.getPlayer();
-        if (player != null) {
-            IsoMath.toScreen(player.getX(), player.getY(), player.getZ(), scratchPoint);
-            originX -= scratchPoint.x;
-            originY -= scratchPoint.y;
-        } else {
-            originY = h / 4.0;
-        }
+Entity player = world.getPlayer();
+if (player != null) {
+    IsoMath.toScreen(player.getX(), player.getY(), player.getZ(), scratchPoint);
+    camX -= scratchPoint.x;
+    camY -= scratchPoint.y;
+} else {
+    camY = h / 4.0;
+}
+
+/* ── NEW: snap the camera once ───────────────────────────────────── */
+int originXi = (int) Math.floor(camX);   // <-- floor   (not round!)
+int originYi = (int) Math.floor(camY);
+/* keep the *fractional* remainders in case you need them elsewhere:
+double subX = camX - originXi;
+double subY = camY - originYi;
+*/
+
 
         /* ---------- clear & prepare canvas ---------- */
         g2.setColor(Color.BLACK);
@@ -85,7 +95,7 @@ public final class Renderer {
                     if (b == null || b.getTexture() == null)
                         continue;
 
-                    boolean[] visibleFaces = getVisibleFaces(blocks, x, y, z, maxX, maxY, maxZ, originX, originY, w, h);
+                    boolean[] visibleFaces = getVisibleFaces(blocks, x, y, z, maxX, maxY, maxZ, originXi, originYi, w, h);
                     if (!visibleFaces[Face.LEFT.index] &&
                             !visibleFaces[Face.RIGHT.index] &&
                             !visibleFaces[Face.TOP.index]) {
@@ -94,8 +104,8 @@ public final class Renderer {
 
                     /* --- screen-space cull before allocating Drawable --- */
                     IsoMath.toScreen(x, y, z, scratchPoint);
-                    double drawX = originX + scratchPoint.x;
-                    double drawY = originY + scratchPoint.y;
+                    double drawX = originXi + scratchPoint.x;
+                    double drawY = originYi + scratchPoint.y;
                     if (drawX + IsoMath.DRAW_TILE_SIZE < 0 || drawX > w ||
                             drawY + IsoMath.DRAW_TILE_SIZE < 0 || drawY > h) {
                         continue; // quad never reaches the viewport
@@ -131,8 +141,8 @@ public final class Renderer {
                     continue;
 
                 IsoMath.toScreen(e.getX(), e.getY(), e.getZ(), scratchPoint);
-                double drawX = originX + scratchPoint.x;
-                double drawY = originY + scratchPoint.y;
+                double drawX = originXi + scratchPoint.x;
+                double drawY = originYi + scratchPoint.y;
                 if (drawX + IsoMath.DRAW_TILE_SIZE < 0 || drawX > w ||
                         drawY + IsoMath.DRAW_TILE_SIZE < 0 || drawY > h) {
                     continue;
@@ -161,8 +171,8 @@ public final class Renderer {
         drawables.sort(DEPTH);
         for (Drawable d : drawables) {
             IsoMath.toScreen(d.x, d.y, d.z, scratchPoint);
-            int dx = (int) Math.round(originX + scratchPoint.x);
-            int dy = (int) Math.round(originY + scratchPoint.y);
+            int dx = originXi + (int) scratchPoint.x;
+            int dy = originYi + (int) scratchPoint.y;
 
             g2.drawImage(d.texture,
                     dx, dy,

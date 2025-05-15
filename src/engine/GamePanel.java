@@ -21,7 +21,10 @@ public class GamePanel extends JPanel {
         setFocusable(true);
         requestFocusInWindow();
 
-        this.world = World.createDemoWorld();
+        // this.world = World.createDemoWorld();
+         this.world = World.loadWorld("world.txt");
+
+
         this.renderer = new Renderer(world);
 
         // Écouteur de touches
@@ -33,6 +36,7 @@ public class GamePanel extends JPanel {
                     return;
                 }
 
+                
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_UP -> player.move(world, 0, -0.1, 0);
                     case KeyEvent.VK_DOWN -> player.move(world, 0, 0.1, 0);

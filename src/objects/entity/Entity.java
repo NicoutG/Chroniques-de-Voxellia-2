@@ -3,6 +3,7 @@ package objects.entity;
 import model.world.World;
 import objects.ObjectInstance;
 import objects.block.Block;
+import objects.collision.BoundingCollision;
 import tools.*;
 
 public class Entity extends ObjectInstance<EntityType>{

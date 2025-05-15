@@ -8,6 +8,8 @@ import javax.imageio.ImageIO;
 import graphics.Texture;
 import graphics.ligth.*;
 import model.world.World;
+import objects.collision.BoundingCollision;
+import objects.collision.ComplexCollision;
 import objects.property.*;
 import graphics.shape.*;
 
@@ -85,6 +87,11 @@ public class BlockTypeFactory {
         Shape shape = new StairsRight();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        ComplexCollision collision = new ComplexCollision();
+        collision.addCollision(new BoundingCollision(-0.5,0.5,-0.5,0.5,-0.5,-0.17));
+        collision.addCollision(new BoundingCollision(-0.5,0.5,-0.5,0.17,-0.17,0.17));
+        collision.addCollision(new BoundingCollision(-0.5,0.5,-0.5,-0.17,0.17,0.5));
+        blockType.addCollision(collision);
         return blockType;
     }
 

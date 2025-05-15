@@ -26,6 +26,9 @@ public class BlockTypeFactory {
         blockTypes.add(loadLavaBlock());
         blockTypes.add(loadSunBlock());
         blockTypes.add(loadGlassBlock());
+        blockTypes.add(loadDirtBlock());
+        blockTypes.add(loadGrassBlock());
+        blockTypes.add(loadHedgeBlock());
         return blockTypes;
     }
 
@@ -138,6 +141,33 @@ public class BlockTypeFactory {
         Texture text = new Texture(shape, getImage("glass-block.png"));
         blockType.addTexture(text);
         blockType.setOpacity(0.2);
+        return blockType;
+    }
+
+    private static BlockType loadDirtBlock() {
+        BlockType blockType = new BlockType("dirtBlock");
+        BufferedImage img = getImage("dirt-block.png");
+        Shape shape = new Cube();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
+    }
+   
+    private static BlockType loadGrassBlock() {
+        BlockType blockType = new BlockType("grassBlock");
+        BufferedImage img = getImage("grass-block.png");
+        Shape shape = new Cube();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
+    }
+   
+    private static BlockType loadHedgeBlock() {
+        BlockType blockType = new BlockType("hedge");
+        BufferedImage img = getImage("hedge.png");
+        Shape shape = new Cube();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
         return blockType;
     }
 }

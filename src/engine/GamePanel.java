@@ -3,8 +3,8 @@ package engine;
 import javax.swing.*;
 
 import graphics.Renderer;
-import model.world.World;
 import objects.entity.Player;
+import world.World;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;

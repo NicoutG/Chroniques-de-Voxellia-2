@@ -1,10 +1,9 @@
 package objects.entity;
 
-import model.world.World;
 import objects.ObjectInstance;
 import objects.block.Block;
-import objects.collision.BoundingCollision;
 import tools.*;
+import world.World;
 
 public class Entity extends ObjectInstance<EntityType>{
     protected static final double MAX_VELOCITY = 2.5;

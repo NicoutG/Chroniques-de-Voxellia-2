@@ -3,11 +3,11 @@ package objects.block;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import model.world.World;
 import objects.ObjectInstance;
 import objects.block.blockBehavior.BlockBehavior;
 import objects.entity.Entity;
 import tools.*;
+import world.World;
 
 public class Block extends ObjectInstance<BlockType>{
     private ArrayList<BlockBehavior> blockBehaviors = new ArrayList<>();

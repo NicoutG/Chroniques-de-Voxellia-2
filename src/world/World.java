@@ -1,19 +1,11 @@
-package model.world;
+package world;
 
-import javax.imageio.ImageIO;
-
-import graphics.Texture;
-import graphics.shape.Cube;
-import graphics.shape.Shape;
 import objects.block.Block;
 import objects.block.BlockType;
 import objects.entity.Entity;
-import objects.entity.EntityType;
 import objects.entity.Player;
 import tools.Vector;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class World {
@@ -28,37 +20,6 @@ public class World {
     public static World loadWorld(String filename) {
         WorldLoader.WorldData data = WorldLoader.loadWorld(filename, BLOCK_TYPES);
         return new World(data.blocks(), data.entities());
-    }
-
-    /* keep the demo generator exactly as before ------------------------ */
-
-    public static World createDemoWorld() {
-        int sx = 25, sy = 25, sz = 2;
-        Block[][][] blocks = new Block[sx][sy][sz + 10];
-
-        try {
-            BufferedImage player0 = ImageIO.read(World.class.getResource(
-                    "/resources/textures/outlined/purple-block.png"));
-
-            Shape cube = new Cube();
-            Texture playerTex = new Texture(cube, player0);
-            EntityType playerTp = new EntityType("player");
-            playerTp.addTexture(playerTex);
-
-            for (int z = 0; z < sz; z++)
-                for (int y = 0; y < sy; y++)
-                    for (int x = 0; x < sx; x++)
-                        blocks[x][y][z] = BLOCK_TYPES.get((x >= 14 && x <= 16 && z == 1 && y == 9) ? 5 : z % 2)
-                                .getInstance();
-
-            ArrayList<Entity> entities = new ArrayList<>();
-            entities.add(new Player(playerTp, 14.5, 8.5, 2.5));
-
-            return new World(blocks, entities);
-
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load demo textures", e);
-        }
     }
 
     /* ------------------------------------------------------------------ */

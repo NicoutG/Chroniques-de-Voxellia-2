@@ -7,10 +7,10 @@ import javax.imageio.ImageIO;
 
 import graphics.Texture;
 import graphics.ligth.*;
-import model.world.World;
 import objects.collision.BoundingCollision;
 import objects.collision.ComplexCollision;
 import objects.property.*;
+import world.World;
 import graphics.shape.*;
 
 public class BlockTypeFactory {

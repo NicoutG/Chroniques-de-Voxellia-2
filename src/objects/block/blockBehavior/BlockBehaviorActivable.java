@@ -1,8 +1,8 @@
 package objects.block.blockBehavior;
 
-import model.world.World;
 import objects.block.Block;
 import tools.*;
+import world.World;
 
 
 public abstract class BlockBehaviorActivable extends BlockBehaviorConnected {

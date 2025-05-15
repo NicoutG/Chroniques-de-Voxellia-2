@@ -1,33 +1,18 @@
 package objects.block;
 
-import java.util.ArrayList;
-import java.util.function.Consumer;
-
 import objects.ObjectInstance;
 import objects.block.blockBehavior.BlockBehavior;
 import objects.entity.Entity;
 import tools.*;
 import world.World;
 
-public class Block extends ObjectInstance<BlockType>{
-    private ArrayList<BlockBehavior> blockBehaviors = new ArrayList<>();
+public class Block extends ObjectInstance<BlockType, Block, BlockBehavior>{
 
     public Block(BlockType blockType) {
         super(blockType);
     }
 
-    public void addBlockBehavior(BlockBehavior blockBehavior) {
-        blockBehaviors.add(blockBehavior);
-        blockBehavior.onAttachToBlock(this);
-    }
-
     //#region behavior events
-
-    private void executeEvent(Consumer<BlockBehavior> fonction) {
-        for (BlockBehavior blockBehavior : blockBehaviors)
-            fonction.accept(blockBehavior);
-        updateStates();
-    }
 
     public void onUpdate(World world,Vector position) {
         executeEvent(b -> b.onUpdate(world,this,position));

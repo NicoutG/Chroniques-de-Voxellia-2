@@ -17,8 +17,8 @@ public class BlockBehaviorActivableLight extends BlockBehaviorActivable {
     }
 
     @Override
-    public void onAttachToBlock(Block block) {
-        super.onAttachToBlock(block);
+    public void onAttachTo(Block block) {
+        super.onAttachTo(block);
         block.setState(LIGHT, false);
     }
 

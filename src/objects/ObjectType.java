@@ -8,13 +8,18 @@ import graphics.ligth.ColorRGB;
 import objects.collision.Collision;
 import objects.property.Property;
 
-public abstract class ObjectType {
+@SuppressWarnings("rawtypes")
+public abstract class ObjectType<
+    I extends ObjectInstance<?, ?, ?>,
+    B extends ObjectBehavior<?, ?, ?>
+> {
     private String name;
     private double opacity;
     private ColorRGB color; // When 0 < opacity < 1
     private ArrayList<Texture> textures = new ArrayList<>();
     private ArrayList<Collision> collisions = new ArrayList<>();
     private HashMap<String, Property> properties = new HashMap<>();
+    protected ArrayList<B> behaviors = new ArrayList<>();
 
     public ObjectType(String name) {
         this.name = name;
@@ -75,5 +80,9 @@ public abstract class ObjectType {
         return true;
     }
 
-    public abstract <T extends ObjectType> ObjectInstance<T> getInstance();
+    public void addBehavior(B behavior) {
+        behaviors.add(behavior);
+    }
+
+    public abstract ObjectInstance getInstance();
 }

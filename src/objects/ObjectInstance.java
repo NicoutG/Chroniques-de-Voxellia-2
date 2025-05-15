@@ -1,18 +1,25 @@
 package objects;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 import graphics.Texture;
 import graphics.ligth.ColorRGB;
 import objects.collision.Collision;
 import objects.property.Property;
 
-public class ObjectInstance<T extends ObjectType> {
+public class ObjectInstance<
+    T extends ObjectType<?, ?>,
+    I extends ObjectInstance<T, I, B>,
+    B extends ObjectBehavior<T, I, B>
+> {
     protected final T type;
     protected int indexTexture = 0;
     protected int indexCollision = 0;
     private HashMap<String, Object> states = new HashMap<>();
     private HashMap<String, Object> stateModifications = null;
+    protected ArrayList<B> behaviors = new ArrayList<>();
 
     public ObjectInstance(T type) {
         this.type = type;
@@ -89,5 +96,17 @@ public class ObjectInstance<T extends ObjectType> {
             setState(entrySet.getKey(), entrySet.getValue());
         stateModifications = null;
         return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void addBehavior(B behavior) {
+        behaviors.add(behavior);
+        behavior.onAttachTo((I)this);
+    }
+
+    protected void executeEvent(Consumer<B> fonction) {
+        for (B behavior : behaviors)
+            fonction.accept(behavior);
+        updateStates();
     }
 }

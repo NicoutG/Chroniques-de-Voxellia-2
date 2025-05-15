@@ -1,13 +1,15 @@
 package objects.block.blockBehavior;
 
+import objects.ObjectBehavior;
 import objects.block.Block;
+import objects.block.BlockType;
 import objects.entity.Entity;
 import tools.*;
 import world.World;
 
-public abstract class BlockBehavior {
+public abstract class BlockBehavior extends ObjectBehavior<BlockType, Block, BlockBehavior>{
 
-    public void onAttachToBlock(Block block) {
+    public void onAttachTo(Block block) {
     }
 
     public BlockBehavior clone() {

@@ -7,7 +7,7 @@ public abstract class BlockBehaviorConnected extends BlockBehavior {
     protected final static String NETWORK = "network";
 
     @Override
-    public void onAttachToBlock(Block block) {
+    public void onAttachTo(Block block) {
         block.setState(ACTIVATION_STATE, false);
         block.setState(NETWORK, 0);
     }

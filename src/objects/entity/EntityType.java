@@ -1,15 +1,18 @@
 package objects.entity;
 
-import objects.ObjectBehavior;
 import objects.ObjectType;
+import objects.entity.entityBehavior.EntityBehavior;
 
-public class EntityType extends ObjectType<Entity, ObjectBehavior>{
+public class EntityType extends ObjectType<Entity, EntityBehavior>{
 
     public EntityType(String name) {
         super(name);
     }
 
     public Entity getInstance() {
-        return new Entity(this,0,0,0);
+        Entity entity = new Entity(this,0,0,0);
+        for (EntityBehavior entityBehavior : behaviors)
+            entity.addBehavior(entityBehavior.clone());
+        return entity;
     }
 }

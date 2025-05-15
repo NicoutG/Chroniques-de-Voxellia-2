@@ -8,7 +8,6 @@ import graphics.ligth.ColorRGB;
 import objects.collision.Collision;
 import objects.property.Property;
 
-@SuppressWarnings("rawtypes")
 public abstract class ObjectType<
     I extends ObjectInstance<?, ?, ?>,
     B extends ObjectBehavior<?, ?, ?>
@@ -84,5 +83,5 @@ public abstract class ObjectType<
         behaviors.add(behavior);
     }
 
-    public abstract ObjectInstance getInstance();
+    public abstract I getInstance();
 }

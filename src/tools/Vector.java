@@ -20,4 +20,14 @@ public class Vector {
     public Vector clone() {
         return new Vector(x,y,z);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) 
+            return true;
+        if (!(o instanceof Vector)) 
+            return false;
+       Vector v = (Vector) o;
+        return x == v.x && y == v.y && z == v.z;
+    }
 }

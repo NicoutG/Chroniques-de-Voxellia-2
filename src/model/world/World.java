@@ -118,22 +118,36 @@ public class World {
     }
 
     public void activateBlocks(int network) {
-        for (int z = 0; z < blocks[0][0].length; z++)
-            for (int y = 0; y < blocks[0].length; y++)
+        Vector pos = new Vector();
+        for (int z = 0; z < blocks[0][0].length; z++) {
+            pos.z = z + 0.5;
+            for (int y = 0; y < blocks[0].length; y++) {
+                pos.y = y + 0.5;
                 for (int x = 0; x < blocks.length; x++) {
-                    Block block = blocks[x][y][z];
-                    if (block != null)
-                        block.onActivated(this, new Vector(x + 0.5, y + 0.5, z + 0.5), network);
+                    Block b = blocks[x][y][z];
+                    if (b != null) {
+                        pos.x = x + 0.5;
+                        b.onActivated(this, new Vector(x + 0.5, y + 0.5, z + 0.5), network);
+                    }
                 }
+            }
+        }
     }
 
     public void desactivateBlocks(int network) {
-        for (int z = 0; z < blocks[0][0].length; z++)
-            for (int y = 0; y < blocks[0].length; y++)
+        Vector pos = new Vector();
+        for (int z = 0; z < blocks[0][0].length; z++) {
+            pos.z = z + 0.5;
+            for (int y = 0; y < blocks[0].length; y++) {
+                pos.y = y + 0.5;
                 for (int x = 0; x < blocks.length; x++) {
-                    Block block = blocks[x][y][z];
-                    if (block != null)
-                        block.onDesactivated(this, new Vector(x + 0.5, y + 0.5, z + 0.5), network);
+                    Block b = blocks[x][y][z];
+                    if (b != null) {
+                        pos.x = x + 0.5;
+                        b.onDesactivated(this, new Vector(x + 0.5, y + 0.5, z + 0.5), network);
+                    }
                 }
+            }
+        }
     }
 }

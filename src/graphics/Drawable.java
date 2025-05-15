@@ -14,6 +14,6 @@ public class Drawable {
     }
 
     double getSortKey() {
-        return x + y + z * 2;
+        return Math.floor(x) + Math.floor(y) + Math.floor(z) * 2;
     }
 }

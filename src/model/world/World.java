@@ -49,7 +49,7 @@ public class World {
     }
 
     public static World createDemoWorld() {
-        int sx = 100, sy = 100, sz = 2;
+        int sx = 25, sy = 25, sz = 2;
         Block[][][] blocks = new Block[sx][sy][sz + 10];
 
         try {
@@ -72,6 +72,8 @@ public class World {
                     }
                 }
             }
+
+            blocks[10][10][9] = blockTypes.get(6).getInstance();
 
             blocks[10][11][2] = blockTypes.get(0).getInstance();
             blocks[10][12][2] = blockTypes.get(0).getInstance();

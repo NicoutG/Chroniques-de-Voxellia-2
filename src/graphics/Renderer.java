@@ -82,7 +82,7 @@ public final class Renderer {
             for (int y = 0; y <= maxY; y++) {
                 for (int x = 0; x <= maxX; x++) {
                     Block b = blocks[x][y][z];
-                    if (b == null)
+                    if (b == null || b.getTexture() == null)
                         continue;
 
                     boolean[] visibleFaces = getVisibleFaces(blocks, x, y, z, maxX, maxY, maxZ, originX, originY, w, h);
@@ -100,6 +100,9 @@ public final class Renderer {
                             drawY + IsoMath.DRAW_TILE_SIZE < 0 || drawY > h) {
                         continue; // quad never reaches the viewport
                     }
+
+                    if (b.getTexture() == null)
+                        continue;
 
                     FaceLighting faceLighting = faceLightings[x][y][z];
 
@@ -194,11 +197,14 @@ public final class Renderer {
         boolean[] faces = new boolean[] { false, false, false };
         if (!isInScreenRange(x, y, z, originX, originY, w, h))
             return faces;
-        if (x == maxX || (b[x + 1][y][z] == null || !b[x + 1][y][z].getTexture().takesFullSpace()))
+        if (x == maxX || (b[x + 1][y][z] == null || b[x + 1][y][z].getTexture() == null
+                || (b[x + 1][y][z].getTexture() != null && !b[x + 1][y][z].getTexture().takesFullSpace())))
             faces[Face.RIGHT.index] = true;
-        if (y == maxY || b[x][y + 1][z] == null || !b[x][y + 1][z].getTexture().takesFullSpace())
+        if (y == maxY || b[x][y + 1][z] == null || b[x][y + 1][z].getTexture() == null
+                || (b[x][y + 1][z].getTexture() != null && !b[x][y + 1][z].getTexture().takesFullSpace()))
             faces[Face.LEFT.index] = true;
-        if (z == maxZ || b[x][y][z + 1] == null || !b[x][y][z + 1].getTexture().takesFullSpace())
+        if (z == maxZ || b[x][y][z + 1] == null || b[x][y][z + 1].getTexture() == null
+                || (b[x][y][z + 1].getTexture() != null && !b[x][y][z + 1].getTexture().takesFullSpace()))
             faces[Face.TOP.index] = true;
         return faces;
     }

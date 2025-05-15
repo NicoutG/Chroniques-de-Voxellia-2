@@ -80,13 +80,19 @@ public class Entity extends ObjectInstance<EntityType>{
         int x = (int)position.x;
         int y = (int)position.y;
         int z = (int)position.z;
-        for (int i = x - 1; i <= x + 1; i++)
-            for (int j = y - 1; j <= y + 1; j++)
+        Vector pos = new Vector();
+        for (int i = x - 1; i <= x + 1; i++) {
+            pos.x = i + 0.5;
+            for (int j = y - 1; j <= y + 1; j++) {
+                pos.y = j + 0.5;
                 for (int k = z - 1; k <= z + 1; k++) {
+                    pos.z = k + 0.5;
                     Block block = world.getBlock(i, j, k);
                     if (block != null)
-                        block.onEntityClose(world, new Vector(i + 0.5, j + 0.5, k + 0.5), this);
+                        block.onEntityClose(world, pos, this);
                 }
+            }
+        }
     }
 
     public void move(World world, double moveX, double moveY, double moveZ) {

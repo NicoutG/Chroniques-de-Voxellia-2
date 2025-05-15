@@ -41,31 +41,25 @@ public class BlockTypeFactory {
         return null;
     }
 
-    private static BlockType loadBlueBlock() {
-        BlockType blockType = new BlockType("blueBlock");
-        BufferedImage img = getImage("blue-block.png");
+    private static BlockType createBasicBlockType(String name, String textureName) {
+        BlockType blockType = new BlockType(name);
+        BufferedImage img = getImage(textureName);
         Shape shape = new Cube();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
         return blockType;
+    }
+
+    private static BlockType loadBlueBlock() {
+        return createBasicBlockType("blueBlock","blue-block.png");
     }
 
     private static BlockType loadRedBlock() {
-        BlockType blockType = new BlockType("redBlock");
-        BufferedImage img = getImage("red-block.png");
-        Shape shape = new Cube();
-        Texture text = new Texture(shape, img);
-        blockType.addTexture(text);
-        return blockType;
+        return createBasicBlockType("redBlock","red-block.png");
     }
 
     private static BlockType loadPurpleBlock() {
-        BlockType blockType = new BlockType("purpleBlock");
-        BufferedImage img = getImage("purple-block.png");
-        Shape shape = new Cube();
-        Texture text = new Texture(shape, img);
-        blockType.addTexture(text);
-        return blockType;
+        return createBasicBlockType("purpleBlock","purple-block.png");
     }
 
     private static BlockType loadFireBlock() {
@@ -136,38 +130,20 @@ public class BlockTypeFactory {
     }
 
       private static BlockType loadGlassBlock() {
-        BlockType blockType = new BlockType("glassBlock");
-        Shape shape = new Cube();
-        Texture text = new Texture(shape, getImage("glass-block.png"));
-        blockType.addTexture(text);
+        BlockType blockType = createBasicBlockType("glassBlock","glass-block.png");
         blockType.setOpacity(0.2);
         return blockType;
     }
 
     private static BlockType loadDirtBlock() {
-        BlockType blockType = new BlockType("dirtBlock");
-        BufferedImage img = getImage("dirt-block.png");
-        Shape shape = new Cube();
-        Texture text = new Texture(shape, img);
-        blockType.addTexture(text);
-        return blockType;
+        return createBasicBlockType("dirtBlock","dirt-block.png");
     }
    
     private static BlockType loadGrassBlock() {
-        BlockType blockType = new BlockType("grassBlock");
-        BufferedImage img = getImage("grass-block.png");
-        Shape shape = new Cube();
-        Texture text = new Texture(shape, img);
-        blockType.addTexture(text);
-        return blockType;
+        return createBasicBlockType("grassBlock","grass-block.png");
     }
    
     private static BlockType loadHedgeBlock() {
-        BlockType blockType = new BlockType("hedge");
-        BufferedImage img = getImage("hedge.png");
-        Shape shape = new Cube();
-        Texture text = new Texture(shape, img);
-        blockType.addTexture(text);
-        return blockType;
+        return createBasicBlockType("hedge","hedge.png");
     }
 }

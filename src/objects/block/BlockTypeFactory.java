@@ -18,17 +18,17 @@ public class BlockTypeFactory {
 
     public static ArrayList<BlockType> loadBlockTypes() {
         ArrayList<BlockType> blockTypes = new ArrayList<>();
-        blockTypes.add(loadBlueBlock());
-        blockTypes.add(loadRedBlock());
-        blockTypes.add(loadPurpleBlock());
-        blockTypes.add(loadFireBlock());
-        blockTypes.add(loadBlueStairsRight());
-        blockTypes.add(loadLavaBlock());
-        blockTypes.add(loadSunBlock());
-        blockTypes.add(loadGlassBlock());
-        blockTypes.add(loadDirtBlock());
-        blockTypes.add(loadGrassBlock());
-        blockTypes.add(loadHedgeBlock());
+        blockTypes.add(loadBlueBlock());        // 0
+        blockTypes.add(loadRedBlock());         // 1
+        blockTypes.add(loadPurpleBlock());      // 2
+        blockTypes.add(loadFireBlock());        // 3
+        blockTypes.add(loadBlueStairsRight());  // 4
+        blockTypes.add(loadLavaBlock());        // 5
+        blockTypes.add(loadSunBlock());         // 6
+        blockTypes.add(loadGlassBlock());       // 7
+        blockTypes.add(loadDirtBlock());        // 8
+        blockTypes.add(loadGrassBlock());       // 9
+        blockTypes.add(loadHedgeBlock());       // 10
         return blockTypes;
     }
 

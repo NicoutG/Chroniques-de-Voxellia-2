@@ -63,7 +63,7 @@ public class ObjectInstance<
 
     public Property getProperty(String propertyName) {
         Object state = getState(propertyName);
-        if (state == null || !(state instanceof Double) || (boolean)state)
+        if (state == null || !(state instanceof Boolean) || (boolean)state)
             return type.getProperty(propertyName);
         else
             return null;

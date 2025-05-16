@@ -29,6 +29,14 @@ public class ObjectInstance<
         return type.getName();
     }
 
+    public int getIndexTexture() { return indexTexture; }
+
+    public void setIndexTexture(int index) { indexTexture = index; }
+
+    public int getIndexCollision() { return indexCollision; }
+
+    public void setIndexCollision(int index) { indexCollision = index; }
+
     public double getOpacity() {
         Object state = getState("opacity");
         if (state == null || !(state instanceof Double))

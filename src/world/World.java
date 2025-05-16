@@ -119,15 +119,17 @@ public class World {
 
     private void updateControls() {
         Player player = getPlayer();
-        if (GameControls.isPressed(KeyEvent.VK_UP))
+        if (GameControls.isPressed(KeyEvent.VK_Z))
             player.move(this, 0, -0.2, 0);
-        if (GameControls.isPressed(KeyEvent.VK_DOWN))
+        if (GameControls.isPressed(KeyEvent.VK_S))
             player.move(this, 0, 0.2, 0);
-        if (GameControls.isPressed(KeyEvent.VK_LEFT))
+        if (GameControls.isPressed(KeyEvent.VK_Q))
             player.move(this, -0.2, 0, 0);
-        if (GameControls.isPressed(KeyEvent.VK_RIGHT))
+        if (GameControls.isPressed(KeyEvent.VK_D))
             player.move(this, 0.2, 0, 0);
-        if (GameControls.isPressed(KeyEvent.VK_SPACE))
+        if (GameControls.isPressed(KeyEvent.VK_A))
             player.addVelocity(0,0,1.5);
+        if (GameControls.isPressed(KeyEvent.VK_E))
+            player.interact(this);
     }
 }

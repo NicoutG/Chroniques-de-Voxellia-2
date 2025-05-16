@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 
 import graphics.Texture;
 import graphics.ligth.*;
+import objects.block.blockBehavior.BlockBehaviorLever;
 import objects.collision.BoundingCollision;
 import objects.collision.ComplexCollision;
 import objects.property.*;
@@ -15,20 +16,25 @@ import graphics.shape.*;
 
 public class BlockTypeFactory {
     private static final String TEXTURE_PATH = "/resources/textures/outlined/";
+    private static final String MASK_PATH = "/resources/masks/";
 
     public static ArrayList<BlockType> loadBlockTypes() {
         ArrayList<BlockType> blockTypes = new ArrayList<>();
+        // 0
         blockTypes.add(loadBlueBlock());
         blockTypes.add(loadRedBlock());
         blockTypes.add(loadPurpleBlock());
         blockTypes.add(loadFireBlock());
         blockTypes.add(loadBlueStairsRight());
+        // 5
         blockTypes.add(loadLavaBlock());
         blockTypes.add(loadSunBlock());
         blockTypes.add(loadGlassBlock());
         blockTypes.add(loadDirtBlock());
         blockTypes.add(loadGrassBlock());
+        // 10
         blockTypes.add(loadHedgeBlock());
+        blockTypes.add(loadLeverBlock());
         return blockTypes;
     }
 
@@ -145,5 +151,29 @@ public class BlockTypeFactory {
    
     private static BlockType loadHedgeBlock() {
         return createBasicBlockType("hedge","hedge.png");
+    }
+
+    private static BlockType loadLeverBlock() {
+        BlockType blockType = new BlockType("lever");
+        try {
+            BufferedImage img = getImage("lever-F.png");
+            String maskPath = MASK_PATH + "lever/false/";
+            Shape shape = new CustomShape(maskPath + "lever-F-left.png", maskPath + "lever-F-right.png", maskPath + "lever-F-top.png");
+            Texture text = new Texture(shape, img);
+            blockType.addTexture(text);
+
+            img = getImage("lever-T.png");
+            maskPath = MASK_PATH + "lever/true/";
+            shape = new CustomShape(maskPath + "lever-T-left.png", maskPath + "lever-T-right.png", maskPath + "lever-T-top.png");
+            text = new Texture(shape, img);
+            blockType.addTexture(text);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        blockType.addProperty(new Property("noCollision"));
+        blockType.setOpacity(0);
+        blockType.addBehavior(new BlockBehaviorLever());
+        return blockType;
     }
 }

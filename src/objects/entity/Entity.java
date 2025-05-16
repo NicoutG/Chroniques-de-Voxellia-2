@@ -38,4 +38,21 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
             }
         }
     }
+
+    public void interact(World world) {
+        int xMin = (int)(position.x - 0.5);
+        int xMax = (int)(position.x + 0.5);
+        int yMin = (int)(position.y - 0.5);
+        int yMax = (int)(position.y + 0.5);
+        int zMin = (int)(position.z - 0.5);
+        int zMax = (int)(position.z + 0.5);
+        int[][] posBlocks = new int[][] {{xMin,yMin,zMin},{xMin,yMin,zMax},{xMin,yMax,zMin},{xMin,yMax,zMax},{xMax,yMin,zMin},{xMax,yMin,zMax},{xMax,yMax,zMin},{xMax,yMax,zMax}};
+        for (int[] posBlock : posBlocks) {
+            Block block = world.getBlock(posBlock[0], posBlock[1], posBlock[2]);
+            if (block != null) {
+                Vector position = new Vector(posBlock[0] + 0.5, posBlock[1] + 0.5, posBlock[2] + 0.5);
+                block.onInteraction(world, position, this);
+            }
+        }
+    }
 }

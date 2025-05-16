@@ -12,9 +12,13 @@ public class BlockBehaviorLever extends BlockBehaviorConnected {
         boolean activationState = getActivationState(block);
         block.setStateModification(ACTIVATION_STATE, !activationState);
         int network = getNetwork(block);
-        if (activationState)
+        if (activationState) {
             world.desactivateBlocks(network);
-        else
+            block.setIndexTexture(1);
+        }
+        else {
             world.activateBlocks(network);
+            block.setIndexTexture(0);
+        }
     }
 }

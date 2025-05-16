@@ -12,13 +12,14 @@ public class GameApp extends JFrame {
 
         GamePanel panel = new GamePanel();
         add(panel);
+        GameControls.listenKeys(panel);
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
                 .getDefaultScreenDevice();
         gd.setFullScreenWindow(this);
 
         int delayMs = 1000 / 20;
-        new Timer(delayMs, e -> {
+        new Timer(delayMs, _ -> {
             panel.tick();
             panel.repaint();
         }).start();

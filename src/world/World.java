@@ -6,7 +6,10 @@ import objects.entity.Entity;
 import objects.entity.Player;
 import tools.Vector;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+
+import engine.GameControls;
 
 public class World {
 
@@ -60,6 +63,8 @@ public class World {
     /* -------------------------- update loop -------------------------- */
 
     public void update() {
+        updateControls();
+
         Vector pos = new Vector();
         for (int z = 0; z < blocks[0][0].length; z++) {
             pos.z = z + 0.5;
@@ -110,5 +115,19 @@ public class World {
                 }
             }
         }
+    }
+
+    private void updateControls() {
+        Player player = getPlayer();
+        if (GameControls.isPressed(KeyEvent.VK_UP))
+            player.move(this, 0, -0.2, 0);
+        if (GameControls.isPressed(KeyEvent.VK_DOWN))
+            player.move(this, 0, 0.2, 0);
+        if (GameControls.isPressed(KeyEvent.VK_LEFT))
+            player.move(this, -0.2, 0, 0);
+        if (GameControls.isPressed(KeyEvent.VK_RIGHT))
+            player.move(this, 0.2, 0, 0);
+        if (GameControls.isPressed(KeyEvent.VK_SPACE))
+            player.addVelocity(0,0,1.5);
     }
 }

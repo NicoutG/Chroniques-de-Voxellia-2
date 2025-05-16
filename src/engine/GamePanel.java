@@ -3,12 +3,9 @@ package engine;
 import javax.swing.*;
 
 import graphics.Renderer;
-import objects.entity.Player;
 import world.World;
 
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class GamePanel extends JPanel {
 
@@ -26,26 +23,6 @@ public class GamePanel extends JPanel {
 
 
         this.renderer = new Renderer(world);
-
-        // Écouteur de touches
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                Player player = world.getPlayer();
-                if (player == null) {
-                    return;
-                }
-
-                
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_UP -> player.move(world, 0, -0.1, 0);
-                    case KeyEvent.VK_DOWN -> player.move(world, 0, 0.1, 0);
-                    case KeyEvent.VK_LEFT -> player.move(world, -0.1, 0, 0);
-                    case KeyEvent.VK_RIGHT -> player.move(world, 0.1, 0, 0);
-                    case KeyEvent.VK_SPACE -> player.addVelocity(0,0,1.5);
-                }
-            }
-        });
     }
 
     public void tick() {

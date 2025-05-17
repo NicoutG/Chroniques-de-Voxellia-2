@@ -69,7 +69,7 @@ public class World {
         if (worlds.containsKey(filename))
             data = worlds.get(filename);
         else {
-            data = WorldLoader.loadWorld(filename, BLOCK_TYPES, spawnPoint);
+            data = WorldLoader.loadWorld(filename, BLOCK_TYPES);
             worlds.put(filename, data);
         }
         blocks = data.blocks();

@@ -3,6 +3,8 @@ package graphics.shape;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import tools.PathManager;
+
 public final class Cube extends Shape {
 
     private static final BufferedImage LEFT_MASK;
@@ -11,9 +13,10 @@ public final class Cube extends Shape {
 
     static {
         try {
-            LEFT_MASK  = loadMask("/resources/masks/cube/mask-left.png");
-            RIGHT_MASK = loadMask("/resources/masks/cube/mask-right.png");
-            TOP_MASK   = loadMask("/resources/masks/cube/mask-top.png");
+            String maskPath = PathManager.MASK_PATH + "cube/";
+            LEFT_MASK  = loadMask(maskPath + "mask-left.png");
+            RIGHT_MASK = loadMask(maskPath + "mask-right.png");
+            TOP_MASK   = loadMask(maskPath + "mask-top.png");
         } catch (IOException ex) {
             throw new ExceptionInInitializerError(ex);
         }

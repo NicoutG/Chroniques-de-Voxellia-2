@@ -31,7 +31,7 @@ public class WorldLoader {
     }
 
     /** Parses <code>WORLD_PATH + file</code> and returns blocks + entities. */
-    public static WorldData loadWorld(String file, ArrayList<BlockType> blockTypes, int spawnPoint) {
+    public static WorldData loadWorld(String file, ArrayList<BlockType> blockTypes) {
 
         Block[][][]       blocks        = null;
         ArrayList<Entity> entities      = new ArrayList<>();
@@ -92,15 +92,9 @@ public class WorldLoader {
                 EntityType playerType = new EntityType("player");
                 playerType.addTexture(skinTex);
 
-                Vector spot;
-                if (spawnPoint < 0)
-                    spot = spawnPoints.get((int) (Math.random() * spawnPoints.size()));
-                else
-                    spot = spawnPoints.get(spawnPoint%spawnPoints.size());
-
                 entities.add(new Player(
                         playerType,
-                        spot.x,spot.y,spot.z));
+                        0,0,0));
             }
 
         } catch (Exception e) {
@@ -108,10 +102,6 @@ public class WorldLoader {
         }
 
         return new WorldData(blocks, entities, spawnPoints);
-    }
-
-    public static WorldData loadWorld(String file, ArrayList<BlockType> blockTypes) {
-        return loadWorld(file, blockTypes,-1);
     }
 
     /* ------------------------------------------------------------------ */

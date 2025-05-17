@@ -167,22 +167,17 @@ public class BlockTypeFactory {
 
     private static BlockType loadLeverBlock() {
         BlockType blockType = new BlockType("lever");
-        try {
-            BufferedImage img = getImage("lever-F.png");
-            String maskPath = PathManager.MASK_PATH + "lever/false/";
-            Shape shape = new CustomShape(maskPath + "lever-F-left.png", maskPath + "lever-F-right.png", maskPath + "lever-F-top.png");
-            Texture text = new Texture(shape, img);
-            blockType.addTexture(text);
 
-            img = getImage("lever-T.png");
-            maskPath = PathManager.MASK_PATH + "lever/true/";
-            shape = new CustomShape(maskPath + "lever-T-left.png", maskPath + "lever-T-right.png", maskPath + "lever-T-top.png");
-            text = new Texture(shape, img);
-            blockType.addTexture(text);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        BufferedImage img = getImage("lever-F.png");
+        Shape shape = new Lever(false);
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+
+        img = getImage("lever-T.png");
+        shape = new Lever(true);
+        text = new Texture(shape, img);
+        blockType.addTexture(text);
+        
         blockType.addProperty(new Property("noCollision"));
         blockType.setOpacity(0);
         blockType.addBehavior(new BlockBehaviorLever());

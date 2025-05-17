@@ -7,16 +7,16 @@ import javax.imageio.ImageIO;
 
 import graphics.Texture;
 import graphics.ligth.*;
+import objects.block.blockBehavior.BlockBehaviorChangeWorld;
 import objects.block.blockBehavior.BlockBehaviorLever;
 import objects.collision.BoundingCollision;
 import objects.collision.ComplexCollision;
 import objects.property.*;
+import tools.PathManager;
 import world.World;
 import graphics.shape.*;
 
 public class BlockTypeFactory {
-    private static final String TEXTURE_PATH = "/resources/textures/outlined/";
-    private static final String MASK_PATH = "/resources/masks/";
 
     public static ArrayList<BlockType> loadBlockTypes() {
         ArrayList<BlockType> blockTypes = new ArrayList<>();
@@ -35,12 +35,13 @@ public class BlockTypeFactory {
         // 10
         blockTypes.add(loadHedgeBlock());
         blockTypes.add(loadLeverBlock());
+        blockTypes.add(loadWorldBlock());
         return blockTypes;
     }
 
     private static BufferedImage getImage(String filePath) {
         try {
-            return ImageIO.read(World.class.getResource(TEXTURE_PATH + filePath));
+            return ImageIO.read(World.class.getResource(PathManager.TEXTURE_PATH + filePath));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,6 +53,17 @@ public class BlockTypeFactory {
         BufferedImage img = getImage(textureName);
         Shape shape = new Cube();
         Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
+    }
+
+    private static BlockType createBasicBlockType(String name, String[] textureNames, int ticksPerFrame) {
+        BlockType blockType = new BlockType(name);
+        BufferedImage[] images = new BufferedImage[textureNames.length];
+        for (int i = 0; i < textureNames.length; i++)
+            images[i] = getImage(textureNames[i]);
+        Shape shape = new Cube();
+        Texture text = new Texture(shape, images, ticksPerFrame);
         blockType.addTexture(text);
         return blockType;
     }
@@ -69,15 +81,7 @@ public class BlockTypeFactory {
     }
 
     private static BlockType loadFireBlock() {
-        BlockType blockType = new BlockType("fire");
-        BufferedImage[] frames = new BufferedImage[] {
-                getImage("fire-0.png"),
-                getImage("fire-1.png"),
-                getImage("fire-2.png")
-        };
-        Shape shape = new Cube();
-        Texture text = new Texture(shape, frames, 1);
-        blockType.addTexture(text);
+        BlockType blockType = createBasicBlockType("fire", new String[]{"fire-0.png","fire-1.png","fire-2.png"},1);
         LightSource light = new LightSource(new ColorRGB(1, 0.6, 0.2), 1.2, 0.8, 0.1);
         Property propLight = new PropertyLight(light);
         blockType.addProperty(propLight);
@@ -157,13 +161,13 @@ public class BlockTypeFactory {
         BlockType blockType = new BlockType("lever");
         try {
             BufferedImage img = getImage("lever-F.png");
-            String maskPath = MASK_PATH + "lever/false/";
+            String maskPath = PathManager.MASK_PATH + "lever/false/";
             Shape shape = new CustomShape(maskPath + "lever-F-left.png", maskPath + "lever-F-right.png", maskPath + "lever-F-top.png");
             Texture text = new Texture(shape, img);
             blockType.addTexture(text);
 
             img = getImage("lever-T.png");
-            maskPath = MASK_PATH + "lever/true/";
+            maskPath = PathManager.MASK_PATH + "lever/true/";
             shape = new CustomShape(maskPath + "lever-T-left.png", maskPath + "lever-T-right.png", maskPath + "lever-T-top.png");
             text = new Texture(shape, img);
             blockType.addTexture(text);
@@ -174,6 +178,12 @@ public class BlockTypeFactory {
         blockType.addProperty(new Property("noCollision"));
         blockType.setOpacity(0);
         blockType.addBehavior(new BlockBehaviorLever());
+        return blockType;
+    }
+
+    private static BlockType loadWorldBlock() {
+        BlockType blockType = createBasicBlockType("worldBlock", new String[]{"world-block-0.png","world-block-1.png","world-block-2.png"},3);
+        blockType.addBehavior(new BlockBehaviorChangeWorld());
         return blockType;
     }
 }

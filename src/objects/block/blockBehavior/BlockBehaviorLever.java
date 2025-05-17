@@ -10,7 +10,7 @@ public class BlockBehaviorLever extends BlockBehaviorConnected {
     @Override
     public void onInteraction(World world, Block block, Vector position, Entity entity) {
         boolean activationState = getActivationState(block);
-        block.setStateModification(ACTIVATION_STATE, !activationState);
+        world.executeAfterUpdate(() -> block.setState(ACTIVATION_STATE, !activationState));
         int network = getNetwork(block);
         if (activationState) {
             world.desactivateBlocks(network);

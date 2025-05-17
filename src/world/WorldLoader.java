@@ -7,6 +7,7 @@ import objects.block.*;
 import objects.entity.Entity;
 import objects.entity.EntityType;
 import objects.entity.Player;
+import tools.PathManager;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -16,8 +17,6 @@ import java.util.ArrayList;
 
 /** Loads worlds from human-readable text files. */
 public class WorldLoader {
-
-    private static final String WORLD_PATH = "src/resources/worlds/";
 
     /* Small record that bundles both arrays for the World ctor */
     public record WorldData(Block[][][] blocks, ArrayList<Entity> entities) {}
@@ -31,15 +30,14 @@ public class WorldLoader {
     }
 
     /** Parses <code>WORLD_PATH + file</code> and returns blocks + entities. */
-    public static WorldData loadWorld(String file,
-                                      ArrayList<BlockType> blockTypes) {
+    public static WorldData loadWorld(String file, ArrayList<BlockType> blockTypes, int spawnPoint) {
 
         Block[][][]       blocks        = null;
         ArrayList<Entity> entities      = new ArrayList<>();
         ArrayList<int[]>  playerSpawns  = new ArrayList<>();
 
         try {
-            String[] lines = Files.readString(Paths.get(WORLD_PATH + file))
+            String[] lines = Files.readString(Paths.get(PathManager.WORLD_PATH + file))
                                    .split("\r?\n");
 
             /* ---- dimensions header ---- */
@@ -93,8 +91,11 @@ public class WorldLoader {
                 EntityType playerType = new EntityType("player");
                 playerType.addTexture(skinTex);
 
-                int[] spot = playerSpawns.get(
-                        (int) (Math.random() * playerSpawns.size()));
+                int[] spot;
+                if (spawnPoint < 0)
+                    spot = playerSpawns.get((int) (Math.random() * playerSpawns.size()));
+                else
+                    spot = playerSpawns.get(spawnPoint%playerSpawns.size());
 
                 entities.add(new Player(
                         playerType,
@@ -108,6 +109,10 @@ public class WorldLoader {
         }
 
         return new WorldData(blocks, entities);
+    }
+
+    public static WorldData loadWorld(String file, ArrayList<BlockType> blockTypes) {
+        return loadWorld(file, blockTypes,-1);
     }
 
     /* ------------------------------------------------------------------ */

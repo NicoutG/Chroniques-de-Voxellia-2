@@ -18,7 +18,6 @@ public class ObjectInstance<
     protected int indexTexture = 0;
     protected int indexCollision = 0;
     private HashMap<String, Object> states = new HashMap<>();
-    private HashMap<String, Object> stateModifications = null;
     protected ArrayList<B> behaviors = new ArrayList<>();
 
     public ObjectInstance(T type) {
@@ -86,26 +85,6 @@ public class ObjectInstance<
         return states.containsKey(stateName);
     }
 
-    public boolean setStateModification(String stateName, Object value) {
-        if (stateModifications == null)
-            stateModifications = new HashMap<>();
-        if(stateModifications.containsKey(stateName)) {
-            stateModifications.replace(stateName, value);
-            return true;
-        }
-        stateModifications.put(stateName, value);
-        return false;
-    }
-
-    public boolean updateStates() {
-        if (stateModifications == null || stateModifications.isEmpty())
-            return false;
-        for (var entrySet : stateModifications.entrySet())
-            setState(entrySet.getKey(), entrySet.getValue());
-        stateModifications = null;
-        return true;
-    }
-
     @SuppressWarnings("unchecked")
     public void addBehavior(B behavior) {
         behaviors.add(behavior);
@@ -115,6 +94,5 @@ public class ObjectInstance<
     protected void executeEvent(Consumer<B> fonction) {
         for (B behavior : behaviors)
             fonction.accept(behavior);
-        updateStates();
     }
 }

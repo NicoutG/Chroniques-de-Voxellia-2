@@ -29,8 +29,10 @@ public class World {
     /* INSTANCE STATE & API */
     /* ------------------------------------------------------------------ */
 
-    private final Block[][][] blocks;
-    private final ArrayList<Entity> entities;
+    private Block[][][] blocks;
+    private ArrayList<Entity> entities;
+
+    private ArrayList<Runnable> afterUpdateTasks = new ArrayList<>();
 
     public World(Block[][][] blocks, ArrayList<Entity> entities) {
         this.blocks = blocks;
@@ -60,6 +62,17 @@ public class World {
         return null;
     }
 
+    public void reLoadWorld(String filename, int spawnPoint) {
+        WorldLoader.WorldData data = WorldLoader.loadWorld(filename, BLOCK_TYPES, spawnPoint);
+        blocks = data.blocks();
+        entities = data.entities();
+        afterUpdateTasks = new ArrayList<>();
+    }
+
+    public void reLoadWorld(String filename) {
+        reLoadWorld(filename,-1);
+    }
+
     /* -------------------------- update loop -------------------------- */
 
     public void update() {
@@ -81,6 +94,17 @@ public class World {
         }
         for (Entity e : entities)
             e.onUpdate(this);
+        
+        executeTasks();
+    }
+
+    public void executeAfterUpdate(Runnable task) {
+        afterUpdateTasks.add(task);
+    }
+
+    public void executeTasks() {
+        for (Runnable task : afterUpdateTasks)
+            task.run();
     }
 
     public void activateBlocks(int network) {
@@ -127,7 +151,7 @@ public class World {
             player.move(this, -0.2, 0, 0);
         if (GameControls.isPressed(KeyEvent.VK_D))
             player.move(this, 0.2, 0, 0);
-        if (GameControls.isPressed(KeyEvent.VK_A))
+        if (GameControls.isPressed(KeyEvent.VK_A) || GameControls.isPressed(KeyEvent.VK_SPACE))
             player.addVelocity(0,0,1.5);
         if (GameControls.isPressed(KeyEvent.VK_E))
             player.interact(this);

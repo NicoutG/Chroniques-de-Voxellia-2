@@ -15,7 +15,7 @@ public abstract class BlockBehaviorActivable extends BlockBehaviorConnected {
     public void onActivated(World world, Block block, Vector position, int network) {
         if (network == getNetwork(block)) {
             activate(world, block, position, network);
-            block.setStateModification(ACTIVATION_STATE, true);
+            world.executeAfterUpdate(() -> block.setState(ACTIVATION_STATE, true));
         }
     }
 
@@ -23,7 +23,7 @@ public abstract class BlockBehaviorActivable extends BlockBehaviorConnected {
     public void onDesactivated(World world, Block block, Vector position, int network) {
         if (network == getNetwork(block)) {
             desactivate(world, block, position, network);
-            block.setStateModification(ACTIVATION_STATE, false);
+            world.executeAfterUpdate(() -> block.setState(ACTIVATION_STATE, false));
         }
     }
 

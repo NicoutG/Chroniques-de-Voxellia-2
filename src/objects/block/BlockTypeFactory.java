@@ -36,6 +36,14 @@ public class BlockTypeFactory {
         blockTypes.add(loadHedgeBlock());
         blockTypes.add(loadLeverBlock());
         blockTypes.add(loadWorldBlock());
+        blockTypes.add(loadRedCarpetBlock());
+        blockTypes.add(loadRedGoldenCarpetBlock());
+        // 15
+        blockTypes.add(loadRedGoldenCarpetBlock2());
+        blockTypes.add(loadRedGoldenCarpetBlock3());
+        blockTypes.add(loadLeavesBlock());
+        blockTypes.add(loadSandBlock());
+        blockTypes.add(loadWoodBlock());
         return blockTypes;
     }
 
@@ -186,4 +194,33 @@ public class BlockTypeFactory {
         blockType.addBehavior(new BlockBehaviorChangeWorld());
         return blockType;
     }
+
+    private static BlockType loadRedCarpetBlock() {
+        return createBasicBlockType("redCarpet","red-carpet-block.png");
+    }
+
+    private static BlockType loadRedGoldenCarpetBlock() {
+        return createBasicBlockType("redGoldenCarpet","red-golden-carpet-block.png");
+    }
+
+    private static BlockType loadRedGoldenCarpetBlock2() {
+        return createBasicBlockType("redGoldenCarpet2","red-golden-carpet-2-block.png");
+    }
+
+    private static BlockType loadRedGoldenCarpetBlock3() {
+        return createBasicBlockType("redGoldenCarpet3","red-golden-carpet-3-block.png");
+    }
+
+    private static BlockType loadLeavesBlock() {
+        return createBasicBlockType("leaves","leaves.png");
+    }
+    
+    private static BlockType loadSandBlock() {
+        return createBasicBlockType("sand","sand-block.png");
+    }
+  
+    private static BlockType loadWoodBlock() {
+        return createBasicBlockType("wood","wood.png");
+    }
+
 }

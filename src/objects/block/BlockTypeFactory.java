@@ -44,6 +44,48 @@ public class BlockTypeFactory {
         blockTypes.add(loadSandBlock());
         // 20
         blockTypes.add(loadWoodBlock());
+        blockTypes.add(loadBlock());
+        blockTypes.add(loadBlockTray());
+        blockTypes.add(loadBlockBrick1());
+        blockTypes.add(loadBlockBrick2());
+        // 25
+        blockTypes.add(loadBlockBroken());
+        blockTypes.add(loadBlockColumnMossy());
+        blockTypes.add(loadBlockColumn());
+        blockTypes.add(loadBlockHalfGrass1());
+        blockTypes.add(loadBlockHalfGrass2());
+        // 30
+        blockTypes.add(loadBlockHalfGrass3());
+        blockTypes.add(loadBlockHalfGrass4());
+        blockTypes.add(loadBlockHalfHorizontal1());
+        blockTypes.add(loadBlockHalfHorizontal2());
+        blockTypes.add(loadBlockHalfVertical1());
+        // 35
+        blockTypes.add(loadBlockHalfVertical2());
+        blockTypes.add(loadBlockHalfVertical3());
+        blockTypes.add(loadBlockHalfVertical4());
+        blockTypes.add(loadBlockHole1());
+        blockTypes.add(loadBlockHole2());
+        // 40
+        blockTypes.add(loadBlockLines());
+        blockTypes.add(loadBlockMossy1());
+        blockTypes.add(loadBlockMossy2());
+        blockTypes.add(loadBlockSlope1());
+        blockTypes.add(loadBlockSlope2());
+        // 45
+        blockTypes.add(loadBlockSlope3());
+        blockTypes.add(loadBlockSlope4());
+        blockTypes.add(loadBlockStairsLeftMossy());
+        blockTypes.add(loadBlockStairsRightMossy());
+        blockTypes.add(loadBlockStairsLeft());
+        // 50
+        blockTypes.add(loadBlockStairsRight());
+        blockTypes.add(loadGrassHalfSlab1());
+        blockTypes.add(loadGrassHalfSlab2());
+        blockTypes.add(loadGrassSlab());
+        blockTypes.add(loadGrassSlabs());
+        // 55
+
         return blockTypes;
     }
 
@@ -77,19 +119,20 @@ public class BlockTypeFactory {
     }
 
     private static BlockType loadBlueBlock() {
-        return createBasicBlockType("blueBlock","blue-block.png");
+        return createBasicBlockType("blueBlock", "blue-block.png");
     }
 
     private static BlockType loadRedBlock() {
-        return createBasicBlockType("redBlock","red-block.png");
+        return createBasicBlockType("redBlock", "red-block.png");
     }
 
     private static BlockType loadPurpleBlock() {
-        return createBasicBlockType("purpleBlock","purple-block.png");
+        return createBasicBlockType("purpleBlock", "purple-block.png");
     }
 
     private static BlockType loadFireBlock() {
-        BlockType blockType = createBasicBlockType("fire", new String[]{"fire-0.png","fire-1.png","fire-2.png"},1);
+        BlockType blockType = createBasicBlockType("fire", new String[] { "fire-0.png", "fire-1.png", "fire-2.png" },
+                1);
         LightSource light = new LightSource(new ColorRGB(1, 0.6, 0.2), 1.2, 0.8, 0.1);
         Property propLight = new PropertyLight(light);
         blockType.addProperty(propLight);
@@ -104,9 +147,9 @@ public class BlockTypeFactory {
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
         ComplexCollision collision = new ComplexCollision();
-        collision.addCollision(new BoundingCollision(-0.5,0.5,-0.5,0.5,-0.5,-0.17));
-        collision.addCollision(new BoundingCollision(-0.5,0.5,-0.5,0.17,-0.17,0.17));
-        collision.addCollision(new BoundingCollision(-0.5,0.5,-0.5,-0.17,0.17,0.5));
+        collision.addCollision(new BoundingCollision(-0.5, 0.5, -0.5, 0.5, -0.5, -0.17));
+        collision.addCollision(new BoundingCollision(-0.5, 0.5, -0.5, 0.17, -0.17, 0.17));
+        collision.addCollision(new BoundingCollision(-0.5, 0.5, -0.5, -0.17, 0.17, 0.5));
         blockType.addCollision(collision);
         return blockType;
     }
@@ -126,20 +169,20 @@ public class BlockTypeFactory {
     private static BlockType loadSunBlock() {
         BlockType blockType = new BlockType("sun");
         ColorRGB[] pulse = {
-            new ColorRGB(1, 1, 1), // plain day (white)
-            new ColorRGB(1, 1, 1), // (white)
-            new ColorRGB(1, 1, 1),
-            new ColorRGB(1, 1, 1), 
-            new ColorRGB(1, 0.9, 0.75), 
-            new ColorRGB(1, 0.5, 0.3), // evening (orange-pink)
-            new ColorRGB(0.6, 0.3, 0.35), 
-            new ColorRGB(0.2, 0.2, 0.4), // night (low blue-white)
-            new ColorRGB(0.2, 0.2, 0.4), 
-            new ColorRGB(0.2, 0.2, 0.4), 
-            new ColorRGB(0.2, 0.2, 0.4), 
-            new ColorRGB(0.6, 0.3, 0.35), 
-            new ColorRGB(0.8, 0.3, 0.3), // morning (reddish)
-            new ColorRGB(1, 0.9, 0.75), 
+                new ColorRGB(1, 1, 1), // plain day (white)
+                new ColorRGB(1, 1, 1), // (white)
+                new ColorRGB(1, 1, 1),
+                new ColorRGB(1, 1, 1),
+                new ColorRGB(1, 0.9, 0.75),
+                new ColorRGB(1, 0.5, 0.3), // evening (orange-pink)
+                new ColorRGB(0.6, 0.3, 0.35),
+                new ColorRGB(0.2, 0.2, 0.4), // night (low blue-white)
+                new ColorRGB(0.2, 0.2, 0.4),
+                new ColorRGB(0.2, 0.2, 0.4),
+                new ColorRGB(0.2, 0.2, 0.4),
+                new ColorRGB(0.6, 0.3, 0.35),
+                new ColorRGB(0.8, 0.3, 0.3), // morning (reddish)
+                new ColorRGB(1, 0.9, 0.75),
         };
         LightSource light = new LightSource(pulse, 1200, 0.75, 1, 0);
         Property propLight = new PropertyLight(light);
@@ -148,21 +191,21 @@ public class BlockTypeFactory {
     }
 
     private static BlockType loadGlassBlock() {
-        BlockType blockType = createBasicBlockType("glassBlock","glass-block.png");
+        BlockType blockType = createBasicBlockType("glassBlock", "glass-block.png");
         blockType.setOpacity(0.2);
         return blockType;
     }
 
     private static BlockType loadDirtBlock() {
-        return createBasicBlockType("dirtBlock","dirt-block.png");
+        return createBasicBlockType("dirtBlock", "dirt.png");
     }
-   
+
     private static BlockType loadGrassBlock() {
-        return createBasicBlockType("grassBlock","grass-block.png");
+        return createBasicBlockType("grassBlock", "grass.png");
     }
-   
+
     private static BlockType loadHedgeBlock() {
-        return createBasicBlockType("hedge","hedge.png");
+        return createBasicBlockType("hedge", "hedge.png");
     }
 
     private static BlockType loadLeverBlock() {
@@ -177,7 +220,7 @@ public class BlockTypeFactory {
         shape = new Lever(true);
         text = new Texture(shape, img);
         blockType.addTexture(text);
-        
+
         blockType.addProperty(new Property("noCollision"));
         blockType.setOpacity(0);
         blockType.addBehavior(new BlockBehaviorLever());
@@ -185,49 +228,201 @@ public class BlockTypeFactory {
     }
 
     private static BlockType loadWorldBlock() {
-        BlockType blockType = createBasicBlockType("worldBlock", new String[]{"world-block-0.png","world-block-1.png","world-block-2.png"},3);
+        BlockType blockType = createBasicBlockType("worldBlock",
+                new String[] { "world-block-0.png", "world-block-1.png", "world-block-2.png" }, 3);
         blockType.addBehavior(new BlockBehaviorChangeWorld());
-            LightSource light = new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0);
+        LightSource light = new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0);
         Property propLight = new PropertyLight(light);
         blockType.addProperty(propLight);
         return blockType;
     }
 
     private static BlockType loadNewWorldBlock() {
-        BlockType blockType = createBasicBlockType("newWorldBlock", new String[]{"world-block-0.png","world-block-1.png","world-block-2.png"},3);
+        BlockType blockType = createBasicBlockType("newWorldBlock",
+                new String[] { "world-block-0.png", "world-block-1.png", "world-block-2.png" }, 3);
         blockType.addBehavior(new BlockBehaviorNewWorld());
-            LightSource light = new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0);
+        LightSource light = new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0);
         Property propLight = new PropertyLight(light);
         blockType.addProperty(propLight);
         return blockType;
     }
 
     private static BlockType loadRedCarpetBlock() {
-        return createBasicBlockType("redCarpet","red-carpet-block.png");
+        return createBasicBlockType("redCarpet", "red-carpet-block.png");
     }
 
     private static BlockType loadRedGoldenCarpetBlock() {
-        return createBasicBlockType("redGoldenCarpet","red-golden-carpet-block.png");
+        return createBasicBlockType("redGoldenCarpet", "red-golden-carpet-block.png");
     }
 
     private static BlockType loadRedGoldenCarpetBlock2() {
-        return createBasicBlockType("redGoldenCarpet2","red-golden-carpet-2-block.png");
+        return createBasicBlockType("redGoldenCarpet2", "red-golden-carpet-2-block.png");
     }
 
     private static BlockType loadRedGoldenCarpetBlock3() {
-        return createBasicBlockType("redGoldenCarpet3","red-golden-carpet-3-block.png");
+        return createBasicBlockType("redGoldenCarpet3", "red-golden-carpet-3-block.png");
     }
 
     private static BlockType loadLeavesBlock() {
-        return createBasicBlockType("leaves","leaves.png");
+        return createBasicBlockType("leaves", "leaves.png");
     }
-    
+
     private static BlockType loadSandBlock() {
-        return createBasicBlockType("sand","sand-block.png");
+        return createBasicBlockType("sand", "sand-block.png");
     }
-  
+
     private static BlockType loadWoodBlock() {
-        return createBasicBlockType("wood","wood.png");
+        return createBasicBlockType("wood", "wood.png");
     }
+
+    private static BlockType loadBlock() {
+        return createBasicBlockType("block", "block.png");
+    }
+
+    private static BlockType loadBlockTray() {
+        return createBasicBlockType("blockTray", "block-tray.png");
+    }
+
+    private static BlockType loadBlockBrick1() {
+        return createBasicBlockType("blockBrick1", "block-brick-1.png");
+    }
+
+    private static BlockType loadBlockBrick2() {
+        return createBasicBlockType("blockBrick2", "block-brick-2.png");
+    }
+
+    private static BlockType loadBlockBroken() {
+        return createBasicBlockType("blockBroken", "block-broken.png");
+    }
+
+    private static BlockType loadBlockColumnMossy() {
+        return createBasicBlockType("blockColumnMossy", "block-column-mossy.png");
+    }
+
+    private static BlockType loadBlockColumn() {
+        return createBasicBlockType("blockColumn", "block-column.png");
+    }
+
+    private static BlockType loadBlockHalfGrass1() {
+        return createBasicBlockType("blockHalfGrass1", "block-half-grass-1.png");
+    }
+
+    private static BlockType loadBlockHalfGrass2() {
+        return createBasicBlockType("blockHalfGrass2", "block-half-grass-2.png");
+    }
+
+    private static BlockType loadBlockHalfGrass3() {
+        return createBasicBlockType("blockHalfGrass3", "block-half-grass-3.png");
+    }
+
+    private static BlockType loadBlockHalfGrass4() {
+        return createBasicBlockType("blockHalfGrass4", "block-half-grass-4.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockHalfHorizontal1() {
+        return createBasicBlockType("blockHalfHorizontal1", "block-half-horizontal-1.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockHalfHorizontal2() {
+        return createBasicBlockType("blockHalfHorizontal2", "block-half-horizontal-2.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockHalfVertical1() {
+        return createBasicBlockType("blockHalfVertical1", "block-half-vertical-1.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockHalfVertical2() {
+        return createBasicBlockType("blockHalfVertical2", "block-half-vertical-2.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockHalfVertical3() {
+        return createBasicBlockType("blockHalfVertical3", "block-half-vertical-3.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockHalfVertical4() {
+        return createBasicBlockType("blockHalfVertical4", "block-half-vertical-4.png");
+    }
+
+    private static BlockType loadBlockHole1() {
+        return createBasicBlockType("blockHole1", "block-hole-1.png");
+    }
+
+    private static BlockType loadBlockHole2() {
+        return createBasicBlockType("blockHole1", "block-hole-2.png");
+    }
+
+    private static BlockType loadBlockLines() {
+        return createBasicBlockType("blockLines", "block-lines.png");
+    }
+
+    private static BlockType loadBlockMossy1() {
+        return createBasicBlockType("blockMossy1", "block-mossy-1.png");
+    }
+
+    private static BlockType loadBlockMossy2() {
+        return createBasicBlockType("blockMossy2", "block-mossy-2.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockSlope1() {
+        return createBasicBlockType("blockSlope1", "block-slope-1.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockSlope2() {
+        return createBasicBlockType("blockSlope2", "block-slope-2.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockSlope3() {
+        return createBasicBlockType("blockSlope3", "block-slope-3.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockSlope4() {
+        return createBasicBlockType("blockSlope4", "block-slope-4.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockStairsLeftMossy() {
+        return createBasicBlockType("blockStairsLeftMossy", "block-stairs-left-mossy.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockStairsRightMossy() {
+        return createBasicBlockType("blockStairsRightMossy", "block-stairs-right-mossy.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockStairsLeft() {
+        return createBasicBlockType("blockStairsLeft", "block-stairs-left.png");
+    }
+
+    // TO DO : collision & mask
+    private static BlockType loadBlockStairsRight() {
+        return createBasicBlockType("blockStairsRight", "block-stairs-right.png");
+    }
+
+    private static BlockType loadGrassHalfSlab1() {
+        return createBasicBlockType("grassHalfSlab1", "grass-half-slab-1.png");
+    }
+
+    private static BlockType loadGrassHalfSlab2() {
+        return createBasicBlockType("grassHalfSlab2", "grass-half-slab-2.png");
+    }
+    private static BlockType loadGrassSlab() {
+        return createBasicBlockType("grassSlab", "grass-slab.png");
+    }
+    private static BlockType loadGrassSlabs() {
+        return createBasicBlockType("grassSlabs", "grass-slabs.png");
+    }
+
+
 
 }

@@ -70,7 +70,7 @@ public class World {
     }
 
     public void reLoadWorld(String filename) {
-        reLoadWorld(filename,-1);
+        reLoadWorld(filename, -1);
     }
 
     /* -------------------------- update loop -------------------------- */
@@ -94,7 +94,7 @@ public class World {
         }
         for (Entity e : entities)
             e.onUpdate(this);
-        
+
         executeTasks();
     }
 
@@ -143,16 +143,29 @@ public class World {
 
     private void updateControls() {
         Player player = getPlayer();
+        double dx = 0, dy = 0;
+
         if (GameControls.isPressed(KeyEvent.VK_Z))
-            player.move(this, 0, -0.2, 0);
+            dy -= 0.2;
         if (GameControls.isPressed(KeyEvent.VK_S))
-            player.move(this, 0, 0.2, 0);
+            dy += 0.2;
         if (GameControls.isPressed(KeyEvent.VK_Q))
-            player.move(this, -0.2, 0, 0);
+            dx -= 0.2;
         if (GameControls.isPressed(KeyEvent.VK_D))
-            player.move(this, 0.2, 0, 0);
+            dx += 0.2;
+
+        // Normalize movement if moving diagonally
+        if (dx != 0 && dy != 0) {
+            double norm = Math.sqrt(dx * dx + dy * dy);
+            dx = dx / norm * 0.2;
+            dy = dy / norm * 0.2;
+        }
+
+        if (dx != 0 || dy != 0)
+            player.move(this, dx, dy, 0);
+
         if (GameControls.isPressed(KeyEvent.VK_A) || GameControls.isPressed(KeyEvent.VK_SPACE))
-            player.addVelocity(0,0,1.5);
+            player.addVelocity(0, 0, 1.5);
         if (GameControls.isPressed(KeyEvent.VK_E))
             player.interact(this);
     }

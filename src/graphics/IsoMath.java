@@ -7,7 +7,7 @@ import java.awt.geom.Point2D;
 public final class IsoMath {
 
     public static final int TILE_SIZE      = 16;
-    public static final int DRAW_TILE_SIZE = 64;
+    public static final int DRAW_TILE_SIZE = 116;
     private static final double HALF_TILE  = DRAW_TILE_SIZE / 2.0;
     private static final double QUART_TILE = DRAW_TILE_SIZE / 4.0;
 

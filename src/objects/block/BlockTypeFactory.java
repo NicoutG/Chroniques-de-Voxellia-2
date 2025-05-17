@@ -192,6 +192,9 @@ public class BlockTypeFactory {
     private static BlockType loadWorldBlock() {
         BlockType blockType = createBasicBlockType("worldBlock", new String[]{"world-block-0.png","world-block-1.png","world-block-2.png"},3);
         blockType.addBehavior(new BlockBehaviorChangeWorld());
+            LightSource light = new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0);
+        Property propLight = new PropertyLight(light);
+        blockType.addProperty(propLight);
         return blockType;
     }
 

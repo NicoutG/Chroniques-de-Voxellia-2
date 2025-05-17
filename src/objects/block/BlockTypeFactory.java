@@ -7,10 +7,8 @@ import javax.imageio.ImageIO;
 
 import graphics.Texture;
 import graphics.ligth.*;
-import objects.block.blockBehavior.BlockBehaviorChangeWorld;
-import objects.block.blockBehavior.BlockBehaviorLever;
-import objects.collision.BoundingCollision;
-import objects.collision.ComplexCollision;
+import objects.block.blockBehavior.*;
+import objects.collision.*;
 import objects.property.*;
 import tools.PathManager;
 import world.World;
@@ -36,13 +34,15 @@ public class BlockTypeFactory {
         blockTypes.add(loadHedgeBlock());
         blockTypes.add(loadLeverBlock());
         blockTypes.add(loadWorldBlock());
+        blockTypes.add(loadNewWorldBlock());
         blockTypes.add(loadRedCarpetBlock());
-        blockTypes.add(loadRedGoldenCarpetBlock());
         // 15
+        blockTypes.add(loadRedGoldenCarpetBlock());
         blockTypes.add(loadRedGoldenCarpetBlock2());
         blockTypes.add(loadRedGoldenCarpetBlock3());
         blockTypes.add(loadLeavesBlock());
         blockTypes.add(loadSandBlock());
+        // 20
         blockTypes.add(loadWoodBlock());
         return blockTypes;
     }
@@ -192,6 +192,15 @@ public class BlockTypeFactory {
     private static BlockType loadWorldBlock() {
         BlockType blockType = createBasicBlockType("worldBlock", new String[]{"world-block-0.png","world-block-1.png","world-block-2.png"},3);
         blockType.addBehavior(new BlockBehaviorChangeWorld());
+            LightSource light = new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0);
+        Property propLight = new PropertyLight(light);
+        blockType.addProperty(propLight);
+        return blockType;
+    }
+
+    private static BlockType loadNewWorldBlock() {
+        BlockType blockType = createBasicBlockType("newWorldBlock", new String[]{"world-block-0.png","world-block-1.png","world-block-2.png"},3);
+        blockType.addBehavior(new BlockBehaviorNewWorld());
             LightSource light = new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0);
         Property propLight = new PropertyLight(light);
         blockType.addProperty(propLight);

@@ -5,9 +5,11 @@ import objects.block.BlockType;
 import objects.entity.Entity;
 import objects.entity.Player;
 import tools.Vector;
+import world.WorldLoader.WorldData;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import engine.GameControls;
 
@@ -20,23 +22,19 @@ public class World {
     /** All block-types (kept once for the whole JVM). */
     private static final ArrayList<BlockType> BLOCK_TYPES = WorldLoader.loadBlockTypes();
 
-    public static World loadWorld(String filename) {
-        WorldLoader.WorldData data = WorldLoader.loadWorld(filename, BLOCK_TYPES);
-        return new World(data.blocks(), data.entities());
-    }
-
     /* ------------------------------------------------------------------ */
     /* INSTANCE STATE & API */
     /* ------------------------------------------------------------------ */
 
     private Block[][][] blocks;
     private ArrayList<Entity> entities;
+    private ArrayList<Vector> spawnPoints;
 
+    private HashMap<String,WorldData> worlds = new HashMap<>();
     private ArrayList<Runnable> afterUpdateTasks = new ArrayList<>();
 
-    public World(Block[][][] blocks, ArrayList<Entity> entities) {
-        this.blocks = blocks;
-        this.entities = entities;
+    public World(String worldPath) {
+        loadWorld(worldPath);
     }
 
     public Block[][][] getBlocks() {
@@ -62,15 +60,37 @@ public class World {
         return null;
     }
 
-    public void reLoadWorld(String filename, int spawnPoint) {
-        WorldLoader.WorldData data = WorldLoader.loadWorld(filename, BLOCK_TYPES, spawnPoint);
-        blocks = data.blocks();
-        entities = data.entities();
-        afterUpdateTasks = new ArrayList<>();
+    public void clearWorlds() {
+        worlds.clear();
     }
 
-    public void reLoadWorld(String filename) {
-        reLoadWorld(filename, -1);
+    public void loadWorld(String filename, int spawnPoint) {
+        WorldData data;
+        if (worlds.containsKey(filename))
+            data = worlds.get(filename);
+        else {
+            data = WorldLoader.loadWorld(filename, BLOCK_TYPES, spawnPoint);
+            worlds.put(filename, data);
+        }
+        blocks = data.blocks();
+        entities = data.entities();
+        spawnPoints = data.spawnPoints();
+        afterUpdateTasks = new ArrayList<>();
+        spawnPlayer(spawnPoint);
+    }
+
+    public void loadWorld(String filename) {
+        loadWorld(filename, -1);
+    }
+
+    public void spawnPlayer(int spawnPoint) {
+        Player player = getPlayer();
+        Vector position;
+        if (spawnPoint < 0 || spawnPoints.size() <= spawnPoint)
+            position = spawnPoints.get((int) (Math.random() * spawnPoints.size()));
+        else
+            position = spawnPoints.get(spawnPoint);
+        player.setPosition(position.x, position.y, position.z);
     }
 
     /* -------------------------- update loop -------------------------- */

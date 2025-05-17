@@ -8,6 +8,7 @@ import objects.entity.Entity;
 import objects.entity.EntityType;
 import objects.entity.Player;
 import tools.PathManager;
+import tools.Vector;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 public class WorldLoader {
 
     /* Small record that bundles both arrays for the World ctor */
-    public record WorldData(Block[][][] blocks, ArrayList<Entity> entities) {}
+    public record WorldData(Block[][][] blocks, ArrayList<Entity> entities, ArrayList<Vector> spawnPoints) {}
 
     /* ------------------------------------------------------------------ */
     /*  Public helpers                                                     */
@@ -34,7 +35,7 @@ public class WorldLoader {
 
         Block[][][]       blocks        = null;
         ArrayList<Entity> entities      = new ArrayList<>();
-        ArrayList<int[]>  playerSpawns  = new ArrayList<>();
+        ArrayList<Vector>  spawnPoints  = new ArrayList<>();
 
         try {
             String[] lines = Files.readString(Paths.get(PathManager.WORLD_PATH + file))
@@ -72,7 +73,7 @@ public class WorldLoader {
                                    (tok.charAt(0) == 'p' || tok.charAt(0) == 'P')) {
                             /* spawn point → remember coords, store AIR */
                             blocks[x][y][z] = null;
-                            playerSpawns.add(new int[]{x, y, z});
+                            spawnPoints.add(new Vector(x+0.5,y+0.5,z+0.5));
 
                         } else {                                    // ordinary block
                             blocks[x][y][z] = loadBlock(tok, blockTypes);
@@ -82,7 +83,7 @@ public class WorldLoader {
             }
 
             /* ---- create exactly ONE player at a random spawn ---- */
-            if (!playerSpawns.isEmpty()) {
+            if (!spawnPoints.isEmpty()) {
                 BufferedImage skin = ImageIO.read(
                         WorldLoader.class.getResource(
                                 "/resources/textures/outlined/blue-block.png"));
@@ -91,24 +92,22 @@ public class WorldLoader {
                 EntityType playerType = new EntityType("player");
                 playerType.addTexture(skinTex);
 
-                int[] spot;
+                Vector spot;
                 if (spawnPoint < 0)
-                    spot = playerSpawns.get((int) (Math.random() * playerSpawns.size()));
+                    spot = spawnPoints.get((int) (Math.random() * spawnPoints.size()));
                 else
-                    spot = playerSpawns.get(spawnPoint%playerSpawns.size());
+                    spot = spawnPoints.get(spawnPoint%spawnPoints.size());
 
                 entities.add(new Player(
                         playerType,
-                        spot[0] + 0.5,
-                        spot[1] + 0.5,
-                        spot[2] + 0.5));
+                        spot.x,spot.y,spot.z));
             }
 
         } catch (Exception e) {
             throw new RuntimeException("Error loading world '" + file + "'", e);
         }
 
-        return new WorldData(blocks, entities);
+        return new WorldData(blocks, entities, spawnPoints);
     }
 
     public static WorldData loadWorld(String file, ArrayList<BlockType> blockTypes) {

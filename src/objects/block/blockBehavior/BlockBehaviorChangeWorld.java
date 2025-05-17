@@ -28,19 +28,23 @@ public class BlockBehaviorChangeWorld extends BlockBehavior {
             if (xBlock == xEntity && yBlock == yEntity && zBlock == zEntity - 1) {
                 String newWorld = getNewWorld(block);
                 int spawnPoint = getSpawnPoint(block);
-                world.executeAfterUpdate(() -> world.reLoadWorld(newWorld, spawnPoint));
+                loadWorld(world, newWorld, spawnPoint);
             }
         }
     }
 
-    public String getNewWorld(Block block) {
+    protected void loadWorld(World world, String newWorld, int spawnPoint) {
+        world.executeAfterUpdate(() -> world.loadWorld(newWorld, spawnPoint));
+    }
+
+    protected String getNewWorld(Block block) {
         Object state = block.getState(NEW_WORLD);
         if (state != null && state instanceof String)
             return (String)state;
         return "";
     }
 
-    public int getSpawnPoint(Block block) {
+    protected int getSpawnPoint(Block block) {
         Object state = block.getState(SPAWNPOINT);
         if (state != null && state instanceof Integer)
             return (int)state;

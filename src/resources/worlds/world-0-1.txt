@@ -1,10 +1,10 @@
 6 6 8
 Level 0
-8 8 12/newWorld=world-0-0.txt/spawnPoint=1 8 8 8
+8 8 12/world=world-0-0.txt/spawnPoint=1 8 8 8
 8 8 8 8 8 8
 8 8 8 8 8 8
 8 8 8 8 8 8
-8 8 8 8 8 12/newWorld=world-1-1.txt/spawnPoint=1
+8 8 8 8 8 12/world=world-1-1.txt/spawnPoint=1
 8 8 8 8 8 8
 Level 1
 0 . . . . 2

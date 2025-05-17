@@ -7,7 +7,7 @@ import tools.Vector;
 import world.World;
 
 public class BlockBehaviorChangeWorld extends BlockBehavior {
-    protected final static String NEW_WORLD = "newWorld";
+    protected final static String NEW_WORLD = "world";
     protected final static String SPAWNPOINT = "spawnPoint";
 
     @Override

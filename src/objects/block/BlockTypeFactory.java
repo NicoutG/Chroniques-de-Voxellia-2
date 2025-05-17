@@ -147,7 +147,7 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-      private static BlockType loadGlassBlock() {
+    private static BlockType loadGlassBlock() {
         BlockType blockType = createBasicBlockType("glassBlock","glass-block.png");
         blockType.setOpacity(0.2);
         return blockType;

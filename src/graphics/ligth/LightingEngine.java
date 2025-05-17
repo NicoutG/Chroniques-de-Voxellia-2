@@ -26,7 +26,7 @@ public final class LightingEngine {
     /* ENGINE */
     /* ===================================================================== */
 
-    public FaceLighting[][][] compute(Block[][][] blocks) {
+    public FaceLighting[][][] compute(Block[][][] blocks, long tick) {
 
         final int X = blocks.length;
         final int Y = blocks[0].length;
@@ -57,7 +57,7 @@ public final class LightingEngine {
                     LightSource s = lp.getLight();
                     sources.addLast(new Voxel(
                             b, x, y, z,
-                            s.color(), s.oscillatingIntensity(), s.falloff()));
+                            s.color(tick), s.oscillatingIntensity(), s.falloff()));
                 }
 
         /* ---------- scratch buffers reused across all BFS passes ---------- */

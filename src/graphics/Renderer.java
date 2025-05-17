@@ -42,7 +42,7 @@ public final class Renderer {
 
     public void render(Graphics2D g2, int w, int h, long tick) {
         Block[][][] blocks = world.getBlocks();
-        FaceLighting[][][] faceLightings = lighthinEngine.compute(blocks);
+        FaceLighting[][][] faceLightings = lighthinEngine.compute(blocks, tick);
 
         ArrayList<Entity> entities = world.getEntities();
         if (blocks == null)

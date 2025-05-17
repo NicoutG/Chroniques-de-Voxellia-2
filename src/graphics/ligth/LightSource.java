@@ -15,12 +15,6 @@ public final class LightSource {
     private final double oscillation;
 
     /* ------------------------------------------------------------ */
-    /* RUNTIME STATE */
-    /* ------------------------------------------------------------ */
-
-    private int tick = 0; // advances every colour() call
-
-    /* ------------------------------------------------------------ */
     /* CONSTRUCTORS */
     /* ------------------------------------------------------------ */
 
@@ -74,16 +68,15 @@ public final class LightSource {
     }
 
     /** Returns the animated colour and advances the internal tick. */
-    private ColorRGB animatedColour() {
+    private ColorRGB animatedColour(long tick) {
 
         /* Edge-cases: no animation requested or bad parameters. */
         if (keyColours.length < 2 || animDuration <= 0) {
-            tick++; // still advance, to stay deterministic
             return baseColour;
         }
 
         /* --- time parameters ---------------------------------------- */
-        int cycleTick = tick % animDuration; // position inside current cycle
+        long cycleTick = tick % animDuration; // position inside current cycle
         double phase = (double) cycleTick / animDuration; // [0,1)
 
         /* --- determine current segment ------------------------------ */
@@ -101,7 +94,6 @@ public final class LightSource {
                 lerp(c0.g(), c1.g(), localT),
                 lerp(c0.b(), c1.b(), localT));
 
-        tick++; // advance for next call
         return out;
     }
 
@@ -111,7 +103,11 @@ public final class LightSource {
 
     /** The colour that should be used **right now**. */
     public ColorRGB color() {
-        return (animDuration == 0) ? baseColour : animatedColour();
+        return baseColour;
+    }
+
+    public ColorRGB color(long tick) {
+        return (animDuration == 0) ? baseColour : animatedColour(tick);
     }
 
     public double intensity() {

@@ -115,7 +115,7 @@ public final class Voxel {
                     nz < 0 || nz >= maxZ)
                 continue;
 
-            double factor = ((forbiddenMask & (1L << idx)) != 0) ? 0.90 : 1.0;
+            double factor = this.fallOff == 1 ? 1 : ((forbiddenMask & (1L << idx)) != 0) ? 0.90 : 1.0;
 
             Block nb = grid[nx][ny][nz];
             ColorRGB newColor = color;

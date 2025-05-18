@@ -104,7 +104,11 @@ public final class LightingEngine {
 
                     Block nb = n.getBlock();
 
-                    if (nb != null && nb.getOpacity() == 1 && !nb.isLightAllowed(n.getOriginAxisFace().index)) {
+                    if (nb != null && nb.getOpacity() == 1  && !nb.isLightAllowed(Face.LEFT.index) && !nb.isLightAllowed(Face.RIGHT.index) && !nb.isLightAllowed(Face.TOP.index)) {
+                        newRule[ruleCnt++] = OPPOSITE_IDX[n.getOriginDirIdx()];
+                    }
+
+                    else if (nb != null && nb.getOpacity() == 1 && !nb.isLightAllowed(n.getOriginAxisFace().index)) {
                         newRule[ruleCnt++] = OPPOSITE_IDX[n.getOriginDirIdx()];
                         n.kill(); 
                         children[childCnt++] = n;

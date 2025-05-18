@@ -55,4 +55,11 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
             }
         }
     }
+
+    public void jump(World world) {
+        position.z -= 0.1;
+        if (isCollidingBlock(world))
+            addVelocity(0, 0, 1.2);
+        position.z += 0.1;
+    }
 }

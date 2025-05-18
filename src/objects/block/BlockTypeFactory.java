@@ -441,7 +441,7 @@ public class BlockTypeFactory {
         blockType.addTexture(text);
         blockType.addCollision(CollisionList.SLOPE2);
         blockType.setAllowLight(Face.TOP.index, true);
-        blockType.setAllowLight(Face.RIGHT.index, true);
+        blockType.setAllowLight(Face.LEFT.index, true);
         return blockType;
     }
 

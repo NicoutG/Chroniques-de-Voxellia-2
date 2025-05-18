@@ -111,7 +111,7 @@ public class ObjectInstanceMovable <
         }
     }
 
-    private boolean isCollidingBlock(World world) {
+    protected boolean isCollidingBlock(World world) {
         int minX = (int)Math.floor(position.x - 0.5);
         int maxX = (int)Math.ceil(position.x + 0.5);
         int minY = (int)Math.floor(position.y - 0.5);

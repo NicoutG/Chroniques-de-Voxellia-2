@@ -185,7 +185,7 @@ public class World {
             player.move(this, dx, dy, 0);
 
         if (GameControls.isPressed(KeyEvent.VK_A) || GameControls.isPressed(KeyEvent.VK_SPACE))
-            player.addVelocity(0, 0, 1.5);
+            player.jump(this);
         if (GameControls.isPressed(KeyEvent.VK_E))
             player.interact(this);
     }

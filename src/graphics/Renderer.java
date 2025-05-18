@@ -152,8 +152,8 @@ public final class Renderer {
                 drawables.add(new Drawable(
                         e.getTexture().full(tick), e.getX(), e.getY(), e.getZ()));
 
-                FaceLighting faceLighting = sampleLighting(faceLightings, e.getX() + 0.5, e.getY() + 0.5,
-                        e.getZ() + 0.5);
+                FaceLighting faceLighting = sampleLighting(faceLightings, e.getX() - 0.5, e.getY() - 0.5,
+                        e.getZ() - 0.5);
 
                 drawables.add(new Drawable(shade(e.getTexture().left(tick),
                         faceLighting.left()), e.getX(), e.getY(),

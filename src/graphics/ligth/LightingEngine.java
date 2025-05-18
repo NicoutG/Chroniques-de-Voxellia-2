@@ -106,6 +106,11 @@ public final class LightingEngine {
 
                     if (nb != null && nb.getOpacity() == 1 && !nb.isLightAllowed(n.getOriginAxisFace().index)) {
                         newRule[ruleCnt++] = OPPOSITE_IDX[n.getOriginDirIdx()];
+                        n.kill(); 
+                        children[childCnt++] = n;
+                    }
+                    else if (nb != null && nb.getOpacity() == 1) {
+                        newRule[ruleCnt++] = OPPOSITE_IDX[n.getOriginDirIdx()];
                     }
 
                     else if (n.getIntensity() >= EPS) {

@@ -42,6 +42,7 @@ public final class Voxel {
     private final ColorRGB color;
     private double intensity;
     private final double fallOff;
+    private boolean die = false;
 
     /** -1 ⇒ source voxel (no parent) ; 0-5 ⇒ index into {@link #DIR}. */
     private final byte originDirIdx;
@@ -92,11 +93,16 @@ public final class Voxel {
 
     public List<Voxel> getNeighbors(Block[][][] grid) {
 
+        List<Voxel> out = new ArrayList<>(6); // fixed upper bound
+        if (this.die) {
+            return out;
+        }
+
         final int maxX = grid.length,
                 maxY = grid[0].length,
                 maxZ = grid[0][0].length;
 
-        List<Voxel> out = new ArrayList<>(6); // fixed upper bound
+
 
         /* Unrolled loop => no iterator object, predictable branching */
         for (byte idx = 0; idx < 6; ++idx) {
@@ -185,6 +191,10 @@ public final class Voxel {
     /** Convenience getter for the index form of the origin direction. */
     public byte getOriginDirIdx() {
         return originDirIdx;
+    }
+
+    public void kill() {
+        this.die = true;
     }
 
 }

@@ -327,9 +327,7 @@ public class BlockTypeFactory {
         Shape shape = new SlabBottom();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
-        blockType.setAllowLight(Face.TOP.index, true);
-        blockType.setAllowLight(Face.LEFT.index, true);
-        blockType.setAllowLight(Face.RIGHT.index, true);
+        blockType.setOpacity(0);
         return blockType;
     }
 
@@ -340,9 +338,7 @@ public class BlockTypeFactory {
         Shape shape = new SlabTop();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
-        blockType.setAllowLight(Face.TOP.index, true);
-        blockType.setAllowLight(Face.LEFT.index, true);
-        blockType.setAllowLight(Face.RIGHT.index, true);
+        blockType.setOpacity(0);
         return blockType;
     }
 

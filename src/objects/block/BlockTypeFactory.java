@@ -85,6 +85,21 @@ public class BlockTypeFactory {
         blockTypes.add(loadGrassSlab());
         blockTypes.add(loadGrassSlabs());
         // 55
+        blockTypes.add(loadBlockGrassCornerOutLeft());
+        blockTypes.add(loadBlockGrassCornerOutRight());
+        blockTypes.add(loadBlockGrassCornerOutTop());
+        blockTypes.add(loadBlockGrassCornerOutBottom());
+        blockTypes.add(loadBlockGrassCornerInLeft());
+        // 60
+        blockTypes.add(loadBlockGrassCornerInRight());
+        blockTypes.add(loadBlockGrassCornerInTop());
+        blockTypes.add(loadBlockGrassCornerInBottom());
+        blockTypes.add(loadGrassHalfSlab3());
+        blockTypes.add(loadGrassHalfSlab4());
+        // 65
+        blockTypes.add(loadBlockFlower());
+        blockTypes.add(loadBlockClubs());
+        blockTypes.add(loadBlockAlternate());
 
         return blockTypes;
     }
@@ -512,6 +527,56 @@ public class BlockTypeFactory {
 
     private static BlockType loadGrassSlabs() {
         return createBasicBlockType("grassSlabs", "grass-slabs.png");
+    }
+   
+    private static BlockType loadBlockGrassCornerOutLeft() {
+        return createBasicBlockType("blockGrassCornerOuterLeft", "block-grass-corner-outer-left.png");
+    }
+
+    private static BlockType loadBlockGrassCornerOutRight() {
+        return createBasicBlockType("blockGrassCornerOuterRight", "block-grass-corner-outer-right.png");
+    }
+
+    private static BlockType loadBlockGrassCornerOutTop() {
+        return createBasicBlockType("blockGrassCornerOuterTop", "block-grass-corner-outer-top.png");
+    }
+
+    private static BlockType loadBlockGrassCornerOutBottom() {
+        return createBasicBlockType("blockGrassCornerOuterBottom", "block-grass-corner-outer-bottom.png");
+    }
+
+    private static BlockType loadBlockGrassCornerInLeft() {
+        return createBasicBlockType("blockGrassCornerInnerLeft", "block-grass-corner-inner-left.png");
+    }
+
+    private static BlockType loadBlockGrassCornerInRight() {
+        return createBasicBlockType("blockGrassCornerInnerRight", "block-grass-corner-inner-right.png");
+    }
+
+    private static BlockType loadBlockGrassCornerInTop() {
+        return createBasicBlockType("blockGrassCornerInnerTop", "block-grass-corner-inner-top.png");
+    }
+
+    private static BlockType loadBlockGrassCornerInBottom() {
+        return createBasicBlockType("blockGrassCornerInnerBottom", "block-grass-corner-inner-bottom.png");
+    }
+ 
+    private static BlockType loadGrassHalfSlab3() {
+        return createBasicBlockType("GrassHalfSlab3", "grass-half-slab-3.png");
+    }
+ 
+    private static BlockType loadGrassHalfSlab4() {
+        return createBasicBlockType("GrassHalfSlab4", "grass-half-slab-4.png");
+    }
+   
+    private static BlockType loadBlockFlower() {
+        return createBasicBlockType("BlockFlower", "block-flower.png");
+    }
+    private static BlockType loadBlockClubs() {
+        return createBasicBlockType("BlockClubs", "block-clubs.png");
+    }
+    private static BlockType loadBlockAlternate() {
+        return createBasicBlockType("BlockAlternate", "block-alternate.png");
     }
 
 }

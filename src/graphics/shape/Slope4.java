@@ -23,6 +23,6 @@ public final class Slope4 extends Shape {
     }
 
     public Slope4() {
-        super(LEFT_MASK, RIGHT_MASK, TOP_MASK, true);
+        super(LEFT_MASK, RIGHT_MASK, TOP_MASK, false);
     }
 }

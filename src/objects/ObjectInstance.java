@@ -47,6 +47,10 @@ public class ObjectInstance<
     public Texture getTexture() {
         return type.getTexture(indexTexture);
     }
+
+    public boolean isLightAllowed(int index) {
+        return type.isLightAllowed(index);
+    }
     
     public ColorRGB getColor() {
         Object state = getState("color");

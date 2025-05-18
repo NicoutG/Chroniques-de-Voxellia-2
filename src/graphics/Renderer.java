@@ -203,8 +203,8 @@ public final class Renderer {
                 drawY <= screenH; // not completely below
     }
 
-    private boolean visibilityChecker(Block b) {
-        if (b == null || b.getTexture() == null || b.getOpacity() < 1
+    private boolean visibilityChecker(Block b, int direction) {
+        if (b == null || b.getTexture() == null || b.getOpacity() < 1 || b.isLightAllowed(direction)
                 || (b.getTexture() != null && !b.getTexture().takesFullSpace())) {
             return true;
         }
@@ -218,13 +218,13 @@ public final class Renderer {
         if (!isInScreenRange(x, y, z, originX, originY, w, h))
             return faces;
 
-        if (x == maxX || visibilityChecker(b[x + 1][y][z])) {
+        if (x == maxX || visibilityChecker(b[x + 1][y][z], Face.TOP.index)) {
             faces[Face.RIGHT.index] = true;
         }
-        if (y == maxY || visibilityChecker(b[x][y + 1][z])) {
+        if (y == maxY || visibilityChecker(b[x][y + 1][z], Face.TOP.index)) {
             faces[Face.LEFT.index] = true;
         }
-        if (z == maxZ || visibilityChecker(b[x][y][z + 1])) {
+        if (z == maxZ || visibilityChecker(b[x][y][z + 1], Face.TOP.index)) {
             faces[Face.TOP.index] = true;
         }
 

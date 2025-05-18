@@ -23,6 +23,6 @@ public final class SlabVertical3 extends Shape {
     }
 
     public SlabVertical3() {
-        super(LEFT_MASK, RIGHT_MASK, TOP_MASK, true);
+        super(LEFT_MASK, RIGHT_MASK, TOP_MASK, false);
     }
 }

@@ -38,6 +38,6 @@ public final class Lever extends Shape {
     }
 
     private Lever(BufferedImage left, BufferedImage right, BufferedImage top) {
-        super(left, right, top, true);
+        super(left, right, top, false);
     }
 }

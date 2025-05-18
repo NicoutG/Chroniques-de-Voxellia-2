@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import graphics.Texture;
 import graphics.ligth.ColorRGB;
+import graphics.shape.Face;
 import objects.collision.Collision;
 import objects.property.Property;
 
@@ -15,6 +16,7 @@ public abstract class ObjectType<
     private String name;
     private double opacity;
     private ColorRGB color; // When 0 < opacity < 1
+    private boolean[] allowLight = new boolean[]{false, false, false};
     private ArrayList<Texture> textures = new ArrayList<>();
     private ArrayList<Collision> collisions = new ArrayList<>();
     private HashMap<String, Property> properties = new HashMap<>();
@@ -55,6 +57,14 @@ public abstract class ObjectType<
         textures.add(texture);
     }
 
+    public boolean isLightAllowed(int index) { 
+        return allowLight[index];
+    }
+
+    public void setAllowLight(int index, boolean val) { 
+        this.allowLight[index] = val;
+    }
+    
     public Collision getCollision(int index) {
         int nbCollisions = collisions.size();
         if (nbCollisions == 0)

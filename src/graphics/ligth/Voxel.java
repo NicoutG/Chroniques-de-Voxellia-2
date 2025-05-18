@@ -4,6 +4,7 @@ package graphics.ligth; // same package name
 import java.util.ArrayList;
 import java.util.List;
 
+import graphics.shape.Face;
 import objects.block.Block;
 
 public final class Voxel {
@@ -126,6 +127,18 @@ public final class Voxel {
                     forbiddenMask)); // …and inherits the whole mask
         }
         return out;
+    }
+
+    public Face getOriginAxisFace() {
+        if (originDirIdx == -1)
+            return null; // light source voxel
+        int[] d = DIR[originDirIdx];
+        if (d[0] != 0)
+            return Face.RIGHT; // X axis
+        else if (d[1] != 0)
+            return Face.LEFT; // Y axis
+        else
+            return Face.TOP; // Z axis
     }
 
     /* ──────────────────── API identical to original ──────────────────── */

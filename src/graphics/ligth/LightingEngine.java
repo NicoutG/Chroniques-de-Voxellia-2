@@ -104,10 +104,11 @@ public final class LightingEngine {
 
                     Block nb = n.getBlock();
 
-                    if (nb != null && nb.getOpacity() == 1) {
-                        // opaque ⇒ forbid looking back through that neighbour
+                    if (nb != null && nb.getOpacity() == 1 && !nb.isLightAllowed(n.getOriginAxisFace().index)) {
                         newRule[ruleCnt++] = OPPOSITE_IDX[n.getOriginDirIdx()];
-                    } else if (n.getIntensity() >= EPS) {
+                    }
+
+                    else if (n.getIntensity() >= EPS) {
                         children[childCnt++] = n;
                     }
                 }
@@ -163,4 +164,5 @@ public final class LightingEngine {
 
         return out; // === identical observable result ===
     }
+
 }

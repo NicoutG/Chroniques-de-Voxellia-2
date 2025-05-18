@@ -23,6 +23,6 @@ public final class Rectangle extends Shape {
     }
 
     public Rectangle() {
-        super(LEFT_MASK, RIGHT_MASK, TOP_MASK, true);
+        super(LEFT_MASK, RIGHT_MASK, TOP_MASK, false);
     }
 }

@@ -23,6 +23,6 @@ public final class SlabTop extends Shape {
     }
 
     public SlabTop() {
-        super(LEFT_MASK, RIGHT_MASK, TOP_MASK, true);
+        super(LEFT_MASK, RIGHT_MASK, TOP_MASK, false);
     }
 }

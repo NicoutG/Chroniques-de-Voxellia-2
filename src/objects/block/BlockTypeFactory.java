@@ -147,11 +147,7 @@ public class BlockTypeFactory {
         Shape shape = new StairsRight();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
-        ComplexCollision collision = new ComplexCollision();
-        collision.addCollision(new BoundingCollision(-0.5, 0.5, -0.5, 0.5, -0.5, -0.17));
-        collision.addCollision(new BoundingCollision(-0.5, 0.5, -0.5, 0.17, -0.17, 0.17));
-        collision.addCollision(new BoundingCollision(-0.5, 0.5, -0.5, -0.17, 0.17, 0.5));
-        blockType.addCollision(collision);
+        blockType.addCollision(CollisionList.STEP_RIGHT);
         return blockType;
     }
 
@@ -327,6 +323,7 @@ public class BlockTypeFactory {
         Shape shape = new SlabBottom();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLAB_BOTTOM);
         blockType.setOpacity(0);
         return blockType;
     }
@@ -338,6 +335,7 @@ public class BlockTypeFactory {
         Shape shape = new SlabTop();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLAB_TOP);
         blockType.setOpacity(0);
         return blockType;
     }
@@ -349,6 +347,7 @@ public class BlockTypeFactory {
         Shape shape = new SlabVertical1();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLAB_VERTICAL1);
         blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.RIGHT.index, true);
         return blockType;
@@ -361,6 +360,7 @@ public class BlockTypeFactory {
         Shape shape = new SlabVertical2();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLAB_VERTICAL2);
         blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.LEFT.index, true);
         return blockType;
@@ -373,6 +373,7 @@ public class BlockTypeFactory {
         Shape shape = new SlabVertical3();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLAB_VERTICAL3);
         blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.RIGHT.index, true);
         return blockType;
@@ -385,6 +386,7 @@ public class BlockTypeFactory {
         Shape shape = new SlabVertical4();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLAB_VERTICAL4);
         blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.LEFT.index, true);
         return blockType;
@@ -417,6 +419,7 @@ public class BlockTypeFactory {
         Shape shape = new Slope1();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLOPE1);
         blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.RIGHT.index, true);
         return blockType;
@@ -429,6 +432,7 @@ public class BlockTypeFactory {
         Shape shape = new Slope2();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLOPE2);
         blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.RIGHT.index, true);
         return blockType;
@@ -441,7 +445,8 @@ public class BlockTypeFactory {
         Shape shape = new Slope3();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
-                blockType.setAllowLight(Face.TOP.index, true);
+        blockType.addCollision(CollisionList.SLOPE3);
+        blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.LEFT.index, true);
         return blockType;
     }
@@ -453,7 +458,8 @@ public class BlockTypeFactory {
         Shape shape = new Slope4();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
-                blockType.setAllowLight(Face.TOP.index, true);
+        blockType.addCollision(CollisionList.SLOPE4);
+        blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.LEFT.index, true);
         return blockType;
     }
@@ -465,6 +471,7 @@ public class BlockTypeFactory {
         Shape shape = new StairsLeft();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.STEP_LEFT);
         return blockType;
     }
 
@@ -475,6 +482,7 @@ public class BlockTypeFactory {
         Shape shape = new StairsRight();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.STEP_RIGHT);
         return blockType;
     }
 
@@ -485,6 +493,7 @@ public class BlockTypeFactory {
         Shape shape = new StairsLeft();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.STEP_LEFT);
         return blockType;
     }
 
@@ -495,6 +504,7 @@ public class BlockTypeFactory {
         Shape shape = new StairsRight();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.STEP_RIGHT);
         return blockType;
     }
 

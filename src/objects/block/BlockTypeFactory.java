@@ -316,7 +316,6 @@ public class BlockTypeFactory {
         return createBasicBlockType("blockHalfGrass4", "block-half-grass-4.png");
     }
 
-    // TO DO : collision
     private static BlockType loadBlockHalfHorizontal1() {
         BlockType blockType = new BlockType("blockHalfHorizontal1");
         BufferedImage img = getImage("block-half-horizontal-1.png");
@@ -328,7 +327,6 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockHalfHorizontal2() {
         BlockType blockType = new BlockType("blockHalfHorizontal2");
         BufferedImage img = getImage("block-half-horizontal-2.png");
@@ -340,7 +338,6 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockHalfVertical1() {
         BlockType blockType = new BlockType("blockHalfVertical1");
         BufferedImage img = getImage("block-half-vertical-1.png");
@@ -353,7 +350,6 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockHalfVertical2() {
         BlockType blockType = new BlockType("blockHalfVertical2");
         BufferedImage img = getImage("block-half-vertical-2.png");
@@ -366,7 +362,6 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockHalfVertical3() {
         BlockType blockType = new BlockType("blockHalfVertical3");
         BufferedImage img = getImage("block-half-vertical-3.png");
@@ -379,7 +374,6 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockHalfVertical4() {
         BlockType blockType = new BlockType("blockHalfVertical4");
         BufferedImage img = getImage("block-half-vertical-4.png");
@@ -412,7 +406,6 @@ public class BlockTypeFactory {
         return createBasicBlockType("blockMossy2", "block-mossy-2.png");
     }
 
-    // TO DO : collision
     private static BlockType loadBlockSlope1() {
         BlockType blockType = new BlockType("blockSlope1");
         BufferedImage img = getImage("block-slope-1.png");
@@ -425,7 +418,6 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockSlope2() {
         BlockType blockType = new BlockType("blockSlope2");
         BufferedImage img = getImage("block-slope-2.png");
@@ -438,7 +430,6 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockSlope3() {
         BlockType blockType = new BlockType("blockSlope3");
         BufferedImage img = getImage("block-slope-3.png");
@@ -451,7 +442,6 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockSlope4() {
         BlockType blockType = new BlockType("blockSlope4");
         BufferedImage img = getImage("block-slope-4.png");
@@ -464,7 +454,6 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockStairsLeftMossy() {
         BlockType blockType = new BlockType("blockStairsLeftMossy");
         BufferedImage img = getImage("block-stairs-left-mossy.png");
@@ -475,7 +464,6 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockStairsRightMossy() {
         BlockType blockType = new BlockType("blockStairsRightMossy");
         BufferedImage img = getImage("block-stairs-right-mossy.png");
@@ -486,7 +474,6 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockStairsLeft() {
         BlockType blockType = new BlockType("blockStairsLeft");
         BufferedImage img = getImage("block-stairs-left.png");
@@ -497,7 +484,6 @@ public class BlockTypeFactory {
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockStairsRight() {
         BlockType blockType = new BlockType("blockStairsRight");
         BufferedImage img = getImage("block-stairs-right.png");

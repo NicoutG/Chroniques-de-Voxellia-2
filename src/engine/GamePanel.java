@@ -18,8 +18,8 @@ public class GamePanel extends JPanel {
         setFocusable(true);
         requestFocusInWindow();
 
-        // this.world = World.createDemoWorld();
-         this.world = new World("world-0-0.txt");
+        //  this.world = new World("world-0-0.txt");
+         this.world = new World("test2.txt");
 
 
         this.renderer = new Renderer(world);

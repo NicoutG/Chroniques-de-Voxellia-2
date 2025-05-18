@@ -319,34 +319,64 @@ public class BlockTypeFactory {
         return createBasicBlockType("blockHalfGrass4", "block-half-grass-4.png");
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockHalfHorizontal1() {
-        return createBasicBlockType("blockHalfHorizontal1", "block-half-horizontal-1.png");
+        BlockType blockType = new BlockType("blockHalfHorizontal1");
+        BufferedImage img = getImage("block-half-horizontal-1.png");
+        Shape shape = new SlabBottom();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockHalfHorizontal2() {
-        return createBasicBlockType("blockHalfHorizontal2", "block-half-horizontal-2.png");
+        BlockType blockType = new BlockType("blockHalfHorizontal2");
+        BufferedImage img = getImage("block-half-horizontal-2.png");
+        Shape shape = new SlabTop();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockHalfVertical1() {
-        return createBasicBlockType("blockHalfVertical1", "block-half-vertical-1.png");
+        BlockType blockType = new BlockType("blockHalfVertical1");
+        BufferedImage img = getImage("block-half-vertical-1.png");
+        Shape shape = new SlabVertical1();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockHalfVertical2() {
-        return createBasicBlockType("blockHalfVertical2", "block-half-vertical-2.png");
+        BlockType blockType = new BlockType("blockHalfVertical2");
+        BufferedImage img = getImage("block-half-vertical-2.png");
+        Shape shape = new SlabVertical2();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockHalfVertical3() {
-        return createBasicBlockType("blockHalfVertical3", "block-half-vertical-3.png");
+        BlockType blockType = new BlockType("blockHalfVertical3");
+        BufferedImage img = getImage("block-half-vertical-3.png");
+        Shape shape = new SlabVertical3();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockHalfVertical4() {
-        return createBasicBlockType("blockHalfVertical4", "block-half-vertical-4.png");
+        BlockType blockType = new BlockType("blockHalfVertical4");
+        BufferedImage img = getImage("block-half-vertical-4.png");
+        Shape shape = new SlabVertical4();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
     private static BlockType loadBlockHole1() {
@@ -369,44 +399,84 @@ public class BlockTypeFactory {
         return createBasicBlockType("blockMossy2", "block-mossy-2.png");
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockSlope1() {
-        return createBasicBlockType("blockSlope1", "block-slope-1.png");
+        BlockType blockType = new BlockType("blockSlope1");
+        BufferedImage img = getImage("block-slope-1.png");
+        Shape shape = new Slope1();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockSlope2() {
-        return createBasicBlockType("blockSlope2", "block-slope-2.png");
+        BlockType blockType = new BlockType("blockSlope2");
+        BufferedImage img = getImage("block-slope-2.png");
+        Shape shape = new Slope2();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockSlope3() {
-        return createBasicBlockType("blockSlope3", "block-slope-3.png");
+        BlockType blockType = new BlockType("blockSlope3");
+        BufferedImage img = getImage("block-slope-3.png");
+        Shape shape = new Slope3();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockSlope4() {
-        return createBasicBlockType("blockSlope4", "block-slope-4.png");
+        BlockType blockType = new BlockType("blockSlope4");
+        BufferedImage img = getImage("block-slope-4.png");
+        Shape shape = new Slope4();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockStairsLeftMossy() {
-        return createBasicBlockType("blockStairsLeftMossy", "block-stairs-left-mossy.png");
+        BlockType blockType = new BlockType("blockStairsLeftMossy");
+        BufferedImage img = getImage("block-stairs-left-mossy.png");
+        Shape shape = new StairsLeft();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockStairsRightMossy() {
-        return createBasicBlockType("blockStairsRightMossy", "block-stairs-right-mossy.png");
+        BlockType blockType = new BlockType("blockStairsRightMossy");
+        BufferedImage img = getImage("block-stairs-right-mossy.png");
+        Shape shape = new StairsRight();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockStairsLeft() {
-        return createBasicBlockType("blockStairsLeft", "block-stairs-left.png");
+        BlockType blockType = new BlockType("blockStairsLeft");
+        BufferedImage img = getImage("block-stairs-left.png");
+        Shape shape = new StairsLeft();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
-    // TO DO : collision & mask
+    // TO DO : collision
     private static BlockType loadBlockStairsRight() {
-        return createBasicBlockType("blockStairsRight", "block-stairs-right.png");
+        BlockType blockType = new BlockType("blockStairsRight");
+        BufferedImage img = getImage("block-stairs-right.png");
+        Shape shape = new StairsRight();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+        return blockType;
     }
 
     private static BlockType loadGrassHalfSlab1() {
@@ -416,13 +486,13 @@ public class BlockTypeFactory {
     private static BlockType loadGrassHalfSlab2() {
         return createBasicBlockType("grassHalfSlab2", "grass-half-slab-2.png");
     }
+
     private static BlockType loadGrassSlab() {
         return createBasicBlockType("grassSlab", "grass-slab.png");
     }
+
     private static BlockType loadGrassSlabs() {
         return createBasicBlockType("grassSlabs", "grass-slabs.png");
     }
-
-
 
 }

@@ -50,26 +50,26 @@ public final class Renderer {
 
         /* ---------- compute camera offset ---------- */
         /* ---------- compute camera offset ---------- */
-double camX = w / 2.0;
-double camY = h / 2.0;
+        double camX = w / 2.0;
+        double camY = h / 2.0;
 
-Entity player = world.getPlayer();
-if (player != null) {
-    IsoMath.toScreen(player.getX(), player.getY(), player.getZ(), scratchPoint);
-    camX -= scratchPoint.x;
-    camY -= scratchPoint.y;
-} else {
-    camY = h / 4.0;
-}
+        Entity player = world.getPlayer();
+        if (player != null) {
+            IsoMath.toScreen(player.getX(), player.getY(), player.getZ(), scratchPoint);
+            camX -= scratchPoint.x;
+            camY -= scratchPoint.y;
+        } else {
+            camY = h / 4.0;
+        }
 
-/* ── NEW: snap the camera once ───────────────────────────────────── */
-int originXi = (int) Math.floor(camX);   // <-- floor   (not round!)
-int originYi = (int) Math.floor(camY);
-/* keep the *fractional* remainders in case you need them elsewhere:
-double subX = camX - originXi;
-double subY = camY - originYi;
-*/
-
+        /* ── NEW: snap the camera once ───────────────────────────────────── */
+        int originXi = (int) Math.floor(camX); // <-- floor (not round!)
+        int originYi = (int) Math.floor(camY);
+        /*
+         * keep the *fractional* remainders in case you need them elsewhere:
+         * double subX = camX - originXi;
+         * double subY = camY - originYi;
+         */
 
         /* ---------- clear & prepare canvas ---------- */
         g2.setColor(Color.BLACK);
@@ -95,7 +95,8 @@ double subY = camY - originYi;
                     if (b == null || b.getTexture() == null)
                         continue;
 
-                    boolean[] visibleFaces = getVisibleFaces(blocks, x, y, z, maxX, maxY, maxZ, originXi, originYi, w, h);
+                    boolean[] visibleFaces = getVisibleFaces(blocks, x, y, z, maxX, maxY, maxZ, originXi, originYi, w,
+                            h);
                     if (!visibleFaces[Face.LEFT.index] &&
                             !visibleFaces[Face.RIGHT.index] &&
                             !visibleFaces[Face.TOP.index]) {

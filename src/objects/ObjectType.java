@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import graphics.Texture;
 import graphics.ligth.ColorRGB;
-import graphics.shape.Face;
 import objects.collision.Collision;
 import objects.property.Property;
 

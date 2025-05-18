@@ -4,6 +4,7 @@ import graphics.Texture;
 import graphics.shape.Cube;
 import graphics.shape.Shape;
 import objects.block.*;
+import objects.collision.CollisionList;
 import objects.entity.Entity;
 import objects.entity.EntityType;
 import objects.entity.Player;
@@ -91,6 +92,7 @@ public class WorldLoader {
                 Texture  skinTex = new Texture(cube, skin);
                 EntityType playerType = new EntityType("player");
                 playerType.addTexture(skinTex);
+                playerType.addCollision(CollisionList.SMALL_CUBE);
 
                 entities.add(new Player(
                         playerType,

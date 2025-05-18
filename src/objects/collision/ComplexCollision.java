@@ -7,6 +7,15 @@ import tools.*;;
 public class ComplexCollision extends Collision {
     private ArrayList<BoundingCollision> collisions = new ArrayList<>();
 
+    public ComplexCollision() {
+
+    }
+
+    public ComplexCollision(BoundingCollision ... collisions) {
+        for (BoundingCollision collision : collisions)
+            addCollision(collision);
+    }
+
     public ArrayList<BoundingCollision> getCollisions() {
         return collisions;
     }

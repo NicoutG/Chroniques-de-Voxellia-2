@@ -162,11 +162,7 @@ public class BlockTypeFactory {
         Shape shape = new StairsRight();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
-        ComplexCollision collision = new ComplexCollision();
-        collision.addCollision(new BoundingCollision(-0.5, 0.5, -0.5, 0.5, -0.5, -0.17));
-        collision.addCollision(new BoundingCollision(-0.5, 0.5, -0.5, 0.17, -0.17, 0.17));
-        collision.addCollision(new BoundingCollision(-0.5, 0.5, -0.5, -0.17, 0.17, 0.5));
-        blockType.addCollision(collision);
+        blockType.addCollision(CollisionList.STEP_RIGHT);
         return blockType;
     }
 
@@ -335,71 +331,71 @@ public class BlockTypeFactory {
         return createBasicBlockType("blockHalfGrass4", "block-half-grass-4.png");
     }
 
-    // TO DO : collision
     private static BlockType loadBlockHalfHorizontal1() {
         BlockType blockType = new BlockType("blockHalfHorizontal1");
         BufferedImage img = getImage("block-half-horizontal-1.png");
         Shape shape = new SlabBottom();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLAB_BOTTOM);
         blockType.setOpacity(0);
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockHalfHorizontal2() {
         BlockType blockType = new BlockType("blockHalfHorizontal2");
         BufferedImage img = getImage("block-half-horizontal-2.png");
         Shape shape = new SlabTop();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLAB_TOP);
         blockType.setOpacity(0);
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockHalfVertical1() {
         BlockType blockType = new BlockType("blockHalfVertical1");
         BufferedImage img = getImage("block-half-vertical-1.png");
         Shape shape = new SlabVertical1();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLAB_VERTICAL1);
         blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.RIGHT.index, true);
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockHalfVertical2() {
         BlockType blockType = new BlockType("blockHalfVertical2");
         BufferedImage img = getImage("block-half-vertical-2.png");
         Shape shape = new SlabVertical2();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLAB_VERTICAL2);
         blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.LEFT.index, true);
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockHalfVertical3() {
         BlockType blockType = new BlockType("blockHalfVertical3");
         BufferedImage img = getImage("block-half-vertical-3.png");
         Shape shape = new SlabVertical3();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLAB_VERTICAL3);
         blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.RIGHT.index, true);
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockHalfVertical4() {
         BlockType blockType = new BlockType("blockHalfVertical4");
         BufferedImage img = getImage("block-half-vertical-4.png");
         Shape shape = new SlabVertical4();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLAB_VERTICAL4);
         blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.LEFT.index, true);
         return blockType;
@@ -425,91 +421,91 @@ public class BlockTypeFactory {
         return createBasicBlockType("blockMossy2", "block-mossy-2.png");
     }
 
-    // TO DO : collision
     private static BlockType loadBlockSlope1() {
         BlockType blockType = new BlockType("blockSlope1");
         BufferedImage img = getImage("block-slope-1.png");
         Shape shape = new Slope1();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLOPE1);
         blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.RIGHT.index, true);
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockSlope2() {
         BlockType blockType = new BlockType("blockSlope2");
         BufferedImage img = getImage("block-slope-2.png");
         Shape shape = new Slope2();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.SLOPE2);
         blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.RIGHT.index, true);
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockSlope3() {
         BlockType blockType = new BlockType("blockSlope3");
         BufferedImage img = getImage("block-slope-3.png");
         Shape shape = new Slope3();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
-                blockType.setAllowLight(Face.TOP.index, true);
+        blockType.addCollision(CollisionList.SLOPE3);
+        blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.LEFT.index, true);
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockSlope4() {
         BlockType blockType = new BlockType("blockSlope4");
         BufferedImage img = getImage("block-slope-4.png");
         Shape shape = new Slope4();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
-                blockType.setAllowLight(Face.TOP.index, true);
+        blockType.addCollision(CollisionList.SLOPE4);
+        blockType.setAllowLight(Face.TOP.index, true);
         blockType.setAllowLight(Face.LEFT.index, true);
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockStairsLeftMossy() {
         BlockType blockType = new BlockType("blockStairsLeftMossy");
         BufferedImage img = getImage("block-stairs-left-mossy.png");
         Shape shape = new StairsLeft();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.STEP_LEFT);
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockStairsRightMossy() {
         BlockType blockType = new BlockType("blockStairsRightMossy");
         BufferedImage img = getImage("block-stairs-right-mossy.png");
         Shape shape = new StairsRight();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.STEP_RIGHT);
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockStairsLeft() {
         BlockType blockType = new BlockType("blockStairsLeft");
         BufferedImage img = getImage("block-stairs-left.png");
         Shape shape = new StairsLeft();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.STEP_LEFT);
         return blockType;
     }
 
-    // TO DO : collision
     private static BlockType loadBlockStairsRight() {
         BlockType blockType = new BlockType("blockStairsRight");
         BufferedImage img = getImage("block-stairs-right.png");
         Shape shape = new StairsRight();
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
+        blockType.addCollision(CollisionList.STEP_RIGHT);
         return blockType;
     }
 

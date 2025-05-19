@@ -100,6 +100,42 @@ public class BlockTypeFactory {
         blockTypes.add(loadBlockFlower());
         blockTypes.add(loadBlockClubs());
         blockTypes.add(loadBlockAlternate());
+        blockTypes.add(loadAntikBlock());
+        blockTypes.add(loadBlackBlock());
+        // 70
+        blockTypes.add(loadBlueBlockBroken());
+        blockTypes.add(loadBlueBlockClubs());
+        blockTypes.add(loadBlueBlockColumn());
+        blockTypes.add(loadBlueBlockRays());
+        blockTypes.add(loadBookShelve1());
+        // 75
+        blockTypes.add(loadBookShelve2());
+        blockTypes.add(loadBorwnBlock());
+        blockTypes.add(loadDistortedBlockBlue());
+        blockTypes.add(loadDistortedBlockGreen());
+        blockTypes.add(loadDistortedBlockOrange());
+        // 80
+        blockTypes.add(loadDistortedBlockPurple());
+        blockTypes.add(loadDistortedBlockRed());
+        blockTypes.add(loadDistortedBlockYellow());
+        blockTypes.add(loadGravelDark());
+        blockTypes.add(loadGravel());
+        // 85
+        blockTypes.add(loadGreenBlock());
+        blockTypes.add(loadShelve());
+        blockTypes.add(loadStoneBroken());
+        blockTypes.add(loadStoneFrame());
+        blockTypes.add(loadStoneMossy());
+        // 90
+        blockTypes.add(loadStonePolished());
+        blockTypes.add(loadStone());
+        blockTypes.add(loadWhiteBlock());
+        blockTypes.add(loadWoodAcacia());
+        blockTypes.add(loadWoodOak());
+        // 95
+        blockTypes.add(loadWoodPine());
+        blockTypes.add(loadIce());
+        blockTypes.add(loadSnow());
 
         return blockTypes;
     }
@@ -524,7 +560,7 @@ public class BlockTypeFactory {
     private static BlockType loadGrassSlabs() {
         return createBasicBlockType("grassSlabs", "grass-slabs.png");
     }
-   
+
     private static BlockType loadBlockGrassCornerOutLeft() {
         return createBasicBlockType("blockGrassCornerOuterLeft", "block-grass-corner-outer-left.png");
     }
@@ -556,23 +592,149 @@ public class BlockTypeFactory {
     private static BlockType loadBlockGrassCornerInBottom() {
         return createBasicBlockType("blockGrassCornerInnerBottom", "block-grass-corner-inner-bottom.png");
     }
- 
+
     private static BlockType loadGrassHalfSlab3() {
         return createBasicBlockType("GrassHalfSlab3", "grass-half-slab-3.png");
     }
- 
+
     private static BlockType loadGrassHalfSlab4() {
         return createBasicBlockType("GrassHalfSlab4", "grass-half-slab-4.png");
     }
-   
+
     private static BlockType loadBlockFlower() {
         return createBasicBlockType("BlockFlower", "block-flower.png");
     }
+
     private static BlockType loadBlockClubs() {
         return createBasicBlockType("BlockClubs", "block-clubs.png");
     }
+
     private static BlockType loadBlockAlternate() {
         return createBasicBlockType("BlockAlternate", "block-alternate.png");
+    }
+
+    private static BlockType loadAntikBlock() {
+        return createBasicBlockType("antikBlock", "antik-block.png");
+    }
+
+    private static BlockType loadBlackBlock() {
+        return createBasicBlockType("blackBlock", "black-block.png");
+    }
+
+    private static BlockType loadBlueBlockBroken() {
+        return createBasicBlockType("blueBlockBroken", "blue-block-broken.png");
+    }
+
+    private static BlockType loadBlueBlockClubs() {
+        return createBasicBlockType("blueBlockClubs", "blue-block-clubs.png");
+    }
+
+    private static BlockType loadBlueBlockColumn() {
+        return createBasicBlockType("blueBlockColumn", "blue-block-column.png");
+    }
+
+    private static BlockType loadBlueBlockRays() {
+        return createBasicBlockType("blueBlockRays", "blue-block-rays.png");
+    }
+
+    private static BlockType loadBookShelve1() {
+        return createBasicBlockType("bookShelve1", "book-shelve-1.png");
+    }
+
+    private static BlockType loadBookShelve2() {
+        return createBasicBlockType("bookShelve2", "book-shelve-2.png");
+    }
+
+    private static BlockType loadBorwnBlock() {
+        return createBasicBlockType("borwnBlock", "borwn-block.png");
+    }
+
+    private static BlockType loadDistortedBlockBlue() {
+        return createBasicBlockType("distortedBlockBlue", "distorted-block-blue.png");
+    }
+
+    private static BlockType loadDistortedBlockGreen() {
+        return createBasicBlockType("distortedBlockGreen", "distorted-block-green.png");
+    }
+
+    private static BlockType loadDistortedBlockOrange() {
+        return createBasicBlockType("distortedBlockOrange", "distorted-block-orange.png");
+    }
+
+    private static BlockType loadDistortedBlockPurple() {
+        return createBasicBlockType("distortedBlockPurple", "distorted-block-purple.png");
+    }
+
+    private static BlockType loadDistortedBlockRed() {
+        return createBasicBlockType("distortedBlockRed", "distorted-block-red.png");
+    }
+
+    private static BlockType loadDistortedBlockYellow() {
+        return createBasicBlockType("distortedBlockYellow", "distorted-block-yellow.png");
+    }
+
+    private static BlockType loadGravelDark() {
+        return createBasicBlockType("gravelDark", "gravel-dark.png");
+    }
+
+    private static BlockType loadGravel() {
+        return createBasicBlockType("gravel", "gravel.png");
+    }
+
+    private static BlockType loadGreenBlock() {
+        return createBasicBlockType("greenBlock", "green-block.png");
+    }
+
+    private static BlockType loadShelve() {
+        BlockType b =  createBasicBlockType("shelve", "shelve.png");
+        b.setOpacity(0);
+        return b;
+    }
+
+    private static BlockType loadStoneBroken() {
+        return createBasicBlockType("stoneBroken", "stone-broken.png");
+    }
+
+    private static BlockType loadStoneFrame() {
+        return createBasicBlockType("stoneFrame", "stone-frame.png");
+    }
+
+    private static BlockType loadStoneMossy() {
+        return createBasicBlockType("stoneMossy", "stone-mossy.png");
+    }
+
+    private static BlockType loadStonePolished() {
+        return createBasicBlockType("stonePolished", "stone-polished.png");
+    }
+
+    private static BlockType loadStone() {
+        return createBasicBlockType("stone", "stone.png");
+    }
+
+    private static BlockType loadWhiteBlock() {
+        return createBasicBlockType("whiteBlock", "white-block.png");
+    }
+
+    private static BlockType loadWoodAcacia() {
+        return createBasicBlockType("woodAcacia", "wood-acacia.png");
+    }
+
+    private static BlockType loadWoodOak() {
+        return createBasicBlockType("woodOak", "wood-oak.png");
+    }
+
+    private static BlockType loadWoodPine() {
+        return createBasicBlockType("woodPine", "wood-pine.png");
+    }
+
+    private static BlockType loadIce() {
+        BlockType b = createBasicBlockType("ice", "ice.png");
+        b.setOpacity(0.5);
+        return b;
+    }
+
+    private static BlockType loadSnow() {
+        return createBasicBlockType("snow", "snow.png");
     }
 
 }

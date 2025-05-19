@@ -207,7 +207,7 @@ public class BlockTypeFactory {
         Shape shape = new Rectangle();
         Texture text = new Texture(shape, getImage("lava.png"));
         blockType.addTexture(text);
-        LightSource light = new LightSource(new ColorRGB(1, 0.6, 0.4), 1.5, 0.5, 0.05);
+        LightSource light = new LightSource(new ColorRGB(1, 0.6, 0.4), 1.5, 0.5, 0.15);
         Property propLight = new PropertyLight(light);
         blockType.setOpacity(0);
         blockType.addProperty(propLight);

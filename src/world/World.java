@@ -68,15 +68,20 @@ public class World {
 
     public void loadWorld(String filename, int spawnPoint) {
         WorldData data;
-        if (worlds.containsKey(filename))
+        if (worlds.containsKey(filename)) {
             data = worlds.get(filename);
+            blocks = data.blocks();
+            entities = data.entities();
+            spawnPoints = data.spawnPoints();
+        }
         else {
             data = WorldLoader.loadWorld(filename, BLOCK_TYPES, ENTITY_TYPES);
+            blocks = data.blocks();
+            entities = data.entities();
+            spawnPoints = data.spawnPoints();
+            start();
             worlds.put(filename, data);
         }
-        blocks = data.blocks();
-        entities = data.entities();
-        spawnPoints = data.spawnPoints();
         if (spawnPoints.isEmpty())
             throw new IllegalStateException("No spawn point for " + filename);
         afterUpdateTasks = new ArrayList<>();
@@ -192,5 +197,25 @@ public class World {
             player.jump(this);
         if (GameControls.isPressed(KeyEvent.VK_E))
             player.interact(this);
+    }
+
+    private void start() {
+        Vector pos = new Vector();
+        for (int z = 0; z < blocks[0][0].length; z++) {
+            pos.z = z + 0.5;
+            for (int y = 0; y < blocks[0].length; y++) {
+                pos.y = y + 0.5;
+                for (int x = 0; x < blocks.length; x++) {
+                    Block b = blocks[x][y][z];
+                    if (b != null) {
+                        pos.x = x + 0.5;
+                        b.onStart(this, new Vector(x + 0.5, y + 0.5, z + 0.5));
+                    }
+                }
+            }
+        }
+
+        for (Entity entity : entities)
+            entity.onStart(this);
     }
 }

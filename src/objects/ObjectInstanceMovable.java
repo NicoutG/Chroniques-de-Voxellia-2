@@ -1,6 +1,8 @@
 package objects;
 
 import objects.block.Block;
+import objects.collision.CollisionList;
+import objects.entity.Entity;
 import tools.Vector;
 import world.World;
 
@@ -70,20 +72,28 @@ public class ObjectInstanceMovable <
         setVelocity(velocity.x + x, velocity.y + y, velocity.z + z);
     }
 
-    public void move(World world, double moveX, double moveY, double moveZ) {
+    public Vector move(World world, double moveX, double moveY, double moveZ) {
         if (getProperty("noCollision") != null) {
             position.x += moveX;
             position.y += moveY;
             position.z += moveZ;
-            return;
+            return new Vector(moveX, moveY, moveZ);
         }
 
-        moveAxis(world, moveX, 0, 0);
-        moveAxis(world, 0, moveY, 0);
-        moveAxis(world, 0, 0, moveZ);
+        Vector realMove = new Vector();
+        realMove.x = moveAxis(world, moveX, 0, 0);
+        realMove.y = moveAxis(world, 0, moveY, 0);
+        realMove.z = moveAxis(world, 0, 0, moveZ);
+
+        for (Entity entity : world.getEntities()) {
+            if (entity != (Entity)this && CollisionList.ON_TOP_ENTITY.collision(position, entity.getCollision(), entity.getPosition()))
+                entity.move(world, realMove.x, realMove.y, realMove.z);
+        }
+
+        return realMove;
     }
 
-    private void moveAxis(World world, double dx, double dy, double dz) {
+    private double moveAxis(World world, double dx, double dy, double dz) {
         double stepSize = 0.1;
         double distance = Math.abs(dx + dy + dz);
         int steps = (int)(distance / stepSize) + 1;
@@ -91,12 +101,17 @@ public class ObjectInstanceMovable <
         double stepY = dy / steps;
         double stepZ = dz / steps;
 
+        double moveAxis = 0;
+
         for (int i = 0; i < steps; i++) {
             position.x += stepX;
             position.y += stepY;
             position.z += stepZ;
 
-            if (isCollidingBlock(world)) {
+            boolean colliding = isCollidingBlock(world);
+            if (!colliding)
+                colliding = isCollidingEntity(world, stepX, stepY, stepZ);
+            if (colliding) {
                 position.x -= stepX;
                 position.y -= stepY;
                 position.z -= stepZ;
@@ -108,7 +123,10 @@ public class ObjectInstanceMovable <
                     velocity.z = 0;
                 break;
             }
+
+            moveAxis += stepX + stepY + stepZ;
         }
+        return moveAxis;
     }
 
     protected boolean isCollidingBlock(World world) {
@@ -131,6 +149,18 @@ public class ObjectInstanceMovable <
                 }
             }
         }
+        return false;
+    }
+
+    protected boolean isCollidingEntity(World world, double moveX, double moveY, double moveZ) {
+        Vector move = new Vector(moveX, moveY, moveZ);
+        for (Entity entity : world.getEntities())
+            if (entity != this && getCollision().collision(position, entity.getCollision(), entity.getPosition())) {
+                if (this instanceof Entity && (moveX != 0 || moveY != 0 || moveZ != 0))
+                    entity.onPush(world, move, (Entity)this);
+                if (getCollision().collision(position, entity.getCollision(), entity.getPosition()))
+                    return true;
+            }
         return false;
     }
 }

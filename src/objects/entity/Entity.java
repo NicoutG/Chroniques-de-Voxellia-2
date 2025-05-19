@@ -12,14 +12,6 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
         super(type,x,y,z);
     }
 
-    public void onUpdate(World world) {
-        double coef = 0.9;
-        setVelocity(coef * velocity.x, coef * velocity.y, coef * velocity.z -0.4);
-        addVelocity(0, 0, 0.1);
-        move(world, velocity.x, velocity.y, velocity.z);
-        notifyCloseBlocks(world);
-    }
-
     public void notifyCloseBlocks(World world) {
         int x = (int)position.x;
         int y = (int)position.y;
@@ -58,8 +50,29 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
 
     public void jump(World world) {
         position.z -= 0.1;
-        if (isCollidingBlock(world))
+        if (isCollidingBlock(world) || isCollidingEntity(world, 0, 0, 0))
             addVelocity(0, 0, 1.2);
         position.z += 0.1;
     }
+
+    //#region behavior events
+
+    public void onStart(World world) {
+        executeEvent(e -> e.onStart(world,this));
+    }
+
+    public void onUpdate(World world) {
+        double coef = 0.9;
+        setVelocity(coef * velocity.x, coef * velocity.y, coef * velocity.z -0.4);
+        addVelocity(0, 0, 0.1);
+        move(world, velocity.x, velocity.y, velocity.z);
+        notifyCloseBlocks(world);
+        executeEvent(e -> e.onUpdate(world,this));
+    }
+
+    public void onPush(World world, Vector move, Entity entityPush) {
+        executeEvent(e -> e.onPush(world,this,move,entityPush));
+    }
+
+    //#endregion
 }

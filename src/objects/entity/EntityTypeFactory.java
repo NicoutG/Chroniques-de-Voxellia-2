@@ -9,6 +9,7 @@ import graphics.Texture;
 import graphics.shape.Cube;
 import graphics.shape.Shape;
 import objects.collision.CollisionList;
+import objects.entity.entityBehavior.*;
 import tools.PathManager;
 import world.World;
 
@@ -17,7 +18,8 @@ public class EntityTypeFactory {
     public static ArrayList<EntityType> loadEntityTypes() {
         ArrayList<EntityType> entityTypes = new ArrayList<>();
         // 0
-        entityTypes.add(loadPlayer()); // must be the player
+        entityTypes.add(loadPlayer()); // First must be the player
+        entityTypes.add(loadCrateWood());
         return entityTypes;
     }
 
@@ -52,7 +54,15 @@ public class EntityTypeFactory {
 
     private static EntityType loadPlayer() {
         EntityType entityType = createBasicEntityType("player", "blue-block.png");
-        entityType.addCollision(CollisionList.SMALL_CUBE);
+        entityType.addCollision(CollisionList.BLOCK_ENTITY);
+        entityType.addBehavior(new EntityBehaviorPushable());
+        return entityType;
+    }
+
+    private static EntityType loadCrateWood() {
+        EntityType entityType = createBasicEntityType("crateWood", "crate-wood.png");
+        entityType.addCollision(CollisionList.BLOCK_ENTITY);
+        entityType.addBehavior(new EntityBehaviorPushable());
         return entityType;
     }
 }

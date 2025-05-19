@@ -109,6 +109,7 @@ public class WorldLoader {
 
         String[] parts = token.split("/");
         Entity entity = entityTypes.get(Integer.parseInt(parts[0])).getInstance();
+        entity.setPosition(x, y, z);
 
         for (int i = 1; i < parts.length; i++) {
             String[] nv = parts[i].split("=");

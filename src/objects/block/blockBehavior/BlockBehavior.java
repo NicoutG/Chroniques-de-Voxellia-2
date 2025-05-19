@@ -12,8 +12,7 @@ public abstract class BlockBehavior extends ObjectBehavior<BlockType, Block, Blo
     public void onAttachTo(Block block) {
     }
 
-    public BlockBehavior clone() {
-        return this;
+    public void onStart(World world, Block block, Vector position) {
     }
 
     public void onUpdate(World world, Block block, Vector position) {
@@ -34,5 +33,8 @@ public abstract class BlockBehavior extends ObjectBehavior<BlockType, Block, Blo
     public void onEntityClose(World world, Block block, Vector position, Entity entity) {
     }
 
+    public BlockBehavior clone() {
+        return this;
+    }
 
 }

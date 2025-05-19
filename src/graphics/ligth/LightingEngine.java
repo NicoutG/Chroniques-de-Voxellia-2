@@ -2,8 +2,6 @@
 package graphics.ligth;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
 import objects.block.Block;
 import objects.property.PropertyLight;
 import graphics.shape.Face;

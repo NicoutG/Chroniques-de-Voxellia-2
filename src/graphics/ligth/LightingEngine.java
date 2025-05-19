@@ -2,6 +2,7 @@
 package graphics.ligth;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 import objects.block.Block;
 import objects.property.PropertyLight;
@@ -25,27 +26,31 @@ public final class LightingEngine {
     /* ===================================================================== */
     /* ENGINE */
     /* ===================================================================== */
-
+    /* ===================================================================== */
+    /* ENGINE */
+    /* ===================================================================== */
     public FaceLighting[][][] compute(Block[][][] blocks, long tick) {
 
         final int X = blocks.length;
         final int Y = blocks[0].length;
         final int Z = blocks[0][0].length;
 
-        /* ---------- output grids ---------- */
+        /* ---------- output buffers ---------- */
         FaceLighting[][][] out = new FaceLighting[X][Y][Z];
-        ColorRGB[][][] outCol = new ColorRGB[X][Y][Z];
+        ColorRGB[][][] outC = new ColorRGB[X][Y][Z];
 
         for (int x = 0; x < X; ++x)
             for (int y = 0; y < Y; ++y)
                 for (int z = 0; z < Z; ++z)
-                    out[x][y][z] = new FaceLighting(); // keeps external API intact
+                    out[x][y][z] = new FaceLighting();
 
-        /* ---------- 1) extract every light source ---------- */
-        ArrayDeque<Voxel> sources = new ArrayDeque<>(); // we only need FIFO
+        /* ---------- 1) collect light sources ---------- */
+        ColorRGB ambient = ColorRGB.BLACK; // sum of every “master” light
+        ArrayDeque<Voxel> sources = new ArrayDeque<>(); // only falloff < 1
         for (int x = 0; x < X; ++x)
             for (int y = 0; y < Y; ++y)
                 for (int z = 0; z < Z; ++z) {
+
                     Block b = blocks[x][y][z];
                     if (b == null)
                         continue;
@@ -54,75 +59,92 @@ public final class LightingEngine {
                     if (lp == null)
                         continue;
 
-                    LightSource s = lp.getLight();
-                    sources.addLast(new Voxel(
-                            b, x, y, z,
-                            s.color(tick), s.oscillatingIntensity(), s.falloff()));
+                    LightSource ls = lp.getLight();
+                    ColorRGB col = ls.color(tick);
+                    double I = ls.oscillatingIntensity();
+                    double f = ls.falloff();
+
+                    if (f >= 0.999) { // MASTER-LIGHT
+                        ambient = ambient.add(col.mul(I)); // accumulate once
+                    } else { // normal point light
+                        sources.addLast(new Voxel(
+                                b, x, y, z,
+                                col, I, f));
+                    }
                 }
 
-        /* ---------- scratch buffers reused across all BFS passes ---------- */
+        /* ---------- 1-bis) fill every voxel with ambient light ---------- */
+        if (!ambient.isBlack()) {
+            for (int x = 0; x < X; ++x)
+                for (int y = 0; y < Y; ++y)
+                    for (int z = 0; z < Z; ++z)
+                        outC[x][y][z] = ambient; // same object is fine (immutable)
+        }
+
+        /* ---------- reusable scratch buffers ---------- */
         final int[][][] visited = new int[X][Y][Z]; // 0 ⇒ never visited
         int visitTag = 1;
 
         final ArrayDeque<Voxel> q = new ArrayDeque<>();
-        final byte[] newRule = new byte[MAX_NEIGHBOURS]; // indices of forbiddens
+        final byte[] newRule = new byte[MAX_NEIGHBOURS];
         final Voxel[] children = new Voxel[MAX_NEIGHBOURS];
 
         /* ================================================================= */
-        /* 2) propagate **each** source (rules are per-source) */
+        /* 2) propagate every **non-master** source */
         /* ================================================================= */
         for (Voxel src : sources) {
 
-            /* 2-a: the source itself is fully lit */
+            /* inject full power on the source voxel */
             out[src.getX()][src.getY()][src.getZ()]
                     .inject(src.getColor().mul(src.getIntensity()));
 
             q.clear();
             q.addLast(src);
-
-            final int myTag = visitTag++;
+            final int tag = visitTag++;
 
             while (!q.isEmpty()) {
-
                 Voxel v = q.removeFirst();
                 int vx = v.getX(), vy = v.getY(), vz = v.getZ();
-
-                if (visited[vx][vy][vz] == myTag)
+                if (visited[vx][vy][vz] == tag)
                     continue;
-                visited[vx][vy][vz] = myTag;
+                visited[vx][vy][vz] = tag;
 
-                /* ---- accumulate local contribution ---- */
+                /* accumulate contribution on this voxel */
                 ColorRGB add = v.getColor().mul(v.getIntensity());
-                ColorRGB acc = outCol[vx][vy][vz];
-                outCol[vx][vy][vz] = (acc == null) ? add : acc.add(add);
+                ColorRGB acc = outC[vx][vy][vz];
+                outC[vx][vy][vz] = (acc == null) ? add : acc.add(add);
 
-                /* ---- examine neighbours ---- */
+                /* explore neighbours */
                 int ruleCnt = 0, childCnt = 0;
-
-                List<Voxel> neigh = v.getNeighbors(blocks);
-                for (Voxel n : neigh) {
+                for (Voxel n : v.getNeighbors(blocks)) {
 
                     Block nb = n.getBlock();
 
-                    if (nb != null && nb.getOpacity() == 1  && !nb.isLightAllowed(Face.LEFT.index) && !nb.isLightAllowed(Face.RIGHT.index) && !nb.isLightAllowed(Face.TOP.index)) {
-                        newRule[ruleCnt++] = OPPOSITE_IDX[n.getOriginDirIdx()];
-                    }
+                    if (nb != null && nb.getOpacity() == 1 &&
+                            !nb.isLightAllowed(Face.LEFT.index) &&
+                            !nb.isLightAllowed(Face.RIGHT.index) &&
+                            !nb.isLightAllowed(Face.TOP.index)) {
 
-                    else if (nb != null && nb.getOpacity() == 1 && !nb.isLightAllowed(n.getOriginAxisFace().index)) {
                         newRule[ruleCnt++] = OPPOSITE_IDX[n.getOriginDirIdx()];
-                        n.kill(); 
+
+                    } else if (nb != null && nb.getOpacity() == 1 &&
+                            !nb.isLightAllowed(n.getOriginAxisFace().index)) {
+
+                        newRule[ruleCnt++] = OPPOSITE_IDX[n.getOriginDirIdx()];
+                        n.kill();
                         children[childCnt++] = n;
-                    }
-                    else if (nb != null && nb.getOpacity() == 1) {
-                        newRule[ruleCnt++] = OPPOSITE_IDX[n.getOriginDirIdx()];
-                    }
 
-                    else if (n.getIntensity() >= EPS) {
+                    } else if (nb != null && nb.getOpacity() == 1) {
+
+                        newRule[ruleCnt++] = OPPOSITE_IDX[n.getOriginDirIdx()];
+
+                    } else if (n.getIntensity() >= EPS) {
+
                         children[childCnt++] = n;
                     }
                 }
 
-                /* ---- propagate freshly found rules to every child ---- */
+                /* propagate rules to children */
                 for (int i = 0; i < childCnt; ++i) {
                     Voxel c = children[i];
                     for (int r = 0; r < ruleCnt; ++r)
@@ -133,45 +155,32 @@ public final class LightingEngine {
         }
 
         /* ================================================================= */
-        /* 3) project accumulated light onto the three visible faces */
+        /* 3) project accumulated light onto visible faces */
         /* ================================================================= */
         for (int x = 0; x < X; ++x)
             for (int y = 0; y < Y; ++y)
                 for (int z = 0; z < Z; ++z) {
 
                     if (blocks[x][y][z] == null) {
-                        ColorRGB c = outCol[x][y][z];
-                        if (!isBlack(c))
+                        ColorRGB c = outC[x][y][z];
+                        if (!isBlack(c)) {
                             out[x][y][z].accumulate(Face.RIGHT, c.clamp());
-                        if (!isBlack(c))
                             out[x][y][z].accumulate(Face.LEFT, c.clamp());
-                        if (!isBlack(c))
                             out[x][y][z].accumulate(Face.TOP, c.clamp());
-
+                        }
                     } else {
+                        if (x + 1 < X && !isBlack(outC[x + 1][y][z]))
+                            out[x][y][z].accumulate(Face.RIGHT, outC[x + 1][y][z].clamp());
 
-                        /* RIGHT face (+X) */
-                        if (x + 1 < X) {
-                            ColorRGB c = outCol[x + 1][y][z];
-                            if (!isBlack(c))
-                                out[x][y][z].accumulate(Face.RIGHT, c.clamp());
-                        }
-                        /* LEFT face (+Y) */
-                        if (y + 1 < Y) {
-                            ColorRGB c = outCol[x][y + 1][z];
-                            if (!isBlack(c))
-                                out[x][y][z].accumulate(Face.LEFT, c.clamp());
-                        }
-                        /* TOP face (+Z) */
-                        if (z + 1 < Z) {
-                            ColorRGB c = outCol[x][y][z + 1];
-                            if (!isBlack(c))
-                                out[x][y][z].accumulate(Face.TOP, c.clamp());
-                        }
+                        if (y + 1 < Y && !isBlack(outC[x][y + 1][z]))
+                            out[x][y][z].accumulate(Face.LEFT, outC[x][y + 1][z].clamp());
+
+                        if (z + 1 < Z && !isBlack(outC[x][y][z + 1]))
+                            out[x][y][z].accumulate(Face.TOP, outC[x][y][z + 1].clamp());
                     }
                 }
 
-        return out; // === identical observable result ===
+        return out;
     }
 
 }

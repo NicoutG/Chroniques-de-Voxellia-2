@@ -1,18 +1,10 @@
 package world;
 
-import graphics.Texture;
-import graphics.shape.Cube;
-import graphics.shape.Shape;
+import objects.*;
 import objects.block.*;
-import objects.collision.CollisionList;
-import objects.entity.Entity;
-import objects.entity.EntityType;
-import objects.entity.Player;
-import tools.PathManager;
-import tools.Vector;
+import objects.entity.*;
+import tools.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -31,12 +23,18 @@ public class WorldLoader {
         return BlockTypeFactory.loadBlockTypes();
     }
 
+    public static ArrayList<EntityType> loadEntityTypes() {
+        return EntityTypeFactory.loadEntityTypes();
+    }
+
     /** Parses <code>WORLD_PATH + file</code> and returns blocks + entities. */
-    public static WorldData loadWorld(String file, ArrayList<BlockType> blockTypes) {
+    public static WorldData loadWorld(String file, ArrayList<BlockType> blockTypes, ArrayList<EntityType> entityTypes) {
 
         Block[][][]       blocks        = null;
         ArrayList<Entity> entities      = new ArrayList<>();
         ArrayList<Vector>  spawnPoints  = new ArrayList<>();
+
+        entities.add(new Player(entityTypes.get(0),0,0,0));
 
         try {
             String[] lines = Files.readString(Paths.get(PathManager.WORLD_PATH + file))
@@ -67,36 +65,19 @@ public class WorldLoader {
                     for (int x = 0; x < dimX; x++) {
                         String tok = toks[x];
 
-                        if (tok.equals(".")) {                       // air
+                        if (tok.equals("."))                     // air
                             blocks[x][y][z] = null;
-
-                        } else if (tok.length() > 0 &&
-                                   (tok.charAt(0) == 'p' || tok.charAt(0) == 'P')) {
+                        else if (tok.length() > 0 && (tok.charAt(0) == 'p' || tok.charAt(0) == 'P')) {   // spawn point
                             /* spawn point → remember coords, store AIR */
                             blocks[x][y][z] = null;
                             spawnPoints.add(new Vector(x+0.5,y+0.5,z+0.5));
 
-                        } else {                                    // ordinary block
+                        } else if (tok.length() > 0 && (tok.charAt(0) == 'e' || tok.charAt(0) == 'E'))   // block
+                            entities.add(loadEntity(tok.substring(1), x+0.5,y+0.5,z+0.5, entityTypes));
+                        else
                             blocks[x][y][z] = loadBlock(tok, blockTypes);
-                        }
                     }
                 }
-            }
-
-            /* ---- create exactly ONE player at a random spawn ---- */
-            if (!spawnPoints.isEmpty()) {
-                BufferedImage skin = ImageIO.read(
-                        WorldLoader.class.getResource(
-                                "/resources/textures/outlined/blue-block.png"));
-                Shape    cube = new Cube();
-                Texture  skinTex = new Texture(cube, skin);
-                EntityType playerType = new EntityType("player");
-                playerType.addTexture(skinTex);
-                playerType.addCollision(CollisionList.SMALL_CUBE);
-
-                entities.add(new Player(
-                        playerType,
-                        0,0,0));
             }
 
         } catch (Exception e) {
@@ -110,8 +91,9 @@ public class WorldLoader {
     /*  Internal helpers                                                   */
     /* ------------------------------------------------------------------ */
 
-    private static Block loadBlock(String token,
-                                   ArrayList<BlockType> blockTypes) {
+
+
+    private static Block loadBlock(String token, ArrayList<BlockType> blockTypes) {
 
         String[] parts = token.split("/");
         Block block = blockTypes.get(Integer.parseInt(parts[0])).getInstance();
@@ -123,11 +105,23 @@ public class WorldLoader {
         return block;
     }
 
-    private static void setState(Block block, String name, String value) {
-        Object cur = block.getState(name);
-        if (cur instanceof Double) block.setState(name, Double.parseDouble(value));
-        else if (cur instanceof Integer) block.setState(name, Integer.parseInt(value));
-        else if (cur instanceof Boolean) block.setState(name, Boolean.parseBoolean(value));
-        else block.setState(name, value);
+    private static Entity loadEntity(String token, double x, double y, double z, ArrayList<EntityType> entityTypes) {
+
+        String[] parts = token.split("/");
+        Entity entity = entityTypes.get(Integer.parseInt(parts[0])).getInstance();
+
+        for (int i = 1; i < parts.length; i++) {
+            String[] nv = parts[i].split("=");
+            setState(entity, nv[0], nv[1]);
+        }
+        return entity;
+    }
+
+    private static void setState(ObjectInstance instance, String name, String value) {
+        Object cur = instance.getState(name);
+        if (cur instanceof Double) instance.setState(name, Double.parseDouble(value));
+        else if (cur instanceof Integer) instance.setState(name, Integer.parseInt(value));
+        else if (cur instanceof Boolean) instance.setState(name, Boolean.parseBoolean(value));
+        else instance.setState(name, value);
     }
 }

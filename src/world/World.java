@@ -3,6 +3,7 @@ package world;
 import objects.block.Block;
 import objects.block.BlockType;
 import objects.entity.Entity;
+import objects.entity.EntityType;
 import objects.entity.Player;
 import tools.Vector;
 import world.WorldLoader.WorldData;
@@ -21,6 +22,7 @@ public class World {
 
     /** All block-types (kept once for the whole JVM). */
     private static final ArrayList<BlockType> BLOCK_TYPES = WorldLoader.loadBlockTypes();
+    private static final ArrayList<EntityType> ENTITY_TYPES = WorldLoader.loadEntityTypes();
 
     /* ------------------------------------------------------------------ */
     /* INSTANCE STATE & API */
@@ -69,12 +71,14 @@ public class World {
         if (worlds.containsKey(filename))
             data = worlds.get(filename);
         else {
-            data = WorldLoader.loadWorld(filename, BLOCK_TYPES);
+            data = WorldLoader.loadWorld(filename, BLOCK_TYPES, ENTITY_TYPES);
             worlds.put(filename, data);
         }
         blocks = data.blocks();
         entities = data.entities();
         spawnPoints = data.spawnPoints();
+        if (spawnPoints.isEmpty())
+            throw new IllegalStateException("No spawn point for " + filename);
         afterUpdateTasks = new ArrayList<>();
         spawnPlayer(spawnPoint);
     }

@@ -752,6 +752,11 @@ public class BlockTypeFactory {
         blockType.addTexture(text);
 
         blockType.addBehavior(new BlockBehaviorPressurePlate());
+        blockType.addBehavior(new BlockBehaviorActivableLight());
+
+        LightSource light = new LightSource(new ColorRGB(1, 0.6, 0.4), 0.2, 0.5, 0);
+        Property propLight = new PropertyLight(light);
+        blockType.addProperty(propLight);
         return blockType;
     }
 

@@ -136,6 +136,7 @@ public class BlockTypeFactory {
         blockTypes.add(loadWoodPine());
         blockTypes.add(loadIce());
         blockTypes.add(loadSnow());
+        blockTypes.add(loadPressurePlate());
 
         return blockTypes;
     }
@@ -735,6 +736,28 @@ public class BlockTypeFactory {
 
     private static BlockType loadSnow() {
         return createBasicBlockType("snow", "snow.png");
+    }
+
+    private static BlockType loadPressurePlate() {
+        BlockType blockType = new BlockType("pressurePlate");
+
+        BufferedImage img = getImage("pressure-plate-F.png");
+        Shape shape = new Cube();
+        Texture text = new Texture(shape, img);
+        blockType.addTexture(text);
+
+        img = getImage("pressure-plate-T.png");
+        shape = new Cube();
+        text = new Texture(shape, img);
+        blockType.addTexture(text);
+
+        blockType.addBehavior(new BlockBehaviorPressurePlate());
+        blockType.addBehavior(new BlockBehaviorActivableLight());
+
+        LightSource light = new LightSource(new ColorRGB(1, 0.6, 0.4), 0.2, 0.5, 0);
+        Property propLight = new PropertyLight(light);
+        blockType.addProperty(propLight);
+        return blockType;
     }
 
 }

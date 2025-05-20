@@ -55,7 +55,6 @@ public class EntityTypeFactory {
     private static EntityType loadPlayer() {
         EntityType entityType = createBasicEntityType("player", "blue-block.png");
         entityType.addCollision(CollisionList.BLOCK_ENTITY);
-        entityType.addBehavior(new EntityBehaviorPushable());
         return entityType;
     }
 

@@ -13,6 +13,10 @@ public class GamePanel extends JPanel {
     private final World world;
     private long tick = 0;
 
+    private long time = 0;
+    private double fps = 0;
+    private final int TICK_FPS = 20;
+
     public GamePanel() {
         setDoubleBuffered(true);
         setFocusable(true);
@@ -26,8 +30,16 @@ public class GamePanel extends JPanel {
     }
 
     public void tick() {
+        if (tick % TICK_FPS == 0)
+            time = System.currentTimeMillis();
+
         tick++;
         world.update();
+        
+        if (tick % TICK_FPS == 0) {
+            long dif = (System.currentTimeMillis() - time);
+            fps = 1000.0 * TICK_FPS / dif;
+        }
     }
 
     @Override

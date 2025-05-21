@@ -14,7 +14,7 @@ public class GamePanel extends JPanel {
     private long tick = 0;
 
     private long time = 0;
-    private double fps = 0;
+    public double fps = 0;
     private final int TICK_FPS = 20;
 
     public GamePanel() {

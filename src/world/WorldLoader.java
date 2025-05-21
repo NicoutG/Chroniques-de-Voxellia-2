@@ -20,11 +20,17 @@ public class WorldLoader {
     /* ------------------------------------------------------------------ */
 
     public static ArrayList<BlockType> loadBlockTypes() {
-        return BlockTypeFactory.loadBlockTypes();
+        ArrayList<BlockType> blockTypes = new ArrayList<>();
+        for (BlockTemplate template : BlockTemplate.values())
+            blockTypes.add(template.blockType);
+        return blockTypes;
     }
 
     public static ArrayList<EntityType> loadEntityTypes() {
-        return EntityTypeFactory.loadEntityTypes();
+        ArrayList<EntityType> entityTypes = new ArrayList<>();
+        for (EntityTemplate template : EntityTemplate.values())
+            entityTypes.add(template.entityType);
+        return entityTypes;
     }
 
     /** Parses <code>WORLD_PATH + file</code> and returns blocks + entities. */

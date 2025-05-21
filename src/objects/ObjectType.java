@@ -25,18 +25,13 @@ public abstract class ObjectType<
     private HashMap<String, Property> properties = new HashMap<>();
     protected ArrayList<B> behaviors = new ArrayList<>();
 
-    public ObjectType(String name, Texture[] textures, Double opacity, boolean[] allowLights, Collision[] collisions, Property[] properties, B[] behaviors) {
+    public ObjectType(String name, Texture[] textures, Double opacity, Collision[] collisions, Property[] properties, B[] behaviors) {
         this.name = name;
         if (textures != null)
             for (Texture texture : textures)
                 addTexture(texture);
         if (opacity != null)
             setOpacity(opacity);
-        if (allowLights != null && 3 <= allowLights.length) {
-            setAllowLight(0, allowLights[0]);
-            setAllowLight(1, allowLights[1]);
-            setAllowLight(2, allowLights[2]);
-        }
         if (collisions != null)
             for (Collision collision : collisions)
                 addCollision(collision);
@@ -46,10 +41,6 @@ public abstract class ObjectType<
         if (behaviors != null)
             for (B behavior : behaviors)
                 addBehavior(behavior);
-    }
-
-    public ObjectType(String name, Texture[] textures, Double opacity, Collision[] collisions, Property[] properties, B[] behaviors) {
-        this(name, textures, opacity, null, collisions, properties, behaviors);
     }
 
     public ObjectType(String name, Texture[] textures, Collision[] collisions, Property[] properties, B[] behaviors) {

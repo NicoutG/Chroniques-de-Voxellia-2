@@ -23,10 +23,31 @@ public class Drawable {
         this.requiresCorrection = requiresCorrection;
     }
 
-    // If correction is required it means we have to compensate the +0.5 given to
-    // entities. thus we have to remove 0.5 for x and y and 0.25 for z (just to
-    // compensate the factor 1.5) and thus we remove 1.25
     double getSortKey() {
-        return requiresCorrection ? (x + y + z * 1.5) - 1.25 : x + y + z * 1.5;
+        if (requiresCorrection) {
+            double threshold = 0.1;
+            
+            double newX = x - 0.5;
+            double decimalPart = newX - Math.floor(newX);
+            if (decimalPart < threshold || decimalPart > (1 - threshold)) {
+                newX = Math.round(newX);
+            }
+
+            double newY = y - 0.5;
+            decimalPart = newY - Math.floor(newY);
+            if (decimalPart < threshold || decimalPart > (1 - threshold)) {
+                newY = Math.round(newY);
+            }
+            
+            double newZ = z - 0.5;
+            decimalPart = newY - Math.floor(newZ);
+            if (decimalPart < threshold || decimalPart > (1 - threshold)) {
+                newZ = Math.round(newZ);
+            }
+
+            return newX + newY + newZ * 2;
+        }
+
+        return x + y + z * 2;
     }
 }

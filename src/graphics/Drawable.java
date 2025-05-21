@@ -25,7 +25,7 @@ public class Drawable {
 
     double getSortKey() {
         if (requiresCorrection) {
-            double threshold = 0.1;
+            double threshold = 0.08;
             
             double newX = x - 0.5;
             double decimalPart = newX - Math.floor(newX);
@@ -40,9 +40,11 @@ public class Drawable {
             }
             
             double newZ = z - 0.5;
-            decimalPart = newY - Math.floor(newZ);
+            decimalPart = newZ - Math.floor(newZ);
             if (decimalPart < threshold || decimalPart > (1 - threshold)) {
                 newZ = Math.round(newZ);
+            } else if (decimalPart > (0.5 - threshold) && decimalPart < (0.5 + threshold)) {
+                newZ = Math.floor(newZ) + 0.5;
             }
 
             return newX + newY + newZ * 2;

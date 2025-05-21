@@ -22,7 +22,7 @@ public class BlockTypeFactory {
         blockTypes.add(loadBlueBlock());
         blockTypes.add(loadRedBlock());
         blockTypes.add(loadPurpleBlock());
-        blockTypes.add(loadFireBlock());
+        blockTypes.add(loadFireCampBlock());
         blockTypes.add(loadBlueStairsRight());
         // 5
         blockTypes.add(loadLavaBlock());
@@ -182,8 +182,8 @@ public class BlockTypeFactory {
         return createBasicBlockType("purpleBlock", "purple-block.png");
     }
 
-    private static BlockType loadFireBlock() {
-        BlockType blockType = createBasicBlockType("fire", new String[] { "fire-0.png", "fire-1.png", "fire-2.png" },
+    private static BlockType loadFireCampBlock() {
+        BlockType blockType = createBasicBlockType("fireCamp", new String[] { "fire-0.png", "fire-1.png", "fire-2.png" },
                 1);
         LightSource light = new LightSource(new ColorRGB(1, 0.6, 0.2), 1.2, 0.8, 0.1);
         Property propLight = new PropertyLight(light);

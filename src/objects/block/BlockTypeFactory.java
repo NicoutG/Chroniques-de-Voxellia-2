@@ -478,7 +478,7 @@ public class BlockTypeFactory {
         blockType.addTexture(text);
         blockType.addCollision(CollisionList.SLOPE2);
         blockType.setAllowLight(Face.TOP.index, true);
-        blockType.setAllowLight(Face.LEFT.index, true);
+        blockType.setAllowLight(Face.RIGHT.index, true);
         return blockType;
     }
 
@@ -533,6 +533,7 @@ public class BlockTypeFactory {
         Texture text = new Texture(shape, img);
         blockType.addTexture(text);
         blockType.addCollision(CollisionList.STEP_LEFT);
+        blockType.setAllowLight(Face.RIGHT.index, true);
         return blockType;
     }
 

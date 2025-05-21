@@ -221,10 +221,10 @@ public final class Renderer {
         if (x == maxX || visibilityChecker(b[x + 1][y][z], Face.TOP.index)) {
             faces[Face.RIGHT.index] = true;
         }
-        if (y == maxY || visibilityChecker(b[x][y + 1][z], Face.TOP.index)) {
+        if (y == maxY || visibilityChecker(b[x][y + 1][z], Face.RIGHT.index)) {
             faces[Face.LEFT.index] = true;
         }
-        if (z == maxZ || visibilityChecker(b[x][y][z + 1], Face.TOP.index)) {
+        if (z == maxZ || visibilityChecker(b[x][y][z + 1], Face.LEFT.index)) {
             faces[Face.TOP.index] = true;
         }
 

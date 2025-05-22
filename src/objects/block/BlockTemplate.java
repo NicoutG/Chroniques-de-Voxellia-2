@@ -13,73 +13,72 @@ public enum BlockTemplate {
     BLUE_BLOCK(new BlockType("blueBlock", "blue-block.png")),
     RED_BLOCK(new BlockType("redBlock", "red-block.png")),
     PURPLE_BLOCK(new BlockType("purpleBlock", "purple-block.png")),
-    FIRE_CAMP(new BlockType("fireCamp", 
-        new Texture[] {BlockType.createBasicTexture(new String[] { "fire-0.png", "fire-1.png", "fire-2.png" }, 1)}, 
-        0,
-        null,
-        new Property[] {new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.2), 1.2, 0.8, 0.1)), new Property("noCollision")}, 
-        null
-        )),
+    FIRE_CAMP(new BlockType("fireCamp",
+            new Texture[] {
+                    BlockType.createBasicTexture(new String[] { "fire-0.png", "fire-1.png", "fire-2.png" }, 1) },
+            0,
+            null,
+            new Property[] { new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.2), 1.2, 0.8, 0.1)),
+                    new Property("noCollision") },
+            null)),
     BLUE_STAIRS_RIGHT(new BlockType("blueStairsRight",
-        new Texture[] {new Texture(new Rectangle(),PathManager.loadImage("blue-stairs-right.png"))},
-        new Collision[] {CollisionList.STEP_RIGHT},
-        null,
-        null
-        )),
+            new Texture[] { new Texture(new Rectangle(), PathManager.loadImage("blue-stairs-right.png")) },
+            new Collision[] { CollisionList.STEP_RIGHT },
+            null,
+            null)),
     /* 5 */
     LAVA(new BlockType("lava",
-        new Texture[] {new Texture(new Rectangle(),PathManager.loadImage("lava.png"))},
-        0,
-        null,
-        new Property[] {new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 1.5, 0.5, 0.15))},
-        null
-        )),
-    SUN(new BlockType("sun",
-            new Texture[]{},
+            new Texture[] { new Texture(new Rectangle(), PathManager.loadImage("lava.png")) },
+            0,
             null,
-            new Property[] {new PropertyLight(new LightSource(new ColorRGB[] {
-                new ColorRGB(1, 1, 1), // plain day (white)
-                new ColorRGB(1, 1, 1), // (white)
-                new ColorRGB(1, 1, 1),
-                new ColorRGB(1, 1, 1),
-                new ColorRGB(1, 0.9, 0.75),
-                new ColorRGB(1, 0.5, 0.3), // evening (orange-pink)
-                new ColorRGB(0.6, 0.3, 0.35),
-                new ColorRGB(0.2, 0.2, 0.4), // night (low blue-white)
-                new ColorRGB(0.2, 0.2, 0.4),
-                new ColorRGB(0.2, 0.2, 0.4),
-                new ColorRGB(0.2, 0.2, 0.4),
-                new ColorRGB(0.6, 0.3, 0.35),
-                new ColorRGB(0.8, 0.3, 0.3), // morning (reddish)
-                new ColorRGB(1, 0.9, 0.75),
-        }, 1200, 0.75, 1, 0))},
-        null
-        )),
-    GLASS(new BlockType("glassBlock","glass-block.png") {{
+            new Property[] { new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 1.5, 0.5, 0.15)) },
+            null)),
+    SUN(new BlockType("sun",
+            new Texture[] {},
+            null,
+            new Property[] { new PropertyLight(new LightSource(new ColorRGB[] {
+                    new ColorRGB(1, 1, 1), // plain day (white)
+                    new ColorRGB(1, 1, 1), // (white)
+                    new ColorRGB(1, 1, 1),
+                    new ColorRGB(1, 1, 1),
+                    new ColorRGB(1, 0.9, 0.75),
+                    new ColorRGB(1, 0.5, 0.3), // evening (orange-pink)
+                    new ColorRGB(0.6, 0.3, 0.35),
+                    new ColorRGB(0.2, 0.2, 0.4), // night (low blue-white)
+                    new ColorRGB(0.2, 0.2, 0.4),
+                    new ColorRGB(0.2, 0.2, 0.4),
+                    new ColorRGB(0.2, 0.2, 0.4),
+                    new ColorRGB(0.6, 0.3, 0.35),
+                    new ColorRGB(0.8, 0.3, 0.3), // morning (reddish)
+                    new ColorRGB(1, 0.9, 0.75),
+            }, 1200, 0.75, 1, 0)) },
+            null)),
+    GLASS(new BlockType("glassBlock", "glass-block.png") {
+        {
             setOpacity(0.2);
-        }}),
+        }
+    }),
     DIRT(new BlockType("dirtBlock", "dirt.png")),
     GRASS(new BlockType("grassBlock", "grass.png")),
     /* 10 */
     HEDGE(new BlockType("hedge", "hedge.png")),
     LEVER(new BlockType("lever",
-        new Texture[] {new Texture(new Lever(false),PathManager.loadImage("lever-F.png")),
-                       new Texture(new Lever(true),PathManager.loadImage("lever-T.png"))},
-        0,
-        null,
-        new Property[] {new Property("noCollision")},
-        new BlockBehavior[] {new BlockBehaviorLever()}
-        )),
+            new Texture[] { new Texture(new Lever(false), PathManager.loadImage("lever-F.png")),
+                    new Texture(new Lever(true), PathManager.loadImage("lever-T.png")) },
+            0,
+            null,
+            new Property[] { new Property("noCollision") },
+            new BlockBehavior[] { new BlockBehaviorLever() })),
     WORLD(new BlockType("worldBlock",
-        new Texture[] {BlockType.createBasicTexture(new String[] { "world-block-0.png", "world-block-1.png", "world-block-2.png" }, 3)},
-        new Property[] {new PropertyLight(new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0))},
-        new BlockBehavior[] {new BlockBehaviorChangeWorld()}
-        )),
+            new Texture[] { BlockType.createBasicTexture(
+                    new String[] { "world-block-0.png", "world-block-1.png", "world-block-2.png" }, 3) },
+            new Property[] { new PropertyLight(new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0)) },
+            new BlockBehavior[] { new BlockBehaviorChangeWorld() })),
     NEW_WORLD(new BlockType("newWorldBlock",
-        new Texture[] {BlockType.createBasicTexture(new String[] { "world-block-0.png", "world-block-1.png", "world-block-2.png" }, 3)},
-        new Property[] {new PropertyLight(new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0))},
-        new BlockBehavior[] {new BlockBehaviorNewWorld()}
-        )),
+            new Texture[] { BlockType.createBasicTexture(
+                    new String[] { "world-block-0.png", "world-block-1.png", "world-block-2.png" }, 3) },
+            new Property[] { new PropertyLight(new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0)) },
+            new BlockBehavior[] { new BlockBehaviorNewWorld() })),
     RED_CARPET(new BlockType("redCarpet", "red-carpet-block.png")),
     /* 15 */
     RED_GOLDEN_CARPET(new BlockType("redGoldenCarpet", "red-golden-carpet-block.png")),
@@ -103,56 +102,58 @@ public enum BlockTemplate {
     HALF_GRASS3(new BlockType("blockHalfGrass3", "block-half-grass-3.png")),
     HALF_GRASS4(new BlockType("blockHalfGrass4", "block-half-grass-4.png")),
     HALF_HORIZONTAL1(new BlockType("blockHalfHorizontal1",
-        new Texture[] {new Texture(new SlabBottom(),PathManager.loadImage("block-half-horizontal-1.png"))},
-        0,
-        new Collision[] {CollisionList.SLAB_BOTTOM},
-        null,
-        null
-        )),
+            new Texture[] { new Texture(new SlabBottom(), PathManager.loadImage("block-half-horizontal-1.png")) },
+            0,
+            new Collision[] { CollisionList.SLAB_BOTTOM },
+            null,
+            null)),
     HALF_HORIZONTAL2(new BlockType("blockHalfHorizontal2",
-        new Texture[] {new Texture(new SlabTop(),PathManager.loadImage("block-half-horizontal-2.png"))},
-        0,
-        new Collision[] {CollisionList.SLAB_TOP},
-        null,
-        null
-        )),
+            new Texture[] { new Texture(new SlabTop(), PathManager.loadImage("block-half-horizontal-2.png")) },
+            0,
+            new Collision[] { CollisionList.SLAB_TOP },
+            null,
+            null)),
     HALF_VERTICAL1(new BlockType("blockHalfVertical1",
-        new Texture[] {new Texture(new SlabVertical1(),PathManager.loadImage("block-half-vertical-1.png"))},
-        new Collision[] {CollisionList.SLAB_VERTICAL1},
-        null,
-        null
-        ) {{
+            new Texture[] { new Texture(new SlabVertical1(), PathManager.loadImage("block-half-vertical-1.png")) },
+            new Collision[] { CollisionList.SLAB_VERTICAL1 },
+            null,
+            null) {
+        {
             setAllowLight(Face.TOP.index, true);
             setAllowLight(Face.RIGHT.index, true);
-        }}),
+        }
+    }),
     /* 35 */
     HALF_VERTICAL2(new BlockType("blockHalfVertical2",
-        new Texture[] {new Texture(new SlabVertical2(),PathManager.loadImage("block-half-vertical-2.png"))},
-        new Collision[] {CollisionList.SLAB_VERTICAL2},
-        null,
-        null
-        ) {{
+            new Texture[] { new Texture(new SlabVertical2(), PathManager.loadImage("block-half-vertical-2.png")) },
+            new Collision[] { CollisionList.SLAB_VERTICAL2 },
+            null,
+            null) {
+        {
             setAllowLight(Face.TOP.index, true);
             setAllowLight(Face.LEFT.index, true);
-        }}),
+        }
+    }),
     HALF_VERTICAL3(new BlockType("blockHalfVertical3",
-        new Texture[] {new Texture(new SlabVertical3(),PathManager.loadImage("block-half-vertical-3.png"))},
-        new Collision[] {CollisionList.SLAB_VERTICAL3},
-        null,
-        null
-        ) {{
+            new Texture[] { new Texture(new SlabVertical3(), PathManager.loadImage("block-half-vertical-3.png")) },
+            new Collision[] { CollisionList.SLAB_VERTICAL3 },
+            null,
+            null) {
+        {
             setAllowLight(Face.TOP.index, true);
             setAllowLight(Face.RIGHT.index, true);
-        }}),
+        }
+    }),
     HALF_VERTICAL4(new BlockType("blockHalfVertical4",
-        new Texture[] {new Texture(new SlabVertical4(),PathManager.loadImage("block-half-vertical-4.png"))},
-        new Collision[] {CollisionList.SLAB_VERTICAL4},
-        null,
-        null
-        ) {{
+            new Texture[] { new Texture(new SlabVertical4(), PathManager.loadImage("block-half-vertical-4.png")) },
+            new Collision[] { CollisionList.SLAB_VERTICAL4 },
+            null,
+            null) {
+        {
             setAllowLight(Face.TOP.index, true);
             setAllowLight(Face.LEFT.index, true);
-        }}),
+        }
+    }),
     HOLE1(new BlockType("blockHole1", "block-hole-1.png")),
     HOLE2(new BlockType("blockHole2", "block-hole-2.png")),
     /* 40 */
@@ -160,67 +161,67 @@ public enum BlockTemplate {
     MOSSY1(new BlockType("blockMossy1", "block-mossy-1.png")),
     MOSSY2(new BlockType("blockMossy2", "block-mossy-2.png")),
     SLOPE1(new BlockType("blockSlope1",
-        new Texture[] {new Texture(new Slope1(),PathManager.loadImage("block-slope-1.png"))},
-        new Collision[] {CollisionList.SLOPE1},
-        null,
-        null
-        ) {{
+            new Texture[] { new Texture(new Slope1(), PathManager.loadImage("block-slope-1.png")) },
+            new Collision[] { CollisionList.SLOPE1 },
+            null,
+            null) {
+        {
             setAllowLight(Face.TOP.index, true);
             setAllowLight(Face.RIGHT.index, true);
-        }}),
+        }
+    }),
     SLOPE2(new BlockType("blockSlope2",
-        new Texture[] {new Texture(new Slope2(),PathManager.loadImage("block-slope-2.png"))},
-        new Collision[] {CollisionList.SLOPE2},
-        null,
-        null
-        ) {{
+            new Texture[] { new Texture(new Slope2(), PathManager.loadImage("block-slope-2.png")) },
+            new Collision[] { CollisionList.SLOPE2 },
+            null,
+            null) {
+        {
             setAllowLight(Face.TOP.index, true);
             setAllowLight(Face.RIGHT.index, true);
-        }}),
+        }
+    }),
     /* 45 */
     SLOPE3(new BlockType("blockSlope3",
-        new Texture[] {new Texture(new Slope3(),PathManager.loadImage("block-slope-3.png"))},
-        new Collision[] {CollisionList.SLOPE3},
-        null,
-        null
-        ) {{
+            new Texture[] { new Texture(new Slope3(), PathManager.loadImage("block-slope-3.png")) },
+            new Collision[] { CollisionList.SLOPE3 },
+            null,
+            null) {
+        {
             setAllowLight(Face.TOP.index, true);
             setAllowLight(Face.LEFT.index, true);
-        }}),
+        }
+    }),
     SLOPE4(new BlockType("blockSlope4",
-        new Texture[] {new Texture(new Slope4(),PathManager.loadImage("block-slope-4.png"))},
-        new Collision[] {CollisionList.SLOPE4},
-        null,
-        null
-        ) {{
+            new Texture[] { new Texture(new Slope4(), PathManager.loadImage("block-slope-4.png")) },
+            new Collision[] { CollisionList.SLOPE4 },
+            null,
+            null) {
+        {
             setAllowLight(Face.TOP.index, true);
             setAllowLight(Face.LEFT.index, true);
-        }}),
+        }
+    }),
     STAIRS_LEFT_MOSSY(new BlockType("blockStairsLeftMossy",
-        new Texture[] {new Texture(new StairsLeft(),PathManager.loadImage("block-stairs-left-mossy.png"))},
-        new Collision[] {CollisionList.STEP_LEFT},
-        null,
-        null
-        )),
+            new Texture[] { new Texture(new StairsLeft(), PathManager.loadImage("block-stairs-left-mossy.png")) },
+            new Collision[] { CollisionList.STEP_LEFT },
+            null,
+            null)),
     STAIRS_RIGHT_MOSSY(new BlockType("blockStairsRightMossy",
-        new Texture[] {new Texture(new StairsRight(),PathManager.loadImage("block-stairs-right-mossy.png"))},
-        new Collision[] {CollisionList.STEP_RIGHT},
-        null,
-        null
-        )),
+            new Texture[] { new Texture(new StairsRight(), PathManager.loadImage("block-stairs-right-mossy.png")) },
+            new Collision[] { CollisionList.STEP_RIGHT },
+            null,
+            null)),
     STAIRS_LEFT(new BlockType("blockStairsLeft",
-        new Texture[] {new Texture(new StairsLeft(),PathManager.loadImage("block-stairs-left.png"))},
-        new Collision[] {CollisionList.STEP_LEFT},
-        null,
-        null
-        )),
+            new Texture[] { new Texture(new StairsLeft(), PathManager.loadImage("block-stairs-left.png")) },
+            new Collision[] { CollisionList.STEP_LEFT },
+            null,
+            null)),
     /* 50 */
     STAIRS_RIGHT(new BlockType("blockStairsRight",
-        new Texture[] {new Texture(new StairsRight(),PathManager.loadImage("block-stairs-right.png"))},
-        new Collision[] {CollisionList.STEP_RIGHT},
-        null,
-        null
-        )),
+            new Texture[] { new Texture(new StairsRight(), PathManager.loadImage("block-stairs-right.png")) },
+            new Collision[] { CollisionList.STEP_RIGHT },
+            null,
+            null)),
     GRASS_HALF_SLAB_1(new BlockType("grassHalfSlab1", "grass-half-slab-1.png")),
     GRASS_HALF_SLAB_2(new BlockType("grassHalfSlab2", "grass-half-slab-2.png")),
     GRASS_SLAB(new BlockType("grassSlab", "grass-slab.png")),
@@ -263,9 +264,11 @@ public enum BlockTemplate {
     GRAVEL(new BlockType("gravel", "gravel.png")),
     /* 85 */
     GREEN_BLOCK(new BlockType("greenBlock", "green-block.png")),
-    SHELVE(new BlockType("shelve", "shelve.png") {{
+    SHELVE(new BlockType("shelve", "shelve.png") {
+        {
             setOpacity(0);
-        }}),
+        }
+    }),
     STONE_BROKEN(new BlockType("stoneBroken", "stone-broken.png")),
     STONE_FRAME(new BlockType("stoneFrame", "stone-frame.png")),
     STONE_MOSSY(new BlockType("stoneMossy", "stone-mossy.png")),
@@ -277,18 +280,19 @@ public enum BlockTemplate {
     WOOD_OAK(new BlockType("woodOak", "wood-oak.png")),
     /* 95 */
     WOOD_PINE(new BlockType("woodPine", "wood-pine.png")),
-    ICE(new BlockType("ice", "ice.png") {{
+    ICE(new BlockType("ice", "ice.png") {
+        {
             setOpacity(0.5);
-        }}),
+        }
+    }),
     SNOW(new BlockType("snow", "snow.png")),
     PRESSURE_PLATE(new BlockType("pressurePlate",
-        new Texture[] {BlockType.createBasicTexture("pressure-plate-F.png"),
-                       BlockType.createBasicTexture("pressure-plate-T.png")},
-        null,
-        new Property[] {new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 0.2, 0.5, 0))},
-        new BlockBehavior[] {new BlockBehaviorPressurePlate(),
-                             new BlockBehaviorActivableLight()}
-        )),
+            new Texture[] { BlockType.createBasicTexture("pressure-plate-F.png"),
+                    BlockType.createBasicTexture("pressure-plate-T.png") },
+            null,
+            new Property[] { new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 0.2, 0.5, 0)) },
+            new BlockBehavior[] { new BlockBehaviorPressurePlate(),
+                    new BlockBehaviorActivableLight() })),
 
     ;
 
@@ -301,7 +305,7 @@ public enum BlockTemplate {
     public static String toString(BlockTemplate[] blockTypes) {
         String res = "";
         for (int i = 0; i < blockTypes.length; i++)
-            res += i + " " + blockTypes[i].blockType.getName()+"\n";
+            res += i + " " + blockTypes[i].blockType.getName() + "\n";
         return res;
     }
 }

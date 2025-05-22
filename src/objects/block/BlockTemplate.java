@@ -205,23 +205,42 @@ public enum BlockTemplate {
             new Texture[] { new Texture(new StairsLeft(), PathManager.loadImage("block-stairs-left-mossy.png")) },
             new Collision[] { CollisionList.STEP_LEFT },
             null,
-            null)),
+            null)
+            {
+            {
+                setOpacity(0);
+            }
+        }),
     STAIRS_RIGHT_MOSSY(new BlockType("blockStairsRightMossy",
             new Texture[] { new Texture(new StairsRight(), PathManager.loadImage("block-stairs-right-mossy.png")) },
             new Collision[] { CollisionList.STEP_RIGHT },
             null,
-            null)),
+            null){
+            {
+                setOpacity(0);
+            }
+        }),
     STAIRS_LEFT(new BlockType("blockStairsLeft",
             new Texture[] { new Texture(new StairsLeft(), PathManager.loadImage("block-stairs-left.png")) },
             new Collision[] { CollisionList.STEP_LEFT },
             null,
-            null)),
+            null){
+            {
+                setOpacity(0);
+            }
+        }),
     /* 50 */
     STAIRS_RIGHT(new BlockType("blockStairsRight",
             new Texture[] { new Texture(new StairsRight(), PathManager.loadImage("block-stairs-right.png")) },
             new Collision[] { CollisionList.STEP_RIGHT },
             null,
-            null)),
+            null) {
+        {
+            {
+                setOpacity(0);
+            }
+        }
+    }),
     GRASS_HALF_SLAB_1(new BlockType("grassHalfSlab1", "grass-half-slab-1.png")),
     GRASS_HALF_SLAB_2(new BlockType("grassHalfSlab2", "grass-half-slab-2.png")),
     GRASS_SLAB(new BlockType("grassSlab", "grass-slab.png")),
@@ -293,8 +312,99 @@ public enum BlockTemplate {
             new Property[] { new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 0.2, 0.5, 0)) },
             new BlockBehavior[] { new BlockBehaviorPressurePlate(),
                     new BlockBehaviorActivableLight() })),
-
-    ;
+    STAINED_GLASS_RED_LEFT(new BlockType("stainedGlassRedLeft",
+            new Texture[] {
+                    new Texture(new BorderLeft(), PathManager.loadImage("stained-glass/stained-glass-red-left.png")) },
+            new Collision[] { CollisionList.CUBE },
+            null,
+            null) {
+        {
+            setOpacity(0.1);
+            setColor(new ColorRGB(1, 0, 0));
+        }
+    }),
+    /* 100 */
+    STAINED_GLASS_RED_RIGHT(new BlockType("stainedGlassRedRight",
+            new Texture[] {
+                    new Texture(new BorderRight(),
+                            PathManager.loadImage("stained-glass/stained-glass-red-right.png")) },
+            new Collision[] { CollisionList.CUBE },
+            null,
+            null) {
+        {
+            setOpacity(0.1);
+            setColor(new ColorRGB(1, 0, 0));
+        }
+    }),
+    STAINED_GLASS_BLUE_LEFT(new BlockType("stainedGlassBlueLeft",
+            new Texture[] {
+                    new Texture(new BorderLeft(), PathManager.loadImage("stained-glass/stained-glass-blue-left.png")) },
+            new Collision[] { CollisionList.CUBE },
+            null,
+            null) {
+        {
+            setOpacity(0.1);
+            setColor(new ColorRGB(0, 0, 1));
+        }
+    }),
+    STAINED_GLASS_BLUE_RIGHT(new BlockType("stainedGlassBlueRight",
+            new Texture[] {
+                    new Texture(new BorderRight(),
+                            PathManager.loadImage("stained-glass/stained-glass-blue-right.png")) },
+            new Collision[] { CollisionList.CUBE },
+            null,
+            null) {
+        {
+            setOpacity(0.1);
+            setColor(new ColorRGB(0, 0, 1));
+        }
+    }),
+    STAINED_GLASS_GREEN_LEFT(new BlockType("stainedGlassGreenLeft",
+            new Texture[] {
+                    new Texture(new BorderLeft(),
+                            PathManager.loadImage("stained-glass/stained-glass-green-left.png")) },
+            new Collision[] { CollisionList.CUBE },
+            null,
+            null) {
+        {
+            setOpacity(0.1);
+            setColor(new ColorRGB(0, 1, 0));
+        }
+    }),
+    STAINED_GLASS_GREEN_RIGHT(new BlockType("stainedGlassGreenRight",
+            new Texture[] {
+                    new Texture(new BorderRight(),
+                            PathManager.loadImage("stained-glass/stained-glass-green-right.png")) },
+            new Collision[] { CollisionList.CUBE },
+            null,
+            null) {
+        {
+            setOpacity(0.1);
+            setColor(new ColorRGB(0, 1, 0));
+        }
+    }),
+    /* 105 */
+    SUNLIGHT(new BlockType("sunlight",
+            new Texture[] {},
+            null,
+            new Property[] { new PropertyLight(new LightSource(new ColorRGB[] {
+                    new ColorRGB(1, 1, 1), // plain day (white)
+                    new ColorRGB(1, 1, 1), // (white)
+                    new ColorRGB(1, 1, 1),
+                    new ColorRGB(1, 1, 1),
+                    new ColorRGB(1, 0.9, 0.75),
+                    new ColorRGB(1, 0.5, 0.3), // evening (orange-pink)
+                    new ColorRGB(0.6, 0.3, 0.35),
+                    new ColorRGB(0.2, 0.2, 0.4), // night (low blue-white)
+                    new ColorRGB(0.2, 0.2, 0.4),
+                    new ColorRGB(0.2, 0.2, 0.4),
+                    new ColorRGB(0.2, 0.2, 0.4),
+                    new ColorRGB(0.6, 0.3, 0.35),
+                    new ColorRGB(0.8, 0.3, 0.3), // morning (reddish)
+                    new ColorRGB(1, 0.9, 0.75),
+            }, 1200, 1, 0.9, 0)) },
+            null)),
+            ;
 
     public final BlockType blockType;
 

@@ -6,10 +6,15 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import graphics.Texture;
+import graphics.ligth.ColorRGB;
+import graphics.ligth.LightSource;
 import graphics.shape.Cube;
 import graphics.shape.Shape;
+import objects.block.BlockType;
 import objects.collision.CollisionList;
 import objects.entity.entityBehavior.*;
+import objects.property.Property;
+import objects.property.PropertyLight;
 import tools.PathManager;
 import world.World;
 
@@ -53,8 +58,10 @@ public class EntityTypeFactory {
     }
 
     private static EntityType loadPlayer() {
-        EntityType entityType = createBasicEntityType("player", "blue-block.png");
+        EntityType entityType = new EntityType("player");
         entityType.addCollision(CollisionList.BLOCK_ENTITY);
+        entityType.addTexture(EntityType.createBasicTexture(new String[] { "player/right/player-right-0.png", "player/right/player-right-1.png", "player/right/player-right-2.png", "player/right/player-right-3.png"}, 1));
+
         return entityType;
     }
 

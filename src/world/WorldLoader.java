@@ -8,6 +8,7 @@ import tools.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 /** Loads worlds from human-readable text files. */
 public class WorldLoader {
@@ -20,11 +21,17 @@ public class WorldLoader {
     /* ------------------------------------------------------------------ */
 
     public static ArrayList<BlockType> loadBlockTypes() {
-        return BlockTypeFactory.loadBlockTypes();
+        ArrayList<BlockType> blockTypes = new ArrayList<>();
+        for (BlockTemplate template : BlockTemplate.values())
+            blockTypes.add(template.blockType);
+        return blockTypes;
     }
 
     public static ArrayList<EntityType> loadEntityTypes() {
-        return EntityTypeFactory.loadEntityTypes();
+        ArrayList<EntityType> entityTypes = new ArrayList<>();
+        for (EntityTemplate template : EntityTemplate.values())
+            entityTypes.add(template.entityType);
+        return entityTypes;
     }
 
     /** Parses <code>WORLD_PATH + file</code> and returns blocks + entities. */
@@ -123,6 +130,79 @@ public class WorldLoader {
         if (cur instanceof Double) instance.setState(name, Double.parseDouble(value));
         else if (cur instanceof Integer) instance.setState(name, Integer.parseInt(value));
         else if (cur instanceof Boolean) instance.setState(name, Boolean.parseBoolean(value));
+        else if (cur instanceof double[]) instance.setState(name, parseDoubleArray(value));
+        else if (cur instanceof int[]) instance.setState(name, parseIntArray(value));
+        else if (cur instanceof boolean[]) instance.setState(name, parseBooleanArray(value));
+        else if (cur instanceof String[]) instance.setState(name, parseStringArray(value));
         else instance.setState(name, value);
     }
+
+    private static int[] parseIntArray(String input) {
+        input = input.replaceAll("[{}\\s\"]", "");
+        if (input.isEmpty()) return new int[0];
+
+        String[] parts = input.split(",");
+        int[] result = new int[parts.length];
+        for (int i = 0; i < parts.length; i++) {
+            result[i] = Integer.parseInt(parts[i]);
+        }
+        return result;
+    }
+
+    private static double[] parseDoubleArray(String input) {
+        input = input.replaceAll("[{}\\s\"]", "");
+        if (input.isEmpty()) return new double[0];
+
+        String[] parts = input.split(",");
+        double[] result = new double[parts.length];
+        for (int i = 0; i < parts.length; i++) {
+            result[i] = Double.parseDouble(parts[i]);
+        }
+        return result;
+    }
+
+    private static boolean[] parseBooleanArray(String input) {
+        input = input.replaceAll("[{}\\s\"]", "");
+        if (input.isEmpty()) return new boolean[0];
+
+        String[] parts = input.split(",");
+        boolean[] result = new boolean[parts.length];
+        for (int i = 0; i < parts.length; i++) {
+            result[i] = Boolean.parseBoolean(parts[i]);
+        }
+        return result;
+    }
+
+    private static String[] parseStringArray(String input) {
+        System.out.println(input);
+        // Supprime les accolades et les espaces inutiles
+        input = input.trim();
+        if (input.startsWith("{")) input = input.substring(1);
+        if (input.endsWith("}")) input = input.substring(0, input.length() - 1);
+
+        // Sépare les éléments entre guillemets
+        List<String> result = new ArrayList<>();
+        boolean inQuotes = false;
+        StringBuilder current = new StringBuilder();
+
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+
+            if (c == '"') {
+                inQuotes = !inQuotes; // toggle quote status
+                if (!inQuotes) {
+                    result.add(current.toString());
+                    current.setLength(0); // reset buffer
+                }
+            } else if (inQuotes) {
+                if (c != '_')
+                    current.append(c);
+                else
+                    current.append(' ');
+            }
+        }
+
+        return result.toArray(new String[0]);
+    }
+
 }

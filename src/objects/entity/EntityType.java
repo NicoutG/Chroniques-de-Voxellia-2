@@ -8,10 +8,6 @@ import objects.property.Property;
 
 public class EntityType extends ObjectType<Entity, EntityBehavior>{
 
-    public EntityType(String name, Texture[] textures, double opacity, boolean[] allowLights, Collision[] collisions, Property[] properties, EntityBehavior[] behaviors) {
-        super(name, textures, opacity, allowLights, collisions, properties, behaviors);
-    }
-
     public EntityType(String name, Texture[] textures, double opacity, Collision[] collisions, Property[] properties, EntityBehavior[] behaviors) {
         super(name, textures, opacity, collisions, properties, behaviors);
     }

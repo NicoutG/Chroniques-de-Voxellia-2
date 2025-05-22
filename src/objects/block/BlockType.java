@@ -8,10 +8,6 @@ import objects.property.Property;
 
 public class BlockType extends ObjectType<Block, BlockBehavior>{
 
-    public BlockType(String name, Texture[] textures, double opacity, boolean[] allowLights, Collision[] collisions, Property[] properties, BlockBehavior[] behaviors) {
-        super(name, textures, opacity, allowLights, collisions, properties, behaviors);
-    }
-
     public BlockType(String name, Texture[] textures, double opacity, Collision[] collisions, Property[] properties, BlockBehavior[] behaviors) {
         super(name, textures, opacity, collisions, properties, behaviors);
     }

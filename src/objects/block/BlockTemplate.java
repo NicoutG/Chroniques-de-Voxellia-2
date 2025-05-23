@@ -20,7 +20,9 @@ public enum BlockTemplate {
             null,
             new Property[] { new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.2), 1.2, 0.8, 0.1)),
                     new Property("noCollision") },
-            null)),
+            new BlockBehavior[] {
+                    new BlockBehaviorText()
+            })),
     BLUE_STAIRS_RIGHT(new BlockType("blueStairsRight",
             new Texture[] { new Texture(new StairsRight(), PathManager.loadImage("blue-stairs-right.png")) },
             new Collision[] { CollisionList.STEP_RIGHT },
@@ -209,30 +211,29 @@ public enum BlockTemplate {
             new Texture[] { new Texture(new StairsLeft(), PathManager.loadImage("block-stairs-left-mossy.png")) },
             new Collision[] { CollisionList.STEP_LEFT },
             null,
-            null)
-            {
-            {
-                setOpacity(0);
-            }
-        }),
+            null) {
+        {
+            setOpacity(0);
+        }
+    }),
     STAIRS_RIGHT_MOSSY(new BlockType("blockStairsRightMossy",
             new Texture[] { new Texture(new StairsRight(), PathManager.loadImage("block-stairs-right-mossy.png")) },
             new Collision[] { CollisionList.STEP_RIGHT },
             null,
-            null){
-            {
-                setOpacity(0);
-            }
-        }),
+            null) {
+        {
+            setOpacity(0);
+        }
+    }),
     STAIRS_LEFT(new BlockType("blockStairsLeft",
             new Texture[] { new Texture(new StairsLeft(), PathManager.loadImage("block-stairs-left.png")) },
             new Collision[] { CollisionList.STEP_LEFT },
             null,
-            null){
-            {
-                setOpacity(0);
-            }
-        }),
+            null) {
+        {
+            setOpacity(0);
+        }
+    }),
     /* 50 */
     STAIRS_RIGHT(new BlockType("blockStairsRight",
             new Texture[] { new Texture(new StairsRight(), PathManager.loadImage("block-stairs-right.png")) },

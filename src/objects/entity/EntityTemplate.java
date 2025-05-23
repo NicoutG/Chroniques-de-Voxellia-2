@@ -1,18 +1,26 @@
 package objects.entity;
 
+import java.awt.image.BufferedImage;
+
 import graphics.Texture;
+import graphics.shape.PlayerShape;
 import objects.entity.entityBehavior.*;
+import tools.PathManager;
 import objects.collision.*;
 
 public enum EntityTemplate {
     /* 0 */
     PLAYER(new EntityType("player",
-            new Texture[] { EntityType.createBasicTexture(new String[] {
-                    "player/right/player-right-0.png",
-                    "player/right/player-right-1.png",
-                    "player/right/player-right-2.png",
-                    "player/right/player-right-3.png" },
-                    1) },
+
+            new Texture[] {
+                    new Texture(
+                            new PlayerShape(), new BufferedImage[] {
+                                    PathManager.loadImage("player/right/player-right-0.png"),
+                                    PathManager.loadImage("player/right/player-right-1.png"),
+                                    PathManager.loadImage("player/right/player-right-2.png"),
+                                    PathManager.loadImage("player/right/player-right-3.png")
+                            }, 1)
+            },
             new Collision[] { CollisionList.BLOCK_ENTITY },
             null,
             null)),

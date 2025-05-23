@@ -12,6 +12,8 @@ import world.World;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -33,6 +35,23 @@ public final class Renderer {
     private final List<Drawable> drawables = new ArrayList<>(1024);
     private final Point2D.Double scratchPoint = new Point2D.Double();
 
+    private final List<TextLabel> textLabels = new ArrayList<>(128);
+
+    private static final Font PIXEL_FONT;
+
+    static {
+        Font f;
+        try (InputStream is = Renderer.class.getResourceAsStream("/resources/fonts/basis33.ttf")) {
+            f = Font.createFont(Font.TRUETYPE_FONT, is);
+            GraphicsEnvironment.getLocalGraphicsEnvironment()
+                    .registerFont(f);
+        } catch (FontFormatException | IOException e) {
+            f = new Font("Monospaced", Font.PLAIN, 24);
+        }
+        // derive at your default size:
+        PIXEL_FONT = f.deriveFont(Font.PLAIN, 36f);
+    }
+
     public Renderer(World world) {
         this.world = world;
         this.lighthinEngine = new LightingEngine();
@@ -49,7 +68,6 @@ public final class Renderer {
             return;
 
         /* ---------- compute camera offset ---------- */
-        /* ---------- compute camera offset ---------- */
         double camX = w / 2.0;
         double camY = h / 2.0;
 
@@ -62,14 +80,9 @@ public final class Renderer {
             camY = h / 4.0;
         }
 
-        /* ── NEW: snap the camera once ───────────────────────────────────── */
-        int originXi = (int) Math.floor(camX); // <-- floor (not round!)
+        /* ── snap the camera once ───────────────────────────────────── */
+        int originXi = (int) Math.floor(camX);
         int originYi = (int) Math.floor(camY);
-        /*
-         * keep the *fractional* remainders in case you need them elsewhere:
-         * double subX = camX - originXi;
-         * double subY = camY - originYi;
-         */
 
         /* ---------- clear & prepare canvas ---------- */
         g2.setColor(Color.BLACK);
@@ -77,7 +90,8 @@ public final class Renderer {
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 
-        drawables.clear(); // reuse the same list each frame
+        drawables.clear();
+        textLabels.clear();
 
         /*
          * =================================================================
@@ -95,6 +109,10 @@ public final class Renderer {
                     if (b == null || b.getTexture() == null)
                         continue;
 
+                    String lbl = (String) b.getState("text");
+                    if (lbl != null && !lbl.isBlank())
+                        textLabels.add(new TextLabel(lbl, x, y, z));
+
                     boolean[] visibleFaces = getVisibleFaces(blocks, x, y, z, maxX, maxY, maxZ, originXi, originYi, w,
                             h);
                     if (!visibleFaces[Face.LEFT.index] &&
@@ -109,7 +127,7 @@ public final class Renderer {
                     double drawY = originYi + scratchPoint.y;
                     if (drawX + IsoMath.DRAW_TILE_SIZE < 0 || drawX > w ||
                             drawY + IsoMath.DRAW_TILE_SIZE < 0 || drawY > h) {
-                        continue; // quad never reaches the viewport
+                        continue;
                     }
 
                     if (b.getTexture() == null)
@@ -182,6 +200,47 @@ public final class Renderer {
                     0, 0, IsoMath.TILE_SIZE, IsoMath.TILE_SIZE,
                     null);
         }
+
+        /*
+         * ──────────────────────────────────────────────────────────────
+         * 3) draw all labels last
+         * ----------------------------------------------------------------
+         */
+        g2.setFont(PIXEL_FONT);
+
+        for (TextLabel tl : textLabels) {
+            /* world → screen */
+            IsoMath.toScreen(tl.x, tl.y, tl.z, scratchPoint);
+            int sx = originXi + (int) scratchPoint.x + IsoMath.DRAW_TILE_SIZE / 2;
+            int sy = originYi + (int) scratchPoint.y - 32; // anchor (bottom)
+
+            /* word-wrap once per label */
+            List<String> lines = wrapLines(tl.text, 50);
+
+            FontMetrics fm = g2.getFontMetrics();
+            int lineH = fm.getHeight();
+            int ascent = fm.getAscent(); // baseline offset inside a line
+            int blockTopY = sy - (lines.size() - 1) * lineH; // topmost line Y
+
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+
+                int tx = sx - fm.stringWidth(line) / 2; // center this line
+                int ty = blockTopY + i * lineH + ascent; // baseline of line i
+
+                /* outline */
+                g2.setColor(new Color(0, 0, 0, 150));
+                g2.drawString(line, tx - 2, ty);
+                g2.drawString(line, tx + 2, ty);
+                g2.drawString(line, tx, ty - 2);
+                g2.drawString(line, tx, ty + 2);
+
+                /* interior */
+                g2.setColor(new Color(255, 255, 255, 240));
+                g2.drawString(line, tx, ty);
+            }
+        }
+
     }
 
     /* =================================================================== */
@@ -321,6 +380,33 @@ public final class Renderer {
             }
 
         return new FaceLighting(cRight, cLeft, cTop);
+    }
+
+    /**
+     * Splits text into word-wrapped lines whose length never exceeds max.
+     * Words longer than max are left on their own line.
+     */
+    public static List<String> wrapLines(String text, int max) {
+        List<String> lines = new ArrayList<>();
+        if (text == null || text.isBlank())
+            return lines;
+
+        StringBuilder current = new StringBuilder();
+        for (String word : text.split("\\s+")) {
+            if (current.length() == 0) {
+                current.append(word);
+            } else if (current.length() + 1 + word.length() <= max) {
+                current.append(' ').append(word);
+            } else { // overflow → start a new line
+                lines.add(current.toString());
+                current.setLength(0);
+                current.append(word);
+            }
+        }
+        if (current.length() > 0)
+            lines.add(current.toString());
+
+        return lines;
     }
 
 }

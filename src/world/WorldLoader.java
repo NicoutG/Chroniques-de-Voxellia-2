@@ -174,7 +174,6 @@ public class WorldLoader {
     }
 
     private static String[] parseStringArray(String input) {
-        System.out.println(input);
         // Supprime les accolades et les espaces inutiles
         input = input.trim();
         if (input.startsWith("{")) input = input.substring(1);

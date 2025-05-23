@@ -9,6 +9,7 @@ import graphics.Texture;
 import graphics.ligth.ColorRGB;
 import graphics.shape.*;
 import objects.collision.Collision;
+import objects.objectBehavior.ObjectBehavior;
 import objects.property.Property;
 import tools.PathManager;
 

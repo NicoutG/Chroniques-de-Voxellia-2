@@ -8,7 +8,6 @@ import tools.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 /** Loads worlds from human-readable text files. */
 public class WorldLoader {
@@ -137,18 +136,6 @@ public class WorldLoader {
         else instance.setState(name, value);
     }
 
-    private static int[] parseIntArray(String input) {
-        input = input.replaceAll("[{}\\s\"]", "");
-        if (input.isEmpty()) return new int[0];
-
-        String[] parts = input.split(",");
-        int[] result = new int[parts.length];
-        for (int i = 0; i < parts.length; i++) {
-            result[i] = Integer.parseInt(parts[i]);
-        }
-        return result;
-    }
-
     private static double[] parseDoubleArray(String input) {
         input = input.replaceAll("[{}\\s\"]", "");
         if (input.isEmpty()) return new double[0];
@@ -157,6 +144,18 @@ public class WorldLoader {
         double[] result = new double[parts.length];
         for (int i = 0; i < parts.length; i++) {
             result[i] = Double.parseDouble(parts[i]);
+        }
+        return result;
+    }
+
+    private static int[] parseIntArray(String input) {
+        input = input.replaceAll("[{}\\s\"]", "");
+        if (input.isEmpty()) return new int[0];
+
+        String[] parts = input.split(",");
+        int[] result = new int[parts.length];
+        for (int i = 0; i < parts.length; i++) {
+            result[i] = Integer.parseInt(parts[i]);
         }
         return result;
     }
@@ -174,34 +173,11 @@ public class WorldLoader {
     }
 
     private static String[] parseStringArray(String input) {
-        // Supprime les accolades et les espaces inutiles
-        input = input.trim();
-        if (input.startsWith("{")) input = input.substring(1);
-        if (input.endsWith("}")) input = input.substring(0, input.length() - 1);
-
-        // Sépare les éléments entre guillemets
-        List<String> result = new ArrayList<>();
-        boolean inQuotes = false;
-        StringBuilder current = new StringBuilder();
-
-        for (int i = 0; i < input.length(); i++) {
-            char c = input.charAt(i);
-
-            if (c == '"') {
-                inQuotes = !inQuotes; // toggle quote status
-                if (!inQuotes) {
-                    result.add(current.toString());
-                    current.setLength(0); // reset buffer
-                }
-            } else if (inQuotes) {
-                if (c != '_')
-                    current.append(c);
-                else
-                    current.append(' ');
-            }
-        }
-
-        return result.toArray(new String[0]);
+        input = input.replaceAll("[{}\\s\"]", "");
+        input = input.replaceAll("_", " ");
+        if (input.isEmpty()) return new String[0];
+        String[] results = input.split(",");
+        return results;
     }
 
 }

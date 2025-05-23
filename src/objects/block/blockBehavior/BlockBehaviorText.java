@@ -1,44 +1,26 @@
 package objects.block.blockBehavior;
 
-import objects.block.Block;
+import objects.block.*;
 import objects.entity.Entity;
+import objects.objectBehavior.ObjectBehaviorText;
 import tools.Vector;
 import world.World;
 
 public class BlockBehaviorText extends BlockBehavior {
-    protected final static String TEXT = "text";
-    protected final static String TEXTS = "texts";
-    private int index = 0;
+    private final ObjectBehaviorText<BlockType, Block, BlockBehavior> commonBehavior = new ObjectBehaviorText<>();
 
     @Override
     public void onAttachTo(Block block) {
-        block.setState(TEXT, null);
-        block.setState(TEXTS, new String[0]);
+        commonBehavior.onAttachTo(block);
     }
 
     @Override
     public void onInteraction(World world, Block block, Vector position, Entity entity) {
-        String[] texts = getTexts(block);
-        if (index >= texts.length) {
-            block.setState(TEXT, null);
-            index = 0;
-        } else {
-            block.setState(TEXT, texts[index]);
-            index++;
-        }
+        commonBehavior.onInteraction(world, block);
     }
 
-    public String getText(Block block) {
-        Object state = block.getState(TEXT);
-        if (state != null && state instanceof String)
-            return (String) state;
-        return null;
-    }
-
-    public String[] getTexts(Block block) {
-        Object state = block.getState(TEXTS);
-        if (state != null && state instanceof String[])
-            return (String[]) state;
-        return null;
+    @Override
+    public BlockBehaviorText clone() {
+        return new BlockBehaviorText();
     }
 }

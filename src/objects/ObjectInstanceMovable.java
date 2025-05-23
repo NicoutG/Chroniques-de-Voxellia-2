@@ -3,6 +3,7 @@ package objects;
 import objects.block.Block;
 import objects.collision.CollisionList;
 import objects.entity.Entity;
+import objects.objectBehavior.ObjectBehavior;
 import tools.Vector;
 import world.World;
 

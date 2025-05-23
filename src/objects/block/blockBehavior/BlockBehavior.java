@@ -1,9 +1,9 @@
 package objects.block.blockBehavior;
 
-import objects.ObjectBehavior;
 import objects.block.Block;
 import objects.block.BlockType;
 import objects.entity.Entity;
+import objects.objectBehavior.ObjectBehavior;
 import tools.*;
 import world.World;
 

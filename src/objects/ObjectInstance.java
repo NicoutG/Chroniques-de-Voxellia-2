@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import graphics.Texture;
 import graphics.ligth.ColorRGB;
 import objects.collision.Collision;
+import objects.objectBehavior.ObjectBehavior;
 import objects.property.Property;
 
 public class ObjectInstance<

@@ -7,6 +7,8 @@ import tools.*;
 import world.World;
 
 public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBehavior>{
+    private final static long WAITING_TIME_INTERACT = 500;
+    private long lastInteraction = 0;
 
     public Entity(EntityType type,double x, double y, double z) {
         super(type,x,y,z);
@@ -32,19 +34,30 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
     }
 
     public void interact(World world) {
-        int xMin = (int)(position.x - 0.5);
-        int xMax = (int)(position.x + 0.5);
-        int yMin = (int)(position.y - 0.5);
-        int yMax = (int)(position.y + 0.5);
-        int zMin = (int)(position.z - 0.5);
-        int zMax = (int)(position.z + 0.5);
-        int[][] posBlocks = new int[][] {{xMin,yMin,zMin},{xMin,yMin,zMax},{xMin,yMax,zMin},{xMin,yMax,zMax},{xMax,yMin,zMin},{xMax,yMin,zMax},{xMax,yMax,zMin},{xMax,yMax,zMax}};
-        for (int[] posBlock : posBlocks) {
-            Block block = world.getBlock(posBlock[0], posBlock[1], posBlock[2]);
-            if (block != null) {
-                Vector position = new Vector(posBlock[0] + 0.5, posBlock[1] + 0.5, posBlock[2] + 0.5);
-                block.onInteraction(world, position, this);
+        long now = System.currentTimeMillis();
+        if (lastInteraction + WAITING_TIME_INTERACT <= now) {
+            lastInteraction = now;
+            // interact with blocks
+            int xMin = (int)(position.x - 0.5);
+            int xMax = (int)(position.x + 0.5);
+            int yMin = (int)(position.y - 0.5);
+            int yMax = (int)(position.y + 0.5);
+            int zMin = (int)(position.z - 0.5);
+            int zMax = (int)(position.z + 0.5);
+            int[][] posBlocks = new int[][] {{xMin,yMin,zMin},{xMin,yMin,zMax},{xMin,yMax,zMin},{xMin,yMax,zMax},{xMax,yMin,zMin},{xMax,yMin,zMax},{xMax,yMax,zMin},{xMax,yMax,zMax}};
+            for (int[] posBlock : posBlocks) {
+                Block block = world.getBlock(posBlock[0], posBlock[1], posBlock[2]);
+                if (block != null) {
+                    Vector position = new Vector(posBlock[0] + 0.5, posBlock[1] + 0.5, posBlock[2] + 0.5);
+                    block.onInteraction(world, position, this);
+                }
             }
+            // interact with entities
+            double radius = 2;
+            for (Entity entity : world.getEntities())
+                if (entity != this)
+                    if (Math.abs(getX() - entity.getX()) < radius && Math.abs(getY() - entity.getY()) < radius && Math.abs(getZ() - entity.getZ()) < radius)
+                        entity.onInteraction(world, this);
         }
     }
 
@@ -68,6 +81,10 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
         move(world, velocity.x, velocity.y, velocity.z);
         notifyCloseBlocks(world);
         executeEvent(e -> e.onUpdate(world,this));
+    }
+
+    public void onInteraction(World world, Entity entityInteract) {
+        executeEvent(e -> e.onInteraction(world,this,entityInteract));
     }
 
     public void onPush(World world, Vector move, Entity entityPush) {

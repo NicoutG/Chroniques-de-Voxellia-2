@@ -2,8 +2,8 @@ package graphics;
 
 class TextLabel {
     final String text;
-    final int x, y, z;
-    TextLabel(String text, int x, int y, int z) {
+    final double x, y, z;
+    TextLabel(String text, double x, double y, double z) {
         this.text = text;
         this.x = x;  this.y = y;  this.z = z;
     }

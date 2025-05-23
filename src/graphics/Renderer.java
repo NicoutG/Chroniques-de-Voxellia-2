@@ -106,12 +106,15 @@ public final class Renderer {
             for (int y = 0; y <= maxY; y++) {
                 for (int x = 0; x <= maxX; x++) {
                     Block b = blocks[x][y][z];
-                    if (b == null || b.getTexture() == null)
+                    if (b == null)
                         continue;
 
                     String lbl = (String) b.getState("text");
                     if (lbl != null && !lbl.isBlank())
                         textLabels.add(new TextLabel(lbl, x, y, z));
+
+                    if (b.getTexture() == null)
+                        continue;
 
                     boolean[] visibleFaces = getVisibleFaces(blocks, x, y, z, maxX, maxY, maxZ, originXi, originYi, w,
                             h);
@@ -156,7 +159,14 @@ public final class Renderer {
          */
         if (entities != null) {
             for (Entity e : entities) {
-                if (e == null || e.getTexture() == null)
+                if (e == null)
+                    continue;
+
+                String lbl = (String) e.getState("text");
+                if (lbl != null && !lbl.isBlank())
+                    textLabels.add(new TextLabel(lbl, e.getX(), e.getY(), e.getZ()));
+
+                if(e.getTexture() == null)
                     continue;
 
                 IsoMath.toScreen(e.getX(), e.getY(), e.getZ(), scratchPoint);

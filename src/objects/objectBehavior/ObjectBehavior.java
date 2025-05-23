@@ -1,4 +1,7 @@
-package objects;
+package objects.objectBehavior;
+
+import objects.ObjectInstance;
+import objects.ObjectType;
 
 @SuppressWarnings("rawtypes")
 public abstract class ObjectBehavior<

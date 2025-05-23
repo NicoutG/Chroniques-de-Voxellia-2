@@ -7,7 +7,7 @@ import objects.entity.Entity;
 import tools.*;
 import world.World;
 
-public abstract class BlockBehavior extends ObjectBehavior<BlockType, Block, BlockBehavior>{
+public abstract class BlockBehavior extends ObjectBehavior<BlockType, Block, BlockBehavior> {
 
     public void onAttachTo(Block block) {
     }
@@ -32,9 +32,4 @@ public abstract class BlockBehavior extends ObjectBehavior<BlockType, Block, Blo
 
     public void onEntityClose(World world, Block block, Vector position, Entity entity) {
     }
-
-    public BlockBehavior clone() {
-        return this;
-    }
-
 }

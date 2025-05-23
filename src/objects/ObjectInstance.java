@@ -99,4 +99,8 @@ public class ObjectInstance<
         for (B behavior : behaviors)
             fonction.accept(behavior);
     }
+
+    public boolean areSameType(I objectInstance) {
+        return objectInstance.type == type;
+    }
 }

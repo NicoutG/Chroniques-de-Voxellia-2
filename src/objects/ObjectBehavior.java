@@ -5,9 +5,18 @@ public abstract class ObjectBehavior<
     T extends ObjectType<?, ?>,
     I extends ObjectInstance<T, I, ?>,
     B extends ObjectBehavior<T, I, B>
-> {
+> implements Cloneable{
 
     public abstract void onAttachTo(I instance);
 
-    public abstract ObjectBehavior clone();
+    @SuppressWarnings("unchecked")
+    public B clone() {
+		B clone = null;
+		try {
+			clone = (B)super.clone();
+		} catch(CloneNotSupportedException cnse) {
+			cnse.printStackTrace(System.err);
+		}
+		return clone;
+	}
 }

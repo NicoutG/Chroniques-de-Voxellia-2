@@ -30,4 +30,8 @@ public class Vector {
        Vector v = (Vector) o;
         return x == v.x && y == v.y && z == v.z;
     }
+
+    public String toString() {
+        return x+" "+y+" "+z;
+    }
 }

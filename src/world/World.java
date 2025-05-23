@@ -51,8 +51,22 @@ public class World {
         return null;
     }
 
+    public Block getBlock(String name) {
+        for (BlockType blockType : BLOCK_TYPES)
+            if (blockType.getName().equals(name))
+                return blockType.getInstance();
+        return null;
+    }
+
     public ArrayList<Entity> getEntities() {
         return entities;
+    }
+
+    public Entity getEntity(String name) {
+        for (EntityType entityType : ENTITY_TYPES)
+            if (entityType.getName().equals(name))
+                return entityType.getInstance();
+        return null;
     }
 
     public Player getPlayer() {

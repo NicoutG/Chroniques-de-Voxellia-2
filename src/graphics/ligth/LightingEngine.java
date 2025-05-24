@@ -2,7 +2,11 @@
 package graphics.ligth;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+
+import objects.ObjectInstance;
 import objects.block.Block;
+import objects.entity.Entity;
 import objects.property.PropertyLight;
 import graphics.shape.Face;
 
@@ -27,7 +31,7 @@ public final class LightingEngine {
     /* ===================================================================== */
     /* ENGINE */
     /* ===================================================================== */
-    public FaceLighting[][][] compute(Block[][][] blocks, long tick) {
+    public FaceLighting[][][] compute(Block[][][] blocks, ArrayList<Entity> entities, long tick) {
 
         final int X = blocks.length;
         final int Y = blocks[0].length;
@@ -45,31 +49,22 @@ public final class LightingEngine {
         /* ---------- 1) collect light sources ---------- */
         ColorRGB ambient = ColorRGB.BLACK; // sum of every “master” light
         ArrayDeque<Voxel> sources = new ArrayDeque<>(); // only falloff < 1
+        // collect block light sources
         for (int x = 0; x < X; ++x)
             for (int y = 0; y < Y; ++y)
                 for (int z = 0; z < Z; ++z) {
-
                     Block b = blocks[x][y][z];
-                    if (b == null)
-                        continue;
-
-                    PropertyLight lp = (PropertyLight) b.getProperty("light");
-                    if (lp == null)
-                        continue;
-
-                    LightSource ls = lp.getLight();
-                    ColorRGB col = ls.color(tick);
-                    double I = ls.oscillatingIntensity();
-                    double f = ls.falloff();
-
-                    if (f >= 0.999) { // MASTER-LIGHT
-                        ambient = ambient.add(col.mul(I)); // accumulate once
-                    } else { // normal point light
-                        sources.addLast(new Voxel(
-                                b, x, y, z,
-                                col, I, f));
-                    }
+                    addIfLightSource(ambient, sources, tick, b, x, y, z);
                 }
+
+        // collect entity light sources
+        for (Entity e : entities) {
+            int x = (int)e.getX();
+            int y = (int)e.getY();
+            int z = (int)e.getZ();
+            if (0 <= x && x < X && 0 <= y && y < Y && 0 <= z && z < Z)
+                addIfLightSource(ambient, sources, tick, e, x, y, z);
+        }
 
         /* ---------- 1-bis) fill every voxel with ambient light ---------- */
         if (!ambient.isBlack()) {
@@ -116,7 +111,7 @@ public final class LightingEngine {
                 int ruleCnt = 0, childCnt = 0;
                 for (Voxel n : v.getNeighbors(blocks)) {
 
-                    Block nb = n.getBlock();
+                    ObjectInstance nb = n.getObjectInstance();
 
                     if (nb != null && nb.getOpacity() == 1 &&
                             !nb.isLightAllowed(Face.LEFT.index) &&
@@ -179,6 +174,28 @@ public final class LightingEngine {
                 }
 
         return out;
+    }
+
+    private void addIfLightSource(ColorRGB ambient, ArrayDeque<Voxel> sources, long tick, ObjectInstance objectInstance, int x, int y, int z) {
+        if (objectInstance == null)
+            return;
+
+        PropertyLight lp = (PropertyLight) objectInstance.getProperty("light");
+        if (lp == null)
+            return;
+
+        LightSource ls = lp.getLight();
+        ColorRGB col = ls.color(tick);
+        double I = ls.oscillatingIntensity();
+        double f = ls.falloff();
+
+        if (f >= 0.999) { // MASTER-LIGHT
+            ambient = ambient.add(col.mul(I)); // accumulate once
+        } else { // normal point light
+            sources.addLast(new Voxel(
+                    objectInstance, x, y, z,
+                    col, I, f));
+        }
     }
 
 }

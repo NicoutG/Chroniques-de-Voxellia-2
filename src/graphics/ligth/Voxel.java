@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import graphics.shape.Face;
+import objects.ObjectInstance;
 import objects.block.Block;
 
 public final class Voxel {
@@ -38,7 +39,7 @@ public final class Voxel {
     /* ──────────────────── state ──────────────────── */
 
     private final int x, y, z;
-    private final Block block;
+    private final ObjectInstance objectInstance;
     private final ColorRGB color;
     private double intensity;
     private final double fallOff;
@@ -53,11 +54,11 @@ public final class Voxel {
     /* ──────────────────── constructors ──────────────────── */
 
     /** Internal ctor used when we already have an encoded rule-set. */
-    private Voxel(Block b, int x, int y, int z,
+    private Voxel(ObjectInstance o, int x, int y, int z,
             ColorRGB col, double I, double f,
             byte originIdx, long inheritedMask) {
 
-        block = b;
+        objectInstance = o;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -75,17 +76,17 @@ public final class Voxel {
     }
 
     /** Public ctor used by light-source voxels (no rules, no origin). */
-    public Voxel(Block b, int x, int y, int z,
+    public Voxel(ObjectInstance o, int x, int y, int z,
             ColorRGB col, double intensity, double fallOff) {
-        this(b, x, y, z, col, intensity, fallOff, (byte) -1, 0L);
+        this(o, x, y, z, col, intensity, fallOff, (byte) -1, 0L);
     }
 
     /* ──────────────────── core logic ──────────────────── */
 
     private void attenuateThroughBlock() {
         intensity *= fallOff;
-        if (block != null) {
-            double o = block.getOpacity();
+        if (objectInstance != null) {
+            double o = objectInstance.getOpacity();
             if (o > 0 && o < 1)
                 intensity *= 1.0 - o;
         }
@@ -149,8 +150,8 @@ public final class Voxel {
 
     /* ──────────────────── API identical to original ──────────────────── */
 
-    public Block getBlock() {
-        return block;
+    public ObjectInstance getObjectInstance() {
+        return objectInstance;
     }
 
     public int getX() {

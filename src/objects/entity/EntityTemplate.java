@@ -3,9 +3,11 @@ package objects.entity;
 import java.awt.image.BufferedImage;
 
 import graphics.Texture;
+import graphics.ligth.ColorRGB;
+import graphics.ligth.LightSource;
 import graphics.shape.PlayerShape;
 import objects.entity.entityBehavior.*;
-import objects.property.Property;
+import objects.property.*;
 import tools.PathManager;
 import objects.collision.*;
 

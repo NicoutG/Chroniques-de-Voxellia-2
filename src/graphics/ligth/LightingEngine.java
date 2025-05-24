@@ -8,12 +8,17 @@ import objects.ObjectInstance;
 import objects.block.Block;
 import objects.entity.Entity;
 import objects.property.PropertyLight;
+import world.World;
 import graphics.shape.Face;
 
 public final class LightingEngine {
 
     private static final double EPS = 0.01; // perceptible limit
     private static final int MAX_NEIGHBOURS = 6; // axis-aligned
+    private static final double TRANSITION = 0.05; // color change between frames
+
+    private static String previousWorld = "";
+    private static FaceLighting[][][] previousLightings = null;
 
     /* ---------- small helpers ---------- */
 
@@ -25,13 +30,52 @@ public final class LightingEngine {
         return c == null || c.isBlack(); // ‘isBlack()’ should be a simple “== BLACK”
     }
 
+    public FaceLighting[][][] getLightings(World world, long tick) {
+        FaceLighting[][][] newLightings = compute(world.getBlocks(), world.getEntities(), tick);
+        if (world.getCurrentWorld().equals(previousWorld)) {
+            final int X = newLightings.length;
+            final int Y = newLightings[0].length;
+            final int Z = newLightings[0][0].length;
+            for (int x = 0; x < X; x++)
+                for (int y = 0; y < Y; y++)
+                    for (int z = 0; z < Z; z++) {
+                        FaceLighting newLighting = newLightings[x][y][z];
+                        FaceLighting previousLighting = previousLightings[x][y][z];
+                        newLightings[x][y][z] = updateLighting(previousLighting, newLighting);
+                    }
+        }
+        previousWorld = world.getCurrentWorld();
+        previousLightings = newLightings;
+        return newLightings;
+    }
+
+    private FaceLighting updateLighting(FaceLighting previousLighting, FaceLighting newLighting) {
+        ColorRGB previousLeft = previousLighting.left();
+        ColorRGB newLeft = newLighting.left();
+        ColorRGB colorLeft = new ColorRGB(updateValue(previousLeft.r(), newLeft.r()), updateValue(previousLeft.g(), newLeft.g()), updateValue(previousLeft.b(), newLeft.b()));
+        ColorRGB previousRight = previousLighting.right();
+        ColorRGB newRight = newLighting.right();
+        ColorRGB colorRight = new ColorRGB(updateValue(previousRight.r(), newRight.r()), updateValue(previousRight.g(), newRight.g()), updateValue(previousRight.b(), newRight.b()));
+        ColorRGB previousTop = previousLighting.top();
+        ColorRGB newTop = newLighting.top();
+        ColorRGB colorTop = new ColorRGB(updateValue(previousTop.r(), newTop.r()), updateValue(previousTop.g(), newTop.g()), updateValue(previousTop.b(), newTop.b()));
+        return new FaceLighting(colorLeft, colorRight, colorTop);
+    }
+
+    private double updateValue(double previousValue, double newValue) {
+        double dif = newValue - previousValue;
+        if (0 < dif)
+            return Math.min(newValue, previousValue + TRANSITION);
+        return Math.max(newValue, previousValue - TRANSITION);
+    }
+
     /* ===================================================================== */
     /* ENGINE */
     /* ===================================================================== */
     /* ===================================================================== */
     /* ENGINE */
     /* ===================================================================== */
-    public FaceLighting[][][] compute(Block[][][] blocks, ArrayList<Entity> entities, long tick) {
+    private FaceLighting[][][] compute(Block[][][] blocks, ArrayList<Entity> entities, long tick) {
 
         final int X = blocks.length;
         final int Y = blocks[0].length;

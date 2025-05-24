@@ -4,8 +4,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.sound.sampled.Clip;
-
 import graphics.Texture;
 import graphics.ligth.ColorRGB;
 import graphics.shape.*;

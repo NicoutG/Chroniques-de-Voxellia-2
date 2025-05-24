@@ -15,6 +15,8 @@ public final class SoundManager {
 
     private final World world;
 
+    private double globalVolume; 
+
     /** Maximum distance (in world units) at which a sound is audible. */
     private static final double MAX_DISTANCE = 20.0;
 
@@ -31,6 +33,7 @@ public final class SoundManager {
     public SoundManager(World world) {
 
         this.world = world;
+        this.globalVolume = 0.2;
 
         /* ----------- load & cache every clip once -------------- */
         for (SoundType st : SoundType.values()) {
@@ -84,7 +87,7 @@ public final class SoundManager {
                 continue;
             double d2 = dist2(player.getX(), player.getY(), player.getZ(),
                     e.getX(), e.getY(), e.getZ());
-            nearestSq.merge(soundProp.getSound(), d2, Math::min);
+            nearestSq.merge(soundProp.getSound(), d2 , Math::min);
         }
 
         /* 2) Play/stop & set volume. */
@@ -99,7 +102,7 @@ public final class SoundManager {
             }
 
             double d = Math.sqrt(d2);
-            double volLinear = 1.0 - (d / MAX_DISTANCE); // linear fade 1→0
+            double volLinear = (1.0 - (d / MAX_DISTANCE)) * globalVolume * st.volume ;
 
             if (volLinear < EPSILON) {
                 pause(mc);

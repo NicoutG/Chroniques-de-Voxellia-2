@@ -1,9 +1,10 @@
 package objects;
 
-
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.sound.sampled.Clip;
 
 import graphics.Texture;
 import graphics.ligth.ColorRGB;
@@ -13,20 +14,18 @@ import objects.objectBehavior.ObjectBehavior;
 import objects.property.Property;
 import tools.PathManager;
 
-public abstract class ObjectType<
-    I extends ObjectInstance<?, ?, ?>,
-    B extends ObjectBehavior<?, ?, ?>
-> {
+public abstract class ObjectType<I extends ObjectInstance<?, ?, ?>, B extends ObjectBehavior<?, ?, ?>> {
     private String name;
     private double opacity = 1;
     private ColorRGB color; // When 0 < opacity < 1
-    private boolean[] allowLight = new boolean[]{false, false, false};
+    private boolean[] allowLight = new boolean[] { false, false, false };
     private ArrayList<Texture> textures = new ArrayList<>();
     private ArrayList<Collision> collisions = new ArrayList<>();
     private HashMap<String, Property> properties = new HashMap<>();
     protected ArrayList<B> behaviors = new ArrayList<>();
 
-    public ObjectType(String name, Texture[] textures, Double opacity, Collision[] collisions, Property[] properties, B[] behaviors) {
+    public ObjectType(String name, Texture[] textures, Double opacity, Collision[] collisions, Property[] properties,
+            B[] behaviors) {
         this.name = name;
         if (textures != null)
             for (Texture texture : textures)
@@ -49,7 +48,7 @@ public abstract class ObjectType<
     }
 
     public ObjectType(String name, String texturePath, Collision[] collisions, Property[] properties, B[] behaviors) {
-        this(name, new Texture[] {createBasicTexture(texturePath)}, collisions, properties, behaviors);
+        this(name, new Texture[] { createBasicTexture(texturePath) }, collisions, properties, behaviors);
     }
 
     public ObjectType(String name, Texture[] textures, Property[] properties, B[] behaviors) {
@@ -69,30 +68,30 @@ public abstract class ObjectType<
     }
 
     public ObjectType(String name, String texturePath) {
-        this(name, texturePath,null);
+        this(name, texturePath, null);
     }
 
     public ObjectType(String name) {
-        this(name, null,null,null,null,null);
+        this(name, null, null, null, null, null);
     }
 
     public String getName() {
         return name;
     }
 
-    public double getOpacity() { 
+    public double getOpacity() {
         return opacity;
     }
 
-    public void setOpacity(double opacity) { 
+    public void setOpacity(double opacity) {
         this.opacity = opacity;
     }
-    
-    public ColorRGB getColor() { 
+
+    public ColorRGB getColor() {
         return color;
     }
 
-    public void setColor(ColorRGB color) { 
+    public void setColor(ColorRGB color) {
         this.color = color;
     }
 
@@ -102,18 +101,18 @@ public abstract class ObjectType<
         return null;
     }
 
-    public void addTexture(Texture texture) { 
+    public void addTexture(Texture texture) {
         textures.add(texture);
     }
 
-    public boolean isLightAllowed(int index) { 
+    public boolean isLightAllowed(int index) {
         return allowLight[index];
     }
 
-    public void setAllowLight(int index, boolean val) { 
+    public void setAllowLight(int index, boolean val) {
         this.allowLight[index] = val;
     }
-    
+
     public Collision getCollision(int index) {
         int nbCollisions = collisions.size();
         if (nbCollisions == 0)
@@ -123,7 +122,7 @@ public abstract class ObjectType<
         return null;
     }
 
-    public void addCollision(Collision collision) { 
+    public void addCollision(Collision collision) {
         collisions.add(collision);
     }
 

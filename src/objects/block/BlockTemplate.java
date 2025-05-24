@@ -1,5 +1,6 @@
 package objects.block;
 
+import audio.SoundType;
 import graphics.Texture;
 import graphics.ligth.*;
 import graphics.shape.*;
@@ -18,8 +19,10 @@ public enum BlockTemplate {
                     BlockType.createBasicTexture(new String[] { "fire-0.png", "fire-1.png", "fire-2.png" }, 1) },
             0,
             null,
-            new Property[] { new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.2), 1.2, 0.8, 0.1)),
-                    new Property("noCollision") },
+            new Property[] { new PropertyLight(
+                    new LightSource(new ColorRGB(1, 0.6, 0.2), 1.2, 0.8, 0.1)),
+                    new Property("noCollision"),
+                    new PropertySound(SoundType.FIRE) },
             null)),
     BLUE_STAIRS_RIGHT(new BlockType("blueStairsRight",
             new Texture[] { new Texture(new StairsRight(), PathManager.loadImage("blue-stairs-right.png")) },
@@ -29,15 +32,16 @@ public enum BlockTemplate {
     /* 5 */
     LAVA(new BlockType("lava",
             new Texture[] { new Texture(new Rectangle(1), PathManager.loadImage("lava/lava-1.png")),
-                            new Texture(new Rectangle(2), PathManager.loadImage("lava/lava-2.png")),
-                            new Texture(new Rectangle(3), PathManager.loadImage("lava/lava-3.png")),
-                            new Texture(new Cube(), PathManager.loadImage("lava/lava-4.png")),},
+                    new Texture(new Rectangle(2), PathManager.loadImage("lava/lava-2.png")),
+                    new Texture(new Rectangle(3), PathManager.loadImage("lava/lava-3.png")),
+                    new Texture(new Cube(), PathManager.loadImage("lava/lava-4.png")), },
             0,
-            new Collision[] {CollisionList.RECTANGLE1, CollisionList.RECTANGLE2, CollisionList.RECTANGLE3, CollisionList.CUBE},
+            new Collision[] { CollisionList.RECTANGLE1, CollisionList.RECTANGLE2, CollisionList.RECTANGLE3,
+                    CollisionList.CUBE },
             new Property[] { new Property("noCollision"),
-                             new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 1.5, 0.5, 0.15)) },
-            new BlockBehavior[] { new BlockBehaviorLiquid(4, 6), 
-                                  new BlockBehaviorKill() })),
+                    new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 1.5, 0.5, 0.15)) },
+            new BlockBehavior[] { new BlockBehaviorLiquid(4, 6),
+                    new BlockBehaviorKill() })),
     SUN(new BlockType("sun",
             new Texture[] {},
             null,
@@ -69,7 +73,7 @@ public enum BlockTemplate {
     HEDGE(new BlockType("hedge", "hedge.png")),
     LEVER(new BlockType("lever",
             new Texture[] { new Texture(new Lever(false), PathManager.loadImage("lever-F.png")),
-                            new Texture(new Lever(true), PathManager.loadImage("lever-T.png")) },
+                    new Texture(new Lever(true), PathManager.loadImage("lever-T.png")) },
             0,
             null,
             new Property[] { new Property("noCollision") },

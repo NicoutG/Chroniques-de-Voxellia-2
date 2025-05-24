@@ -2,6 +2,7 @@ package engine;
 
 import javax.swing.*;
 
+import audio.SoundManager;
 import graphics.Renderer;
 import world.World;
 
@@ -10,6 +11,7 @@ import java.awt.*;
 public class GamePanel extends JPanel {
 
     private final Renderer renderer;
+    private final SoundManager soundManager;
     private final World world;
     private long tick = 0;
 
@@ -26,8 +28,8 @@ public class GamePanel extends JPanel {
         this.world = new World("lost-city.txt");
         // this.world = new World("room.txt");
 
-
         this.renderer = new Renderer(world);
+        this.soundManager = new SoundManager(world);
     }
 
     public void tick() {
@@ -47,5 +49,6 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         renderer.render((Graphics2D) g, getWidth(), getHeight(), tick);
+        soundManager.tick();
     }
 }

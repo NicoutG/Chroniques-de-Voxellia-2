@@ -1,7 +1,5 @@
 package objects.property;
 
-import javax.sound.sampled.Clip;
-
 import audio.SoundType;
 
 public class PropertySound extends Property {

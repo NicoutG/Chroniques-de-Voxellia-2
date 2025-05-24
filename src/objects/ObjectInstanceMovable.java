@@ -139,13 +139,16 @@ public class ObjectInstanceMovable <
             int minZ = (int)Math.floor(position.z - 0.5);
             int maxZ = (int)Math.ceil(position.z + 0.5);
 
-            for (int x = minX; x <= maxX; x++) {
+            Vector blockPos = new Vector();
+            for (int z = minZ; z <= maxZ; z++) {
+                blockPos.z = z + 0.5;
                 for (int y = minY; y <= maxY; y++) {
-                    for (int z = minZ; z <= maxZ; z++) {
+                    blockPos.y = y + 0.5;
+                    for (int x = minX; x <= maxX; x++) {
                         Block block = world.getBlock(x, y, z);
                         if (block != null  && block.getProperty("noCollision") == null) {
-                            Vector blockPos = new Vector(x + 0.5, y + 0.5, z + 0.5);
-                            if (getCollision().collision(position, block.getCollision(), blockPos))
+                            blockPos.x = x + 0.5;
+                            if (collision(position, block, blockPos))
                                 return true;
                         }
                     }
@@ -161,13 +164,13 @@ public class ObjectInstanceMovable <
             for (Entity entity : world.getEntities())
                 if (entity != this)
                     if ((entity.getProperty("noCollision") == null) && (entity.getProperty("noCollisionEntity") == null))
-                        if (getCollision().collision(position, entity.getCollision(), entity.getPosition())) {
+                        if (collision(position, entity, entity.getPosition())) {
                             if (moveX != 0 || moveY != 0 || moveZ != 0) {
                                 entity.onPush(world, move, (Entity)this);
                                 entity.onEntityCollision(world, (Entity)this);
                                 ((Entity)this).onEntityCollision(world, entity);
                             }
-                            if (getCollision().collision(position, entity.getCollision(), entity.getPosition()))
+                            if (collision(position, entity, entity.getPosition()))
                                 return true;
                         }
         }

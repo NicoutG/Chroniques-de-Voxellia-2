@@ -35,11 +35,16 @@ public class World {
     private HashMap<String,WorldData> worlds = new HashMap<>();
     private ArrayList<Runnable> afterUpdateTasks = new ArrayList<>();
 
-    private String startingFileName;
+    private String currentWorld;
+    private String startingWorld;
     private int startingSpawnPoint;
 
     public World(String worldPath) {
         loadWorld0(worldPath);
+    }
+
+    public String getCurrentWorld() {
+        return currentWorld;
     }
 
     public Block[][][] getBlocks() {
@@ -80,6 +85,7 @@ public class World {
     }
 
     public void loadWorld(String filename, int spawnPoint) {
+        currentWorld = filename;
         WorldData data;
         if (worlds.containsKey(filename)) {
             data = worlds.get(filename);
@@ -107,7 +113,7 @@ public class World {
 
     public void loadWorld0(String filename, int spawnPoint) {
         worlds.clear();
-        startingFileName = filename;
+        startingWorld = filename;
         startingSpawnPoint = spawnPoint;
         loadWorld(filename, spawnPoint);
     }
@@ -117,7 +123,7 @@ public class World {
     }
 
     public void reloadWorld() {
-        loadWorld0(startingFileName, startingSpawnPoint);
+        loadWorld0(startingWorld, startingSpawnPoint);
     }
 
     private void spawnPlayer(int spawnPoint) {

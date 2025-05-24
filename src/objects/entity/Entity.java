@@ -43,13 +43,13 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
             int zMin = (int)position.z - 1;
             Vector positionBlock = new Vector();
             for (int z = zMin; z < zMin + 3; z++) {
-                positionBlock.z = z;
+                positionBlock.z = z + 0.5;
                 for (int y = yMin; y < yMin + 3; y++) {
-                    positionBlock.y = y;
+                    positionBlock.y = y + 0.5;
                     for (int x = xMin; x < xMin + 3; x++) {
                         Block block = world.getBlock(x,y,z);
                         if (block != null) {
-                            positionBlock.x = x;
+                            positionBlock.x = x + 0.5;
                             block.onInteraction(world, positionBlock, this);
                         }
                     }

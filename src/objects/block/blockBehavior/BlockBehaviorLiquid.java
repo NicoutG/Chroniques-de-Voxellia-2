@@ -38,16 +38,17 @@ public class BlockBehaviorLiquid extends BlockBehavior {
         int x = (int)position.x;
         int y = (int)position.y;
         int z = (int)position.z; 
-        if (tick % VISCOSITY == 0) {
+        if (tick % VISCOSITY == 0)
             propageLiquid(world, block, x, y, z);
-            endPropageLiquid(world, block, x, y, z);
-        }
+        endPropageLiquid(world, block, x, y, z);
         tick++;
     }
 
     private void propageLiquid(World world, Block block, int x, int y, int z) {
         Block[][][] blocks = world.getBlocks();
         int liquid = getLiquid(block);
+        if (liquid <= 0)
+            return;
         // falling liquid
         if (z > 0) {
             Block blockDown = world.getBlock(x, y, z - 1);
@@ -105,36 +106,46 @@ public class BlockBehaviorLiquid extends BlockBehavior {
         int xSide,ySide;
         xSide = x;
         ySide = y - 1;
-        if (isPossibleFlow(blocks, block, xSide, ySide, z, liquid))
-            possibleFlows.add(new int[] {xSide,ySide});
+        addPossibleFlow(blocks, block, xSide, ySide, z, liquid, possibleFlows);
         xSide = x - 1;
         ySide = y;
-        if (isPossibleFlow(blocks, block, xSide, ySide, z, liquid))
-            possibleFlows.add(new int[] {xSide,ySide});
+        addPossibleFlow(blocks, block, xSide, ySide, z, liquid, possibleFlows);
         xSide = x + 1;
         ySide = y;
-        if (isPossibleFlow(blocks, block, xSide, ySide, z, liquid))
-            possibleFlows.add(new int[] {xSide,ySide});
+        addPossibleFlow(blocks, block, xSide, ySide, z, liquid, possibleFlows);
         xSide = x;
         ySide = y + 1;
-        if (isPossibleFlow(blocks, block, xSide, ySide, z, liquid))
-            possibleFlows.add(new int[] {xSide,ySide});
+        addPossibleFlow(blocks, block, xSide, ySide, z, liquid, possibleFlows);
         return possibleFlows;
     }
 
-    private boolean isPossibleFlow(Block[][][] blocks, Block block, int xSide, int ySide, int z, int liquid) {
+    private int getPossibleFlow(Block[][][] blocks, Block block, int xSide, int ySide, int z) {
         if (0 <= xSide && xSide < blocks.length && 0 <= ySide && ySide < blocks[xSide].length) {
             Block blockSide = blocks[xSide][ySide][z];
             if (blockSide == null)
-                return true;
+                return 0;
             else
                 if(blockSide.areSameType(block)) {
                     int liquidSide = getLiquid(blockSide) + getLiquidNext(blockSide);
-                    if (liquidSide < liquid)
-                        return true;
+                    return liquidSide;
                 }
         }
-        return false;
+        return MAX_LIQUID;
+    }
+
+    private void addPossibleFlow(Block[][][] blocks, Block block, int xSide, int ySide, int z, int liquid, ArrayList<int[]> possibleFlows) {
+        int liquidSide = getPossibleFlow(blocks, block, xSide, ySide, z);
+        if (liquidSide < liquid) {
+            if (possibleFlows.isEmpty())
+                possibleFlows.add(new int[] {xSide,ySide,liquidSide});
+            else {
+                int minLiquid = possibleFlows.get(0)[2];
+                if (liquidSide < minLiquid)
+                    possibleFlows.clear();
+                if (liquidSide <= minLiquid)
+                    possibleFlows.add(new int[] {xSide,ySide,liquidSide});
+            }
+        }
     }
 
     private void endPropageLiquid(World world, Block block, int x, int y, int z) {

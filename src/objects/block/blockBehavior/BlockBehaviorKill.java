@@ -9,7 +9,7 @@ public class BlockBehaviorKill extends BlockBehavior {
 
     @Override
     public void onEntityClose(World world, Block block, Vector position, Entity entity) {
-        if (block.getCollision().collision(position, entity.getCollision(), entity.getPosition()))
+        if (block.collision(position, entity, entity.getPosition()))
             entity.onDeath(world);
     }
 }

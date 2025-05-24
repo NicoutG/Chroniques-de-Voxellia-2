@@ -20,9 +20,7 @@ public enum BlockTemplate {
             null,
             new Property[] { new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.2), 1.2, 0.8, 0.1)),
                     new Property("noCollision") },
-            new BlockBehavior[] {
-                    new BlockBehaviorText()
-            })),
+            null)),
     BLUE_STAIRS_RIGHT(new BlockType("blueStairsRight",
             new Texture[] { new Texture(new StairsRight(), PathManager.loadImage("blue-stairs-right.png")) },
             new Collision[] { CollisionList.STEP_RIGHT },

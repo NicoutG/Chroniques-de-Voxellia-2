@@ -54,7 +54,7 @@ public final class LightingEngine {
             for (int y = 0; y < Y; ++y)
                 for (int z = 0; z < Z; ++z) {
                     Block b = blocks[x][y][z];
-                    addIfLightSource(ambient, sources, tick, b, x, y, z);
+                    ambient = addIfLightSource(ambient, sources, tick, b, x, y, z);
                 }
 
         // collect entity light sources
@@ -63,7 +63,7 @@ public final class LightingEngine {
             int y = (int)e.getY();
             int z = (int)e.getZ();
             if (0 <= x && x < X && 0 <= y && y < Y && 0 <= z && z < Z)
-                addIfLightSource(ambient, sources, tick, e, x, y, z);
+                ambient = addIfLightSource(ambient, sources, tick, e, x, y, z);
         }
 
         /* ---------- 1-bis) fill every voxel with ambient light ---------- */
@@ -176,13 +176,13 @@ public final class LightingEngine {
         return out;
     }
 
-    private void addIfLightSource(ColorRGB ambient, ArrayDeque<Voxel> sources, long tick, ObjectInstance objectInstance, int x, int y, int z) {
+    private ColorRGB addIfLightSource(ColorRGB ambient, ArrayDeque<Voxel> sources, long tick, ObjectInstance objectInstance, int x, int y, int z) {
         if (objectInstance == null)
-            return;
+            return ambient;
 
         PropertyLight lp = (PropertyLight) objectInstance.getProperty("light");
         if (lp == null)
-            return;
+            return ambient;
 
         LightSource ls = lp.getLight();
         ColorRGB col = ls.color(tick);
@@ -196,6 +196,7 @@ public final class LightingEngine {
                     objectInstance, x, y, z,
                     col, I, f));
         }
+        return ambient;
     }
 
 }

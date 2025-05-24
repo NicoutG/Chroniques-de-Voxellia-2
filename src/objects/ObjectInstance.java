@@ -9,6 +9,7 @@ import graphics.ligth.ColorRGB;
 import objects.collision.Collision;
 import objects.objectBehavior.ObjectBehavior;
 import objects.property.Property;
+import tools.Vector;
 
 public class ObjectInstance<
     T extends ObjectType<?, ?>,
@@ -59,6 +60,16 @@ public class ObjectInstance<
             return type.getColor();
         else
             return (ColorRGB) state;
+    }
+
+    public boolean collision(Vector position1, ObjectInstance objectInstance, Vector position2) {
+        Collision collision1 = getCollision();
+        if (collision1 != null) {
+            Collision collision2 = objectInstance.getCollision();
+            if (collision2 != null)
+                return collision1.collision(position1, collision2, position2);
+        }
+        return false;
     }
 
     public Collision getCollision() {

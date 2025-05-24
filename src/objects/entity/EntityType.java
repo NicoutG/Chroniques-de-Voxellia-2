@@ -50,4 +50,11 @@ public class EntityType extends ObjectType<Entity, EntityBehavior>{
             entity.addBehavior(entityBehavior.clone());
         return entity;
     }
+
+    public Player getInstancePlayer() {
+        Player entity = new Player(this,0,0,0);
+        for (EntityBehavior entityBehavior : behaviors)
+            entity.addBehavior(entityBehavior.clone());
+        return entity;
+    }
 }

@@ -23,6 +23,12 @@ public abstract class EntityBehavior extends ObjectBehavior<EntityType, Entity, 
     public void onPush(World world, Entity entity, Vector move, Entity entityPush) {
     }
 
+    public void onEntityCollision(World world, Entity entity, Entity entityCollision) {
+    }
+
+    public void onDeath(World world, Entity entity) {
+    }
+
     public EntityBehavior clone() {
         return this;
     }

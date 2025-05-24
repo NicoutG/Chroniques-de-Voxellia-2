@@ -131,21 +131,23 @@ public class ObjectInstanceMovable <
     }
 
     protected boolean isCollidingBlock(World world) {
-        int minX = (int)Math.floor(position.x - 0.5);
-        int maxX = (int)Math.ceil(position.x + 0.5);
-        int minY = (int)Math.floor(position.y - 0.5);
-        int maxY = (int)Math.ceil(position.y + 0.5);
-        int minZ = (int)Math.floor(position.z - 0.5);
-        int maxZ = (int)Math.ceil(position.z + 0.5);
+        if ((((Entity)this).getProperty("noCollision") == null) && (((Entity)this).getProperty("noCollisionBlock") == null)) {
+            int minX = (int)Math.floor(position.x - 0.5);
+            int maxX = (int)Math.ceil(position.x + 0.5);
+            int minY = (int)Math.floor(position.y - 0.5);
+            int maxY = (int)Math.ceil(position.y + 0.5);
+            int minZ = (int)Math.floor(position.z - 0.5);
+            int maxZ = (int)Math.ceil(position.z + 0.5);
 
-        for (int x = minX; x <= maxX; x++) {
-            for (int y = minY; y <= maxY; y++) {
-                for (int z = minZ; z <= maxZ; z++) {
-                    Block block = world.getBlock(x, y, z);
-                    if (block != null  && block.getProperty("noCollision") == null) {
-                        Vector blockPos = new Vector(x + 0.5, y + 0.5, z + 0.5);
-                        if (getCollision().collision(position, block.getCollision(), blockPos))
-                            return true;
+            for (int x = minX; x <= maxX; x++) {
+                for (int y = minY; y <= maxY; y++) {
+                    for (int z = minZ; z <= maxZ; z++) {
+                        Block block = world.getBlock(x, y, z);
+                        if (block != null  && block.getProperty("noCollision") == null) {
+                            Vector blockPos = new Vector(x + 0.5, y + 0.5, z + 0.5);
+                            if (getCollision().collision(position, block.getCollision(), blockPos))
+                                return true;
+                        }
                     }
                 }
             }
@@ -154,14 +156,21 @@ public class ObjectInstanceMovable <
     }
 
     protected boolean isCollidingEntity(World world, double moveX, double moveY, double moveZ) {
-        Vector move = new Vector(moveX, moveY, moveZ);
-        for (Entity entity : world.getEntities())
-            if (entity != this && getCollision().collision(position, entity.getCollision(), entity.getPosition())) {
-                if (this instanceof Entity && (moveX != 0 || moveY != 0 || moveZ != 0))
-                    entity.onPush(world, move, (Entity)this);
-                if (getCollision().collision(position, entity.getCollision(), entity.getPosition()))
-                    return true;
-            }
+        if ((((Entity)this).getProperty("noCollision") == null) && (((Entity)this).getProperty("noCollisionEntity") == null)) {
+            Vector move = new Vector(moveX, moveY, moveZ);
+            for (Entity entity : world.getEntities())
+                if (entity != this)
+                    if ((entity.getProperty("noCollision") == null) && (entity.getProperty("noCollisionEntity") == null))
+                        if (getCollision().collision(position, entity.getCollision(), entity.getPosition())) {
+                            if (moveX != 0 || moveY != 0 || moveZ != 0) {
+                                entity.onPush(world, move, (Entity)this);
+                                entity.onEntityCollision(world, (Entity)this);
+                                ((Entity)this).onEntityCollision(world, entity);
+                            }
+                            if (getCollision().collision(position, entity.getCollision(), entity.getPosition()))
+                                return true;
+                        }
+        }
         return false;
     }
 }

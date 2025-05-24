@@ -6,7 +6,6 @@ public class BlockBehaviorNewWorld extends BlockBehaviorChangeWorld {
 
     @Override
     protected void loadWorld(World world, String newWorld, int spawnPoint) {
-        world.clearWorlds();
-        world.executeAfterUpdate(() -> world.loadWorld(newWorld, spawnPoint));
+        world.executeAfterUpdate(() -> world.loadWorld0(newWorld, spawnPoint));
     }
 }

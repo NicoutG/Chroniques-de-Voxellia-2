@@ -38,22 +38,25 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
         if (lastInteraction + WAITING_TIME_INTERACT <= now) {
             lastInteraction = now;
             // interact with blocks
-            int xMin = (int)(position.x - 0.5);
-            int xMax = (int)(position.x + 0.5);
-            int yMin = (int)(position.y - 0.5);
-            int yMax = (int)(position.y + 0.5);
-            int zMin = (int)(position.z - 0.5);
-            int zMax = (int)(position.z + 0.5);
-            int[][] posBlocks = new int[][] {{xMin,yMin,zMin},{xMin,yMin,zMax},{xMin,yMax,zMin},{xMin,yMax,zMax},{xMax,yMin,zMin},{xMax,yMin,zMax},{xMax,yMax,zMin},{xMax,yMax,zMax}};
-            for (int[] posBlock : posBlocks) {
-                Block block = world.getBlock(posBlock[0], posBlock[1], posBlock[2]);
-                if (block != null) {
-                    Vector position = new Vector(posBlock[0] + 0.5, posBlock[1] + 0.5, posBlock[2] + 0.5);
-                    block.onInteraction(world, position, this);
+            int xMin = (int)position.x - 1;
+            int yMin = (int)position.y - 1;
+            int zMin = (int)position.z - 1;
+            Vector positionBlock = new Vector();
+            for (int z = zMin; z < zMin + 3; z++) {
+                positionBlock.z = z;
+                for (int y = yMin; y < yMin + 3; y++) {
+                    positionBlock.y = y;
+                    for (int x = xMin; x < xMin + 3; x++) {
+                        Block block = world.getBlock(x,y,z);
+                        if (block != null) {
+                            positionBlock.x = x;
+                            block.onInteraction(world, positionBlock, this);
+                        }
+                    }
                 }
             }
             // interact with entities
-            double radius = 2;
+            double radius = 1.5;
             for (Entity entity : world.getEntities())
                 if (entity != this)
                     if (Math.abs(getX() - entity.getX()) < radius && Math.abs(getY() - entity.getY()) < radius && Math.abs(getZ() - entity.getZ()) < radius)
@@ -89,6 +92,14 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
 
     public void onPush(World world, Vector move, Entity entityPush) {
         executeEvent(e -> e.onPush(world,this,move,entityPush));
+    }
+
+    public void onEntityCollision(World world, Entity entityCollision) {
+        executeEvent(e -> e.onEntityCollision(world,this,entityCollision));
+    }
+
+    public void onDeath(World world) {
+        executeEvent(e -> e.onDeath(world,this));
     }
 
     //#endregion

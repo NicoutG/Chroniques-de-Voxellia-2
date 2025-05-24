@@ -21,9 +21,6 @@ public abstract class BlockBehavior extends ObjectBehavior<BlockType, Block, Blo
     public void onInteraction(World world, Block block, Vector position, Entity entity) {
     }
 
-    public void onPush(World world, Block block, Vector position, int depX, int depY, int depZ) {
-    }
-
     public void onActivated(World world, Block block, Vector position, int network) {
     }
 

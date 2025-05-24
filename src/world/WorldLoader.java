@@ -40,7 +40,7 @@ public class WorldLoader {
         ArrayList<Entity> entities      = new ArrayList<>();
         ArrayList<Vector>  spawnPoints  = new ArrayList<>();
 
-        entities.add(new Player(entityTypes.get(0),0,0,0));
+        entities.add(entityTypes.get(0).getInstancePlayer());
 
         try {
             String[] lines = Files.readString(Paths.get(PathManager.WORLD_PATH + file))

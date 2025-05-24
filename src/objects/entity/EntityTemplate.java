@@ -5,13 +5,13 @@ import java.awt.image.BufferedImage;
 import graphics.Texture;
 import graphics.shape.PlayerShape;
 import objects.entity.entityBehavior.*;
+import objects.property.Property;
 import tools.PathManager;
 import objects.collision.*;
 
 public enum EntityTemplate {
     /* 0 */
     PLAYER(new EntityType("player",
-
             new Texture[] {
                     new Texture(
                             new PlayerShape(), new BufferedImage[] {
@@ -23,7 +23,7 @@ public enum EntityTemplate {
             },
             new Collision[] { CollisionList.BLOCK_ENTITY },
             null,
-            null)),
+            new EntityBehavior[] { new EntityBehaviorPlayer() })),
     CRATE_WOOD(new EntityType("crateWood",
             "crate-wood.png",
             new Collision[] { CollisionList.BLOCK_ENTITY },

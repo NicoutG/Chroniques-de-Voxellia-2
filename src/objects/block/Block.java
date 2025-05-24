@@ -26,10 +26,6 @@ public class Block extends ObjectInstance<BlockType, Block, BlockBehavior>{
         executeEvent(b -> b.onInteraction(world,this,position,entity));
     }
 
-    public void onPush(World world, Vector position, int depX, int depY, int depZ) {
-        executeEvent(b -> b.onPush(world,this,position,depX,depY,depZ));
-    }
-
     public void onActivated(World world, Vector position, int network) {
         executeEvent(b -> b.onActivated(world,this,position,network));
     }

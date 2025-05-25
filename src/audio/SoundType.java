@@ -2,7 +2,8 @@ package audio;
 
 public enum SoundType {
     FIRE("fire-loop.wav", true, 0.4),
-    LAVA("lava-loop.wav", true, 1.25);
+    LAVA("lava-loop.wav", true, 1.25),
+    LEVER("lever.wav", false, 1);
 
     final String path;
     final boolean looping;

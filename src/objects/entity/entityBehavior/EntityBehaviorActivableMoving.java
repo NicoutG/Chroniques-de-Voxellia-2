@@ -13,7 +13,7 @@ public class EntityBehaviorActivableMoving extends EntityBehaviorActivable {
     public void onAttachTo(Entity entity) {
         super.onAttachTo(entity);
         entity.setState(SPEED, 1.0);
-        entity.setState(POSITION1, new double[]{0,0,0});
+        entity.setState(POSITION1, new double[]{entity.getX(),entity.getY(),entity.getZ()});
         entity.setState(POSITION2, new double[]{0,0,0});
     }
 

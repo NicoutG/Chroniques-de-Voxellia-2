@@ -31,7 +31,7 @@ public final class SoundManager {
     private record ManagedClip(Clip clip, boolean looping) {
     }
 
-    private final Map<SoundType, ManagedClip> clips = new EnumMap<>(SoundType.class);
+    private static final Map<SoundType, ManagedClip> clips = new EnumMap<>(SoundType.class);
 
     public SoundManager(World world) {
 
@@ -151,6 +151,12 @@ public final class SoundManager {
                 ensurePlaying(mc, volLinear);
             }
         }
+    }
+
+    public static void stopSound(SoundType soundType) {
+        ManagedClip mc = clips.get(soundType);
+        if (mc != null && mc.clip.isRunning())
+            mc.clip.stop();
     }
 
     /** Close every {@link Clip}. Call once when your program exits. */

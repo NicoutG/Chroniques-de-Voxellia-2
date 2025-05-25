@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import audio.SoundManager;
 import audio.SoundType;
 import engine.GameControls;
 
@@ -212,6 +213,7 @@ public class World {
     }
 
     public void playSound(SoundType st) {
+        stopSound(st);
         sounds.add(st);
     }
 
@@ -221,6 +223,10 @@ public class World {
 
     public void removeSound(SoundType st) {
         sounds.remove(st);
+    }
+
+    public void stopSound(SoundType st) {
+        SoundManager.stopSound(st);
     }
 
     private void updateControls() {

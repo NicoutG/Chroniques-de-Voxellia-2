@@ -8,14 +8,17 @@ import tools.PathManager;
 import world.World;
 
 import javax.sound.sampled.*;
+
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 public final class SoundManager {
 
     private final World world;
 
-    private double globalVolume; 
+    private double globalVolume;
 
     /** Maximum distance (in world units) at which a sound is audible. */
     private static final double MAX_DISTANCE = 20.0;
@@ -48,6 +51,44 @@ public final class SoundManager {
      * Call once per game‑loop iteration (e.g. from {@code GamePanel.tick()}).
      */
     public void tick() {
+
+        /*
+         * ----------------------------------------------------------
+         * 1) Handle queued per-tick sounds (World#getSounds())
+         * ----------------------------------------------------------
+         */
+        List<SoundType> eventSounds = world.getSounds();
+        if (eventSounds != null && !eventSounds.isEmpty()) {
+
+            // Copy to avoid concurrent-mod with World.removeSound()
+            for (SoundType st : new ArrayList<>(eventSounds)) {
+                ManagedClip mc = clips.get(st);
+                if (mc == null)
+                    continue; // no clip loaded
+
+                /* play only if stopped */
+                if (!mc.clip.isRunning()) {
+                    mc.clip.setFramePosition(0);
+                    setVolume(mc.clip, globalVolume * st.volume); // ① gain FIRST
+                    if (st.looping) {
+                        mc.clip.loop(Clip.LOOP_CONTINUOUSLY);
+                    } else {
+                        mc.clip.start();
+                    }
+                }
+
+                /* remove one-shots through the World API */ // ② proper removal
+                if (!st.looping) {
+                    world.removeSound(st);
+                }
+            }
+        }
+
+        /*
+         * --------------------------------------------------------------
+         * 2) Spatialised ambiences: only the closest emitter of each type.
+         * --------------------------------------------------------------
+         */
 
         Player player = world.getPlayer();
         if (player == null || world == null)
@@ -87,7 +128,7 @@ public final class SoundManager {
                 continue;
             double d2 = dist2(player.getX(), player.getY(), player.getZ(),
                     e.getX(), e.getY(), e.getZ());
-            nearestSq.merge(soundProp.getSound(), d2 , Math::min);
+            nearestSq.merge(soundProp.getSound(), d2, Math::min);
         }
 
         /* 2) Play/stop & set volume. */
@@ -102,13 +143,12 @@ public final class SoundManager {
             }
 
             double d = Math.sqrt(d2);
-            double volLinear = (1.0 - (d / MAX_DISTANCE)) * globalVolume * st.volume ;
+            double volLinear = (1.0 - (d / MAX_DISTANCE)) * globalVolume * st.volume;
 
             if (volLinear < EPSILON) {
                 pause(mc);
             } else {
-                ensurePlaying(mc);
-                setVolume(mc.clip, volLinear);
+                ensurePlaying(mc, volLinear);
             }
         }
     }
@@ -121,18 +161,21 @@ public final class SoundManager {
         });
     }
 
-    private void ensurePlaying(ManagedClip mc) {
+    private void ensurePlaying(ManagedClip mc, double volLin) {
         if (mc.clip.isRunning())
             return;
+        mc.clip.setFramePosition(0);
+        setVolume(mc.clip, volLin); // gain FIRST
         if (mc.looping) {
             mc.clip.loop(Clip.LOOP_CONTINUOUSLY);
         } else {
-            mc.clip.setFramePosition(0);
             mc.clip.start();
         }
     }
 
     private void pause(ManagedClip mc) {
+        if (!mc.looping)
+            return;
         if (mc.clip.isRunning())
             mc.clip.stop();
     }

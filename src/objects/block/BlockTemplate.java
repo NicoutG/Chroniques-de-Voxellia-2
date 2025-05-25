@@ -79,7 +79,10 @@ public enum BlockTemplate {
             0,
             null,
             new Property[] { new Property("noCollision") },
-            new BlockBehavior[] { new BlockBehaviorLever() })),
+            new BlockBehavior[] {
+                new BlockBehaviorLever(),
+                new BlockBehaviorSound(SoundType.LEVER)
+             })),
     WORLD(new BlockType("worldBlock",
             new Texture[] { BlockType.createBasicTexture(
                     new String[] { "world-block-0.png", "world-block-1.png", "world-block-2.png" }, 3) },

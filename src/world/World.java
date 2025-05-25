@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import audio.SoundType;
 import engine.GameControls;
 
 public class World {
@@ -38,6 +39,8 @@ public class World {
     private String currentWorld;
     private String startingWorld;
     private int startingSpawnPoint;
+
+    private ArrayList<SoundType> sounds = new ArrayList<>();
 
     public World(String worldPath) {
         loadWorld0(worldPath);
@@ -206,6 +209,18 @@ public class World {
         }
         for (Entity entity : entities)
             entity.onDesactivated(this, network);
+    }
+
+    public void playSound(SoundType st) {
+        sounds.add(st);
+    }
+
+    public ArrayList<SoundType> getSounds() {
+        return sounds;
+    }
+
+    public void removeSound(SoundType st) {
+        sounds.remove(st);
     }
 
     private void updateControls() {

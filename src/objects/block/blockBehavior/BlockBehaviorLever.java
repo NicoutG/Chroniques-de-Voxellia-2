@@ -8,17 +8,25 @@ import world.World;
 public class BlockBehaviorLever extends BlockBehaviorConnected {
 
     @Override
+    public void onStart(World world, Block block, Vector position) {
+        if (getActivationState(block))
+            block.setIndexTexture(1);
+        else
+            block.setIndexTexture(0);
+    }
+
+    @Override
     public void onInteraction(World world, Block block, Vector position, Entity entity) {
         boolean activationState = getActivationState(block);
         world.executeAfterUpdate(() -> block.setState(ACTIVATION_STATE, !activationState));
         int network = getNetwork(block);
         if (activationState) {
-            world.desactivateBlocks(network);
-            block.setIndexTexture(1);
+            world.desactivate(network);
+            block.setIndexTexture(0);
         }
         else {
-            world.activateBlocks(network);
-            block.setIndexTexture(0);
+            world.activate(network);
+            block.setIndexTexture(1);
         }
     }
 }

@@ -94,6 +94,14 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
         executeEvent(e -> e.onPush(world,this,move,entityPush));
     }
 
+    public void onActivated(World world, int network) {
+        executeEvent(e -> e.onActivated(world,this,network));
+    }
+
+    public void onDesactivated(World world, int network) {
+        executeEvent(e -> e.onDesactivated(world,this,network));
+    }
+
     public void onEntityCollision(World world, Entity entityCollision) {
         executeEvent(e -> e.onEntityCollision(world,this,entityCollision));
     }

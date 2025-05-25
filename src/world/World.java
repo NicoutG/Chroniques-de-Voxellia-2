@@ -170,7 +170,7 @@ public class World {
             task.run();
     }
 
-    public void activateBlocks(int network) {
+    public void activate(int network) {
         Vector pos = new Vector();
         for (int z = 0; z < blocks[0][0].length; z++) {
             pos.z = z + 0.5;
@@ -185,9 +185,11 @@ public class World {
                 }
             }
         }
+        for (Entity entity : entities)
+            entity.onActivated(this, network);
     }
 
-    public void desactivateBlocks(int network) {
+    public void desactivate(int network) {
         Vector pos = new Vector();
         for (int z = 0; z < blocks[0][0].length; z++) {
             pos.z = z + 0.5;
@@ -202,6 +204,8 @@ public class World {
                 }
             }
         }
+        for (Entity entity : entities)
+            entity.onDesactivated(this, network);
     }
 
     private void updateControls() {

@@ -23,6 +23,12 @@ public abstract class EntityBehavior extends ObjectBehavior<EntityType, Entity, 
     public void onPush(World world, Entity entity, Vector move, Entity entityPush) {
     }
 
+    public void onActivated(World world, Entity entity, int network) {
+    }
+
+    public void onDesactivated(World world, Entity entity, int network) {
+    }
+
     public void onEntityCollision(World world, Entity entity, Entity entityCollision) {
     }
 

@@ -14,7 +14,7 @@ public class BlockBehaviorPressurePlate extends BlockBehaviorConnected {
         boolean activationState = getActivationState(block);
         if (activationState && !entityOn) {
             int network = getNetwork(block);
-            world.desactivateBlocks(network);
+            world.desactivate(network);
             block.setIndexTexture(0);
             world.executeAfterUpdate(() -> block.setState(ACTIVATION_STATE, false));
         }
@@ -28,7 +28,7 @@ public class BlockBehaviorPressurePlate extends BlockBehaviorConnected {
                 int network = getNetwork(block);
                 boolean activationState = getActivationState(block);
                 if (!activationState)
-                    world.activateBlocks(network);
+                    world.activate(network);
                 block.setIndexTexture(1);
                 world.executeAfterUpdate(() -> block.setState(ACTIVATION_STATE, true));
                 entityOn = true;

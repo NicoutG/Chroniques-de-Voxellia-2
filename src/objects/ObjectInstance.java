@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-import javax.sound.sampled.Clip;
-
 import graphics.Texture;
 import graphics.ligth.ColorRGB;
 import objects.collision.Collision;

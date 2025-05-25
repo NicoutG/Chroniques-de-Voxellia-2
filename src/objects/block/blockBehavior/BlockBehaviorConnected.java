@@ -1,28 +1,25 @@
 package objects.block.blockBehavior;
 
 import objects.block.Block;
+import objects.block.BlockType;
+import objects.objectBehavior.ObjectBehaviorConnected;
 
-public abstract class BlockBehaviorConnected extends BlockBehavior {
-    protected final static String ACTIVATION_STATE = "activated";
-    protected final static String NETWORK = "network";
+public class BlockBehaviorConnected extends BlockBehavior {
+    public final static String ACTIVATION_STATE = ObjectBehaviorConnected.ACTIVATION_STATE;
+    public final static String NETWORK = ObjectBehaviorConnected.NETWORK;
+
+    private final ObjectBehaviorConnected<BlockType, Block, BlockBehavior> commonBehavior = new ObjectBehaviorConnected<>();
 
     @Override
     public void onAttachTo(Block block) {
-        block.setState(ACTIVATION_STATE, false);
-        block.setState(NETWORK, 0);
+        commonBehavior.onAttachTo(block);
     }
 
     public boolean getActivationState(Block block) {
-        Object state = block.getState(ACTIVATION_STATE);
-        if (state != null && state instanceof Boolean)
-            return (boolean)state;
-        return false;
+        return commonBehavior.getActivationState(block);
     }
 
     public int getNetwork(Block block) {
-        Object state = block.getState(NETWORK);
-        if (state != null && state instanceof Integer)
-            return (int)state;
-        return -1;
+        return commonBehavior.getNetwork(block);
     }
 }

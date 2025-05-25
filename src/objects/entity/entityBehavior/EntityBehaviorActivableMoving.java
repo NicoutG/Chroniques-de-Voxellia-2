@@ -31,7 +31,6 @@ public class EntityBehaviorActivableMoving extends EntityBehaviorActivable {
             double difX = destination.x - position.x;
             double difY = destination.y - position.y;
             double difZ = destination.z - position.z;
-            System.out.println(position);
             double distance = Math.sqrt(difX*difX + difY*difY + difZ*difZ);
             if (distance < speed)
                 entity.move(world, difX, difY, difZ);

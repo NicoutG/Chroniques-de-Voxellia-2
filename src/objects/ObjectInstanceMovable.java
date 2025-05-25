@@ -12,6 +12,11 @@ public class ObjectInstanceMovable <
     I extends ObjectInstance<T, I, B>,
     B extends ObjectBehavior<T, I, B>
 > extends ObjectInstance<T,I,B> {
+
+    public static final String NO_COLLISION = "noCollision";
+    public static final String NO_COLLISION_BLOCK = "noCollisionBlock";
+    public static final String NO_COLLISION_ENTITY = "noCollisionEntity";
+    public static final String NO_COLLISION_SAME = "noCollisionSame";
     protected static final double MAX_VELOCITY = 2.5;
 
     protected Vector position;
@@ -74,7 +79,7 @@ public class ObjectInstanceMovable <
     }
 
     public Vector move(World world, double moveX, double moveY, double moveZ) {
-        if (getProperty("noCollision") != null) {
+        if (noCollision(this)) {
             position.x += moveX;
             position.y += moveY;
             position.z += moveZ;
@@ -86,9 +91,15 @@ public class ObjectInstanceMovable <
         realMove.y = moveAxis(world, 0, moveY, 0);
         realMove.z = moveAxis(world, 0, 0, moveZ);
 
-        for (Entity entity : world.getEntities()) {
-            if (entity != (Entity)this && CollisionList.ON_TOP_ENTITY.collision(position, entity.getCollision(), entity.getPosition()))
-                entity.move(world, realMove.x, realMove.y, realMove.z);
+        if (!noCollisionEntity(this)) {
+            boolean noCollisionSame = noCollisionSame(this);
+            for (Entity entity : world.getEntities()) {
+                if (entity != (Entity)this && !noCollision(entity) && 
+                        !noCollisionEntity(entity) && 
+                        !(noCollisionSame && entity.areSameType((Entity)this)) && 
+                        CollisionList.ON_TOP_ENTITY.collision(position, entity.getCollision(), entity.getPosition()))
+                    entity.move(world, realMove.x, realMove.y, realMove.z);
+            }
         }
 
         return realMove;
@@ -131,7 +142,7 @@ public class ObjectInstanceMovable <
     }
 
     protected boolean isCollidingBlock(World world) {
-        if ((((Entity)this).getProperty("noCollision") == null) && (((Entity)this).getProperty("noCollisionBlock") == null)) {
+        if (!noCollision(this) && !noCollisionBlock(this)) {
             int minX = (int)Math.floor(position.x - 0.5);
             int maxX = (int)Math.ceil(position.x + 0.5);
             int minY = (int)Math.floor(position.y - 0.5);
@@ -146,7 +157,7 @@ public class ObjectInstanceMovable <
                     blockPos.y = y + 0.5;
                     for (int x = minX; x <= maxX; x++) {
                         Block block = world.getBlock(x, y, z);
-                        if (block != null  && block.getProperty("noCollision") == null) {
+                        if (block != null  && !noCollision(block)) {
                             blockPos.x = x + 0.5;
                             if (collision(position, block, blockPos))
                                 return true;
@@ -160,12 +171,16 @@ public class ObjectInstanceMovable <
 
     protected boolean isCollidingEntity(World world, double moveX, double moveY, double moveZ) {
         Vector move = new Vector(moveX, moveY, moveZ);
+        boolean noCollision = noCollision(this);
+        boolean noCollisionEntity = noCollisionEntity(this);
+        boolean noCollisionSame = noCollisionSame(this);
         for (Entity entity : world.getEntities())
             if (entity != this)
                 if (collision(position, entity, entity.getPosition())) {
                     entity.onEntityCollision(world, (Entity)this);
                     ((Entity)this).onEntityCollision(world, entity);
-                    if ((this.getProperty("noCollision") == null) && (this.getProperty("noCollisionEntity") == null) && (entity.getProperty("noCollision") == null) && (entity.getProperty("noCollisionEntity") == null)) {
+                    if (!noCollision && !noCollisionEntity && !noCollision(entity) && !noCollisionEntity(entity) && 
+                            !(noCollisionSame && entity.areSameType((Entity)this))) {
                         if (moveX != 0 || moveY != 0 || moveZ != 0)
                             entity.onPush(world, move, (Entity)this);
                         if (collision(position, entity, entity.getPosition()))
@@ -173,5 +188,21 @@ public class ObjectInstanceMovable <
                     }
                 }
         return false;
+    }
+
+    private boolean noCollision(ObjectInstance objectInstance) {
+        return (objectInstance.getProperty(NO_COLLISION) != null);
+    }
+
+    private boolean noCollisionBlock(ObjectInstance objectInstance) {
+        return (objectInstance.getProperty(NO_COLLISION_BLOCK) != null);
+    }
+
+    private boolean noCollisionEntity(ObjectInstance objectInstance) {
+        return (objectInstance.getProperty(NO_COLLISION_ENTITY) != null);
+    }
+
+    private boolean noCollisionSame(ObjectInstance objectInstance) {
+        return (objectInstance.getProperty(NO_COLLISION_SAME) != null);
     }
 }

@@ -34,7 +34,7 @@ public enum EntityTemplate {
     MOVING_BLOCK(new EntityType("movingBlock",
             "block.png",
             new Collision[] { CollisionList.CUBE },
-            new Property[] { new Property("noCollisionBlock")},
+            new Property[] { new Property("noCollisionSame"), new Property("noCollisionBlock")},
             new EntityBehavior[] { new EntityBehaviorActivableMoving() })),
 
     ;

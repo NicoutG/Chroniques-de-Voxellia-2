@@ -10,7 +10,7 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
     private final static long WAITING_TIME_INTERACT = 500;
     private long lastInteraction = 0;
 
-    public Entity(EntityType type,double x, double y, double z) {
+    public Entity(EntityType type, double x, double y, double z) {
         super(type,x,y,z);
     }
 

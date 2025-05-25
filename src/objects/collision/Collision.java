@@ -13,7 +13,7 @@ public class Collision {
             return complexCollision(position1, (ComplexCollision)collision, position2);
         double[] bounds1 = getBounds(position1);
         double[] bounds2 = collision.getBounds(position2);
-        if (bounds1[0]>bounds2[1] || bounds1[1]<bounds2[0] || bounds1[2]>bounds2[3] || bounds1[3]<bounds2[2] || bounds1[4]>bounds2[5] || bounds1[5]<bounds2[4])
+        if (bounds1[0]>=bounds2[1] || bounds1[1]<=bounds2[0] || bounds1[2]>=bounds2[3] || bounds1[3]<=bounds2[2] || bounds1[4]>=bounds2[5] || bounds1[5]<=bounds2[4])
             return false;
         return true;
     }

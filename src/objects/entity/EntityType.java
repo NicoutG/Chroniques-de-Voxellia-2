@@ -45,14 +45,22 @@ public class EntityType extends ObjectType<Entity, EntityBehavior>{
     }
 
     public Entity getInstance() {
-        Entity entity = new Entity(this,0,0,0);
+        return getInstance(0,0,0);
+    }
+
+    public Entity getInstance(double x, double y, double z) {
+        Entity entity = new Entity(this,x,y,z);
         for (EntityBehavior entityBehavior : behaviors)
             entity.addBehavior(entityBehavior.clone());
         return entity;
     }
 
     public Player getInstancePlayer() {
-        Player entity = new Player(this,0,0,0);
+        return getInstancePlayer(0, 0, 0);
+    }
+
+    public Player getInstancePlayer(double x, double y, double z) {
+        Player entity = new Player(this,x,y,z);
         for (EntityBehavior entityBehavior : behaviors)
             entity.addBehavior(entityBehavior.clone());
         return entity;

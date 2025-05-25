@@ -74,8 +74,8 @@ public enum BlockTemplate {
     /* 10 */
     HEDGE(new BlockType("hedge", "hedge.png")),
     LEVER(new BlockType("lever",
-            new Texture[] { new Texture(new Lever(false), PathManager.loadImage("lever-F.png")),
-                    new Texture(new Lever(true), PathManager.loadImage("lever-T.png")) },
+            new Texture[] { new Texture(new Lever(false), PathManager.loadImage("lever/lever-F.png")),
+                    new Texture(new Lever(true), PathManager.loadImage("lever/lever-T.png")) },
             0,
             null,
             new Property[] { new Property("noCollision") },
@@ -417,7 +417,15 @@ public enum BlockTemplate {
                     new ColorRGB(1, 0.9, 0.75),
             }, 1200, 1, 0.9, 0)) },
             null)),
-            ;
+    LINKED_LEVER(new BlockType("linkedLever",
+        new Texture[] { new Texture(new Lever(false), PathManager.loadImage("linkedLever/linked-lever-F.png")),
+                new Texture(new Lever(true), PathManager.loadImage("linkedLever/linked-lever-T.png")) },
+        0,
+        null,
+        new Property[] { new Property("noCollision") },
+        new BlockBehavior[] { new BlockBehaviorLever(), new BlockBehaviorActivable() })),
+
+    ;
 
     public final BlockType blockType;
 

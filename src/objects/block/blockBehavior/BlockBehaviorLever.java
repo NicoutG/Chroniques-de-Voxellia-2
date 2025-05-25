@@ -8,7 +8,7 @@ import world.World;
 public class BlockBehaviorLever extends BlockBehaviorConnected {
 
     @Override
-    public void onStart(World world, Block block, Vector position) {
+    public void onUpdate(World world, Block block, Vector position) {
         if (getActivationState(block))
             block.setIndexTexture(1);
         else

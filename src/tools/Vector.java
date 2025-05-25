@@ -17,6 +17,26 @@ public class Vector {
         this.z = z;
     }
 
+    public Vector add(Vector vector) {
+        return new Vector(x + vector.x, y + vector.y, z + vector.z);
+    }
+
+    public Vector sub(Vector vector) {
+        return new Vector(x - vector.x, y - vector.y, z - vector.z);
+    }
+
+    public Vector mult(double coef) {
+        return new Vector(coef * x , coef * y, coef * z);
+    }
+
+    public double getNorm() {
+        return Math.sqrt(x*x + y*y + z*z);
+    }
+
+    public Vector norm() {
+        return mult(1.0/getNorm());
+    }
+
     public Vector clone() {
         return new Vector(x,y,z);
     }

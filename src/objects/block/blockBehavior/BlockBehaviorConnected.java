@@ -4,7 +4,7 @@ import objects.block.Block;
 import objects.block.BlockType;
 import objects.objectBehavior.ObjectBehaviorConnected;
 
-public class BlockBehaviorConnected extends BlockBehavior {
+public abstract class BlockBehaviorConnected extends BlockBehavior {
     public final static String ACTIVATION_STATE = ObjectBehaviorConnected.ACTIVATION_STATE;
     public final static String NETWORK = ObjectBehaviorConnected.NETWORK;
 

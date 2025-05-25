@@ -25,12 +25,17 @@ public enum EntityTemplate {
             },
             new Collision[] { CollisionList.BLOCK_ENTITY },
             null,
-            new EntityBehavior[] { new EntityBehaviorPlayer() })),
+            new EntityBehavior[] { new EntityBehaviorFalling(), new EntityBehaviorPushable(), new EntityBehaviorPlayer() })),
     CRATE_WOOD(new EntityType("crateWood",
             "crate-wood.png",
             new Collision[] { CollisionList.BLOCK_ENTITY },
             null,
-            new EntityBehavior[] { new EntityBehaviorPushable() })),
+            new EntityBehavior[] { new EntityBehaviorFalling(), new EntityBehaviorPushable() })),
+    MOVING_BLOCK(new EntityType("movingBlock",
+            "block.png",
+            new Collision[] { CollisionList.CUBE },
+            new Property[] { new Property("noCollisionBlock")},
+            new EntityBehavior[] { new EntityBehaviorActivableMoving() })),
 
     ;
 

@@ -159,21 +159,19 @@ public class ObjectInstanceMovable <
     }
 
     protected boolean isCollidingEntity(World world, double moveX, double moveY, double moveZ) {
-        if ((((Entity)this).getProperty("noCollision") == null) && (((Entity)this).getProperty("noCollisionEntity") == null)) {
-            Vector move = new Vector(moveX, moveY, moveZ);
-            for (Entity entity : world.getEntities())
-                if (entity != this)
-                    if ((entity.getProperty("noCollision") == null) && (entity.getProperty("noCollisionEntity") == null))
-                        if (collision(position, entity, entity.getPosition())) {
-                            if (moveX != 0 || moveY != 0 || moveZ != 0) {
-                                entity.onPush(world, move, (Entity)this);
-                                entity.onEntityCollision(world, (Entity)this);
-                                ((Entity)this).onEntityCollision(world, entity);
-                            }
-                            if (collision(position, entity, entity.getPosition()))
-                                return true;
-                        }
-        }
+        Vector move = new Vector(moveX, moveY, moveZ);
+        for (Entity entity : world.getEntities())
+            if (entity != this)
+                if (collision(position, entity, entity.getPosition())) {
+                    entity.onEntityCollision(world, (Entity)this);
+                    ((Entity)this).onEntityCollision(world, entity);
+                    if ((this.getProperty("noCollision") == null) && (this.getProperty("noCollisionEntity") == null) && (entity.getProperty("noCollision") == null) && (entity.getProperty("noCollisionEntity") == null)) {
+                        if (moveX != 0 || moveY != 0 || moveZ != 0)
+                            entity.onPush(world, move, (Entity)this);
+                        if (collision(position, entity, entity.getPosition()))
+                            return true;
+                    }
+                }
         return false;
     }
 }

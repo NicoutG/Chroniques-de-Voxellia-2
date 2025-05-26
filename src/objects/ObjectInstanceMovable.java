@@ -1,7 +1,8 @@
 package objects;
 
+import java.util.ArrayList;
+
 import objects.block.Block;
-import objects.collision.CollisionList;
 import objects.entity.Entity;
 import objects.objectBehavior.ObjectBehavior;
 import tools.Vector;
@@ -21,6 +22,7 @@ public class ObjectInstanceMovable <
 
     protected Vector position;
     protected Vector velocity = new Vector();
+    protected ObjectInstance floor = null;
 
     public ObjectInstanceMovable(T type, double x, double y, double z) {
         super(type);
@@ -89,20 +91,52 @@ public class ObjectInstanceMovable <
         Vector realMove = new Vector();
         realMove.x = moveAxis(world, moveX, 0, 0);
         realMove.y = moveAxis(world, 0, moveY, 0);
-        realMove.z = moveAxis(world, 0, 0, moveZ);
-
-        if (!noCollisionEntity(this)) {
-            boolean noCollisionSame = noCollisionSame(this);
-            for (Entity entity : world.getEntities()) {
-                if (entity != (Entity)this && !noCollision(entity) && 
-                        !noCollisionEntity(entity) && 
-                        !(noCollisionSame && entity.areSameType((Entity)this)) && 
-                        CollisionList.ON_TOP_ENTITY.collision(position, entity.getCollision(), entity.getPosition()))
-                    entity.move(world, realMove.x, realMove.y, realMove.z);
-            }
-        }
+        moveAxis(world, 0, 0, moveZ);
 
         return realMove;
+    }
+
+    public ObjectInstance getFloor() {
+        return floor;
+    }
+
+    public void updateFloor(World world) {
+        floor = findFloor(world);
+    }
+
+    public Block getCollidingBlock(World world) {
+        int minX = (int)Math.floor(position.x - 0.5);
+        int maxX = (int)Math.ceil(position.x + 0.5);
+        int minY = (int)Math.floor(position.y - 0.5);
+        int maxY = (int)Math.ceil(position.y + 0.5);
+        int minZ = (int)Math.floor(position.z - 0.5);
+        int maxZ = (int)Math.ceil(position.z + 0.5);
+        Vector blockPos = new Vector();
+        for (int z = minZ; z <= maxZ; z++) {
+            blockPos.z = z + 0.5;
+            for (int y = minY; y <= maxY; y++) {
+                blockPos.y = y + 0.5;
+                for (int x = minX; x <= maxX; x++) {
+                    Block block = world.getBlock(x, y, z);
+                    if (block != null  && !noCollision(block)) {
+                        blockPos.x = x + 0.5;
+                        if (collision(position, block, blockPos))
+                            return block;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public Entity getCollidingEntity(World world) {
+        boolean noCollisionSame = noCollisionSame(this);
+        for (Entity entity : world.getEntities())
+            if (entity != this)
+                if (!noCollision(entity) && !noCollisionEntity(entity) && !(noCollisionSame && entity.areSameType((Entity)this)) && 
+                        collision(position, entity, entity.getPosition()))
+                    return entity;
+        return null;
     }
 
     private double moveAxis(World world, double dx, double dy, double dz) {
@@ -141,52 +175,59 @@ public class ObjectInstanceMovable <
         return moveAxis;
     }
 
-    protected boolean isCollidingBlock(World world) {
-        if (!noCollision(this) && !noCollisionBlock(this)) {
-            int minX = (int)Math.floor(position.x - 0.5);
-            int maxX = (int)Math.ceil(position.x + 0.5);
-            int minY = (int)Math.floor(position.y - 0.5);
-            int maxY = (int)Math.ceil(position.y + 0.5);
-            int minZ = (int)Math.floor(position.z - 0.5);
-            int maxZ = (int)Math.ceil(position.z + 0.5);
-
-            Vector blockPos = new Vector();
-            for (int z = minZ; z <= maxZ; z++) {
-                blockPos.z = z + 0.5;
-                for (int y = minY; y <= maxY; y++) {
-                    blockPos.y = y + 0.5;
-                    for (int x = minX; x <= maxX; x++) {
-                        Block block = world.getBlock(x, y, z);
-                        if (block != null  && !noCollision(block)) {
-                            blockPos.x = x + 0.5;
-                            if (collision(position, block, blockPos))
-                                return true;
-                        }
-                    }
-                }
-            }
+    private ObjectInstance findFloor(World world) {
+        position.z -= 0.1;
+        ObjectInstance floorInstance = getCollidingBlock(world);
+        if (floorInstance != null) {
+            position.z += 0.1;
+            return floorInstance;
         }
+        floorInstance = getCollidingEntity(world);
+        position.z += 0.1;
+        return floorInstance;
+    }
+
+    private boolean isCollidingBlock(World world) {
+        if (!noCollision(this) && !noCollisionBlock(this))
+            return getCollidingBlock(world) != null;
         return false;
     }
 
-    protected boolean isCollidingEntity(World world, double moveX, double moveY, double moveZ) {
+    private boolean isCollidingEntity(World world, double moveX, double moveY, double moveZ) {
         Vector move = new Vector(moveX, moveY, moveZ);
         boolean noCollision = noCollision(this);
         boolean noCollisionEntity = noCollisionEntity(this);
         boolean noCollisionSame = noCollisionSame(this);
-        for (Entity entity : world.getEntities())
-            if (entity != this)
+        ArrayList<Entity> entities = world.getEntities();
+        boolean[] possibleCollision = new boolean[entities.size()];
+        // push on move
+        for (int i = 0; i < entities.size();i++) {
+            Entity entity = entities.get(i);
+            if (entity != this) {
+                possibleCollision[i] = !noCollision && !noCollisionEntity && !noCollision(entity) && !noCollisionEntity(entity) && 
+                            !(noCollisionSame && entity.areSameType((Entity)this));
                 if (collision(position, entity, entity.getPosition())) {
                     entity.onEntityCollision(world, (Entity)this);
                     ((Entity)this).onEntityCollision(world, entity);
-                    if (!noCollision && !noCollisionEntity && !noCollision(entity) && !noCollisionEntity(entity) && 
-                            !(noCollisionSame && entity.areSameType((Entity)this))) {
+                    if (possibleCollision[i]) {
                         if (moveX != 0 || moveY != 0 || moveZ != 0)
                             entity.onPush(world, move, (Entity)this);
-                        if (collision(position, entity, entity.getPosition()))
-                            return true;
                     }
                 }
+            }
+        }
+        // push on top
+        for (Entity entity : world.getEntities())
+            if (entity != this && entity.getFloor() == this)
+                if (moveX != 0 || moveY != 0 || moveZ != 0)
+                    entity.onPush(world, move, (Entity)this);
+        // test collision
+        for (int i = 0; i < entities.size();i++) {
+            Entity entity = entities.get(i);
+            if (entity != this && possibleCollision[i])
+                if (collision(position, entity, entity.getPosition()))
+                    return true;
+        }
         return false;
     }
 

@@ -268,7 +268,7 @@ public class World {
                     Block b = blocks[x][y][z];
                     if (b != null) {
                         pos.x = x + 0.5;
-                        b.onStart(this, new Vector(x + 0.5, y + 0.5, z + 0.5));
+                        b.onStart(this, pos);
                     }
                 }
             }

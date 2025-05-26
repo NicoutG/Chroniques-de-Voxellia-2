@@ -7,8 +7,6 @@ import tools.*;
 import world.World;
 
 public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBehavior>{
-    private final static long WAITING_TIME_INTERACT = 500;
-    private long lastInteraction = 0;
 
     public Entity(EntityType type, double x, double y, double z) {
         super(type,x,y,z);
@@ -34,41 +32,35 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
     }
 
     public void interact(World world) {
-        long now = System.currentTimeMillis();
-        if (lastInteraction + WAITING_TIME_INTERACT <= now) {
-            lastInteraction = now;
-            // interact with blocks
-            int xMin = (int)position.x - 1;
-            int yMin = (int)position.y - 1;
-            int zMin = (int)position.z - 1;
-            Vector positionBlock = new Vector();
-            for (int z = zMin; z < zMin + 3; z++) {
-                positionBlock.z = z + 0.5;
-                for (int y = yMin; y < yMin + 3; y++) {
-                    positionBlock.y = y + 0.5;
-                    for (int x = xMin; x < xMin + 3; x++) {
-                        Block block = world.getBlock(x,y,z);
-                        if (block != null) {
-                            positionBlock.x = x + 0.5;
-                            block.onInteraction(world, positionBlock, this);
-                        }
+        // interact with blocks
+        int xMin = (int)position.x - 1;
+        int yMin = (int)position.y - 1;
+        int zMin = (int)position.z - 1;
+        Vector positionBlock = new Vector();
+        for (int z = zMin; z < zMin + 3; z++) {
+            positionBlock.z = z + 0.5;
+            for (int y = yMin; y < yMin + 3; y++) {
+                positionBlock.y = y + 0.5;
+                for (int x = xMin; x < xMin + 3; x++) {
+                    Block block = world.getBlock(x,y,z);
+                    if (block != null) {
+                        positionBlock.x = x + 0.5;
+                        block.onInteraction(world, positionBlock, this);
                     }
                 }
             }
-            // interact with entities
-            double radius = 1.5;
-            for (Entity entity : world.getEntities())
-                if (entity != this)
-                    if (Math.abs(getX() - entity.getX()) < radius && Math.abs(getY() - entity.getY()) < radius && Math.abs(getZ() - entity.getZ()) < radius)
-                        entity.onInteraction(world, this);
         }
+        // interact with entities
+        double radius = 1.5;
+        for (Entity entity : world.getEntities())
+            if (entity != this)
+                if (Math.abs(getX() - entity.getX()) < radius && Math.abs(getY() - entity.getY()) < radius && Math.abs(getZ() - entity.getZ()) < radius)
+                    entity.onInteraction(world, this);
     }
 
     public void jump(World world) {
-        position.z -= 0.1;
-        if (isCollidingBlock(world) || isCollidingEntity(world, 0, 0, 0))
+        if (getFloor() != null)
             addVelocity(0, 0, 1.2);
-        position.z += 0.1;
     }
 
     //#region behavior events
@@ -81,6 +73,7 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
         double coef = 0.9;
         setVelocity(coef * velocity.x, coef * velocity.y, coef * velocity.z);
         move(world, velocity.x, velocity.y, velocity.z);
+        updateFloor(world);
         notifyCloseBlocks(world);
         executeEvent(e -> e.onUpdate(world,this));
     }

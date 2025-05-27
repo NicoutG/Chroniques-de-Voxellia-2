@@ -58,9 +58,12 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
                     entity.onInteraction(world, this);
     }
 
-    public void jump(World world) {
-        if (getFloor() != null)
+    public boolean jump(World world) {
+        if (getFloor() != null) {
             addVelocity(0, 0, 1.2);
+            return true;
+        }
+        return false;
     }
 
     //#region behavior events

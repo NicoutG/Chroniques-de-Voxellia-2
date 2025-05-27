@@ -23,6 +23,7 @@ public class ObjectInstanceMovable <
     protected Vector position;
     protected Vector velocity = new Vector();
     protected ObjectInstance floor = null;
+    protected boolean moving = false;
 
     public ObjectInstanceMovable(T type, double x, double y, double z) {
         super(type);
@@ -81,6 +82,7 @@ public class ObjectInstanceMovable <
     }
 
     public Vector move(World world, double moveX, double moveY, double moveZ) {
+        moving = true;
         if (noCollision(this)) {
             position.x += moveX;
             position.y += moveY;
@@ -91,8 +93,9 @@ public class ObjectInstanceMovable <
         Vector realMove = new Vector();
         realMove.x = moveAxis(world, moveX, 0, 0);
         realMove.y = moveAxis(world, 0, moveY, 0);
-        moveAxis(world, 0, 0, moveZ);
+        realMove.z = moveAxis(world, 0, 0, moveZ);
 
+        moving = false;
         return realMove;
     }
 
@@ -209,22 +212,21 @@ public class ObjectInstanceMovable <
                 if (collision(position, entity, entity.getPosition())) {
                     entity.onEntityCollision(world, (Entity)this);
                     ((Entity)this).onEntityCollision(world, entity);
-                    if (possibleCollision[i]) {
-                        if (moveX != 0 || moveY != 0 || moveZ != 0)
+                    if (!entity.moving && possibleCollision[i])
+                        if (moveX != 0 || moveY != 0 || moveZ > 0)
                             entity.onPush(world, move, (Entity)this);
-                    }
                 }
             }
         }
         // push on top
         for (Entity entity : world.getEntities())
             if (entity != this && entity.getFloor() == this)
-                if (moveX != 0 || moveY != 0 || moveZ != 0)
+                if (moveX != 0 || moveY != 0 || moveZ > 0)
                     entity.onPush(world, move, (Entity)this);
         // test collision
         for (int i = 0; i < entities.size();i++) {
             Entity entity = entities.get(i);
-            if (entity != this && possibleCollision[i])
+            if (entity != this && !entity.moving && possibleCollision[i])
                 if (collision(position, entity, entity.getPosition()))
                     return true;
         }

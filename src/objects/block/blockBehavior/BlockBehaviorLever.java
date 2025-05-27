@@ -1,5 +1,7 @@
 package objects.block.blockBehavior;
 
+import audio.SoundManager;
+import audio.SoundType;
 import objects.block.Block;
 import objects.entity.Entity;
 import tools.Vector;
@@ -20,6 +22,7 @@ public class BlockBehaviorLever extends BlockBehaviorConnected {
         boolean activationState = getActivationState(block);
         world.executeAfterUpdate(() -> block.setState(ACTIVATION_STATE, !activationState));
         int network = getNetwork(block);
+        SoundManager.playSound(SoundType.LEVER);
         if (activationState) {
             world.desactivate(network);
             block.setIndexTexture(0);

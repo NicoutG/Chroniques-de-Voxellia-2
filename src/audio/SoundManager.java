@@ -16,9 +16,11 @@ import java.util.Map;
 
 public final class SoundManager {
 
-    private final World world;
+     private static final String SOUND = "sound";
 
-    private double globalVolume;
+    private static World world;
+
+    private static double globalVolume;
 
     /** Maximum distance (in world units) at which a sound is audible. */
     private static final double MAX_DISTANCE = 20.0;
@@ -33,10 +35,12 @@ public final class SoundManager {
 
     private static final Map<SoundType, ManagedClip> clips = new EnumMap<>(SoundType.class);
 
+    private static List<SoundType> eventSounds= new ArrayList<>();
+
     public SoundManager(World world) {
 
-        this.world = world;
-        this.globalVolume = 0.2;
+        SoundManager.world = world;
+        SoundManager.globalVolume = 0.2;
 
         /* ----------- load & cache every clip once -------------- */
         for (SoundType st : SoundType.values()) {
@@ -54,10 +58,9 @@ public final class SoundManager {
 
         /*
          * ----------------------------------------------------------
-         * 1) Handle queued per-tick sounds (World#getSounds())
+         * 1) Handle queued per-tick sounds
          * ----------------------------------------------------------
          */
-        List<SoundType> eventSounds = world.getSounds();
         if (eventSounds != null && !eventSounds.isEmpty()) {
 
             // Copy to avoid concurrent-mod with World.removeSound()
@@ -79,7 +82,7 @@ public final class SoundManager {
 
                 /* remove one-shots through the World API */ // ② proper removal
                 if (!st.looping) {
-                    world.removeSound(st);
+                    removeSound(st);
                 }
             }
         }
@@ -106,9 +109,9 @@ public final class SoundManager {
                         Block b = blocks[x][y][z];
                         if (b == null)
                             continue;
-                        if (b.getProperty("sound") == null)
+                        if (b.getProperty(SOUND) == null)
                             continue;
-                        PropertySound soundProp = (PropertySound) b.getProperty("sound");
+                        PropertySound soundProp = (PropertySound) b.getProperty(SOUND);
                         if (soundProp.getSound() == null)
                             continue;
                         double d2 = dist2(player.getX(), player.getY(), player.getZ(),
@@ -121,9 +124,9 @@ public final class SoundManager {
         for (Entity e : world.getEntities()) {
             if (e == null)
                 continue;
-            if (e.getProperty("sound") == null)
+            if (e.getProperty(SOUND) == null)
                 continue;
-            PropertySound soundProp = (PropertySound) e.getProperty("sound");
+            PropertySound soundProp = (PropertySound) e.getProperty(SOUND);
             if (soundProp.getSound() == null)
                 continue;
             double d2 = dist2(player.getX(), player.getY(), player.getZ(),
@@ -151,6 +154,15 @@ public final class SoundManager {
                 ensurePlaying(mc, volLinear);
             }
         }
+    }
+
+    public static void playSound(SoundType st) {
+        stopSound(st);
+        eventSounds.add(st);
+    }
+
+    public static void removeSound(SoundType st) {
+        eventSounds.remove(st);
     }
 
     public static void stopSound(SoundType soundType) {

@@ -16,8 +16,6 @@ import java.util.Map;
 
 public final class SoundManager {
 
-     private static final String SOUND = "sound";
-
     private static World world;
 
     private static double globalVolume;
@@ -109,9 +107,9 @@ public final class SoundManager {
                         Block b = blocks[x][y][z];
                         if (b == null)
                             continue;
-                        if (b.getProperty(SOUND) == null)
+                        if (b.getProperty(PropertySound.NAME) == null)
                             continue;
-                        PropertySound soundProp = (PropertySound) b.getProperty(SOUND);
+                        PropertySound soundProp = (PropertySound) b.getProperty(PropertySound.NAME);
                         if (soundProp.getSound() == null)
                             continue;
                         double d2 = dist2(player.getX(), player.getY(), player.getZ(),
@@ -124,9 +122,9 @@ public final class SoundManager {
         for (Entity e : world.getEntities()) {
             if (e == null)
                 continue;
-            if (e.getProperty(SOUND) == null)
+            if (e.getProperty(PropertySound.NAME) == null)
                 continue;
-            PropertySound soundProp = (PropertySound) e.getProperty(SOUND);
+            PropertySound soundProp = (PropertySound) e.getProperty(PropertySound.NAME);
             if (soundProp.getSound() == null)
                 continue;
             double d2 = dist2(player.getX(), player.getY(), player.getZ(),

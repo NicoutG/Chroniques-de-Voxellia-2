@@ -26,7 +26,7 @@ public class ObjectBehaviorText<
             objectInstance.setState(TEXT, null);
             index = 0;
         } else {
-            objectInstance.setState(TEXT, texts[index]);
+            objectInstance.setState(TEXT, texts[index].replace("_", " "));
             index++;
         }
     }

@@ -224,7 +224,7 @@ public final class LightingEngine {
         if (objectInstance == null)
             return ambient;
 
-        PropertyLight lp = (PropertyLight) objectInstance.getProperty("light");
+        PropertyLight lp = (PropertyLight) objectInstance.getProperty(PropertyLight.NAME);
         if (lp == null)
             return ambient;
 

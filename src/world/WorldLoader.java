@@ -173,7 +173,6 @@ public class WorldLoader {
 
     private static String[] parseStringArray(String input) {
         input = input.replaceAll("[{}\\s\"]", "");
-        input = input.replaceAll("_", " ");
         if (input.isEmpty()) return new String[0];
         String[] results = input.split(",");
         return results;

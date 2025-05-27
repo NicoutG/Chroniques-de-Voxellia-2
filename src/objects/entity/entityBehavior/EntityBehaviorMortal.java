@@ -7,7 +7,7 @@ public class EntityBehaviorMortal extends EntityBehavior {
 
     @Override
     public void onDeath(World world, Entity entity) {
-        world.getEntities().remove(entity);
+        world.executeAfterUpdate(() -> entity.destroyEntity(world));
     }
     
 }

@@ -66,6 +66,10 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
         return false;
     }
 
+    public void destroyEntity(World world) {
+        world.getEntities().remove(this);
+    }
+
     //#region behavior events
 
     public void onStart(World world) {
@@ -76,6 +80,7 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
         double coef = 0.9;
         setVelocity(coef * velocity.x, coef * velocity.y, coef * velocity.z);
         move(world, velocity.x, velocity.y, velocity.z);
+        heightCheck(world);
         updateFloor(world);
         notifyCloseBlocks(world);
         executeEvent(e -> e.onUpdate(world,this));
@@ -106,4 +111,11 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
     }
 
     //#endregion
+
+    private void heightCheck(World world) {
+        if (position.z < -20) {
+            onDeath(world);
+            world.executeAfterUpdate(() -> this.destroyEntity(world));
+        }
+    }
 }

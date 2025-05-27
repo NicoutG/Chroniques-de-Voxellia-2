@@ -152,12 +152,17 @@ public class ObjectInstanceMovable <
 
         double moveAxis = 0;
 
+        double X = world.getX();
+        double Y = world.getY();
+
         for (int i = 0; i < steps; i++) {
             position.x += stepX;
             position.y += stepY;
             position.z += stepZ;
 
-            boolean colliding = isCollidingBlock(world);
+            boolean colliding = position.x < 0 || X <= position.x || position.y < 0 || Y <= position.y;
+            if (!colliding)
+                colliding = isCollidingBlock(world);
             if (!colliding)
                 colliding = isCollidingEntity(world, stepX, stepY, stepZ);
             if (colliding) {

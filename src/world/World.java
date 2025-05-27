@@ -256,4 +256,22 @@ public class World {
         for (Entity entity : entities)
             entity.onStart(this);
     }
+
+    public int getX() {
+        if (blocks == null)
+            return 0;
+        return blocks.length;
+    }
+
+    public int getY() {
+        if (blocks == null)
+            return 0;
+        return blocks[0].length;
+    }
+
+    public int getZ() {
+        if (blocks == null)
+            return 0;
+        return blocks[0][0].length;
+    }
 }

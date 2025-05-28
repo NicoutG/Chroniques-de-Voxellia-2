@@ -16,6 +16,21 @@ public class ComplexCollision extends Collision {
             addCollision(collision);
     }
 
+    public double[] getBounds(Vector position) {
+        double[] bounds = new double[] {Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
+        for (BoundingCollision collision : collisions) {
+            double[] boundsCol = collision.getBounds(position);
+            for (int i = 0; i < 6; i++)
+                if (i % 2 == 0)
+                    if (boundsCol[i] < bounds[i])
+                        bounds[i] = boundsCol[i];
+                else
+                    if (boundsCol[i] > bounds[i])
+                        bounds[i] = boundsCol[i];
+        }
+        return bounds;
+    }
+
     public ArrayList<BoundingCollision> getCollisions() {
         return collisions;
     }

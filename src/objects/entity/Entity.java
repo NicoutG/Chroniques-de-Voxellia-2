@@ -60,7 +60,7 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
 
     public boolean jump(World world) {
         if (getFloor() != null) {
-            addVelocity(0, 0, 1.2);
+            addVelocity(0, 0, 1.1);
             return true;
         }
         return false;
@@ -77,13 +77,13 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
     }
 
     public void onUpdate(World world) {
+        executeEvent(e -> e.onUpdate(world,this));
         double coef = 0.9;
-        setVelocity(coef * velocity.x, coef * velocity.y, coef * velocity.z);
+        notifyCloseBlocks(world);
         move(world, velocity.x, velocity.y, velocity.z);
         heightCheck(world);
         updateFloor(world);
-        notifyCloseBlocks(world);
-        executeEvent(e -> e.onUpdate(world,this));
+        setVelocity(coef * velocity.x, coef * velocity.y, coef * velocity.z);
     }
 
     public void onInteraction(World world, Entity entityInteract) {

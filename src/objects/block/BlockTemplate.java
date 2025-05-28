@@ -424,7 +424,19 @@ public enum BlockTemplate {
         null,
         new Property[] { new Property("noCollision") },
         new BlockBehavior[] { new BlockBehaviorLever(), new BlockBehaviorActivable() })),
-
+    WATER(new BlockType("water",
+            new Texture[] { new Texture(new Rectangle(1), PathManager.loadImage("water/water-1.png")),
+                    new Texture(new Rectangle(2), PathManager.loadImage("water/water-2.png")),
+                    new Texture(new Rectangle(3), PathManager.loadImage("water/water-3.png")),
+                    new Texture(new Cube(), PathManager.loadImage("water/water-4.png")), },
+            0,
+            new Collision[] { CollisionList.RECTANGLE1, CollisionList.RECTANGLE2, CollisionList.RECTANGLE3,
+                    CollisionList.CUBE },
+            new Property[] {
+                    new Property("noCollision") },
+            new BlockBehavior[] { new BlockBehaviorLiquid(4, 2),
+                    new BlockBehaviorApplyForce(0,0,0.5) })),    
+    
     ;
 
     public final BlockType blockType;

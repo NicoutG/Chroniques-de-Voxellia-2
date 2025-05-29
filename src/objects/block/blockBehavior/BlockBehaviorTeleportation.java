@@ -31,11 +31,12 @@ public class BlockBehaviorTeleportation extends BlockBehaviorActivable {
 
     public void onUpdate(World world, Block block, Vector position) {
         if (getActivationState(block)) {
-            for (int i = teleportedEntities.size() - 1; i >= 0; i--)
+            for (int i = teleportedEntities.size() - 1; i >= 0; i--) {
                 if (!isClose(position, teleportedEntities.get(i)))
                     teleportedEntities.remove(i);
+            }
             for (Entity entity : world.getEntities())
-                if (isClose(position, entity))
+                if (isClose(position, entity) && !teleportedEntities.contains(entity))
                     teleportedEntities.add(entity);
         }
     }

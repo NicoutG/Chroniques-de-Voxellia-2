@@ -40,7 +40,8 @@ public class WorldLoader {
         ArrayList<Entity> entities      = new ArrayList<>();
         ArrayList<Vector>  spawnPoints  = new ArrayList<>();
 
-        entities.add(entityTypes.get(0).getInstancePlayer());
+        Player player = entityTypes.get(0).getInstancePlayer();
+        entities.add(player);
 
         try {
             String[] lines = Files.readString(Paths.get(PathManager.WORLD_PATH + file))
@@ -76,7 +77,7 @@ public class WorldLoader {
                         else if (tok.length() > 0 && (tok.charAt(0) == 'p' || tok.charAt(0) == 'P')) {   // spawn point
                             /* spawn point → remember coords, store AIR */
                             blocks[x][y][z] = null;
-                            spawnPoints.add(new Vector(x+0.5,y+0.5,z+0.5));
+                            loadSpawnPoint(tok.substring(1), x, y, z, spawnPoints, player);
 
                         } else if (tok.length() > 0 && (tok.charAt(0) == 'e' || tok.charAt(0) == 'E'))   // block
                             entities.add(loadEntity(tok.substring(1), x+0.5,y+0.5,z+0.5, entityTypes));
@@ -98,16 +99,16 @@ public class WorldLoader {
     /* ------------------------------------------------------------------ */
 
 
+    private static void loadSpawnPoint(String token, double x, double y, double z, ArrayList<Vector> spawnPoints, Player player) {
+        spawnPoints.add(new Vector(x+0.5,y+0.5,z+0.5));
+        String[] parts = token.split("/");
+        setStates(player, parts);
+    }
 
     private static Block loadBlock(String token, ArrayList<BlockType> blockTypes) {
-
         String[] parts = token.split("/");
         Block block = blockTypes.get(Integer.parseInt(parts[0])).getInstance();
-
-        for (int i = 1; i < parts.length; i++) {
-            String[] nv = parts[i].split("=");
-            setState(block, nv[0], nv[1]);
-        }
+        setStates(block, parts);
         return block;
     }
 
@@ -115,12 +116,17 @@ public class WorldLoader {
 
         String[] parts = token.split("/");
         Entity entity = entityTypes.get(Integer.parseInt(parts[0])).getInstance(x,y,z);
-
-        for (int i = 1; i < parts.length; i++) {
-            String[] nv = parts[i].split("=");
-            setState(entity, nv[0], nv[1]);
-        }
+        setStates(entity, parts);
         return entity;
+    }
+
+    private static void setStates(ObjectInstance instance, String ... states) {
+        if (states != null) {
+            for (int i = 1; i < states.length; i++) {
+                String[] nv = states[i].split("=");
+                setState(instance, nv[0], nv[1]);
+            }
+        }
     }
 
     private static void setState(ObjectInstance instance, String name, String value) {

@@ -195,6 +195,21 @@ public class ObjectInstanceMovable <
         return floorInstance;
     }
 
+    public boolean isColliding(World world) {
+        if (isCollidingBlock(world))
+            return true;
+        boolean noCollision = noCollision(this);
+        boolean noCollisionEntity = noCollisionEntity(this);
+        boolean noCollisionSame = noCollisionSame(this);
+        for (Entity entity : world.getEntities()) {
+            if (entity != this && !noCollision && !noCollisionEntity && !noCollision(entity) && !noCollisionEntity(entity) && 
+                            !(noCollisionSame && entity.areSameType((Entity)this)))
+                if (collision(position, entity, entity.getPosition()))
+                    return true;
+        }
+        return false;
+    }
+
     private boolean isCollidingBlock(World world) {
         if (!noCollision(this) && !noCollisionBlock(this))
             return getCollidingBlock(world) != null;

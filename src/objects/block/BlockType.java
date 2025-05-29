@@ -46,8 +46,10 @@ public class BlockType extends ObjectType<Block, BlockBehavior>{
 
     public Block getInstance() {
         Block block = new Block(this);
-        for (BlockBehavior blockBehavior : behaviors)
-            block.addBehavior(blockBehavior.clone());
+        for (BlockBehavior blockBehavior : behaviors) {
+            BlockBehavior behaviorClone = blockBehavior.clone();
+            block.addBehavior(behaviorClone);
+        }
         return block;
     }
 }

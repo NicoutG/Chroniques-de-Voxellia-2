@@ -139,8 +139,6 @@ public class World {
     /* -------------------------- update loop -------------------------- */
 
     public void update() {
-        updateControls();
-
         Vector pos = new Vector();
         for (int z = 0; z < blocks[0][0].length; z++) {
             pos.z = z + 0.5;
@@ -155,6 +153,9 @@ public class World {
                 }
             }
         }
+
+        updateControls();
+
         for (Entity e : entities)
             e.onUpdate(this);
 

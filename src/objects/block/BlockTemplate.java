@@ -274,7 +274,12 @@ public enum BlockTemplate {
     BLOCK_FLOWER(new BlockType("blockFlower", "block-flower.png")),
     BLOCK_CLUBS(new BlockType("blockClubs", "block-clubs.png")),
     BLOCK_ALTERNATE(new BlockType("blockAlternate", "block-alternate.png")),
-    ANTIK_BLOCK(new BlockType("antikBlock", "antik-block.png")),
+    TELEPORTER(new BlockType("teleporter",
+        new Texture[] { new Texture(new Cube(), PathManager.loadImage("teleporter/teleporter-F.png")),
+                BlockType.createBasicTexture(new String[] { "teleporter/teleporter-0-T.png", "teleporter/teleporter-1-T.png", "teleporter/teleporter-2-T.png", "teleporter/teleporter-3-T.png" }, 3) },
+        null,
+        new Property[] { new PropertyLight(new LightSource(new ColorRGB(0.6, 0.2, 0.6), 0.3, 0.5, 0.05)) },
+        new BlockBehavior[] { new BlockBehaviorTeleportation(), new BlockBehaviorActivableLight() })),
     BLACK_BLOCK(new BlockType("blackBlock", "black-block.png")),
     /* 70 */
     BLUE_BLOCK_BROKEN(new BlockType("blueBlockBroken", "blue-block-broken.png")),
@@ -435,8 +440,7 @@ public enum BlockTemplate {
             new Property[] {
                     new Property("noCollision") },
             new BlockBehavior[] { new BlockBehaviorLiquid(4, 2),
-                    new BlockBehaviorApplyForce(0,0,0.5) })),    
-    
+                    new BlockBehaviorApplyForce(0,0,0.5) })),
     ;
 
     public final BlockType blockType;

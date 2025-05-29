@@ -2,6 +2,7 @@ package objects.entity;
 
 import graphics.Texture;
 import objects.ObjectType;
+import objects.block.blockBehavior.BlockBehavior;
 import objects.collision.Collision;
 import objects.entity.entityBehavior.EntityBehavior;
 import objects.property.Property;
@@ -61,8 +62,10 @@ public class EntityType extends ObjectType<Entity, EntityBehavior>{
 
     public Player getInstancePlayer(double x, double y, double z) {
         Player entity = new Player(this,x,y,z);
-        for (EntityBehavior entityBehavior : behaviors)
-            entity.addBehavior(entityBehavior.clone());
+        for (EntityBehavior entityBehavior : behaviors) {
+            EntityBehavior behaviorClone = entityBehavior.clone();
+            entity.addBehavior(behaviorClone);
+        }
         return entity;
     }
 }

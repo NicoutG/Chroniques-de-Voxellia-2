@@ -51,9 +51,12 @@ Voici une liste des comportements et de leurs états configurables.
 
 ### Comportements des blocs
 
-- ActivableLight : Désactive sa lumière lorsque le bloc est désactivé.
+- ActivableProperty : Désactive une propriété lorsque le bloc est désactivé.
     - activated : boolean si le bloc est activé ou non (false par défaut)
     - network : int le réseau sur lequel le bloc doit être activé (0 par défaut)
+
+- ApplyForce : Applique une force sur les entités en collision avec le bloc
+    - force : double[3] la force appliquée aux l'entités (définit dans le constructeur par défaut)
 
 - ChangeWorld : Charge un autre monde lorsque le joueur passe dessus.
     - world : String le nom du monde à charger (vide par défaut)
@@ -86,7 +89,7 @@ Voici une liste des comportements et de leurs états configurables.
 
 ### Comportements des entités
 
-- ActivableLight : Désactive sa lumière lorsque l'entité est désactivée.
+- ActivableProperty : Désactive une propriété lorsque l'entité est désactivée.
     - activated : boolean si l'entité est activée ou non (false par défaut)
     - network : int le réseau sur lequel l'entité doit être activée (0 par défaut)
 
@@ -97,7 +100,8 @@ Voici une liste des comportements et de leurs états configurables.
     - position1 : double[3] la position vers laquelle va l'entité désactivée (position de départ par défaut)
     - position2 : double[3] la position vers laquelle va l'entité activée (position de départ par défaut)
 
-- Falling : Applique la gravité sur l'entité
+- ApplyForce : Applique une force sur l'entité
+    - force : double[3] la force appliquée à l'entité ({0,0,-0.3} par défaut)
 
 - Kill : Tue les entités qui touche l'entité.
 

@@ -2,13 +2,17 @@ package objects.block.blockBehavior;
 
 import objects.block.Block;
 import objects.block.BlockType;
-import objects.objectBehavior.ObjectBehaviorActivableLight;
+import objects.objectBehavior.ObjectBehaviorActivableProperty;
 import tools.*;
 import world.World;
 
 
-public class BlockBehaviorActivableLight extends BlockBehavior {
-    private final ObjectBehaviorActivableLight<BlockType, Block, BlockBehavior> commonBehavior = new ObjectBehaviorActivableLight<>();
+public class BlockBehaviorActivableProperty extends BlockBehavior {
+    private final ObjectBehaviorActivableProperty<BlockType, Block, BlockBehavior> commonBehavior;
+
+    public BlockBehaviorActivableProperty(String property) {
+        commonBehavior = new ObjectBehaviorActivableProperty<>(property);
+    }
 
     @Override
     public void onAttachTo(Block block) {

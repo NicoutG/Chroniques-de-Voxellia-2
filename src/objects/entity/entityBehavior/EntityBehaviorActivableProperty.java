@@ -1,13 +1,17 @@
 package objects.entity.entityBehavior;
 
 import objects.entity.*;
-import objects.objectBehavior.ObjectBehaviorActivableLight;
+import objects.objectBehavior.ObjectBehaviorActivableProperty;
 import world.World;
 
 
-public class EntityBehaviorActivableLight extends EntityBehavior {
-    private final ObjectBehaviorActivableLight<EntityType, Entity, EntityBehavior> commonBehavior = new ObjectBehaviorActivableLight<>();
+public class EntityBehaviorActivableProperty extends EntityBehavior {
+    private final ObjectBehaviorActivableProperty<EntityType, Entity, EntityBehavior> commonBehavior;
 
+    public EntityBehaviorActivableProperty(String property) {
+        commonBehavior = new ObjectBehaviorActivableProperty<>(property);
+    }
+    
     @Override
     public void onAttachTo(Entity entity) {
         commonBehavior.onAttachTo(entity);

@@ -279,7 +279,7 @@ public enum BlockTemplate {
                 BlockType.createBasicTexture(new String[] { "teleporter/teleporter-0-T.png", "teleporter/teleporter-1-T.png", "teleporter/teleporter-2-T.png", "teleporter/teleporter-3-T.png" }, 3) },
         null,
         new Property[] { new PropertyLight(new LightSource(new ColorRGB(0.6, 0.2, 0.6), 0.3, 0.5, 0.05)) },
-        new BlockBehavior[] { new BlockBehaviorTeleportation(), new BlockBehaviorActivableLight() })),
+        new BlockBehavior[] { new BlockBehaviorTeleportation(), new BlockBehaviorActivableProperty(PropertyLight.NAME) })),
     BLACK_BLOCK(new BlockType("blackBlock", "black-block.png")),
     /* 70 */
     BLUE_BLOCK_BROKEN(new BlockType("blueBlockBroken", "blue-block-broken.png")),
@@ -329,7 +329,7 @@ public enum BlockTemplate {
             null,
             new Property[] { new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 0.2, 0.5, 0)) },
             new BlockBehavior[] { new BlockBehaviorPressurePlate(),
-                    new BlockBehaviorActivableLight() })),
+                    new BlockBehaviorActivableProperty(PropertyLight.NAME) })),
     STAINED_GLASS_RED_LEFT(new BlockType("stainedGlassRedLeft",
             new Texture[] {
                     new Texture(new BorderLeft(), PathManager.loadImage("stained-glass/stained-glass-red-left.png")) },

@@ -1,16 +1,13 @@
 package objects;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import graphics.Texture;
 import graphics.ligth.ColorRGB;
-import graphics.shape.*;
 import objects.collision.Collision;
 import objects.objectBehavior.ObjectBehavior;
 import objects.property.Property;
-import tools.PathManager;
 
 public abstract class ObjectType<I extends ObjectInstance<?, ?, ?>, B extends ObjectBehavior<?, ?, ?>> {
     private String name;
@@ -46,7 +43,7 @@ public abstract class ObjectType<I extends ObjectInstance<?, ?, ?>, B extends Ob
     }
 
     public ObjectType(String name, String texturePath, Collision[] collisions, Property[] properties, B[] behaviors) {
-        this(name, new Texture[] { createBasicTexture(texturePath) }, collisions, properties, behaviors);
+        this(name, new Texture[] { Texture.createBasicTexture(texturePath) }, collisions, properties, behaviors);
     }
 
     public ObjectType(String name, Texture[] textures, Property[] properties, B[] behaviors) {
@@ -140,15 +137,4 @@ public abstract class ObjectType<I extends ObjectInstance<?, ?, ?>, B extends Ob
     }
 
     public abstract I getInstance();
-
-    public static Texture createBasicTexture(String texturePath) {
-        return new Texture(new Cube(), PathManager.loadImage(texturePath));
-    }
-
-    public static Texture createBasicTexture(String[] texturePaths, int ticksPerFrame) {
-        BufferedImage[] images = new BufferedImage[texturePaths.length];
-        for (int i = 0; i < texturePaths.length; i++)
-            images[i] = PathManager.loadImage(texturePaths[i]);
-        return new Texture(new Cube(), images, ticksPerFrame);
-    }
 }

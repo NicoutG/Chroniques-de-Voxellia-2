@@ -17,7 +17,7 @@ public enum BlockTemplate {
     PURPLE_BLOCK(new BlockType("purpleBlock", "purple-block.png")),
     FIRE_CAMP(new BlockType("fireCamp",
             new Texture[] {
-                    BlockType.createBasicTexture(new String[] { "fire-0.png", "fire-1.png", "fire-2.png" }, 1) },
+                    Texture.createBasicTexture(new String[] { "fire-0.png", "fire-1.png", "fire-2.png" }, 1) },
             0,
             null,
             new Property[] { new PropertyLight(
@@ -32,10 +32,10 @@ public enum BlockTemplate {
             null)),
     /* 5 */
     LAVA(new BlockType("lava",
-            new Texture[] { new Texture(new Rectangle(1), PathManager.loadImage("lava/lava-1.png")),
-                    new Texture(new Rectangle(2), PathManager.loadImage("lava/lava-2.png")),
-                    new Texture(new Rectangle(3), PathManager.loadImage("lava/lava-3.png")),
-                    new Texture(new Cube(), PathManager.loadImage("lava/lava-4.png")), },
+            new Texture[] { Texture.createBasicTexture(new Rectangle(3), new String[] { "lava/lava-1-0.png", "lava/lava-1-1.png", "lava/lava-1-2.png", "lava/lava-1-3.png" }, 4),
+                    Texture.createBasicTexture(new Rectangle(3), new String[] { "lava/lava-2-0.png", "lava/lava-2-1.png", "lava/lava-2-2.png", "lava/lava-2-3.png" }, 4),
+                    Texture.createBasicTexture(new Rectangle(3), new String[] { "lava/lava-3-0.png", "lava/lava-3-1.png", "lava/lava-3-2.png", "lava/lava-3-3.png" }, 4),
+                    Texture.createBasicTexture(new String[] { "lava/lava-4-0.png", "lava/lava-4-1.png", "lava/lava-4-2.png", "lava/lava-4-3.png" }, 4) },
             0,
             new Collision[] { CollisionList.RECTANGLE1, CollisionList.RECTANGLE2, CollisionList.RECTANGLE3,
                     CollisionList.CUBE },
@@ -86,12 +86,12 @@ public enum BlockTemplate {
                 new BlockBehaviorLever()
              })),
     WORLD(new BlockType("worldBlock",
-            new Texture[] { BlockType.createBasicTexture(
+            new Texture[] { Texture.createBasicTexture(
                     new String[] { "world-block-0.png", "world-block-1.png", "world-block-2.png" }, 3) },
             new Property[] { new PropertyLight(new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0)) },
             new BlockBehavior[] { new BlockBehaviorChangeWorld() })),
     NEW_WORLD(new BlockType("newWorldBlock",
-            new Texture[] { BlockType.createBasicTexture(
+            new Texture[] { Texture.createBasicTexture(
                     new String[] { "world-block-0.png", "world-block-1.png", "world-block-2.png" }, 3) },
             new Property[] { new PropertyLight(new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0)) },
             new BlockBehavior[] { new BlockBehaviorNewWorld() })),
@@ -278,7 +278,7 @@ public enum BlockTemplate {
     BLOCK_ALTERNATE(new BlockType("blockAlternate", "block-alternate.png")),
     TELEPORTER(new BlockType("teleporter",
         new Texture[] { new Texture(new Cube(), PathManager.loadImage("teleporter/teleporter-F.png")),
-                BlockType.createBasicTexture(new String[] { "teleporter/teleporter-0-T.png", "teleporter/teleporter-1-T.png", "teleporter/teleporter-2-T.png", "teleporter/teleporter-3-T.png" }, 3) },
+                Texture.createBasicTexture(new String[] { "teleporter/teleporter-0-T.png", "teleporter/teleporter-1-T.png", "teleporter/teleporter-2-T.png", "teleporter/teleporter-3-T.png" }, 3) },
         null,
         new Property[] { new PropertyLight(new LightSource(new ColorRGB(0.6, 0.2, 0.6), 0.3, 0.5, 0.05)) },
         new BlockBehavior[] { new BlockBehaviorTeleportation(), new BlockBehaviorActivableProperty(PropertyLight.NAME) })),
@@ -326,8 +326,8 @@ public enum BlockTemplate {
     }),
     SNOW(new BlockType("snow", "snow.png")),
     PRESSURE_PLATE(new BlockType("pressurePlate",
-            new Texture[] { BlockType.createBasicTexture("pressure-plate-F.png"),
-                    BlockType.createBasicTexture("pressure-plate-T.png") },
+            new Texture[] { Texture.createBasicTexture("pressure-plate-F.png"),
+                    Texture.createBasicTexture("pressure-plate-T.png") },
             null,
             new Property[] { new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 0.2, 0.5, 0)) },
             new BlockBehavior[] { new BlockBehaviorPressurePlate(),

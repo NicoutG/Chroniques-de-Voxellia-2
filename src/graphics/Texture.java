@@ -1,8 +1,10 @@
 /*  graphics/texture/Texture.java  */
 package graphics;
 
+import graphics.shape.Cube;
 import graphics.shape.Face;
 import graphics.shape.Shape;
+import tools.PathManager;
 
 import java.awt.image.BufferedImage;
 import java.util.Objects;
@@ -26,6 +28,24 @@ public final class Texture {
     private final int ticksPerFrame;
 
     /* =========================== CTORS ================================= */
+
+    public static Texture createBasicTexture(String texturePath) {
+        return new Texture(new Cube(), PathManager.loadImage(texturePath));
+    }
+
+    public static Texture createBasicTexture(String[] texturePaths, int ticksPerFrame) {
+        BufferedImage[] images = new BufferedImage[texturePaths.length];
+        for (int i = 0; i < texturePaths.length; i++)
+            images[i] = PathManager.loadImage(texturePaths[i]);
+        return new Texture(new Cube(), images, ticksPerFrame);
+    }
+
+    public static Texture createBasicTexture(Shape shape,String[] texturePaths, int ticksPerFrame) {
+        BufferedImage[] images = new BufferedImage[texturePaths.length];
+        for (int i = 0; i < texturePaths.length; i++)
+            images[i] = PathManager.loadImage(texturePaths[i]);
+        return new Texture(shape, images, ticksPerFrame);
+    }
 
     /** Static sprite – one frame, no animation. */
     public Texture(Shape shape, BufferedImage frame) {

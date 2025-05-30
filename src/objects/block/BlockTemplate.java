@@ -5,6 +5,7 @@ import graphics.Texture;
 import graphics.ligth.*;
 import graphics.shape.*;
 import objects.block.blockBehavior.*;
+import objects.block.blockBehavior.Logic.*;
 import objects.collision.*;
 import objects.property.*;
 import tools.PathManager;
@@ -46,9 +47,10 @@ public enum BlockTemplate {
                     new BlockBehaviorKill(),
                     new BlockBehaviorApplyForce(0,0,0.5) })),
     SUN(new BlockType("sun",
-            new Texture[] {},
+            (Texture[])null,
             null,
-            new Property[] { new PropertyLight(new LightSource(new ColorRGB[] {
+            new Property[] { new Property("noCollision"),
+                new PropertyLight(new LightSource(new ColorRGB[] {
                     new ColorRGB(1, 1, 1), // plain day (white)
                     new ColorRGB(1, 1, 1), // (white)
                     new ColorRGB(1, 1, 1),
@@ -403,9 +405,10 @@ public enum BlockTemplate {
     }),
     /* 105 */
     SUNLIGHT(new BlockType("sunlight",
-            new Texture[] {},
+            (Texture[])null,
             null,
-            new Property[] { new PropertyLight(new LightSource(new ColorRGB[] {
+            new Property[] { new Property("noCollision"),
+                new PropertyLight(new LightSource(new ColorRGB[] {
                     new ColorRGB(1, 1, 1), // plain day (white)
                     new ColorRGB(1, 1, 1), // (white)
                     new ColorRGB(1, 1, 1),
@@ -441,6 +444,33 @@ public enum BlockTemplate {
                     new Property("noCollision") },
             new BlockBehavior[] { new BlockBehaviorLiquid(4, 2),
                     new BlockBehaviorApplyForce(0,0,0.5) })),
+    AND(new BlockType("and",
+        (Texture[])null,
+        null,
+        new Property[] { new Property("noCollision") },
+        new BlockBehavior[] { new BlockBehaviorAnd() })),
+    OR(new BlockType("or",
+        (Texture[])null,
+        null,
+        new Property[] { new Property("noCollision") },
+        new BlockBehavior[] { new BlockBehaviorOr() })),
+    /* 110 */
+    NOT(new BlockType("not",
+        (Texture[])null,
+        null,
+        new Property[] { new Property("noCollision") },
+        new BlockBehavior[] { new BlockBehaviorNot() })),
+    DELAY(new BlockType("delay",
+        (Texture[])null,
+        null,
+        new Property[] { new Property("noCollision") },
+        new BlockBehavior[] { new BlockBehaviorDelay() })),
+    ALTERNATE(new BlockType("alternate",
+        (Texture[])null,
+        null,
+        new Property[] { new Property("noCollision") },
+        new BlockBehavior[] { new BlockBehaviorAlternate() })),
+    
     ;
 
     public final BlockType blockType;

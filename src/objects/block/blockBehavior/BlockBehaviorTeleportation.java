@@ -29,6 +29,7 @@ public class BlockBehaviorTeleportation extends BlockBehaviorActivable {
         block.setState(TELEPORTATION, 0);
     }
 
+    @Override
     public void onUpdate(World world, Block block, Vector position) {
         if (getActivationState(block)) {
             for (int i = teleportedEntities.size() - 1; i >= 0; i--) {
@@ -41,6 +42,7 @@ public class BlockBehaviorTeleportation extends BlockBehaviorActivable {
         }
     }
 
+    @Override
     public void onEntityClose(World world, Block block, Vector position, Entity entity) {
         if (getActivationState(block)) {
             if (isClose(position, entity) && !teleportedEntities.contains(entity)) {
@@ -62,6 +64,13 @@ public class BlockBehaviorTeleportation extends BlockBehaviorActivable {
                 }
             }
         }
+    }
+
+    @Override
+    public BlockBehavior clone() {
+        BlockBehaviorTeleportation behavior = (BlockBehaviorTeleportation)super.clone();
+        behavior.teleportedEntities = (ArrayList)teleportedEntities.clone();
+        return behavior;
     }
 
     public int getTeleportation(Block block) {
@@ -129,11 +138,5 @@ public class BlockBehaviorTeleportation extends BlockBehaviorActivable {
             }
         }
         return null;
-    }
-
-    public BlockBehavior clone() {
-        BlockBehaviorTeleportation behavior = (BlockBehaviorTeleportation)super.clone();
-        behavior.teleportedEntities = (ArrayList)teleportedEntities.clone();
-        return behavior;
     }
 }

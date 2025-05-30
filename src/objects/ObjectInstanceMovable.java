@@ -121,7 +121,7 @@ public class ObjectInstanceMovable <
                 blockPos.y = y + 0.5;
                 for (int x = minX; x <= maxX; x++) {
                     Block block = world.getBlock(x, y, z);
-                    if (block != null  && !noCollision(block)) {
+                    if (block != null  && possibleCollisionWith(block)) {
                         blockPos.x = x + 0.5;
                         if (collision(position, block, blockPos))
                             return block;
@@ -133,13 +133,20 @@ public class ObjectInstanceMovable <
     }
 
     public Entity getCollidingEntity(World world) {
-        boolean noCollisionSame = noCollisionSame(this);
         for (Entity entity : world.getEntities())
             if (entity != this)
-                if (!noCollision(entity) && !noCollisionEntity(entity) && !(noCollisionSame && entity.areSameType((Entity)this)) && 
+                if (possibleCollisionWith(entity) && 
                         collision(position, entity, entity.getPosition()))
                     return entity;
         return null;
+    }
+
+    public boolean possibleCollisionWith(Block block) {
+        return (!noCollision(block));
+    }
+
+    public boolean possibleCollisionWith(Entity entity) {
+        return (!noCollision(entity) && !noCollisionEntity(entity) && !(noCollisionSame(this) && entity.areSameType((Entity)this)));
     }
 
     private double moveAxis(World world, double dx, double dy, double dz) {

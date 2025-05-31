@@ -51,6 +51,19 @@ public class Vector {
         return x == v.x && y == v.y && z == v.z;
     }
 
+    @Override
+    public int hashCode() {
+        int result = 17;
+        long xBits = Double.doubleToLongBits(x);
+        long yBits = Double.doubleToLongBits(y);
+        long zBits = Double.doubleToLongBits(z);
+        result = 31 * result + (int)(xBits ^ (xBits >>> 32));
+        result = 31 * result + (int)(yBits ^ (yBits >>> 32));
+        result = 31 * result + (int)(zBits ^ (zBits >>> 32));
+        return result;
+    }
+
+    @Override
     public String toString() {
         return x+" "+y+" "+z;
     }

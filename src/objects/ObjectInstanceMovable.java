@@ -146,7 +146,23 @@ public class ObjectInstanceMovable <
     }
 
     public boolean possibleCollisionWith(Entity entity) {
-        return (!noCollision(entity) && !noCollisionEntity(entity) && !(noCollisionSame(this) && entity.areSameType((Entity)this)));
+        return (this != entity && !noCollision(entity) && !noCollisionEntity(entity) && !(noCollisionSame(this) && entity.areSameType((Entity)this)));
+    }
+
+    public static boolean noCollision(ObjectInstance objectInstance) {
+        return (objectInstance.getProperty(NO_COLLISION) != null);
+    }
+
+    public static boolean noCollisionBlock(ObjectInstance objectInstance) {
+        return (objectInstance.getProperty(NO_COLLISION_BLOCK) != null);
+    }
+
+    public static boolean noCollisionEntity(ObjectInstance objectInstance) {
+        return (objectInstance.getProperty(NO_COLLISION_ENTITY) != null);
+    }
+
+    public static boolean noCollisionSame(ObjectInstance objectInstance) {
+        return (objectInstance.getProperty(NO_COLLISION_SAME) != null);
     }
 
     private double moveAxis(World world, double dx, double dy, double dz) {
@@ -258,21 +274,5 @@ public class ObjectInstanceMovable <
                     return true;
         }
         return false;
-    }
-
-    private boolean noCollision(ObjectInstance objectInstance) {
-        return (objectInstance.getProperty(NO_COLLISION) != null);
-    }
-
-    private boolean noCollisionBlock(ObjectInstance objectInstance) {
-        return (objectInstance.getProperty(NO_COLLISION_BLOCK) != null);
-    }
-
-    private boolean noCollisionEntity(ObjectInstance objectInstance) {
-        return (objectInstance.getProperty(NO_COLLISION_ENTITY) != null);
-    }
-
-    private boolean noCollisionSame(ObjectInstance objectInstance) {
-        return (objectInstance.getProperty(NO_COLLISION_SAME) != null);
     }
 }

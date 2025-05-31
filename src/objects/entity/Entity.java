@@ -79,9 +79,9 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
     public void onUpdate(World world) {
         double coef = 0.9;
         move(world, velocity.x, velocity.y, velocity.z);
+        executeEvent(e -> e.onUpdate(world,this));
         heightCheck(world);
         updateFloor(world);
-        executeEvent(e -> e.onUpdate(world,this));
         notifyCloseBlocks(world);
         setVelocity(coef * velocity.x, coef * velocity.y, coef * velocity.z);
     }

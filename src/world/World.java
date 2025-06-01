@@ -3,6 +3,7 @@ package world;
 import objects.block.Block;
 import objects.block.BlockType;
 import objects.entity.Entity;
+import objects.entity.EntityAction;
 import objects.entity.EntityType;
 import objects.entity.Player;
 import tools.Vector;
@@ -211,31 +212,22 @@ public class World {
 
     private void updateControls() {
         Player player = getPlayer();
-        double dx = 0, dy = 0;
-
+        ArrayList<EntityAction> actions = new ArrayList<>();
         if (GameControls.isPressed(KeyEvent.VK_Z))
-            dy -= 0.2;
+            actions.add(EntityAction.TOP);
         if (GameControls.isPressed(KeyEvent.VK_S))
-            dy += 0.2;
+            actions.add(EntityAction.BOTTOM);
         if (GameControls.isPressed(KeyEvent.VK_Q))
-            dx -= 0.2;
+            actions.add(EntityAction.LEFT);
         if (GameControls.isPressed(KeyEvent.VK_D))
-            dx += 0.2;
-
-        // Normalize movement if moving diagonally
-        if (dx != 0 && dy != 0) {
-            double norm = Math.sqrt(dx * dx + dy * dy);
-            dx = dx / norm * 0.2;
-            dy = dy / norm * 0.2;
-        }
-
-        if (dx != 0 || dy != 0)
-            player.move(this, dx, dy, 0);
-
+            actions.add(EntityAction.RIGHT);
         if (GameControls.isPressed(KeyEvent.VK_A) || GameControls.isPressed(KeyEvent.VK_SPACE))
-            player.jump(this);
+            actions.add(EntityAction.JUMP);
         if (GameControls.isPressed(KeyEvent.VK_E))
-            player.interact(this);
+            actions.add(EntityAction.INTERACT);
+        
+        if (!actions.isEmpty())
+            player.doActions(this, actions.toArray(new EntityAction[0]));
     }
 
     private void start() {

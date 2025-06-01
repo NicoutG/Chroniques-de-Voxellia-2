@@ -1,5 +1,7 @@
 package objects.entity;
 
+import tools.Vector;
+import tools.PathFinding.PathFinding;
 import world.World;
 
 public class Player extends Entity {
@@ -13,16 +15,17 @@ public class Player extends Entity {
     }
 
     @Override
-    public void interact(World world) {
+    protected void interact(World world) {
         long now = System.currentTimeMillis();
         if (lastInteraction + WAITING_TIME_INTERACT <= now) {
+            PathFinding.findPath(world, this, position, new Vector(0.5,0.5,8.5));
             lastInteraction = now;
             super.interact(world);
         }
     }
 
     @Override
-    public boolean jump(World world) {
+    protected boolean jump(World world) {
         long now = System.currentTimeMillis();
         if (lastJump + WAITING_TIME_JUMP <= now) {
             boolean hadJump = super.jump(world);

@@ -2,7 +2,6 @@ package objects.entity;
 
 import graphics.Texture;
 import objects.ObjectType;
-import objects.block.blockBehavior.BlockBehavior;
 import objects.collision.Collision;
 import objects.entity.entityBehavior.EntityBehavior;
 import objects.property.Property;

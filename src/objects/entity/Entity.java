@@ -7,6 +7,7 @@ import tools.*;
 import world.World;
 
 public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBehavior>{
+    public double speed = 0.2;
 
     public Entity(EntityType type, double x, double y, double z) {
         super(type,x,y,z);
@@ -31,7 +32,27 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
         }
     }
 
-    public void interact(World world) {
+    public void doActions(World world, EntityAction ... entityActions) {
+        Vector move = new Vector(0,0,0);
+        for (EntityAction action : entityActions) {
+            switch (action) {
+                case LEFT: move.x -= 1;break;
+                case RIGHT: move.x += 1;break;
+                case TOP: move.y -= 1;break;
+                case BOTTOM: move.y += 1;break;
+                case ABOVE: move.z += 1;break;
+                case BELOW: move.z -= 1;break;
+                case JUMP: jump(world);break;
+                case INTERACT: interact(world);break;
+                default:break;
+            }
+        }
+        double norm = move.getNorm();
+        if (norm != 0)
+            move(world, speed * move.x / norm, speed * move.y / norm, speed * move.z / norm);
+    }
+
+    protected void interact(World world) {
         // interact with blocks
         int xMin = (int)position.x - 1;
         int yMin = (int)position.y - 1;
@@ -58,9 +79,9 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
                     entity.onInteraction(world, this);
     }
 
-    public boolean jump(World world) {
+    protected boolean jump(World world) {
         if (getFloor() != null) {
-            addVelocity(0, 0, 1.1);
+            addVelocity(0, 0, 1.05);
             return true;
         }
         return false;

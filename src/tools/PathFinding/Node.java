@@ -2,14 +2,14 @@ package tools.PathFinding;
 
 import tools.Vector;
 
-public class Path {
+public class Node {
     public Vector position;
     public int made;
     public double leftEstimation;
     public double totalEstimation;
-    public Path parent;
+    public Node parent;
 
-    public Path(Vector position, int made, double leftEstimation, Path parent) {
+    public Node(Vector position, int made, double leftEstimation, Node parent) {
         this.position = position;
         this.made = made;
         this.leftEstimation = leftEstimation;

@@ -10,13 +10,16 @@ import world.World;
 public class PathFinding {
 
     public static void findPath(World world, Entity entity, Vector position, Vector destination) {
-        ArrayList<Path> openList = initOpenList(position);
+        ArrayList<Node> openList = initOpenList(position);
         HashSet<Vector> closeList = new HashSet<>();
         Vector dest = adaptPosition(destination);
         Boolean find = null;
+        int nb = 0;
         do {
-            find = findPath(world, entity, dest, openList, closeList, 100, new NeighboorsFinderFly());
+            find = findPath(world, entity, dest, openList, closeList, 1, new NeighboorsFinderFalling());
+            nb++;
         }while(find == null);
+        System.out.println(nb);
         if (find == true) {
             ArrayList<Vector> path = getPathFromOpenList(openList);
             for (int i = 0; i < path.size(); i++)
@@ -31,19 +34,19 @@ public class PathFinding {
         return new Vector((int)position.x + 0.5, (int)position.y + 0.5,(int)position.z + 0.5);
     }
 
-    public static ArrayList<Path> initOpenList(Vector position) {
-        ArrayList<Path> openList = new ArrayList<>();
-        openList.add(new Path(adaptPosition(position), 0, leftEstimation(position, position), null));
+    public static ArrayList<Node> initOpenList(Vector position) {
+        ArrayList<Node> openList = new ArrayList<>();
+        openList.add(new Node(adaptPosition(position), 0, leftEstimation(position, position), null));
         return openList;
     }
 
-    public static ArrayList<Vector> getPathAndLinkToEntity(World world, Entity entity, ArrayList<Path> openList, NeighboorsFinder neighboorsFinder) {
+    public static ArrayList<Vector> getPathAndLinkToEntity(World world, Entity entity, ArrayList<Node> openList, NeighboorsFinder neighboorsFinder) {
         ArrayList<Vector> path = getPathFromOpenList(openList);
         int nbNodesToLink = Math.min(path.size() / 10, 10);
         if (nbNodesToLink <= 0)
             return path;
         Vector destination = path.get(nbNodesToLink);
-        ArrayList<Path> openListLink = initOpenList(entity.getPosition());
+        ArrayList<Node> openListLink = initOpenList(entity.getPosition());
         HashSet<Vector> closeList = new HashSet<>();
         Boolean find = null;
         final int step = 100;
@@ -60,10 +63,10 @@ public class PathFinding {
         return newPath;
     }
 
-    public static ArrayList<Vector> getPathFromOpenList(ArrayList<Path> openList) {
+    public static ArrayList<Vector> getPathFromOpenList(ArrayList<Node> openList) {
         ArrayList<Vector> path = new ArrayList<>();
         if (!openList.isEmpty()) {
-            Path node = openList.getFirst();
+            Node node = openList.getFirst();
             while(node.parent != null) {
                 path.addFirst(node.position);
                 node = node.parent;
@@ -72,10 +75,10 @@ public class PathFinding {
         return path;
     }
     
-    public static Boolean findPath(World world, Entity entity, Vector destination, ArrayList<Path> openList, HashSet<Vector> closedList, int nbStep, NeighboorsFinder neighboorsFinder) {
+    public static Boolean findPath(World world, Entity entity, Vector destination, ArrayList<Node> openList, HashSet<Vector> closedList, int nbStep, NeighboorsFinder neighboorsFinder) {
         int i = 0;
         while(i < nbStep && !openList.isEmpty()) {
-            Path node = openList.getFirst();
+            Node node = openList.getFirst();
             if (node.position.equals(destination))
                 return true;
             openList.remove(0);
@@ -83,7 +86,7 @@ public class PathFinding {
             ArrayList<Vector> neighboors = neighboorsFinder.getNeighboors(world, entity, node.position, destination);
             for (Vector neighboor : neighboors)
                 if (!closedList.contains(neighboor)) {
-                    Path nodeNeighboor = new Path(neighboor, node.made + 1, leftEstimation(neighboor, destination), node);
+                    Node nodeNeighboor = new Node(neighboor, node.made + 1, leftEstimation(neighboor, destination), node);
                     boolean insert = true;
                     for (int j = 0; j < openList.size(); j++)
                         if (openList.get(j).position.equals(neighboor)) {
@@ -113,12 +116,13 @@ public class PathFinding {
         double difX = destX - posX;
         double difY = destY - posY;
         double difZ = destZ - posZ;
+        final double coef = 1.42;
         if (destZ > posZ)
-            return Math.abs(difX) + Math.abs(difY) + 2 * Math.abs(difZ);
-        return Math.abs(difX) + Math.abs(difY) + Math.abs(difZ);
+            return coef * Math.sqrt(difX * difX + difY * difY + 2 * difZ * difZ);
+        return coef * Math.sqrt(difX * difX + difY * difY + difZ * difZ);
     }
 
-    private static void insertSorted(ArrayList<Path> openList, Path path) {
+    private static void insertSorted(ArrayList<Node> openList, Node path) {
         int low = 0;
         int high = openList.size();
 

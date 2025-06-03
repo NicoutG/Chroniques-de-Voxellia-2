@@ -97,8 +97,12 @@ Voici une liste des comportements et de leurs états configurables.
     - activated : boolean si l'entité est activée ou non (false par défaut)
     - network : int le réseau sur lequel l'entité doit être activée (0 par défaut)
     - speed : double la vitesse de déplacement de l'entité (0.1 par défaut)
-    - position1 : double[3] la position vers laquelle va l'entité désactivée (position de départ par défaut)
-    - position2 : double[3] la position vers laquelle va l'entité activée (position de départ par défaut)
+    - x1 : la position x vers laquelle va l'entité désactivée (position de départ par défaut)
+    - y1 : la position y vers laquelle va l'entité désactivée (position de départ par défaut)
+    - z1 : la position z vers laquelle va l'entité désactivée (position de départ par défaut)
+    - x2 : la position x vers laquelle va l'entité activée (position de départ par défaut)
+    - y2 : la position y vers laquelle va l'entité activée (position de départ par défaut)
+    - z2 : la position z vers laquelle va l'entité activée (position de départ par défaut)
 
 - ApplyForce : Applique une force sur l'entité
     - force : double[3] la force appliquée à l'entité ({0,0,-0.3} par défaut)

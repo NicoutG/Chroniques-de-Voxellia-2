@@ -6,8 +6,9 @@ import objects.entity.Entity;
 import tools.Vector;
 import world.World;
 
-public class NeighboorsFinderFalling extends NeighboorsFinder {
+public class PathFindingFalling extends PathFindingType {
 
+    @Override
     public ArrayList<Vector> getNeighboors(World world, Entity entity, Vector position, Vector destination) {
         ArrayList<Vector> neighboors = new ArrayList<>();
         final double x = position.x;
@@ -35,5 +36,26 @@ public class NeighboorsFinderFalling extends NeighboorsFinder {
                 neighboors.add(posAbove);
         }
         return neighboors;
+    }
+
+    @Override
+    public ArrayList<Vector> refinePath(World world, Entity entity, ArrayList<Vector> path) {
+        for (int i = 0; i < path.size() - 2; i++) {
+            Vector pos1 = path.get(i);
+            Vector pos2 = path.get(i+1);
+            Vector pos3 = path.get(i+2);
+            double difX1 = pos2.x - pos1.x;
+            double difX2 = pos3.x - pos2.x;
+            double difY1 = pos2.y - pos1.y;
+            double difY2 = pos3.y - pos2.y;
+            if (difX1 != difX2 && difY1 != difY2) {
+                Vector angle = new Vector(pos1.x + pos3.x - pos2.x, pos1.y + pos3.y - pos2.y, pos1.z);
+                if (isValidNeighboor(world, entity, angle))
+                    path.remove(i+1);
+            }
+        }
+        if (1 < path.size())
+            path.removeFirst();
+        return path;
     }
 }

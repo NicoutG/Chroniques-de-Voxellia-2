@@ -14,7 +14,7 @@ Level 1
 . . . . . . . . . .
 . . 106/network=2 . . . . . . .
 23 23 23 . . . . 23 23 23
-23 23 23 e2/position2={3.5,3.4,0.5}/speed=0.1/network=2 e2/position2={4.5,3.4,0.5}/speed=0.1/network=2 e2/position2={5.5,3.4,0.5}/speed=0.1/network=2 e2/position2={7.5,3.4,1.5}/speed=0.1/network=2 23 23 23
+23 23 23 e2/z2=0.5/speed=0.1/network=2 e2/z2=0.5/speed=0.1/network=2 e2/z2=0.5/speed=0.1/network=2 e2/x2=7.5/speed=0.1/network=2 23 23 23
 . . 106/network=2 . . . . . . .
 . . . . . . . . . .
 . . . . p . . . . .
@@ -25,7 +25,7 @@ Level 2
 . . . . . . . . . .
 . . . . . . . . . .
 23 23 23 . . . . 23 23 23
-23 23 23 e2/position2={2.5,3.4,2.5}/speed=0.1/network=2 e2/position2={4.5,3.4,0.5}/speed=0.2/network=2 e2/position2={7.5,3.4,2.5}/speed=0.2/network=2 e2/position2={7.5,3.4,2.5}/speed=0.1/network=2 23 23 23
+23 23 23 e2/x2=2.5/speed=0.1/network=2 e2/z2=0.5/speed=0.2/network=2 e2/x2=7.5/speed=0.2/network=2 e2/x2=7.5/speed=0.1/network=2 23 23 23
 . . . . . . . . . .
 . . . . . . . . . .
 . . . . . . . . . .
@@ -36,7 +36,7 @@ Level 3
 . . . . . . . . . .
 . . . . . . . . . .
 23 23 23 . . . . 23 23 23
-23 23 23 e2/position2={2.5,3.4,3.5}/speed=0.1/network=2 e2/position2={2.5,3.4,3.5}/speed=0.2/network=2 e2/position2={5.5,3.4,5.5}/speed=0.2/network=2 e2/position2={7.5,3.4,3.5}/speed=0.1/network=2 23 23 23
+23 23 23 e2/x2=2.5/speed=0.1/network=2 e2/x2=2.5/speed=0.2/network=2 e2/z2=5.5/speed=0.2/network=2 e2/x2=7.5/speed=0.1/network=2 23 23 23
 . . . . . . . . . .
 . . . . . . . . . .
 . . . . . . . . . .
@@ -47,7 +47,7 @@ Level 4
 . . . . . . . . . .
 . . . . . . . . . .
 23 23 23 . . . . 23 23 23
-23 23 23 e2/position2={2.5,3.4,4.5}/speed=0.1/network=2 e2/position2={4.5,3.4,5.5}/speed=0.1/network=2 e2/position2={5.5,3.4,5.5}/speed=0.1/network=2 e2/position2={6.5,3.4,5.5}/speed=0.1/network=2 23 23 23
+23 23 23 e2/x2=2.5/speed=0.1/network=2 e2/z2=5.5/speed=0.1/network=2 e2/z2=5.5/speed=0.1/network=2 e2/z2=5.5/speed=0.1/network=2 23 23 23
 . . . . . . . . . .
 . . . . . . . . . .
 . . . . . . . . . .

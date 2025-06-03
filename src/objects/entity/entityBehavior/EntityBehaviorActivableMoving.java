@@ -6,15 +6,23 @@ import world.World;
 
 public class EntityBehaviorActivableMoving extends EntityBehaviorActivable {
     public final static String SPEED = "speed";
-    public final static String POSITION1 = "position1";
-    public final static String POSITION2 = "position2";
+    public final static String X1 = "x1";
+    public final static String Y1 = "y1";
+    public final static String Z1 = "z1";
+    public final static String X2 = "x2";
+    public final static String Y2 = "y2";
+    public final static String Z2 = "z2";
 
     @Override
     public void onAttachTo(Entity entity) {
         super.onAttachTo(entity);
         entity.setState(SPEED, 0.1);
-        entity.setState(POSITION1, new double[]{entity.getX(),entity.getY(),entity.getZ()});
-        entity.setState(POSITION2, new double[]{entity.getX(),entity.getY(),entity.getZ()});
+        entity.setState(X1,entity.getX());
+        entity.setState(Y1,entity.getY());
+        entity.setState(Z1,entity.getZ());
+        entity.setState(X2,entity.getX());
+        entity.setState(Y2,entity.getY());
+        entity.setState(Z2,entity.getZ());
     }
 
     @Override
@@ -50,19 +58,37 @@ public class EntityBehaviorActivableMoving extends EntityBehaviorActivable {
     }
 
     public Vector getPosition1(Entity entity) {
-        Object state = entity.getState(POSITION1);
-        if (state != null && state instanceof double[]) {
-            double[] pos = (double[])state;
-            return new Vector(pos[0],pos[1],pos[2]);
+        Vector position = new Vector();
+        Object state = entity.getState(X1);
+        if (state != null && state instanceof Double) {
+            position.x = (double)state;
+            state = entity.getState(Y1);
+            if (state != null && state instanceof Double) {
+                position.y = (double)state;
+                state = entity.getState(Z1);
+                if (state != null && state instanceof Double) {
+                    position.z = (double)state;
+                    return position;
+                }
+            }
         }
         return null;
     }
 
     public Vector getPosition2(Entity entity) {
-        Object state = entity.getState(POSITION2);
-        if (state != null && state instanceof double[]) {
-            double[] pos = (double[])state;
-            return new Vector(pos[0],pos[1],pos[2]);
+        Vector position = new Vector();
+        Object state = entity.getState(X2);
+        if (state != null && state instanceof Double) {
+            position.x = (double)state;
+            state = entity.getState(Y2);
+            if (state != null && state instanceof Double) {
+                position.y = (double)state;
+                state = entity.getState(Z2);
+                if (state != null && state instanceof Double) {
+                    position.z = (double)state;
+                    return position;
+                }
+            }
         }
         return null;
     }

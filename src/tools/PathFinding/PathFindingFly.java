@@ -66,22 +66,22 @@ public class PathFindingFly extends PathFindingType {
     }
 
     @Override
-    public EntityAction[] convertToAction(Entity entity, Vector destination) {
+    public EntityAction[] convertToAction(Entity entity, Vector destination, double epsilon) {
         ArrayList<EntityAction> actions = new ArrayList<>();
         double difX = destination.x - entity.getX();
-        if (difX < -EPSILON)
+        if (difX <= -epsilon)
             actions.add(EntityAction.LEFT);
-        else if (EPSILON < difX)
+        else if (epsilon <= difX)
             actions.add(EntityAction.RIGHT);
         double difY = destination.y - entity.getY();
-        if (difY < -EPSILON)
+        if (difY <= -epsilon)
             actions.add(EntityAction.TOP);
-        else if (EPSILON < difY)
+        else if (epsilon <= difY)
             actions.add(EntityAction.BOTTOM);
         double difZ = destination.z - entity.getZ();
-        if (difZ < -EPSILON)
+        if (difZ <= -epsilon)
             actions.add(EntityAction.BELOW);
-        else if (EPSILON < difZ)
+        else if (epsilon <= difZ)
             actions.add(EntityAction.ABOVE);
         return actions.toArray(new EntityAction[0]);
     }

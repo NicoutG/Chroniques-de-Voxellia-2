@@ -34,7 +34,7 @@ public class EntityBehaviorFollowPlayer extends EntityBehavior {
     public void onUpdate(World world, Entity entity) {
         if (path != null && !path.isEmpty()) {
             Vector nextStep = path.getFirst();
-            EntityAction[] actions = pathFindingType.convertToAction(entity, nextStep);
+            EntityAction[] actions = pathFindingType.convertToAction(entity, nextStep, entity.speed / 2.0);
             entity.doActions(world, actions);
             if ((int)entity.getX() == (int)nextStep.x && (int)entity.getY() == (int)nextStep.y && (int)entity.getZ() == (int)nextStep.z)
                 path.removeFirst();

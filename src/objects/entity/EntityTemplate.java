@@ -42,7 +42,7 @@ public enum EntityTemplate {
             "crate-wood.png",
             new Collision[] { CollisionList.BLOCK_ENTITY },
             null,
-            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorFollowPlayer(new PathFindingFalling()) })),
+            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorFollowPlayer(new PathFindingFalling()) })),
 
     ;
 

@@ -65,21 +65,21 @@ public class PathFindingFalling extends PathFindingType {
     }
 
     @Override
-    public EntityAction[] convertToAction(Entity entity, Vector destination) {
+    public EntityAction[] convertToAction(Entity entity, Vector destination, double epsilon) {
         ArrayList<EntityAction> actions = new ArrayList<>();
         double zMin = entity.getCollision().getBounds(entity.getPosition())[4];
         int difZ = (int)destination.z - (int)zMin;
         if (0 < difZ)
             actions.add(EntityAction.JUMP);
         double difX = destination.x - entity.getX();
-        if (difX < -EPSILON)
+        if (difX <= -epsilon)
             actions.add(EntityAction.LEFT);
-        else if (EPSILON < difX)
+        else if (epsilon <= difX)
             actions.add(EntityAction.RIGHT);
         double difY = destination.y - entity.getY();
-        if (difY < -EPSILON)
+        if (difY <= -epsilon)
             actions.add(EntityAction.TOP);
-        else if (EPSILON < difY)
+        else if (epsilon <= difY)
             actions.add(EntityAction.BOTTOM);
         return actions.toArray(new EntityAction[0]);
     }

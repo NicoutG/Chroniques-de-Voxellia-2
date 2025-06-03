@@ -33,11 +33,11 @@ public class EntityBehaviorFollowPlayer extends EntityBehavior {
     @Override
     public void onUpdate(World world, Entity entity) {
         if (path != null && !path.isEmpty()) {
-            Vector nextStep = path.getFirst();
+            Vector nextStep = path.get(0);
             EntityAction[] actions = pathFindingType.convertToAction(entity, nextStep, entity.speed / 2.0);
             entity.doActions(world, actions);
             if ((int)entity.getX() == (int)nextStep.x && (int)entity.getY() == (int)nextStep.y && (int)entity.getZ() == (int)nextStep.z)
-                path.removeFirst();
+                path.remove(0);
         }
         
         Boolean findPath = PathFinding.findPath(world, entity, destination, openList, closedList, MAX_SEARCH_PER_TICK, pathFindingType);

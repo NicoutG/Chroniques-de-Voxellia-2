@@ -66,11 +66,11 @@ public class PathFinding {
     public static ArrayList<Vector> getPathFromOpenList(ArrayList<Node> openList) {
         ArrayList<Vector> path = new ArrayList<>();
         if (!openList.isEmpty()) {
-            Node node = openList.getFirst();
-            path.addFirst(node.position);
+            Node node = openList.get(0);
+            path.add(0,node.position);
             while(node.parent != null) {
                 node = node.parent;
-                path.addFirst(node.position);
+                path.add(0,node.position);
             }
         }
         return path;
@@ -79,7 +79,7 @@ public class PathFinding {
     public static Boolean findPath(World world, Entity entity, Vector destination, ArrayList<Node> openList, HashSet<Vector> closedList, int nbStep, PathFindingType pathFindingType) {
         int i = 0;
         while(i < nbStep && !openList.isEmpty()) {
-            Node node = openList.getFirst();
+            Node node = openList.get(0);
             if (node.position.equals(destination))
                 return true;
             openList.remove(0);

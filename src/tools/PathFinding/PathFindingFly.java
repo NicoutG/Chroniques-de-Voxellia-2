@@ -61,7 +61,7 @@ public class PathFindingFly extends PathFindingType {
                     path.remove(i+1);
         }
         if (1 < path.size())
-            path.removeFirst();
+            path.remove(0);
         return path;
     }
 

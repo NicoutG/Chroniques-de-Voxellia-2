@@ -7,8 +7,10 @@ import graphics.ligth.ColorRGB;
 import graphics.ligth.LightSource;
 import graphics.shape.PlayerShape;
 import objects.entity.entityBehavior.*;
+import objects.entity.entityBehavior.pathFinding.*;
 import objects.property.*;
 import tools.PathManager;
+import tools.PathFinding.*;
 import objects.collision.*;
 
 public enum EntityTemplate {
@@ -36,6 +38,11 @@ public enum EntityTemplate {
             new Collision[] { CollisionList.CUBE },
             new Property[] { new Property("noCollisionSame"), new Property("noCollisionBlock")},
             new EntityBehavior[] { new EntityBehaviorActivableMoving() })),
+    FOOLOW_CRATE_WOOD(new EntityType("followCrateWood",
+            "crate-wood.png",
+            new Collision[] { CollisionList.BLOCK_ENTITY },
+            null,
+            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorFollowPlayer(new PathFindingFalling()) })),
 
     ;
 

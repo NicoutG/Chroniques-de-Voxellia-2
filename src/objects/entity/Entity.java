@@ -7,6 +7,11 @@ import tools.*;
 import world.World;
 
 public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBehavior>{
+    private final static long WAITING_TIME_INTERACT = 500;
+    private final static long WAITING_TIME_JUMP = 100;
+
+    private long lastInteraction = 0;
+    private long lastJump = 0;
     public double speed = 0.2;
 
     public Entity(EntityType type, double x, double y, double z) {
@@ -53,36 +58,44 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
     }
 
     protected void interact(World world) {
-        // interact with blocks
-        int xMin = (int)position.x - 1;
-        int yMin = (int)position.y - 1;
-        int zMin = (int)position.z - 1;
-        Vector positionBlock = new Vector();
-        for (int z = zMin; z < zMin + 3; z++) {
-            positionBlock.z = z + 0.5;
-            for (int y = yMin; y < yMin + 3; y++) {
-                positionBlock.y = y + 0.5;
-                for (int x = xMin; x < xMin + 3; x++) {
-                    Block block = world.getBlock(x,y,z);
-                    if (block != null) {
-                        positionBlock.x = x + 0.5;
-                        block.onInteraction(world, positionBlock, this);
+        long now = System.currentTimeMillis();
+        if (lastInteraction + WAITING_TIME_INTERACT <= now) {
+            lastInteraction = now;
+            // interact with blocks
+            int xMin = (int)position.x - 1;
+            int yMin = (int)position.y - 1;
+            int zMin = (int)position.z - 1;
+            Vector positionBlock = new Vector();
+            for (int z = zMin; z < zMin + 3; z++) {
+                positionBlock.z = z + 0.5;
+                for (int y = yMin; y < yMin + 3; y++) {
+                    positionBlock.y = y + 0.5;
+                    for (int x = xMin; x < xMin + 3; x++) {
+                        Block block = world.getBlock(x,y,z);
+                        if (block != null) {
+                            positionBlock.x = x + 0.5;
+                            block.onInteraction(world, positionBlock, this);
+                        }
                     }
                 }
             }
+            // interact with entities
+            double radius = 1.5;
+            for (Entity entity : world.getEntities())
+                if (entity != this)
+                    if (Math.abs(getX() - entity.getX()) < radius && Math.abs(getY() - entity.getY()) < radius && Math.abs(getZ() - entity.getZ()) < radius)
+                        entity.onInteraction(world, this);
         }
-        // interact with entities
-        double radius = 1.5;
-        for (Entity entity : world.getEntities())
-            if (entity != this)
-                if (Math.abs(getX() - entity.getX()) < radius && Math.abs(getY() - entity.getY()) < radius && Math.abs(getZ() - entity.getZ()) < radius)
-                    entity.onInteraction(world, this);
     }
 
     protected boolean jump(World world) {
-        if (getFloor() != null) {
-            addVelocity(0, 0, 1.05);
-            return true;
+        long now = System.currentTimeMillis();
+        if (lastJump + WAITING_TIME_JUMP <= now) {
+            if (getFloor() != null) {
+                addVelocity(0, 0, 1.05);
+                lastJump = now;
+                return true;
+            }
         }
         return false;
     }

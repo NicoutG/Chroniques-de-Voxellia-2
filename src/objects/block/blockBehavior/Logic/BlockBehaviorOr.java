@@ -1,4 +1,4 @@
-package objects.block.blockBehavior.Logic;
+package objects.block.blockBehavior.logic;
 
 import objects.block.Block;
 import tools.Vector;

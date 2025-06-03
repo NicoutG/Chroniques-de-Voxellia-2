@@ -93,19 +93,23 @@ public class World {
             blocks = data.blocks();
             entities = data.entities();
             spawnPoints = data.spawnPoints();
+            if (spawnPoints.isEmpty())
+                throw new IllegalStateException("No spawn point for " + filename);
+            afterUpdateTasks = new ArrayList<>();
+            spawnPlayer(spawnPoint);
         }
         else {
             data = WorldLoader.loadWorld(filename, BLOCK_TYPES, ENTITY_TYPES);
             blocks = data.blocks();
             entities = data.entities();
             spawnPoints = data.spawnPoints();
+            if (spawnPoints.isEmpty())
+                throw new IllegalStateException("No spawn point for " + filename);
+            afterUpdateTasks = new ArrayList<>();
+            spawnPlayer(spawnPoint);
             start();
             worlds.put(filename, data);
         }
-        if (spawnPoints.isEmpty())
-            throw new IllegalStateException("No spawn point for " + filename);
-        afterUpdateTasks = new ArrayList<>();
-        spawnPlayer(spawnPoint);
     }
 
     public void loadWorld(String filename) {

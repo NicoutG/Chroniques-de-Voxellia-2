@@ -3,6 +3,7 @@ package tools.PathFinding;
 import java.util.ArrayList;
 
 import objects.entity.Entity;
+import objects.entity.EntityAction;
 import tools.Vector;
 import world.World;
 
@@ -53,9 +54,33 @@ public class PathFindingFalling extends PathFindingType {
                 if (isValidNeighboor(world, entity, angle))
                     path.remove(i+1);
             }
+            double difZ1 = pos2.z - pos1.z;
+            double difZ2 = pos3.z - pos2.z;
+            if (difZ2 < difZ1)
+                path.remove(i+1);
         }
         if (1 < path.size())
             path.removeFirst();
         return path;
+    }
+
+    @Override
+    public EntityAction[] convertToAction(Entity entity, Vector destination) {
+        ArrayList<EntityAction> actions = new ArrayList<>();
+        double zMin = entity.getCollision().getBounds(entity.getPosition())[4];
+        int difZ = (int)destination.z - (int)zMin;
+        if (0 < difZ)
+            actions.add(EntityAction.JUMP);
+        double difX = destination.x - entity.getX();
+        if (difX < -EPSILON)
+            actions.add(EntityAction.LEFT);
+        else if (EPSILON < difX)
+            actions.add(EntityAction.RIGHT);
+        double difY = destination.y - entity.getY();
+        if (difY < -EPSILON)
+            actions.add(EntityAction.TOP);
+        else if (EPSILON < difY)
+            actions.add(EntityAction.BOTTOM);
+        return actions.toArray(new EntityAction[0]);
     }
 }

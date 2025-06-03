@@ -5,7 +5,7 @@ import graphics.Texture;
 import graphics.ligth.*;
 import graphics.shape.*;
 import objects.block.blockBehavior.*;
-import objects.block.blockBehavior.Logic.*;
+import objects.block.blockBehavior.logic.*;
 import objects.collision.*;
 import objects.property.*;
 import tools.PathManager;

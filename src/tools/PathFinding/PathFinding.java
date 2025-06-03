@@ -36,7 +36,7 @@ public class PathFinding {
 
     public static ArrayList<Node> initOpenList(Vector position) {
         ArrayList<Node> openList = new ArrayList<>();
-        openList.add(new Node(adaptPosition(position), 0, leftEstimation(position, position), null));
+        openList.add(new Node(adaptPosition(position), 0, 0, null));
         return openList;
     }
 
@@ -55,7 +55,7 @@ public class PathFinding {
             find = findPath(world, entity, destination, openListLink, closeList, step, pathFindingType);
             max -= step;
         }while(find == null && 0 < max);
-        if (find == false)
+        if (find != null && !find)
             return pathFindingType.refinePath(world, entity, path);
         ArrayList<Vector> newPath = getPathFromOpenList(openListLink);
         for (int i = nbNodesToLink; i < path.size(); i++)

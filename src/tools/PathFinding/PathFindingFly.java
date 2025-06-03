@@ -3,6 +3,7 @@ package tools.PathFinding;
 import java.util.ArrayList;
 
 import objects.entity.Entity;
+import objects.entity.EntityAction;
 import tools.Vector;
 import world.World;
 
@@ -62,5 +63,26 @@ public class PathFindingFly extends PathFindingType {
         if (1 < path.size())
             path.removeFirst();
         return path;
+    }
+
+    @Override
+    public EntityAction[] convertToAction(Entity entity, Vector destination) {
+        ArrayList<EntityAction> actions = new ArrayList<>();
+        double difX = destination.x - entity.getX();
+        if (difX < -EPSILON)
+            actions.add(EntityAction.LEFT);
+        else if (EPSILON < difX)
+            actions.add(EntityAction.RIGHT);
+        double difY = destination.y - entity.getY();
+        if (difY < -EPSILON)
+            actions.add(EntityAction.TOP);
+        else if (EPSILON < difY)
+            actions.add(EntityAction.BOTTOM);
+        double difZ = destination.z - entity.getZ();
+        if (difZ < -EPSILON)
+            actions.add(EntityAction.BELOW);
+        else if (EPSILON < difZ)
+            actions.add(EntityAction.ABOVE);
+        return actions.toArray(new EntityAction[0]);
     }
 }

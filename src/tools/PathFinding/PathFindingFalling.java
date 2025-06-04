@@ -1,6 +1,7 @@
 package tools.PathFinding;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import objects.entity.Entity;
 import objects.entity.EntityAction;
@@ -67,20 +68,29 @@ public class PathFindingFalling extends PathFindingType {
     @Override
     public EntityAction[] convertToAction(Entity entity, Vector destination, double epsilon) {
         ArrayList<EntityAction> actions = new ArrayList<>();
+        Random random = new Random();
+        double difX = destination.x - entity.getX();
+        if (0 < difX) {
+            if (epsilon <= difX || (random.nextDouble() < getProbaChange(difX, epsilon)))
+                actions.add(EntityAction.RIGHT);
+        }
+        else if (difX < 0) {
+            if (difX <= -epsilon || (random.nextDouble() < getProbaChange(-difX, epsilon)))
+                actions.add(EntityAction.LEFT);
+        }
+        double difY = destination.y - entity.getY();
+        if (0 < difY) {
+            if (epsilon <= difY  || (random.nextDouble() < getProbaChange(difY, epsilon)))
+                actions.add(EntityAction.BOTTOM);
+        }
+        else if (difY < 0) {
+            if (difY <= -epsilon  || (random.nextDouble() < getProbaChange(-difY, epsilon)))
+                actions.add(EntityAction.TOP);
+        }
         double zMin = entity.getCollision().getBounds(entity.getPosition())[4];
         int difZ = (int)destination.z - (int)zMin;
         if (0 < difZ)
             actions.add(EntityAction.JUMP);
-        double difX = destination.x - entity.getX();
-        if (difX <= -epsilon)
-            actions.add(EntityAction.LEFT);
-        else if (epsilon <= difX)
-            actions.add(EntityAction.RIGHT);
-        double difY = destination.y - entity.getY();
-        if (difY <= -epsilon)
-            actions.add(EntityAction.TOP);
-        else if (epsilon <= difY)
-            actions.add(EntityAction.BOTTOM);
         return actions.toArray(new EntityAction[0]);
     }
 }

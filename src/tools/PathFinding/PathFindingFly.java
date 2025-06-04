@@ -1,6 +1,7 @@
 package tools.PathFinding;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import objects.entity.Entity;
 import objects.entity.EntityAction;
@@ -68,21 +69,34 @@ public class PathFindingFly extends PathFindingType {
     @Override
     public EntityAction[] convertToAction(Entity entity, Vector destination, double epsilon) {
         ArrayList<EntityAction> actions = new ArrayList<>();
+        Random random = new Random();
         double difX = destination.x - entity.getX();
-        if (difX <= -epsilon)
-            actions.add(EntityAction.LEFT);
-        else if (epsilon <= difX)
-            actions.add(EntityAction.RIGHT);
+        if (0 < difX) {
+            if (epsilon <= difX || (random.nextDouble() < getProbaChange(difX, epsilon)))
+                actions.add(EntityAction.RIGHT);
+        }
+        else if (difX < 0) {
+            if (difX <= -epsilon || (random.nextDouble() < getProbaChange(-difX, epsilon)))
+                actions.add(EntityAction.LEFT);
+        }
         double difY = destination.y - entity.getY();
-        if (difY <= -epsilon)
-            actions.add(EntityAction.TOP);
-        else if (epsilon <= difY)
-            actions.add(EntityAction.BOTTOM);
+        if (0 < difY) {
+            if (epsilon <= difY  || (random.nextDouble() < getProbaChange(difY, epsilon)))
+                actions.add(EntityAction.BOTTOM);
+        }
+        else if (difY < 0) {
+            if (difY <= -epsilon  || (random.nextDouble() < getProbaChange(-difY, epsilon)))
+                actions.add(EntityAction.TOP);
+        }
         double difZ = destination.z - entity.getZ();
-        if (difZ <= -epsilon)
-            actions.add(EntityAction.BELOW);
-        else if (epsilon <= difZ)
-            actions.add(EntityAction.ABOVE);
+        if (0 < difZ) {
+            if (epsilon <= difZ  || (random.nextDouble() < getProbaChange(difZ, epsilon)))
+                actions.add(EntityAction.ABOVE);
+        }
+        else if (difZ < 0) {
+            if (difZ <= -epsilon  || (random.nextDouble() < getProbaChange(-difZ, epsilon)))
+                actions.add(EntityAction.BELOW);
+        }
         return actions.toArray(new EntityAction[0]);
     }
 }

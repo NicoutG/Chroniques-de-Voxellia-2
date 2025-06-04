@@ -32,5 +32,9 @@ public abstract class PathFindingType {
         }
         return false;
     }
+
+    protected double getProbaChange(double dif, double epsilon) {
+        return (dif *dif)/(4*epsilon * epsilon);
+    }
     
 }

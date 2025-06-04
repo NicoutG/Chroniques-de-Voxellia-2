@@ -9,13 +9,16 @@ import world.World;
 
 public class PathFinding {
 
-    public static Vector adaptPosition(Vector position) {
-        return new Vector((int)position.x + 0.5, (int)position.y + 0.5,(int)position.z + 0.5);
+    public static Vector adaptPosition(World world, Vector position) {
+        double x = Math.max(0.5,Math.min(world.getX() + 0.5, (int)position.x + 0.5));
+        double y = Math.max(0.5,Math.min(world.getY() + 0.5, (int)position.y + 0.5));
+        double z = Math.max(0.5,Math.min(world.getZ() + 0.5, (int)position.z + 0.5));
+        return new Vector(x,y,z);
     }
 
-    public static ArrayList<Node> initOpenList(Vector position) {
+    public static ArrayList<Node> initOpenList(World world, Vector position) {
         ArrayList<Node> openList = new ArrayList<>();
-        openList.add(new Node(adaptPosition(position), 0, 0, null));
+        openList.add(new Node(adaptPosition(world, position), 0, 0, null));
         return openList;
     }
 
@@ -25,7 +28,7 @@ public class PathFinding {
         if (nbNodesToLink <= 0)
             return pathFindingType.refinePath(world, entity, path);
         Vector destination = path.get(nbNodesToLink);
-        ArrayList<Node> openListLink = initOpenList(entity.getPosition());
+        ArrayList<Node> openListLink = initOpenList(world, entity.getPosition());
         HashSet<Vector> closeList = new HashSet<>();
         Boolean find = null;
         int max = nbNodesToLink * 10;

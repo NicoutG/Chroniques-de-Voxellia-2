@@ -14,6 +14,7 @@ import world.World;
 
 public class EntityBehaviorFollowPlayer extends EntityBehavior {
     private final static int MAX_SEARCH_PER_TICK = 100;
+    private final static int MAX_SEARCH = 2000;
 
     private PathFindingType pathFindingType;
     private ArrayList<Node> openList = null;
@@ -35,17 +36,22 @@ public class EntityBehaviorFollowPlayer extends EntityBehavior {
         if (path != null && !path.isEmpty()) {
             Vector nextStep = path.get(0);
             EntityAction[] actions = pathFindingType.convertToAction(entity, nextStep, entity.speed);
+            System.out.println("pos : "+entity.getPosition()+ " dest : "+nextStep);
+            for (EntityAction action : actions)
+                System.out.println(action);
             entity.doActions(world, actions);
             if ((int)entity.getX() == (int)nextStep.x && (int)entity.getY() == (int)nextStep.y && (int)entity.getZ() == (int)nextStep.z)
                 path.remove(0);
         }
+        System.out.println("player : "+world.getPlayer().getPosition()+" dest : "+destination);
         
         Boolean findPath = PathFinding.findPath(world, entity, destination, openList, closedList, MAX_SEARCH_PER_TICK, pathFindingType);
+        System.out.println(closedList.size());
         if (findPath != null && findPath) {
             path = PathFinding.getPathAndLinkToEntity(world, entity, openList, pathFindingType);
             initPathFinding(world, entity);
         }
-        else if (findPath != null && !findPath) {
+        else if ((findPath != null && !findPath) || MAX_SEARCH <= closedList.size()) {
             path = null;
             initPathFinding(world, entity);
         }
@@ -53,8 +59,8 @@ public class EntityBehaviorFollowPlayer extends EntityBehavior {
 
     private void initPathFinding(World world, Entity entity) {
         openList = new ArrayList<>();
-        openList = PathFinding.initOpenList(entity.getPosition());
+        openList = PathFinding.initOpenList(world, entity.getPosition());
         closedList = new HashSet<>();
-        destination = PathFinding.adaptPosition(world.getPlayer().getPosition());
+        destination = PathFinding.adaptPosition(world, world.getPlayer().getPosition());
     }
 }

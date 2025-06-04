@@ -9,27 +9,6 @@ import world.World;
 
 public class PathFinding {
 
-    public static void findPath(World world, Entity entity, Vector position, Vector destination) {
-        ArrayList<Node> openList = initOpenList(position);
-        HashSet<Vector> closeList = new HashSet<>();
-        Vector dest = adaptPosition(destination);
-        Boolean find = null;
-        int nb = 0;
-        do {
-            find = findPath(world, entity, dest, openList, closeList, 1, new PathFindingFalling());
-            nb++;
-        }while(find == null);
-        System.out.println(nb);
-        if (find == true) {
-            ArrayList<Vector> path = getPathAndLinkToEntity(world, entity, openList, new PathFindingFalling());
-            for (int i = 0; i < path.size(); i++)
-                System.out.println(path.get(i));
-        }
-        else {
-            System.out.println("No path");
-        }
-    }
-
     public static Vector adaptPosition(Vector position) {
         return new Vector((int)position.x + 0.5, (int)position.y + 0.5,(int)position.z + 0.5);
     }
@@ -49,13 +28,9 @@ public class PathFinding {
         ArrayList<Node> openListLink = initOpenList(entity.getPosition());
         HashSet<Vector> closeList = new HashSet<>();
         Boolean find = null;
-        final int step = 100;
-        int max = nbNodesToLink * 100;
-        do {
-            find = findPath(world, entity, destination, openListLink, closeList, step, pathFindingType);
-            max -= step;
-        }while(find == null && 0 < max);
-        if (find != null && !find)
+        int max = nbNodesToLink * 10;
+        find = findPath(world, entity, destination, openListLink, closeList, max, pathFindingType);
+        if (find == null || !find)
             return pathFindingType.refinePath(world, entity, path);
         ArrayList<Vector> newPath = getPathFromOpenList(openListLink);
         for (int i = nbNodesToLink; i < path.size(); i++)

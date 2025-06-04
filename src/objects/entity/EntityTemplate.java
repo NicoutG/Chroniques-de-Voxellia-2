@@ -38,11 +38,16 @@ public enum EntityTemplate {
             new Collision[] { CollisionList.CUBE },
             new Property[] { new Property("noCollisionSame"), new Property("noCollisionBlock")},
             new EntityBehavior[] { new EntityBehaviorActivableMoving() })),
-    FOOLOW_CRATE_WOOD(new EntityType("followCrateWood",
+    FOLLOW_CRATE_WOOD(new EntityType("followCrateWood",
             "crate-wood.png",
             new Collision[] { CollisionList.BLOCK_ENTITY },
             null,
             new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorFollowPlayer(new PathFindingFalling()) })),
+    LILY(new EntityType("lily",
+            "lily.png",
+            new Collision[] { CollisionList.BLOCK_ENTITY },
+            null,
+            new EntityBehavior[] { new EntityBehaviorApplyForce() })),
 
     ;
 

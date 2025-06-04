@@ -11,7 +11,7 @@ Level 0
 9 9 9 9 9 9 9 9 9 9
 9 9 9 9 9 9 9 9 9 9
 Level 1
-. . . . . . . . . .
+. . . . . e3 . . . .
 . . 106/network=2 . . . . . . .
 23 23 23 . . . . 23 23 23
 23 23 23 e2/z2=0.5/speed=0.1/network=2 e2/z2=0.5/speed=0.1/network=2 e2/z2=0.5/speed=0.1/network=2 e2/x2=7.5/speed=0.1/network=2 23 23 23

@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import graphics.Texture;
 import graphics.ligth.ColorRGB;
 import graphics.ligth.LightSource;
+import graphics.shape.FlyingSlimeShape;
 import graphics.shape.PlayerShape;
 import objects.entity.entityBehavior.*;
 import objects.entity.entityBehavior.pathFinding.*;
@@ -48,7 +49,20 @@ public enum EntityTemplate {
             new Collision[] { CollisionList.BLOCK_ENTITY },
             null,
             new EntityBehavior[] { new EntityBehaviorApplyForce() })),
-
+            /* 5 */
+    FLYING_SLIME(new EntityType("flyingSlime",
+            new Texture[] {
+                    new Texture(
+                            new FlyingSlimeShape(), new BufferedImage[] {
+                                    PathManager.loadImage("slime/flying-slime-0.png"),
+                                    PathManager.loadImage("slime/flying-slime-1.png"),
+                                    PathManager.loadImage("slime/flying-slime-2.png"),
+                            }, 1)
+            },
+            new Collision[] { CollisionList.BLOCK_ENTITY },
+            new Property[] { new PropertyLight(
+                    new LightSource(new ColorRGB(0.2, 0.9, 0.2), 0.5, 0.8, 0))},
+            new EntityBehavior[] { new EntityBehaviorPushable(), new EntityBehaviorFollowPlayer(new PathFindingFly()) })),
     ;
 
     public final EntityType entityType;

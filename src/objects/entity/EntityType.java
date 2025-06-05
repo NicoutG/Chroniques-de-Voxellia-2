@@ -7,6 +7,7 @@ import objects.entity.entityBehavior.EntityBehavior;
 import objects.property.Property;
 
 public class EntityType extends ObjectType<Entity, EntityBehavior>{
+    private double speed = 0.2;
 
     public EntityType(String name, Texture[] textures, double opacity, Collision[] collisions, Property[] properties, EntityBehavior[] behaviors) {
         super(name, textures, opacity, collisions, properties, behaviors);
@@ -52,6 +53,7 @@ public class EntityType extends ObjectType<Entity, EntityBehavior>{
         Entity entity = new Entity(this,x,y,z);
         for (EntityBehavior entityBehavior : behaviors)
             entity.addBehavior(entityBehavior.clone());
+        entity.setSpeed(speed);
         return entity;
     }
 
@@ -65,6 +67,15 @@ public class EntityType extends ObjectType<Entity, EntityBehavior>{
             EntityBehavior behaviorClone = entityBehavior.clone();
             entity.addBehavior(behaviorClone);
         }
+        entity.setSpeed(speed);
         return entity;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 }

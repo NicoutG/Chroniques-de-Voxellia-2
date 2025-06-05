@@ -5,7 +5,6 @@ import tools.Vector;
 import world.World;
 
 public class EntityBehaviorActivableMoving extends EntityBehaviorActivable {
-    public final static String SPEED = "speed";
     public final static String X1 = "x1";
     public final static String Y1 = "y1";
     public final static String Z1 = "z1";
@@ -16,7 +15,6 @@ public class EntityBehaviorActivableMoving extends EntityBehaviorActivable {
     @Override
     public void onAttachTo(Entity entity) {
         super.onAttachTo(entity);
-        entity.setState(SPEED, 0.1);
         entity.setState(X1,entity.getX());
         entity.setState(Y1,entity.getY());
         entity.setState(Z1,entity.getZ());
@@ -38,7 +36,7 @@ public class EntityBehaviorActivableMoving extends EntityBehaviorActivable {
     private void move(World world, Entity entity, Vector destination) {
         Vector position = entity.getPosition();
         if (!position.equals(destination)) {
-            double speed = getSpeed(entity);
+            double speed = entity.getSpeed();
             double difX = destination.x - position.x;
             double difY = destination.y - position.y;
             double difZ = destination.z - position.z;
@@ -48,13 +46,6 @@ public class EntityBehaviorActivableMoving extends EntityBehaviorActivable {
             else
                 entity.move(world, speed * difX / distance, speed * difY / distance, speed * difZ / distance);
         }
-    }
-
-    public double getSpeed(Entity entity) {
-        Object state = entity.getState(SPEED);
-        if (state != null && state instanceof Double)
-            return (double)state;
-        return -1;
     }
 
     public Vector getPosition1(Entity entity) {

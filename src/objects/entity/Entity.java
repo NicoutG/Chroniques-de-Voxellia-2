@@ -9,13 +9,24 @@ import world.World;
 public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBehavior>{
     private final static long WAITING_TIME_INTERACT = 500;
     private final static long WAITING_TIME_JUMP = 100;
+    public final static String SPEED = "speed";
 
     private long lastInteraction = 0;
     private long lastJump = 0;
-    public double speed = 0.2;
 
     public Entity(EntityType type, double x, double y, double z) {
         super(type,x,y,z);
+    }
+
+    public void setSpeed(double speed) {
+        setState(SPEED,speed);
+    }
+
+    public double getSpeed() {
+        Object state = getState(SPEED);
+        if (state != null && state instanceof Double)
+            return (double)state;
+        return -1;
     }
 
     public void notifyCloseBlocks(World world) {
@@ -53,8 +64,10 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
             }
         }
         double norm = move.getNorm();
-        if (norm != 0)
+        if (norm != 0) {
+            double speed = getSpeed();
             move(world, speed * move.x / norm, speed * move.y / norm, speed * move.z / norm);
+        }
     }
 
     protected void interact(World world) {

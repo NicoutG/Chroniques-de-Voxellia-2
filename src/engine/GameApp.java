@@ -5,6 +5,7 @@ import java.awt.*;
 
 public class GameApp extends JFrame {
 
+    @SuppressWarnings("unused")
     public GameApp() {
         super("Chroniques de Voxellia 2");
         setUndecorated(true);

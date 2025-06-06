@@ -465,11 +465,11 @@ public enum BlockTemplate {
         null,
         new Property[] { new Property("noCollision") },
         new BlockBehavior[] { new BlockBehaviorDelay() })),
-    ALTERNATE(new BlockType("alternate",
+    LOOP(new BlockType("loop",
         (Texture[])null,
         null,
         new Property[] { new Property("noCollision") },
-        new BlockBehavior[] { new BlockBehaviorAlternate() })),
+        new BlockBehavior[] { new BlockBehaviorLoop() })),
     
     ;
 

@@ -109,7 +109,7 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
             if (getFloor() != null) {
                 addVelocity(0, 0, 1.05);
                 lastJump = now;
-                SoundManager.playSound(SoundType.JUMP2);
+                SoundManager.playSoundFromCoordinates(SoundType.JUMP2, this.getX(), this.getY(), this.getZ());
                 return true;
             }
         }

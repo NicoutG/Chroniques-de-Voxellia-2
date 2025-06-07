@@ -171,6 +171,44 @@ public final class SoundManager {
         eventSounds.add(st);
     }
 
+    public static void playSoundFromCoordinates(SoundType st,
+            double sx, double sy, double sz) {
+
+        if (world == null)
+            return;
+        Player p = world.getPlayer();
+        if (p == null)
+            return;
+
+        double d2 = dist2(p.getX(), p.getY(), p.getZ(), sx, sy, sz);
+        if (d2 > MAX_DISTANCE * MAX_DISTANCE)
+            return; // too far to hear
+
+        double d = Math.sqrt(d2);
+        double vol = st.ambient
+                ? globalVolume * st.volume // full for ambients
+                : (1.0 - (d / MAX_DISTANCE)) * globalVolume * st.volume;
+
+        /* -------- play exactly like the queued event path -------- */
+        if (st.looping) { // use managed clip
+            ManagedClip mc = clips.get(st);
+            if (mc == null)
+                return;
+            if (mc.clip.isRunning())
+                mc.clip.stop();
+            mc.clip.setFramePosition(0);
+            setVolume(mc.clip, vol);
+            mc.clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } else { // spawn throw-away
+            Clip c = PathManager.loadSound(st.path); // lightweight copy
+            if (c == null)
+                return;
+            setVolume(c, vol);
+            c.setFramePosition(0);
+            c.start();
+        }
+    }
+
     public static void removeSound(SoundType st) {
         eventSounds.remove(st);
     }
@@ -208,7 +246,7 @@ public final class SoundManager {
             mc.clip.stop();
     }
 
-    private void setVolume(Clip clip, double lin) {
+    private static void setVolume(Clip clip, double lin) {
         if (!clip.isControlSupported(FloatControl.Type.MASTER_GAIN))
             return;
         FloatControl ctrl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);

@@ -588,7 +588,7 @@ public enum BlockTemplate {
     SIGN_LEFT(new BlockType("SignLeft",
             new Texture[] { new Texture(ShapeList.SIGN_LEFT, PathManager.loadImage("sign-left.png")) },
             null,
-            null) {
+            new BlockBehavior[] {new BlockBehaviorText()}) {
         {
             setOpacity(0);
         }
@@ -597,7 +597,7 @@ public enum BlockTemplate {
     SIGN_RIGHT(new BlockType("SignRight",
             new Texture[] { new Texture(ShapeList.SIGN_RIGHT, PathManager.loadImage("sign-right.png")) },
             null,
-            null) {
+            new BlockBehavior[] {new BlockBehaviorText()}) {
         {
             setOpacity(0);
         }

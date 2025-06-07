@@ -484,10 +484,23 @@ public enum BlockTemplate {
                         new Property[] { new Property("noCollision") },
                         new BlockBehavior[] { new BlockBehaviorLever(), new BlockBehaviorActivable() })),
         WATER(new BlockType("water",
-                        new Texture[] { new Texture(ShapeList.RECTANGLE1, PathManager.loadImage("water/water-1.png")),
-                                        new Texture(ShapeList.RECTANGLE2, PathManager.loadImage("water/water-2.png")),
-                                        new Texture(ShapeList.RECTANGLE3, PathManager.loadImage("water/water-3.png")),
-                                        new Texture(ShapeList.CUBE, PathManager.loadImage("water/water-4.png")), },
+                        new Texture[] {
+                                        Texture.createBasicTexture(ShapeList.RECTANGLE1,
+                                                        new String[] { "water/water-1-0.png", "water/water-1-1.png",
+                                                                        "water/water-1-2.png" },
+                                                        4),
+                                        Texture.createBasicTexture(ShapeList.RECTANGLE2,
+                                                        new String[] { "water/water-2-0.png", "water/water-2-1.png",
+                                                                        "water/water-2-2.png" },
+                                                        4),
+                                        Texture.createBasicTexture(ShapeList.RECTANGLE3,
+                                                        new String[] { "water/water-3-0.png", "water/water-3-1.png",
+                                                                        "water/water-3-2.png" },
+                                                        4),
+                                        Texture.createBasicTexture(
+                                                        new String[] { "water/water-4-0.png", "water/water-4-1.png",
+                                                                        "water/water-4-2.png" },
+                                                        4) },
                         0,
                         new Collision[] { CollisionList.RECTANGLE1, CollisionList.RECTANGLE2, CollisionList.RECTANGLE3,
                                         CollisionList.CUBE },
@@ -671,7 +684,8 @@ public enum BlockTemplate {
         }),
         /* 130 */
         GRASS_BIG(new BlockType("grassBig",
-                        new Texture[] { new Texture(ShapeList.GRASS_BIG, PathManager.loadImage("herbs/grass-big.png")) },
+                        new Texture[] { new Texture(ShapeList.GRASS_BIG,
+                                        PathManager.loadImage("herbs/grass-big.png")) },
                         null,
                         new Property[] { new Property("noCollision"), },
                         null) {
@@ -680,7 +694,8 @@ public enum BlockTemplate {
                 }
         }),
         GRASS_SMALL(new BlockType("grassSmall",
-                        new Texture[] { new Texture(ShapeList.GRASS_SMALL, PathManager.loadImage("herbs/grass-small.png")) },
+                        new Texture[] { new Texture(ShapeList.GRASS_SMALL,
+                                        PathManager.loadImage("herbs/grass-small.png")) },
                         null,
                         new Property[] { new Property("noCollision"), },
                         null) {

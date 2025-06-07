@@ -247,7 +247,7 @@ public enum BlockTemplate {
         }
     }),
     STAIRS_LEFT(new BlockType("blockStairsLeft",
-            new Texture[] { new Texture(ShapeList.STAIR1, PathManager.loadImage("block-stairs-left.png")) },
+            new Texture[] { new Texture(ShapeList.STAIR1, PathManager.loadImage("blockStairs/block-stairs-left.png")) },
             new Collision[] { CollisionList.STAIR1 },
             null,
             null) {
@@ -257,14 +257,12 @@ public enum BlockTemplate {
     }),
     /* 50 */
     STAIRS_RIGHT(new BlockType("blockStairsRight",
-            new Texture[] { new Texture(ShapeList.STAIR2, PathManager.loadImage("block-stairs-right.png")) },
+            new Texture[] { new Texture(ShapeList.STAIR2, PathManager.loadImage("blockStairs/block-stairs-right.png")) },
             new Collision[] { CollisionList.STAIR2 },
             null,
             null) {
         {
-            {
                 setOpacity(0);
-            }
         }
     }),
     GRASS_HALF_SLAB_1(new BlockType("grassHalfSlab1", "grass-half-slab-1.png")),
@@ -484,16 +482,109 @@ public enum BlockTemplate {
             new Property[] { new Property("noCollision") },
             new BlockBehavior[] { new BlockBehaviorDelay() })),
     LOOP(new BlockType("loop",
-            (Texture[]) null,
-            null,
-            new Property[] { new Property("noCollision") },
-            new BlockBehavior[] { new BlockBehaviorLoop() })),
+        (Texture[])null,
+        null,
+        new Property[] { new Property("noCollision") },
+        new BlockBehavior[] { new BlockBehaviorLoop() })),
     AMBIENT1(new BlockType("ambient1",
-            (Texture[]) null,
+            (Texture[])null,
             null,
             new Property[] { new Property("noCollision"),
                     new PropertySound(SoundType.AMBIENT1) },
             null)),
+    STAIRS3(new BlockType("blockStairs3",
+            new Texture[] { new Texture(ShapeList.STAIR3, PathManager.loadImage("blockStairs/block-stairs3.png")) },
+            new Collision[] { CollisionList.STAIR3 },
+            null,
+            null) {
+        {
+                setOpacity(0);
+        }
+    }),
+    /* 115 */
+    STAIRS4(new BlockType("blockStairs4",
+            new Texture[] { new Texture(ShapeList.STAIR4, PathManager.loadImage("blockStairs/block-stairs4.png")) },
+            new Collision[] { CollisionList.STAIR4 },
+            null,
+            null) {
+        {
+                setOpacity(0);
+        }
+    }),
+    STAIRS_ANGLE1(new BlockType("blockStairsAngle1",
+            new Texture[] { new Texture(ShapeList.STAIR_ANGLE1, PathManager.loadImage("blockStairs/block-stairs-angle1.png")) },
+            new Collision[] { CollisionList.STAIR_ANGLE1 },
+            null,
+            null) {
+        {
+                setOpacity(0);
+        }
+    }),
+    STAIRS_ANGLE2(new BlockType("blockStairsAngle2",
+            new Texture[] { new Texture(ShapeList.STAIR_ANGLE2, PathManager.loadImage("blockStairs/block-stairs-angle2.png")) },
+            new Collision[] { CollisionList.STAIR_ANGLE2 },
+            null,
+            null) {
+        {
+                setOpacity(0);
+        }
+    }),
+    STAIRS_ANGLE3(new BlockType("blockStairsAngle3",
+            new Texture[] { new Texture(ShapeList.STAIR_ANGLE3, PathManager.loadImage("blockStairs/block-stairs-angle3.png")) },
+            new Collision[] { CollisionList.STAIR_ANGLE3 },
+            null,
+            null) {
+        {
+                setOpacity(0);
+        }
+    }),
+    STAIRS_ANGLE4(new BlockType("blockStairsAngle4",
+            new Texture[] { new Texture(ShapeList.STAIR_ANGLE4, PathManager.loadImage("blockStairs/block-stairs-angle4.png")) },
+            new Collision[] { CollisionList.STAIR_ANGLE4 },
+            null,
+            null) {
+        {
+                setOpacity(0);
+        }
+    }),
+    /* 120 */
+    STAIRS_ANGLE5(new BlockType("blockStairsAngle5",
+            new Texture[] { new Texture(ShapeList.STAIR_ANGLE5, PathManager.loadImage("blockStairs/block-stairs-angle5.png")) },
+            new Collision[] { CollisionList.STAIR_ANGLE5 },
+            null,
+            null) {
+        {
+                setOpacity(0);
+        }
+    }),
+    STAIRS_ANGLE6(new BlockType("blockStairsAngle6",
+            new Texture[] { new Texture(ShapeList.STAIR_ANGLE6, PathManager.loadImage("blockStairs/block-stairs-angle6.png")) },
+            new Collision[] { CollisionList.STAIR_ANGLE6 },
+            null,
+            null) {
+        {
+                setOpacity(0);
+        }
+    }),
+    STAIRS_ANGLE7(new BlockType("blockStairsAngle7",
+            new Texture[] { new Texture(ShapeList.STAIR_ANGLE7, PathManager.loadImage("blockStairs/block-stairs-angle7.png")) },
+            new Collision[] { CollisionList.STAIR_ANGLE7 },
+            null,
+            null) {
+        {
+                setOpacity(0);
+        }
+    }),
+    STAIRS_ANGLE8(new BlockType("blockStairsAngle8",
+            new Texture[] { new Texture(ShapeList.STAIR_ANGLE8, PathManager.loadImage("blockStairs/block-stairs-angle8.png")) },
+            new Collision[] { CollisionList.STAIR_ANGLE8 },
+            null,
+            null) {
+        {
+                setOpacity(0);
+        }
+    }),
+
     SIGN_LEFT(new BlockType("SignLeft",
             new Texture[] { new Texture(ShapeList.SIGN_LEFT, PathManager.loadImage("sign-left.png")) },
             null,

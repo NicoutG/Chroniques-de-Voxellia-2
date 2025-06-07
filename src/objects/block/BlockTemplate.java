@@ -441,7 +441,8 @@ public enum BlockTemplate {
             new Collision[] { CollisionList.RECTANGLE1, CollisionList.RECTANGLE2, CollisionList.RECTANGLE3,
                     CollisionList.CUBE },
             new Property[] {
-                    new Property("noCollision") },
+                    new Property("noCollision"),
+                    new PropertySound(SoundType.WATER) },
             new BlockBehavior[] { new BlockBehaviorLiquid(4, 2),
                     new BlockBehaviorApplyForce(0,0,0.5) })),
     AND(new BlockType("and",
@@ -470,7 +471,12 @@ public enum BlockTemplate {
         null,
         new Property[] { new Property("noCollision") },
         new BlockBehavior[] { new BlockBehaviorLoop() })),
-    
+     AMBIENT1(new BlockType("ambient1",
+            (Texture[])null,
+            null,
+            new Property[] { new Property("noCollision"),
+            new PropertySound(SoundType.AMBIENT1) },
+            null)),
     ;
 
     public final BlockType blockType;

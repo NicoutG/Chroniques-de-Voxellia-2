@@ -1,6 +1,7 @@
 /*  graphics/texture/Texture.java  */
 package graphics;
 
+import graphics.ligth.ColorRGB;
 import graphics.shape.Face;
 import graphics.shape.Shape;
 import graphics.shape.ShapeList;
@@ -129,5 +130,78 @@ public final class Texture {
                     (alpha == 0) ? 0 : tp[i]);
         }
         return out;
+    }
+
+    public BufferedImage shade(BufferedImage src, ColorRGB cLeft, ColorRGB cRight, ColorRGB cTop) {
+        int w = src.getWidth();
+        int h = src.getHeight();
+        BufferedImage dst = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+
+        int[] mpLeft = shape.getLeftMask().getRGB(0, 0, w, h, null, 0, w);
+        int[] mpRight = shape.getRightMask().getRGB(0, 0, w, h, null, 0, w);
+        int[] mpTop = shape.getTopMask().getRGB(0, 0, w, h, null, 0, w);
+
+        for (int y = 0; y < h; ++y) {
+            for (int x = 0; x < w; ++x) {
+                int index = y * w + x;
+
+                int argb = src.getRGB(x, y);
+                int a = argb >>> 24;
+                int r0 = (argb >> 16) & 0xFF;
+                int g0 = (argb >> 8) & 0xFF;
+                int b0 = argb & 0xFF;
+
+                int count = 0;
+                double rSum = 0, gSum = 0, bSum = 0;
+
+                if ((mpLeft[index] >>> 24) != 0) {
+                    count++;
+                    rSum += cLeft.r();
+                    gSum += cLeft.g();
+                    bSum += cLeft.b();
+                }
+                if ((mpRight[index] >>> 24) != 0) {
+                    count++;
+                    rSum += cRight.r();
+                    gSum += cRight.g();
+                    bSum += cRight.b();
+                }
+                if ((mpTop[index] >>> 24) != 0) {
+                    count++;
+                    rSum += cTop.r();
+                    gSum += cTop.g();
+                    bSum += cTop.b();
+                }
+
+                if (count == 0) {
+                    dst.setRGB(x, y, argb);
+                    continue;
+                }
+
+                int r = Math.min(255, (int) (r0 * rSum / count));
+                int g = Math.min(255, (int) (g0 * gSum / count));
+                int b = Math.min(255, (int) (b0 * bSum / count));
+
+                dst.setRGB(x, y, (a << 24) | (r << 16) | (g << 8) | b);
+            }
+        }
+
+        return dst;
+    }
+
+    public BufferedImage shade(BufferedImage src, ColorRGB c) {
+        BufferedImage dst = new BufferedImage(src.getWidth(),
+                src.getHeight(),
+                BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < src.getHeight(); ++y)
+            for (int x = 0; x < src.getWidth(); ++x) {
+                int argb = src.getRGB(x, y);
+                int a = argb >>> 24;
+                int r = (int) (((argb >> 16) & 0xFF) * c.r());
+                int g = (int) (((argb >> 8) & 0xFF) * c.g());
+                int b = (int) (((argb) & 0xFF) * c.b());
+                dst.setRGB(x, y, (a << 24) | (r << 16) | (g << 8) | b);
+            }
+        return dst;
     }
 }

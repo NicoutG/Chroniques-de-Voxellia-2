@@ -1,5 +1,7 @@
 package objects.block.blockBehavior;
 
+import audio.SoundManager;
+import audio.SoundType;
 import objects.block.*;
 import objects.entity.Entity;
 import objects.objectBehavior.ObjectBehaviorText;
@@ -17,6 +19,7 @@ public class BlockBehaviorText extends BlockBehavior {
     @Override
     public void onInteraction(World world, Block block, Vector position, Entity entity) {
         commonBehavior.onInteraction(world, block);
+        SoundManager.playSound(SoundType.TYPING);
     }
 
     @Override

@@ -676,7 +676,7 @@ public enum BlockTemplate {
         FLOWERS(new BlockType("flowers",
                         new Texture[] { new Texture(ShapeList.FLOWERS, PathManager.loadImage("herbs/flowers.png")) },
                         null,
-                        new Property[] { new Property("noCollision"), },
+                        new Property[] { new Property("noCollision"), new Property("floor")},
                         null) {
                 {
                         setOpacity(0);
@@ -687,7 +687,7 @@ public enum BlockTemplate {
                         new Texture[] { new Texture(ShapeList.GRASS_BIG,
                                         PathManager.loadImage("herbs/grass-big.png")) },
                         null,
-                        new Property[] { new Property("noCollision"), },
+                        new Property[] { new Property("noCollision"), new Property("floor")},
                         null) {
                 {
                         setOpacity(0);
@@ -697,7 +697,7 @@ public enum BlockTemplate {
                         new Texture[] { new Texture(ShapeList.GRASS_SMALL,
                                         PathManager.loadImage("herbs/grass-small.png")) },
                         null,
-                        new Property[] { new Property("noCollision"), },
+                        new Property[] { new Property("noCollision"), new Property("floor")},
                         null) {
                 {
                         setOpacity(0);

@@ -137,8 +137,7 @@ public final class Renderer {
 
                     FaceLighting faceLighting = faceLightings[x][y][z];
 
-                    // TO REFACTORE !
-                    boolean alwaysBehind =  (b.getName().equals( "flowers") ||b.getName().equals( "grassSmall") ||b.getName().equals( "grassBig"));
+                    boolean alwaysBehind =  b.getProperty("floor") != null;
 
                     Texture text = b.getTexture();
                     if (visibleFaces[Face.LEFT.index]) {

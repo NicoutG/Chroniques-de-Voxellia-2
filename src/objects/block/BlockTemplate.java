@@ -593,7 +593,7 @@ public enum BlockTemplate {
             setOpacity(0);
         }
     }),
-    /* 115 */
+    /* 125 */
     SIGN_RIGHT(new BlockType("SignRight",
             new Texture[] { new Texture(ShapeList.SIGN_RIGHT, PathManager.loadImage("sign-right.png")) },
             null,

@@ -676,33 +676,63 @@ public enum BlockTemplate {
         FLOWERS(new BlockType("flowers",
                         new Texture[] { new Texture(ShapeList.FLOWERS, PathManager.loadImage("herbs/flowers.png")) },
                         null,
-                        new Property[] { new Property("noCollision"), new Property("floor")},
+                        new Property[] { new Property("noCollision"), new Property("floor") },
+                        null) {
+                {
+                        setOpacity(0);
+                }
+        }),
+        GRASS_BIG(new BlockType("grassBig",
+                        new Texture[] { new Texture(ShapeList.GRASS_BIG,
+                                        PathManager.loadImage("herbs/grass-big.png")) },
+                        null,
+                        new Property[] { new Property("noCollision"), new Property("floor") },
                         null) {
                 {
                         setOpacity(0);
                 }
         }),
         /* 130 */
-        GRASS_BIG(new BlockType("grassBig",
-                        new Texture[] { new Texture(ShapeList.GRASS_BIG,
-                                        PathManager.loadImage("herbs/grass-big.png")) },
-                        null,
-                        new Property[] { new Property("noCollision"), new Property("floor")},
-                        null) {
-                {
-                        setOpacity(0);
-                }
-        }),
         GRASS_SMALL(new BlockType("grassSmall",
                         new Texture[] { new Texture(ShapeList.GRASS_SMALL,
                                         PathManager.loadImage("herbs/grass-small.png")) },
                         null,
-                        new Property[] { new Property("noCollision"), new Property("floor")},
+                        new Property[] { new Property("noCollision"), new Property("floor") },
                         null) {
                 {
                         setOpacity(0);
                 }
         }),
+        WATER_FAKE(new BlockType("waterFake",
+                        new Texture[] {
+                                        Texture.createBasicTexture(ShapeList.RECTANGLE2,
+                                                        new String[] { "water/water-2-0.png", "water/water-2-1.png",
+                                                                        "water/water-2-2.png" },
+                                                        4) },
+                        0,
+                        new Collision[] { CollisionList.RECTANGLE2 },
+                        new Property[] {
+                                        new Property("noCollision"),
+                                        new PropertySound(SoundType.WATER) },
+                        new BlockBehavior[] {
+                                        new BlockBehaviorApplyForce(0, 0, 0.5) })),
+        LAVA_FAKE(new BlockType("lavaFake",
+                        new Texture[] {
+                                        Texture.createBasicTexture(ShapeList.RECTANGLE2,
+                                                        new String[] { "lava/lava-2-0.png", "lava/lava-2-1.png",
+                                                                        "lava/lava-2-2.png",
+                                                                        "lava/lava-2-3.png" },
+                                                        4) },
+                        0,
+                        new Collision[] { CollisionList.RECTANGLE2 },
+                        new Property[] {
+                                        new Property("noCollision"),
+                                        new PropertySound(SoundType.LAVA),
+                                        new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 1.5, 0.5, 0.15)) },
+                        new BlockBehavior[] {
+                                        new BlockBehaviorKill(),
+                                        new BlockBehaviorApplyForce(0, 0, 0.5) })),
+
         ;
 
         public final BlockType blockType;

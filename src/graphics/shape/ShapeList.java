@@ -35,6 +35,9 @@ public final class ShapeList {
     public static final Shape STAIR_ANGLE8 = new Shape("stairs/angle8/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape SIGN_LEFT = new Shape("signs/left/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape SIGN_RIGHT = new Shape("signs/right/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape GRASS_BIG = new Shape("herbs/grass-big/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape GRASS_SMALL = new Shape("herbs/grass-small/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape FLOWERS = new Shape("herbs/flowers/","mask-left.png","mask-right.png","mask-top.png",false);
     
 
     private ShapeList() {}

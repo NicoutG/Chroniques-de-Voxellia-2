@@ -661,7 +661,7 @@ public enum BlockTemplate {
                                         new PropertySound(SoundType.BACKGROUND_NATURE) },
                         null)),
         FLOWERS(new BlockType("flowers",
-                        new Texture[] { new Texture(ShapeList.CUBE, PathManager.loadImage("herbs/flowers.png")) },
+                        new Texture[] { new Texture(ShapeList.FLOWERS, PathManager.loadImage("herbs/flowers.png")) },
                         null,
                         new Property[] { new Property("noCollision"), },
                         null) {
@@ -671,7 +671,7 @@ public enum BlockTemplate {
         }),
         /* 130 */
         GRASS_BIG(new BlockType("grassBig",
-                        new Texture[] { new Texture(ShapeList.CUBE, PathManager.loadImage("herbs/grass-big.png")) },
+                        new Texture[] { new Texture(ShapeList.GRASS_BIG, PathManager.loadImage("herbs/grass-big.png")) },
                         null,
                         new Property[] { new Property("noCollision"), },
                         null) {
@@ -680,7 +680,7 @@ public enum BlockTemplate {
                 }
         }),
         GRASS_SMALL(new BlockType("grassSmall",
-                        new Texture[] { new Texture(ShapeList.CUBE, PathManager.loadImage("herbs/grass-small.png")) },
+                        new Texture[] { new Texture(ShapeList.GRASS_SMALL, PathManager.loadImage("herbs/grass-small.png")) },
                         null,
                         new Property[] { new Property("noCollision"), },
                         null) {

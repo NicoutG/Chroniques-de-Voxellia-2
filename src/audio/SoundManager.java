@@ -161,7 +161,8 @@ public final class SoundManager {
             if (volLinear < EPSILON) {
                 pause(mc);
             } else {
-                ensurePlaying(mc, volLinear);
+                ensurePlaying(mc, volLinear); // may (re)start the clip
+                setVolume(mc.clip, volLinear); 
             }
         }
     }

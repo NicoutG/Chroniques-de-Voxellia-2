@@ -660,7 +660,35 @@ public enum BlockTemplate {
                         new Property[] { new Property("noCollision"),
                                         new PropertySound(SoundType.BACKGROUND_NATURE) },
                         null)),
-                        ;
+        FLOWERS(new BlockType("flowers",
+                        new Texture[] { new Texture(ShapeList.CUBE, PathManager.loadImage("herbs/flowers.png")) },
+                        null,
+                        new Property[] { new Property("noCollision"), },
+                        null) {
+                {
+                        setOpacity(0);
+                }
+        }),
+        /* 130 */
+        GRASS_BIG(new BlockType("grassBig",
+                        new Texture[] { new Texture(ShapeList.CUBE, PathManager.loadImage("herbs/grass-big.png")) },
+                        null,
+                        new Property[] { new Property("noCollision"), },
+                        null) {
+                {
+                        setOpacity(0);
+                }
+        }),
+        GRASS_SMALL(new BlockType("grassSmall",
+                        new Texture[] { new Texture(ShapeList.CUBE, PathManager.loadImage("herbs/grass-small.png")) },
+                        null,
+                        new Property[] { new Property("noCollision"), },
+                        null) {
+                {
+                        setOpacity(0);
+                }
+        }),
+        ;
 
         public final BlockType blockType;
 

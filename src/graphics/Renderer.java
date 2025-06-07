@@ -137,15 +137,18 @@ public final class Renderer {
 
                     FaceLighting faceLighting = faceLightings[x][y][z];
 
+                    // TO REFACTORE !
+                    boolean alwaysBehind =  (b.getName().equals( "flowers") ||b.getName().equals( "grassSmall") ||b.getName().equals( "grassBig"));
+
                     Texture text = b.getTexture();
                     if (visibleFaces[Face.LEFT.index]) {
-                        drawables.add(new Drawable(text.shade(text.left(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z));
+                        drawables.add(new Drawable(text.shade(text.left(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
                     }
                     if (visibleFaces[Face.RIGHT.index]) {
-                        drawables.add(new Drawable(text.shade(text.right(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z));
+                        drawables.add(new Drawable(text.shade(text.right(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
                     }
                     if (visibleFaces[Face.TOP.index]) {
-                        drawables.add(new Drawable(text.shade(text.top(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z));
+                        drawables.add(new Drawable(text.shade(text.top(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
                     }
 
                 }

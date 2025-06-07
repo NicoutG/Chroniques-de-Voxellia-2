@@ -2,6 +2,7 @@ package objects.entity;
 
 import java.awt.image.BufferedImage;
 
+import audio.SoundType;
 import graphics.Texture;
 import graphics.ligth.ColorRGB;
 import graphics.ligth.LightSource;
@@ -59,7 +60,9 @@ public enum EntityTemplate {
                             }, 1)
             },
             new Collision[] { CollisionList.BLOCK_ENTITY },
-            new Property[] { new PropertyLight(
+            new Property[] { 
+                 new PropertySound(SoundType.HELICOPTER) ,
+                new PropertyLight(
                     new LightSource(new ColorRGB(0.2, 0.9, 0.2), 0.5, 0.8, 0))},
             new EntityBehavior[] { new EntityBehaviorPushable(), new EntityBehaviorFollowPlayer(new PathFindingFly()) })),
     ;

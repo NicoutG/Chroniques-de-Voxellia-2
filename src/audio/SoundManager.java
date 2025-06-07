@@ -33,7 +33,7 @@ public final class SoundManager {
 
     private static final Map<SoundType, ManagedClip> clips = new EnumMap<>(SoundType.class);
 
-    private static List<SoundType> eventSounds= new ArrayList<>();
+    private static List<SoundType> eventSounds = new ArrayList<>();
 
     public SoundManager(World world) {
 
@@ -132,12 +132,24 @@ public final class SoundManager {
             nearestSq.merge(soundProp.getSound(), d2, Math::min);
         }
 
-        /* 2) Play/stop & set volume. */
         for (Map.Entry<SoundType, ManagedClip> entry : clips.entrySet()) {
             SoundType st = entry.getKey();
             ManagedClip mc = entry.getValue();
-            Double d2 = nearestSq.get(st);
+            Double d2 = nearestSq.get(st); // null = no source this frame
 
+            /* ---------- 1) AMBIENT LOOP HANDLING ------------------------- */
+            if (st.ambient) {
+                if (d2 == null) { // no ambient block -> stop
+                    pause(mc);
+                } else { // at least one present
+                    double vol = globalVolume * st.volume;
+                    ensurePlaying(mc, vol);
+                    setVolume(mc.clip, vol);
+                }
+                continue;
+            }
+
+            /* ---------- 2) NORMAL (non-ambient) HANDLING ----------------- */
             if (d2 == null || d2 > MAX_DISTANCE * MAX_DISTANCE) {
                 pause(mc);
                 continue;

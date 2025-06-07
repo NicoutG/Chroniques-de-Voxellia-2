@@ -439,7 +439,8 @@ public enum BlockTemplate {
             new Collision[] { CollisionList.RECTANGLE1, CollisionList.RECTANGLE2, CollisionList.RECTANGLE3,
                     CollisionList.CUBE },
             new Property[] {
-                    new Property("noCollision") },
+                    new Property("noCollision"),
+                    new PropertySound(SoundType.WATER) },
             new BlockBehavior[] { new BlockBehaviorLiquid(4, 2),
                     new BlockBehaviorApplyForce(0,0,0.5) })),
     AND(new BlockType("and",
@@ -468,6 +469,12 @@ public enum BlockTemplate {
         null,
         new Property[] { new Property("noCollision") },
         new BlockBehavior[] { new BlockBehaviorLoop() })),
+    AMBIENT1(new BlockType("ambient1",
+            (Texture[])null,
+            null,
+            new Property[] { new Property("noCollision"),
+            new PropertySound(SoundType.AMBIENT1) },
+            null)),
     STAIRS3(new BlockType("blockStairs3",
             new Texture[] { new Texture(ShapeList.STAIR3, PathManager.loadImage("blockStairs/block-stairs3.png")) },
             new Collision[] { CollisionList.STAIR3 },
@@ -477,6 +484,7 @@ public enum BlockTemplate {
                 setOpacity(0);
         }
     }),
+    /* 115 */
     STAIRS4(new BlockType("blockStairs4",
             new Texture[] { new Texture(ShapeList.STAIR4, PathManager.loadImage("blockStairs/block-stairs4.png")) },
             new Collision[] { CollisionList.STAIR4 },
@@ -486,7 +494,6 @@ public enum BlockTemplate {
                 setOpacity(0);
         }
     }),
-    /* 115 */
     STAIRS_ANGLE1(new BlockType("blockStairsAngle1",
             new Texture[] { new Texture(ShapeList.STAIR_ANGLE1, PathManager.loadImage("blockStairs/block-stairs-angle1.png")) },
             new Collision[] { CollisionList.STAIR_ANGLE1 },
@@ -523,6 +530,7 @@ public enum BlockTemplate {
                 setOpacity(0);
         }
     }),
+    /* 120 */
     STAIRS_ANGLE5(new BlockType("blockStairsAngle5",
             new Texture[] { new Texture(ShapeList.STAIR_ANGLE5, PathManager.loadImage("blockStairs/block-stairs-angle5.png")) },
             new Collision[] { CollisionList.STAIR_ANGLE5 },
@@ -532,7 +540,6 @@ public enum BlockTemplate {
                 setOpacity(0);
         }
     }),
-    /* 120 */
     STAIRS_ANGLE6(new BlockType("blockStairsAngle6",
             new Texture[] { new Texture(ShapeList.STAIR_ANGLE6, PathManager.loadImage("blockStairs/block-stairs-angle6.png")) },
             new Collision[] { CollisionList.STAIR_ANGLE6 },

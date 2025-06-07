@@ -3,6 +3,8 @@ package objects.block.blockBehavior;
 import java.util.ArrayList;
 import java.util.Random;
 
+import audio.SoundManager;
+import audio.SoundType;
 import objects.block.Block;
 import objects.entity.Entity;
 import tools.Vector;
@@ -59,8 +61,11 @@ public class BlockBehaviorTeleportation extends BlockBehaviorActivable {
                         else
                             teleporters.remove(index);
                     }while(!found && !teleporters.isEmpty());
-                    if (!found)
+                    if (!found) {
                         entity.setPosition(posEntity.x, posEntity.y, posEntity.z);
+                    } else {
+                        SoundManager.playSound(SoundType.TELEPORTATION);
+                    }
                 }
             }
         }

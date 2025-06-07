@@ -4,7 +4,7 @@ public enum SoundType {
     FIRE("fire-loop.wav", true, 0.35),
     LAVA("lava-loop.wav", true, 1.15),
     LEVER("lever.wav", false, 1),
-    WATER("water-loop.wav", true, 5),
+    WATER("water-loop.wav", true, 3),
     HELICOPTER("helicopter-loop.wav", true, 0.7),
     TELEPORTATION("teleportation.wav", false, 15),
     JUMP1("movements/jump1.wav", false, 0.2),

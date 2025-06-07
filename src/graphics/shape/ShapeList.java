@@ -23,6 +23,8 @@ public final class ShapeList {
     public static final Shape SLOPE4 = new Shape("slope/4/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape STAIR1 = new Shape("stairs/left/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape STAIR2 = new Shape("stairs/right/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape SIGN_LEFT = new Shape("signs/left/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape SIGN_RIGHT = new Shape("signs/right/","mask-left.png","mask-right.png","mask-top.png",false);
     
 
     private ShapeList() {}

@@ -32,10 +32,21 @@ public enum BlockTemplate {
             null)),
     /* 5 */
     LAVA(new BlockType("lava",
-            new Texture[] { Texture.createBasicTexture(ShapeList.RECTANGLE1, new String[] { "lava/lava-1-0.png", "lava/lava-1-1.png", "lava/lava-1-2.png", "lava/lava-1-3.png" }, 4),
-                    Texture.createBasicTexture(ShapeList.RECTANGLE2, new String[] { "lava/lava-2-0.png", "lava/lava-2-1.png", "lava/lava-2-2.png", "lava/lava-2-3.png" }, 4),
-                    Texture.createBasicTexture(ShapeList.RECTANGLE3, new String[] { "lava/lava-3-0.png", "lava/lava-3-1.png", "lava/lava-3-2.png", "lava/lava-3-3.png" }, 4),
-                    Texture.createBasicTexture(new String[] { "lava/lava-4-0.png", "lava/lava-4-1.png", "lava/lava-4-2.png", "lava/lava-4-3.png" }, 4) },
+            new Texture[] {
+                    Texture.createBasicTexture(ShapeList.RECTANGLE1,
+                            new String[] { "lava/lava-1-0.png", "lava/lava-1-1.png", "lava/lava-1-2.png",
+                                    "lava/lava-1-3.png" },
+                            4),
+                    Texture.createBasicTexture(ShapeList.RECTANGLE2,
+                            new String[] { "lava/lava-2-0.png", "lava/lava-2-1.png", "lava/lava-2-2.png",
+                                    "lava/lava-2-3.png" },
+                            4),
+                    Texture.createBasicTexture(ShapeList.RECTANGLE3,
+                            new String[] { "lava/lava-3-0.png", "lava/lava-3-1.png", "lava/lava-3-2.png",
+                                    "lava/lava-3-3.png" },
+                            4),
+                    Texture.createBasicTexture(new String[] { "lava/lava-4-0.png", "lava/lava-4-1.png",
+                            "lava/lava-4-2.png", "lava/lava-4-3.png" }, 4) },
             0,
             new Collision[] { CollisionList.RECTANGLE1, CollisionList.RECTANGLE2, CollisionList.RECTANGLE3,
                     CollisionList.CUBE },
@@ -45,27 +56,27 @@ public enum BlockTemplate {
                     new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 1.5, 0.5, 0.15)) },
             new BlockBehavior[] { new BlockBehaviorLiquid(4, 6),
                     new BlockBehaviorKill(),
-                    new BlockBehaviorApplyForce(0,0,0.5) })),
+                    new BlockBehaviorApplyForce(0, 0, 0.5) })),
     SUN(new BlockType("sun",
-            (Texture[])null,
+            (Texture[]) null,
             null,
             new Property[] { new Property("noCollision"),
-                new PropertyLight(new LightSource(new ColorRGB[] {
-                    new ColorRGB(1, 1, 1), // plain day (white)
-                    new ColorRGB(1, 1, 1), // (white)
-                    new ColorRGB(1, 1, 1),
-                    new ColorRGB(1, 1, 1),
-                    new ColorRGB(1, 0.9, 0.75),
-                    new ColorRGB(1, 0.5, 0.3), // evening (orange-pink)
-                    new ColorRGB(0.6, 0.3, 0.35),
-                    new ColorRGB(0.2, 0.2, 0.4), // night (low blue-white)
-                    new ColorRGB(0.2, 0.2, 0.4),
-                    new ColorRGB(0.2, 0.2, 0.4),
-                    new ColorRGB(0.2, 0.2, 0.4),
-                    new ColorRGB(0.6, 0.3, 0.35),
-                    new ColorRGB(0.8, 0.3, 0.3), // morning (reddish)
-                    new ColorRGB(1, 0.9, 0.75),
-            }, 1200, 0.75, 1, 0)) },
+                    new PropertyLight(new LightSource(new ColorRGB[] {
+                            new ColorRGB(1, 1, 1), // plain day (white)
+                            new ColorRGB(1, 1, 1), // (white)
+                            new ColorRGB(1, 1, 1),
+                            new ColorRGB(1, 1, 1),
+                            new ColorRGB(1, 0.9, 0.75),
+                            new ColorRGB(1, 0.5, 0.3), // evening (orange-pink)
+                            new ColorRGB(0.6, 0.3, 0.35),
+                            new ColorRGB(0.2, 0.2, 0.4), // night (low blue-white)
+                            new ColorRGB(0.2, 0.2, 0.4),
+                            new ColorRGB(0.2, 0.2, 0.4),
+                            new ColorRGB(0.2, 0.2, 0.4),
+                            new ColorRGB(0.6, 0.3, 0.35),
+                            new ColorRGB(0.8, 0.3, 0.3), // morning (reddish)
+                            new ColorRGB(1, 0.9, 0.75),
+                    }, 1200, 0.75, 1, 0)) },
             null)),
     GLASS(new BlockType("glassBlock", "glass-block.png") {
         {
@@ -83,8 +94,8 @@ public enum BlockTemplate {
             null,
             new Property[] { new Property("noCollision") },
             new BlockBehavior[] {
-                new BlockBehaviorLever()
-             })),
+                    new BlockBehaviorLever()
+            })),
     WORLD(new BlockType("worldBlock",
             new Texture[] { Texture.createBasicTexture(
                     new String[] { "world-block-0.png", "world-block-1.png", "world-block-2.png" }, 3) },
@@ -277,11 +288,15 @@ public enum BlockTemplate {
     BLOCK_CLUBS(new BlockType("blockClubs", "block-clubs.png")),
     BLOCK_ALTERNATE(new BlockType("blockAlternate", "block-alternate.png")),
     TELEPORTER(new BlockType("teleporter",
-        new Texture[] { new Texture(ShapeList.CUBE, PathManager.loadImage("teleporter/teleporter-F.png")),
-                Texture.createBasicTexture(new String[] { "teleporter/teleporter-0-T.png", "teleporter/teleporter-1-T.png", "teleporter/teleporter-2-T.png", "teleporter/teleporter-3-T.png" }, 3) },
-        null,
-        new Property[] { new PropertyLight(new LightSource(new ColorRGB(0.8, 0.2, 0.7), 0.35, 0.5, 0.05)) },
-        new BlockBehavior[] { new BlockBehaviorTeleportation(), new BlockBehaviorActivableProperty(PropertyLight.NAME) })),
+            new Texture[] { new Texture(ShapeList.CUBE, PathManager.loadImage("teleporter/teleporter-F.png")),
+                    Texture.createBasicTexture(
+                            new String[] { "teleporter/teleporter-0-T.png", "teleporter/teleporter-1-T.png",
+                                    "teleporter/teleporter-2-T.png", "teleporter/teleporter-3-T.png" },
+                            3) },
+            null,
+            new Property[] { new PropertyLight(new LightSource(new ColorRGB(0.8, 0.2, 0.7), 0.35, 0.5, 0.05)) },
+            new BlockBehavior[] { new BlockBehaviorTeleportation(),
+                    new BlockBehaviorActivableProperty(PropertyLight.NAME) })),
     BLACK_BLOCK(new BlockType("blackBlock", "black-block.png")),
     /* 70 */
     BLUE_BLOCK_BROKEN(new BlockType("blueBlockBroken", "blue-block-broken.png")),
@@ -334,7 +349,8 @@ public enum BlockTemplate {
                     new BlockBehaviorActivableProperty(PropertyLight.NAME) })),
     STAINED_GLASS_RED_LEFT(new BlockType("stainedGlassRedLeft",
             new Texture[] {
-                    new Texture(ShapeList.BORDER_LEFT, PathManager.loadImage("stained-glass/stained-glass-red-left.png")) },
+                    new Texture(ShapeList.BORDER_LEFT,
+                            PathManager.loadImage("stained-glass/stained-glass-red-left.png")) },
             new Collision[] { CollisionList.CUBE },
             null,
             null) {
@@ -358,7 +374,8 @@ public enum BlockTemplate {
     }),
     STAINED_GLASS_BLUE_LEFT(new BlockType("stainedGlassBlueLeft",
             new Texture[] {
-                    new Texture(ShapeList.BORDER_LEFT, PathManager.loadImage("stained-glass/stained-glass-blue-left.png")) },
+                    new Texture(ShapeList.BORDER_LEFT,
+                            PathManager.loadImage("stained-glass/stained-glass-blue-left.png")) },
             new Collision[] { CollisionList.CUBE },
             null,
             null) {
@@ -405,33 +422,33 @@ public enum BlockTemplate {
     }),
     /* 105 */
     SUNLIGHT(new BlockType("sunlight",
-            (Texture[])null,
+            (Texture[]) null,
             null,
             new Property[] { new Property("noCollision"),
-                new PropertyLight(new LightSource(new ColorRGB[] {
-                    new ColorRGB(1, 1, 1), // plain day (white)
-                    new ColorRGB(1, 1, 1), // (white)
-                    new ColorRGB(1, 1, 1),
-                    new ColorRGB(1, 1, 1),
-                    new ColorRGB(1, 0.9, 0.75),
-                    new ColorRGB(1, 0.5, 0.3), // evening (orange-pink)
-                    new ColorRGB(0.6, 0.3, 0.35),
-                    new ColorRGB(0.2, 0.2, 0.4), // night (low blue-white)
-                    new ColorRGB(0.2, 0.2, 0.4),
-                    new ColorRGB(0.2, 0.2, 0.4),
-                    new ColorRGB(0.2, 0.2, 0.4),
-                    new ColorRGB(0.6, 0.3, 0.35),
-                    new ColorRGB(0.8, 0.3, 0.3), // morning (reddish)
-                    new ColorRGB(1, 0.9, 0.75),
-            }, 1200, 1, 0.9, 0)) },
+                    new PropertyLight(new LightSource(new ColorRGB[] {
+                            new ColorRGB(1, 1, 1), // plain day (white)
+                            new ColorRGB(1, 1, 1), // (white)
+                            new ColorRGB(1, 1, 1),
+                            new ColorRGB(1, 1, 1),
+                            new ColorRGB(1, 0.9, 0.75),
+                            new ColorRGB(1, 0.5, 0.3), // evening (orange-pink)
+                            new ColorRGB(0.6, 0.3, 0.35),
+                            new ColorRGB(0.2, 0.2, 0.4), // night (low blue-white)
+                            new ColorRGB(0.2, 0.2, 0.4),
+                            new ColorRGB(0.2, 0.2, 0.4),
+                            new ColorRGB(0.2, 0.2, 0.4),
+                            new ColorRGB(0.6, 0.3, 0.35),
+                            new ColorRGB(0.8, 0.3, 0.3), // morning (reddish)
+                            new ColorRGB(1, 0.9, 0.75),
+                    }, 1200, 1, 0.9, 0)) },
             null)),
     LINKED_LEVER(new BlockType("linkedLever",
-        new Texture[] { new Texture(ShapeList.LEVER_OFF, PathManager.loadImage("linkedLever/linked-lever-F.png")),
-                new Texture(ShapeList.LEVER_ON, PathManager.loadImage("linkedLever/linked-lever-T.png")) },
-        0,
-        null,
-        new Property[] { new Property("noCollision") },
-        new BlockBehavior[] { new BlockBehaviorLever(), new BlockBehaviorActivable() })),
+            new Texture[] { new Texture(ShapeList.LEVER_OFF, PathManager.loadImage("linkedLever/linked-lever-F.png")),
+                    new Texture(ShapeList.LEVER_ON, PathManager.loadImage("linkedLever/linked-lever-T.png")) },
+            0,
+            null,
+            new Property[] { new Property("noCollision") },
+            new BlockBehavior[] { new BlockBehaviorLever(), new BlockBehaviorActivable() })),
     WATER(new BlockType("water",
             new Texture[] { new Texture(ShapeList.RECTANGLE1, PathManager.loadImage("water/water-1.png")),
                     new Texture(ShapeList.RECTANGLE2, PathManager.loadImage("water/water-2.png")),
@@ -444,39 +461,56 @@ public enum BlockTemplate {
                     new Property("noCollision"),
                     new PropertySound(SoundType.WATER) },
             new BlockBehavior[] { new BlockBehaviorLiquid(4, 2),
-                    new BlockBehaviorApplyForce(0,0,0.5) })),
+                    new BlockBehaviorApplyForce(0, 0, 0.5) })),
     AND(new BlockType("and",
-        (Texture[])null,
-        null,
-        new Property[] { new Property("noCollision") },
-        new BlockBehavior[] { new BlockBehaviorAnd() })),
+            (Texture[]) null,
+            null,
+            new Property[] { new Property("noCollision") },
+            new BlockBehavior[] { new BlockBehaviorAnd() })),
     OR(new BlockType("or",
-        (Texture[])null,
-        null,
-        new Property[] { new Property("noCollision") },
-        new BlockBehavior[] { new BlockBehaviorOr() })),
+            (Texture[]) null,
+            null,
+            new Property[] { new Property("noCollision") },
+            new BlockBehavior[] { new BlockBehaviorOr() })),
     /* 110 */
     NOT(new BlockType("not",
-        (Texture[])null,
-        null,
-        new Property[] { new Property("noCollision") },
-        new BlockBehavior[] { new BlockBehaviorNot() })),
+            (Texture[]) null,
+            null,
+            new Property[] { new Property("noCollision") },
+            new BlockBehavior[] { new BlockBehaviorNot() })),
     DELAY(new BlockType("delay",
-        (Texture[])null,
-        null,
-        new Property[] { new Property("noCollision") },
-        new BlockBehavior[] { new BlockBehaviorDelay() })),
+            (Texture[]) null,
+            null,
+            new Property[] { new Property("noCollision") },
+            new BlockBehavior[] { new BlockBehaviorDelay() })),
     LOOP(new BlockType("loop",
-        (Texture[])null,
-        null,
-        new Property[] { new Property("noCollision") },
-        new BlockBehavior[] { new BlockBehaviorLoop() })),
-     AMBIENT1(new BlockType("ambient1",
-            (Texture[])null,
+            (Texture[]) null,
+            null,
+            new Property[] { new Property("noCollision") },
+            new BlockBehavior[] { new BlockBehaviorLoop() })),
+    AMBIENT1(new BlockType("ambient1",
+            (Texture[]) null,
             null,
             new Property[] { new Property("noCollision"),
-            new PropertySound(SoundType.AMBIENT1) },
+                    new PropertySound(SoundType.AMBIENT1) },
             null)),
+    SIGN_LEFT(new BlockType("SignLeft",
+            new Texture[] { new Texture(ShapeList.SIGN_LEFT, PathManager.loadImage("sign-left.png")) },
+            null,
+            null) {
+        {
+            setOpacity(0);
+        }
+    }),
+    /* 115 */
+    SIGN_RIGHT(new BlockType("SignRight",
+            new Texture[] { new Texture(ShapeList.SIGN_RIGHT, PathManager.loadImage("sign-right.png")) },
+            null,
+            null) {
+        {
+            setOpacity(0);
+        }
+    }),
     ;
 
     public final BlockType blockType;

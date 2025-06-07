@@ -4,13 +4,13 @@ public enum SoundType {
     FIRE("fire-loop.wav", true, 0.35),
     LAVA("lava-loop.wav", true, 1.15),
     LEVER("lever.wav", false, 1),
-    WATER("water-loop.wav", true, 16),
+    WATER("water-loop.wav", true, 3),
     HELICOPTER("helicopter-loop.wav", true, 0.7),
     TELEPORTATION("teleportation.wav", false, 15),
     JUMP1("movements/jump1.wav", false, 0.2),
     JUMP2("movements/jump2.wav", false, 0.4),
     DEATH("death.wav", false, 2),
-    TYPING("typing.wav", false, 0.75),
+    TYPING("typing.wav", false, 0.5),
     AMBIENT1("ambient/moon-origin-loop.wav", true, 1, true);
 
     final String path;

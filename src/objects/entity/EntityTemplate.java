@@ -5,8 +5,7 @@ import java.awt.image.BufferedImage;
 import graphics.Texture;
 import graphics.ligth.ColorRGB;
 import graphics.ligth.LightSource;
-import graphics.shape.FlyingSlimeShape;
-import graphics.shape.PlayerShape;
+import graphics.shape.ShapeList;
 import objects.entity.entityBehavior.*;
 import objects.entity.entityBehavior.pathFinding.*;
 import objects.property.*;
@@ -19,7 +18,7 @@ public enum EntityTemplate {
     PLAYER(new EntityType("player",
             new Texture[] {
                     new Texture(
-                            new PlayerShape(), new BufferedImage[] {
+                            ShapeList.PLAYER, new BufferedImage[] {
                                     PathManager.loadImage("player/right/player-right-0.png"),
                                     PathManager.loadImage("player/right/player-right-1.png"),
                                     PathManager.loadImage("player/right/player-right-2.png"),
@@ -53,7 +52,7 @@ public enum EntityTemplate {
     FLYING_SLIME(new EntityType("flyingSlime",
             new Texture[] {
                     new Texture(
-                            new FlyingSlimeShape(), new BufferedImage[] {
+                            ShapeList.FLYING_SLIME, new BufferedImage[] {
                                     PathManager.loadImage("slime/flying-slime-0.png"),
                                     PathManager.loadImage("slime/flying-slime-1.png"),
                                     PathManager.loadImage("slime/flying-slime-2.png"),

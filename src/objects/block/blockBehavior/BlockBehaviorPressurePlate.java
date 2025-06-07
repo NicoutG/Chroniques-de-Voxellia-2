@@ -1,7 +1,7 @@
 package objects.block.blockBehavior;
 
-import objects.block.Block;
 import objects.collision.CollisionList;
+import objects.block.Block;
 import objects.entity.Entity;
 import tools.Vector;
 import world.World;

@@ -1,9 +1,9 @@
 /*  graphics/texture/Texture.java  */
 package graphics;
 
-import graphics.shape.Cube;
 import graphics.shape.Face;
 import graphics.shape.Shape;
+import graphics.shape.ShapeList;
 import tools.PathManager;
 
 import java.awt.image.BufferedImage;
@@ -30,14 +30,14 @@ public final class Texture {
     /* =========================== CTORS ================================= */
 
     public static Texture createBasicTexture(String texturePath) {
-        return new Texture(new Cube(), PathManager.loadImage(texturePath));
+        return new Texture(ShapeList.CUBE, PathManager.loadImage(texturePath));
     }
 
     public static Texture createBasicTexture(String[] texturePaths, int ticksPerFrame) {
         BufferedImage[] images = new BufferedImage[texturePaths.length];
         for (int i = 0; i < texturePaths.length; i++)
             images[i] = PathManager.loadImage(texturePaths[i]);
-        return new Texture(new Cube(), images, ticksPerFrame);
+        return new Texture(ShapeList.CUBE, images, ticksPerFrame);
     }
 
     public static Texture createBasicTexture(Shape shape,String[] texturePaths, int ticksPerFrame) {

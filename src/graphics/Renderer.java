@@ -11,7 +11,6 @@ import world.World;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -138,14 +137,15 @@ public final class Renderer {
 
                     FaceLighting faceLighting = faceLightings[x][y][z];
 
+                    Texture text = b.getTexture();
                     if (visibleFaces[Face.LEFT.index]) {
-                        drawables.add(new Drawable(shade(b.getTexture().left(tick), faceLighting.left()), x, y, z));
+                        drawables.add(new Drawable(text.shade(text.left(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z));
                     }
                     if (visibleFaces[Face.RIGHT.index]) {
-                        drawables.add(new Drawable(shade(b.getTexture().right(tick), faceLighting.right()), x, y, z));
+                        drawables.add(new Drawable(text.shade(text.right(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z));
                     }
                     if (visibleFaces[Face.TOP.index]) {
-                        drawables.add(new Drawable(shade(b.getTexture().top(tick), faceLighting.top()), x, y, z));
+                        drawables.add(new Drawable(text.shade(text.top(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z));
                     }
 
                 }
@@ -183,14 +183,15 @@ public final class Renderer {
                 FaceLighting faceLighting = sampleLighting(faceLightings, e.getX() - 0.5, e.getY() - 0.5,
                         e.getZ() - 0.5);
 
-                drawables.add(new Drawable(shade(e.getTexture().left(tick),
-                        faceLighting.left()), e.getX(), e.getY(),
+                Texture text = e.getTexture();
+                drawables.add(new Drawable(text.shade(text.left(tick),
+                        faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
                         e.getZ(), true));
-                drawables.add(new Drawable(shade(e.getTexture().right(tick),
-                        faceLighting.right()), e.getX(), e.getY(),
+                drawables.add(new Drawable(text.shade(text.right(tick),
+                        faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
                         e.getZ(), true));
-                drawables.add(new Drawable(shade(e.getTexture().top(tick),
-                        faceLighting.top()), e.getX(), e.getY(),
+                drawables.add(new Drawable(text.shade(text.top(tick),
+                        faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
                         e.getZ(), true));
 
             }
@@ -298,23 +299,6 @@ public final class Renderer {
         }
 
         return faces;
-    }
-
-    /* ---------- modulation couleur (logiciel) ----------------------- */
-    private BufferedImage shade(BufferedImage src, ColorRGB c) {
-        BufferedImage dst = new BufferedImage(src.getWidth(),
-                src.getHeight(),
-                BufferedImage.TYPE_INT_ARGB);
-        for (int y = 0; y < src.getHeight(); ++y)
-            for (int x = 0; x < src.getWidth(); ++x) {
-                int argb = src.getRGB(x, y);
-                int a = argb >>> 24;
-                int r = (int) (((argb >> 16) & 0xFF) * c.r());
-                int g = (int) (((argb >> 8) & 0xFF) * c.g());
-                int b = (int) (((argb) & 0xFF) * c.b());
-                dst.setRGB(x, y, (a << 24) | (r << 16) | (g << 8) | b);
-            }
-        return dst;
     }
 
     /**

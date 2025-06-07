@@ -147,42 +147,45 @@ public final class Texture {
 
                 int argb = src.getRGB(x, y);
                 int a = argb >>> 24;
-                int r0 = (argb >> 16) & 0xFF;
-                int g0 = (argb >> 8) & 0xFF;
-                int b0 = argb & 0xFF;
 
-                int count = 0;
-                double rSum = 0, gSum = 0, bSum = 0;
+                if (a != 0) {
+                    int r0 = (argb >> 16) & 0xFF;
+                    int g0 = (argb >> 8) & 0xFF;
+                    int b0 = argb & 0xFF;
 
-                if ((mpLeft[index] >>> 24) != 0) {
-                    count++;
-                    rSum += cLeft.r();
-                    gSum += cLeft.g();
-                    bSum += cLeft.b();
+                    int count = 0;
+                    double rSum = 0, gSum = 0, bSum = 0;
+
+                    if ((mpLeft[index] >>> 24) != 0) {
+                        count++;
+                        rSum += cLeft.r();
+                        gSum += cLeft.g();
+                        bSum += cLeft.b();
+                    }
+                    if ((mpRight[index] >>> 24) != 0) {
+                        count++;
+                        rSum += cRight.r();
+                        gSum += cRight.g();
+                        bSum += cRight.b();
+                    }
+                    if ((mpTop[index] >>> 24) != 0) {
+                        count++;
+                        rSum += cTop.r();
+                        gSum += cTop.g();
+                        bSum += cTop.b();
+                    }
+
+                    if (count == 0) {
+                        dst.setRGB(x, y, argb);
+                        continue;
+                    }
+
+                    int r = Math.min(255, (int) (r0 * rSum / count));
+                    int g = Math.min(255, (int) (g0 * gSum / count));
+                    int b = Math.min(255, (int) (b0 * bSum / count));
+
+                    dst.setRGB(x, y, (a << 24) | (r << 16) | (g << 8) | b);
                 }
-                if ((mpRight[index] >>> 24) != 0) {
-                    count++;
-                    rSum += cRight.r();
-                    gSum += cRight.g();
-                    bSum += cRight.b();
-                }
-                if ((mpTop[index] >>> 24) != 0) {
-                    count++;
-                    rSum += cTop.r();
-                    gSum += cTop.g();
-                    bSum += cTop.b();
-                }
-
-                if (count == 0) {
-                    dst.setRGB(x, y, argb);
-                    continue;
-                }
-
-                int r = Math.min(255, (int) (r0 * rSum / count));
-                int g = Math.min(255, (int) (g0 * gSum / count));
-                int b = Math.min(255, (int) (b0 * bSum / count));
-
-                dst.setRGB(x, y, (a << 24) | (r << 16) | (g << 8) | b);
             }
         }
 

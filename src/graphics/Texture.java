@@ -132,7 +132,7 @@ public final class Texture {
         return out;
     }
 
-    public BufferedImage shade(BufferedImage src, ColorRGB cLeft, ColorRGB cRight, ColorRGB cTop) {
+    public BufferedImage shade(BufferedImage src, Face face, ColorRGB cLeft, ColorRGB cRight, ColorRGB cTop) {
         int w = src.getWidth();
         int h = src.getHeight();
         BufferedImage dst = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
@@ -155,36 +155,44 @@ public final class Texture {
 
                     int count = 0;
                     double rSum = 0, gSum = 0, bSum = 0;
+                    Face firstFace = null;
 
                     if ((mpLeft[index] >>> 24) != 0) {
                         count++;
                         rSum += cLeft.r();
                         gSum += cLeft.g();
                         bSum += cLeft.b();
+                        if (count == 1)
+                            firstFace = Face.LEFT;
                     }
                     if ((mpRight[index] >>> 24) != 0) {
                         count++;
                         rSum += cRight.r();
                         gSum += cRight.g();
                         bSum += cRight.b();
+                        if (count == 1)
+                            firstFace = Face.RIGHT;
                     }
                     if ((mpTop[index] >>> 24) != 0) {
                         count++;
                         rSum += cTop.r();
                         gSum += cTop.g();
                         bSum += cTop.b();
+                        if (count == 1)
+                            firstFace = Face.TOP;
                     }
 
                     if (count == 0) {
                         dst.setRGB(x, y, argb);
                         continue;
                     }
+                    else if (face == firstFace) {
+                            int r = Math.min(255, (int) (r0 * (1.0 * rSum / count)));
+                            int g = Math.min(255, (int) (g0 * (1.0 * gSum / count)));
+                            int b = Math.min(255, (int) (b0 * (1.0 * bSum / count)));
 
-                    int r = Math.min(255, (int) (r0 * rSum / count));
-                    int g = Math.min(255, (int) (g0 * gSum / count));
-                    int b = Math.min(255, (int) (b0 * bSum / count));
-
-                    dst.setRGB(x, y, (a << 24) | (r << 16) | (g << 8) | b);
+                            dst.setRGB(x, y, (a << 24) | (r << 16) | (g << 8) | b);
+                        }
                 }
             }
         }

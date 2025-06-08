@@ -141,13 +141,13 @@ public final class Renderer {
 
                     Texture text = b.getTexture();
                     if (visibleFaces[Face.LEFT.index]) {
-                        drawables.add(new Drawable(text.shade(text.left(tick), Face.LEFT, faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
+                        drawables.add(new Drawable(text.shade(text.left(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
                     }
                     if (visibleFaces[Face.RIGHT.index]) {
-                        drawables.add(new Drawable(text.shade(text.right(tick), Face.RIGHT, faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
+                        drawables.add(new Drawable(text.shade(text.right(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
                     }
                     if (visibleFaces[Face.TOP.index]) {
-                        drawables.add(new Drawable(text.shade(text.top(tick), Face.TOP, faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
+                        drawables.add(new Drawable(text.shade(text.top(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
                     }
 
                 }
@@ -186,13 +186,13 @@ public final class Renderer {
                         e.getZ() - 0.5);
 
                 Texture text = e.getTexture();
-                drawables.add(new Drawable(text.shade(text.left(tick), Face.LEFT,
+                drawables.add(new Drawable(text.shade(text.left(tick), 
                         faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
                         e.getZ(), true));
-                drawables.add(new Drawable(text.shade(text.right(tick), Face.RIGHT,
+                drawables.add(new Drawable(text.shade(text.right(tick), 
                         faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
                         e.getZ(), true));
-                drawables.add(new Drawable(text.shade(text.top(tick), Face.TOP,
+                drawables.add(new Drawable(text.shade(text.top(tick), 
                         faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
                         e.getZ(), true));
 

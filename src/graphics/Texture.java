@@ -74,9 +74,10 @@ public final class Texture {
         /* ---- pre-cut all faces exactly once ---- */
         faces = new BufferedImage[frames.length][Face.values().length];
         for (int i = 0; i < frames.length; i++) {
-            faces[i][Face.LEFT.index] = applyMask(frames[i], shape.getLeftMask());
-            faces[i][Face.TOP.index] = applyMask(frames[i], shape.getTopMask());
-            faces[i][Face.RIGHT.index] = applyMask(frames[i], shape.getRightMask());
+            faces[i] = applyMasks(frames[i], shape.getLeftMask(), shape.getRightMask(), shape.getTopMask());
+            // faces[i][Face.LEFT.index] = applyMask(frames[i], shape.getLeftMask());
+            // faces[i][Face.TOP.index] = applyMask(frames[i], shape.getTopMask());
+            // faces[i][Face.RIGHT.index] = applyMask(frames[i], shape.getRightMask());
         }
     }
 
@@ -115,24 +116,41 @@ public final class Texture {
     /* ============================ HELPERS ================================ */
 
     /** AND-the-alpha of tex with mask. */
-    private static BufferedImage applyMask(BufferedImage tex, BufferedImage mask) {
+    private static BufferedImage[] applyMasks(BufferedImage tex, BufferedImage maskLeft, BufferedImage maskRight, BufferedImage maskTop) {
 
         int w = tex.getWidth(), h = tex.getHeight();
-        BufferedImage out = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage[] out = new BufferedImage[3];
+        for (int i = 0; i < out.length; i++)
+            out[i] = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 
         int[] tp = tex.getRGB(0, 0, w, h, null, 0, w);
-        int[] mp = mask.getRGB(0, 0, w, h, null, 0, w);
+        int[] mpLeft = maskLeft.getRGB(0, 0, w, h, null, 0, w);
+        int[] mpRight = maskRight.getRGB(0, 0, w, h, null, 0, w);
+        int[] mpTop = maskTop.getRGB(0, 0, w, h, null, 0, w);
 
         for (int i = 0; i < tp.length; i++) {
-            int alpha = (mp[i] >>> 24); // 0-255
+            int alpha = (mpLeft[i] >>> 24); // 0-255
             // si le masque n’est pas transparent, on garde la couleur de la texture
-            out.setRGB(i % w, i / w,
-                    (alpha == 0) ? 0 : tp[i]);
+            if (alpha != 0) {
+                out[Face.LEFT.index].setRGB(i % w, i / w, tp[i]);
+                continue;
+            }
+            alpha = (mpRight[i] >>> 24); // 0-255
+            if (alpha != 0) {
+                out[Face.RIGHT.index].setRGB(i % w, i / w, tp[i]);
+                continue;
+            }
+            alpha = (mpTop[i] >>> 24); // 0-255
+            if (alpha != 0) {
+                out[Face.TOP.index].setRGB(i % w, i / w, tp[i]);
+                continue;
+            }
         }
+
         return out;
     }
 
-    public BufferedImage shade(BufferedImage src, Face face, ColorRGB cLeft, ColorRGB cRight, ColorRGB cTop) {
+    public BufferedImage shade(BufferedImage src, ColorRGB cLeft, ColorRGB cRight, ColorRGB cTop) {
         int w = src.getWidth();
         int h = src.getHeight();
         BufferedImage dst = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
@@ -155,44 +173,37 @@ public final class Texture {
 
                     int count = 0;
                     double rSum = 0, gSum = 0, bSum = 0;
-                    Face firstFace = null;
 
                     if ((mpLeft[index] >>> 24) != 0) {
                         count++;
                         rSum += cLeft.r();
                         gSum += cLeft.g();
                         bSum += cLeft.b();
-                        if (count == 1)
-                            firstFace = Face.LEFT;
                     }
                     if ((mpRight[index] >>> 24) != 0) {
                         count++;
                         rSum += cRight.r();
                         gSum += cRight.g();
                         bSum += cRight.b();
-                        if (count == 1)
-                            firstFace = Face.RIGHT;
                     }
                     if ((mpTop[index] >>> 24) != 0) {
                         count++;
                         rSum += cTop.r();
                         gSum += cTop.g();
                         bSum += cTop.b();
-                        if (count == 1)
-                            firstFace = Face.TOP;
                     }
 
                     if (count == 0) {
                         dst.setRGB(x, y, argb);
                         continue;
                     }
-                    else if (face == firstFace) {
-                            int r = Math.min(255, (int) (r0 * (1.0 * rSum / count)));
-                            int g = Math.min(255, (int) (g0 * (1.0 * gSum / count)));
-                            int b = Math.min(255, (int) (b0 * (1.0 * bSum / count)));
+                    else {
+                        int r = Math.min(255, (int) (r0 * (1.0 * rSum / count)));
+                        int g = Math.min(255, (int) (g0 * (1.0 * gSum / count)));
+                        int b = Math.min(255, (int) (b0 * (1.0 * bSum / count)));
 
-                            dst.setRGB(x, y, (a << 24) | (r << 16) | (g << 8) | b);
-                        }
+                        dst.setRGB(x, y, (a << 24) | (r << 16) | (g << 8) | b);
+                    }
                 }
             }
         }

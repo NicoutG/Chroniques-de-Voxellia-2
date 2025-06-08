@@ -221,8 +221,8 @@ public enum BlockTemplate {
         MOSSY2(new BlockType("blockMossy2", "block-mossy-2.png")),
         SLOPE_HALF1(new BlockType("blockSlopeHalf1",
                         new Texture[] { new Texture(ShapeList.SLOPE_HALF1, 
-                                        PathManager.loadImage("block-slope-1.png")) },
-                        new Collision[] { CollisionList.SLOPE1 },
+                                        PathManager.loadImage("blockSlopes/block-slope-half1.png")) },
+                        new Collision[] { CollisionList.STAIR_HALF1 },
                         null,
                         null) {
                 {
@@ -232,8 +232,8 @@ public enum BlockTemplate {
         }),
         SLOPE_HALF2(new BlockType("blockSlopeHalf2",
                         new Texture[] { new Texture(ShapeList.SLOPE_HALF2, 
-                                        PathManager.loadImage("block-slope-2.png")) },
-                        new Collision[] { CollisionList.SLOPE2 },
+                                        PathManager.loadImage("blockSlopes/block-slope-half2.png")) },
+                        new Collision[] { CollisionList.STAIR_HALF2 },
                         null,
                         null) {
                 {
@@ -244,8 +244,8 @@ public enum BlockTemplate {
         /* 45 */
         SLOPE_HALF3(new BlockType("blockSlopeHalf3",
                         new Texture[] { new Texture(ShapeList.SLOPE_HALF3, 
-                                        PathManager.loadImage("block-slope-3.png")) },
-                        new Collision[] { CollisionList.SLOPE3 },
+                                        PathManager.loadImage("blockSlopes/block-slope-half3.png")) },
+                        new Collision[] { CollisionList.STAIR_HALF3 },
                         null,
                         null) {
                 {
@@ -255,8 +255,8 @@ public enum BlockTemplate {
         }),
         SLOPE_HALF4(new BlockType("blockSlopeHalf4",
                         new Texture[] { new Texture(ShapeList.SLOPE_HALF4, 
-                                        PathManager.loadImage("block-slope-4.png")) },
-                        new Collision[] { CollisionList.SLOPE4 },
+                                        PathManager.loadImage("blockSlopes/block-slope-half4.png")) },
+                        new Collision[] { CollisionList.STAIR_HALF4 },
                         null,
                         null) {
                 {

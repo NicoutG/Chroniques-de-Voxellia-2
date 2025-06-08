@@ -11,6 +11,7 @@ public enum SoundType {
     JUMP2("movements/jump2.wav", false, 0.4),
     DEATH("death.wav", false, 2),
     WORLD_LOADER_ACTIVATION("world-loader-activation.wav", false, 6),
+    TELEPORTER_ACTIVATION("teleporter-activation.wav", false, 6),
     TYPING("typing.wav", false, 0.5),
     // Ambient :
     AMBIENT1("ambient/moon-origin-loop.wav", true, 1, true),

@@ -21,6 +21,7 @@ public class BlockBehaviorChangeWorld extends BlockBehaviorActivable {
     @Override
     protected void desactivate(World world, Block block, Vector position, int network) {
         block.setIndexTexture(0);
+        SoundManager.playSoundFromCoordinates(SoundType.WORLD_LOADER_ACTIVATION, position.x, position.y, position.z);
     }
 
     @Override

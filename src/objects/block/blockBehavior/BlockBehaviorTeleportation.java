@@ -17,12 +17,14 @@ public class BlockBehaviorTeleportation extends BlockBehaviorActivable {
     @Override
     protected void activate(World world, Block block, Vector position, int network) {
         block.setIndexTexture(1);
+        SoundManager.playSoundFromCoordinates(SoundType.TELEPORTER_ACTIVATION, position.x, position.y, position.z);
     }
 
     @Override
     protected void desactivate(World world, Block block, Vector position, int network) {
         teleportedEntities.clear();
         block.setIndexTexture(0);
+        SoundManager.playSoundFromCoordinates(SoundType.TELEPORTER_ACTIVATION, position.x, position.y, position.z);
     }
 
     @Override

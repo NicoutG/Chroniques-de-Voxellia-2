@@ -364,7 +364,10 @@ public enum BlockTemplate {
                 }
         }),
         STONE_BROKEN(new BlockType("stoneBroken", "stone-broken.png")),
-        STONE_FRAME(new BlockType("stoneFrame", "stone-frame.png")),
+        STONE_FRAME(new BlockType("stoneFrame",
+                        new Texture[] { new Texture(ShapeList.CUBE, PathManager.loadImage("stone-frame.png")) },
+                        null,
+                        new BlockBehavior[] { new BlockBehaviorText() })),
         STONE_MOSSY(new BlockType("stoneMossy", "stone-mossy.png")),
         /* 90 */
         STONE_POLISHED(new BlockType("stonePolished", "stone-polished.png")),

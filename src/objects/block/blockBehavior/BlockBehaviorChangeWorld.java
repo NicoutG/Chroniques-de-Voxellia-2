@@ -1,14 +1,27 @@
 package objects.block.blockBehavior;
 
+import audio.SoundManager;
+import audio.SoundType;
 import objects.block.Block;
 import objects.entity.Entity;
 import objects.entity.Player;
 import tools.Vector;
 import world.World;
 
-public class BlockBehaviorChangeWorld extends BlockBehavior {
+public class BlockBehaviorChangeWorld extends BlockBehaviorActivable {
     protected final static String NEW_WORLD = "world";
     protected final static String SPAWNPOINT = "spawnPoint";
+
+     @Override
+    protected void activate(World world, Block block, Vector position, int network) {
+        block.setIndexTexture(1);
+        SoundManager.playSoundFromCoordinates(SoundType.WORLD_LOADER_ACTIVATION, position.x, position.y, position.z);
+    }
+
+    @Override
+    protected void desactivate(World world, Block block, Vector position, int network) {
+        block.setIndexTexture(0);
+    }
 
     @Override
     public void onAttachTo(Block block) {
@@ -18,7 +31,7 @@ public class BlockBehaviorChangeWorld extends BlockBehavior {
 
     @Override
     public void onEntityClose(World world, Block block, Vector position, Entity entity) {
-        if (entity instanceof Player) {
+        if (entity instanceof Player && getActivationState(block)) {
             int xBlock = (int)position.x;
             int yBlock = (int)position.y;
             int zBlock = (int)position.z;

@@ -103,21 +103,35 @@ public enum BlockTemplate {
                                         new BlockBehaviorLever()
                         })),
         WORLD(new BlockType("worldBlock",
-                        new Texture[] { Texture.createBasicTexture(
-                                        new String[] { "world-loader/world-loader-1-0.png",
-                                                        "world-loader/world-loader-1-1.png",
-                                                        "world-loader/world-loader-1-2.png" },
-                                        3) },
+                        new Texture[] {
+                                        new Texture(ShapeList.CUBE,
+                                                        PathManager.loadImage("world-loader/world-loader-0.png")),
+                                        Texture.createBasicTexture(
+                                                        new String[] { "world-loader/world-loader-1-0.png",
+                                                                        "world-loader/world-loader-1-1.png",
+                                                                        "world-loader/world-loader-1-2.png" },
+                                                        3)
+
+                        },
                         new Property[] { new PropertyLight(new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0)) },
-                        new BlockBehavior[] { new BlockBehaviorChangeWorld() })),
+                        new BlockBehavior[] { new BlockBehaviorChangeWorld(),
+                                        new BlockBehaviorActivableProperty(PropertyLight.NAME)
+                        })),
         NEW_WORLD(new BlockType("newWorldBlock",
-                        new Texture[] { Texture.createBasicTexture(
-                                        new String[] { "world-loader/world-loader-1-0.png",
-                                                        "world-loader/world-loader-1-1.png",
-                                                        "world-loader/world-loader-1-2.png" },
-                                        3) },
+                        new Texture[] {
+                                        new Texture(ShapeList.CUBE,
+                                                        PathManager.loadImage("world-loader/world-loader-0.png")),
+                                        Texture.createBasicTexture(
+                                                        new String[] { "world-loader/world-loader-1-0.png",
+                                                                        "world-loader/world-loader-1-1.png",
+                                                                        "world-loader/world-loader-1-2.png" },
+                                                        3)
+
+                        },
                         new Property[] { new PropertyLight(new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0)) },
-                        new BlockBehavior[] { new BlockBehaviorNewWorld() })),
+                        new BlockBehavior[] { new BlockBehaviorNewWorld(),
+                                        new BlockBehaviorActivableProperty(PropertyLight.NAME)
+                        })),
         RED_CARPET(new BlockType("redCarpet", "red-carpet-block.png")),
         /* 15 */
         RED_GOLDEN_CARPET(new BlockType("redGoldenCarpet", "red-golden-carpet-block.png")),

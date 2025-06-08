@@ -21,7 +21,7 @@ public final class SoundManager {
     private static double globalVolume;
 
     /** Maximum distance (in world units) at which a sound is audible. */
-    private static final double MAX_DISTANCE = 20.0;
+    private static final double MAX_DISTANCE = 25.0;
 
     /** If the linear volume falls below this threshold the clip is paused. */
     private static final double EPSILON = 0.04;

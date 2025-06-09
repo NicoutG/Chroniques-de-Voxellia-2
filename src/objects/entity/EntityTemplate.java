@@ -27,9 +27,7 @@ public enum EntityTemplate {
                             }, 1)
             },
             new Collision[] { CollisionList.BLOCK_ENTITY },
-            new Property[] { 
-                new PropertyLight(
-                    new LightSource(new ColorRGB(0.2, 0.9, 0.2), 0.5, 0.8, 0))},
+            null,
             new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorPlayer() })),
     CRATE_WOOD(new EntityType("crateWood",
             "crate-wood.png",

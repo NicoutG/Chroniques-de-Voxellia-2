@@ -48,7 +48,7 @@ public class WorldLoader {
                                    .split("\r?\n");
 
             /* ---- dimensions header ---- */
-            String[] dims = lines[0].trim().split(" ");
+            String[] dims = split(lines[0].trim(),' ');
             int dimX = Integer.parseInt(dims[0]);
             int dimY = Integer.parseInt(dims[1]);
             int dimZ = Integer.parseInt(dims[2]);
@@ -65,7 +65,7 @@ public class WorldLoader {
                 line++;                       // skip blank separator
                 for (int y = 0; y < dimY; y++) {
 
-                    String[] toks = lines[line++].trim().split(" ");
+                    String[] toks = split(lines[line++].trim(),' ');
                     if (toks.length != dimX)
                         throw new IllegalStateException("Malformed row in " + file);
 
@@ -101,12 +101,12 @@ public class WorldLoader {
 
     private static void loadSpawnPoint(String token, double x, double y, double z, ArrayList<Vector> spawnPoints, Player player) {
         spawnPoints.add(new Vector(x+0.5,y+0.5,z+0.5));
-        String[] parts = token.split("/");
+        String[] parts = split(token,'/');
         setStates(player, parts);
     }
 
     private static Block loadBlock(String token, ArrayList<BlockType> blockTypes) {
-        String[] parts = token.split("/");
+        String[] parts = split(token,'/');
         Block block = blockTypes.get(Integer.parseInt(parts[0])).getInstance();
         setStates(block, parts);
         return block;
@@ -114,7 +114,7 @@ public class WorldLoader {
 
     private static Entity loadEntity(String token, double x, double y, double z, ArrayList<EntityType> entityTypes) {
 
-        String[] parts = token.split("/");
+        String[] parts = split(token,'/');
         Entity entity = entityTypes.get(Integer.parseInt(parts[0])).getInstance(x,y,z);
         setStates(entity, parts);
         return entity;
@@ -123,7 +123,7 @@ public class WorldLoader {
     private static void setStates(ObjectInstance instance, String ... states) {
         if (states != null) {
             for (int i = 1; i < states.length; i++) {
-                String[] nv = states[i].split("=");
+                String[] nv = split(states[i],'=');
                 setState(instance, nv[0], nv[1]);
             }
         }
@@ -138,7 +138,7 @@ public class WorldLoader {
         else if (cur instanceof int[]) instance.setState(name, parseIntArray(value));
         else if (cur instanceof boolean[]) instance.setState(name, parseBooleanArray(value));
         else if (cur instanceof String[]) instance.setState(name, parseStringArray(value));
-        else instance.setState(name, value);
+        else instance.setState(name, convertToString(value));
     }
 
     private static double[] parseDoubleArray(String input) {
@@ -178,10 +178,35 @@ public class WorldLoader {
     }
 
     private static String[] parseStringArray(String input) {
-        input = input.replaceAll("[{}\\s\"]", "");
+        input = input.replaceAll("[{}\"]", "");
         if (input.isEmpty()) return new String[0];
-        String[] results = input.split(",");
+        String[] results = split(input,',');
+        for (int i = 0; i < results.length; i++)
+            results[i] = convertToString(results[i]);
         return results;
+    }
+
+    private static String convertToString(String text) {
+        if (text.charAt(0) == '"' && text.charAt(text.length() - 1) == '"')
+            return text.substring(1, text.length() - 1);
+        return text;
+    }
+
+    private static String[] split(String text, char separator) {
+        ArrayList<String> texts = new ArrayList<>();
+        boolean isInString = false;
+        int begin = 0;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == separator && !isInString) {
+                texts.add(text.substring(begin, i));
+                begin = i + 1;
+            }
+            if(text.charAt(i) == '"')
+                isInString = !isInString;
+        }
+        if(begin < text.length())
+            texts.add(text.substring(begin, text.length()));
+        return texts.toArray(new String[0]);
     }
 
 }

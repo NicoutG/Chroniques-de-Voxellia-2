@@ -37,9 +37,6 @@ public final class Renderer {
 
     private static final Font PIXEL_FONT;
 
-    private Map<Vector, Block> fogMap = new HashMap();
-
-
     static {
         Font f;
         try (InputStream is = Renderer.class.getResourceAsStream("/resources/fonts/basis33.ttf")) {
@@ -67,10 +64,6 @@ public final class Renderer {
 
         ArrayList<Entity> entities = world.getEntities();
         FaceLighting[][][] faceLightings = lighthinEngine.getLightings(world, tick);
-
-        if (fogMap.size() == 0) {
-            fogMap = fogManager.getFogMap(blocks);
-        }
 
         /* ---------- compute camera offset ---------- */
         double camX = w / 2.0;
@@ -168,7 +161,7 @@ public final class Renderer {
          * 1-bis) FOG – border voxels above solid blocks
          * =================================================================
          */
-        for (Map.Entry<Vector, Block> f : fogMap.entrySet()) {
+        for (Map.Entry<Vector, Block> f : world.getFogMap().entrySet()) {
             Vector v = f.getKey();
             Block b = f.getValue();
             if (b.getTexture() == null)
@@ -437,9 +430,5 @@ public final class Renderer {
             lines.add(current.toString());
 
         return lines;
-    }
-
-    public void updateFog() {
-        this.fogMap = fogManager.getFogMap(world.getBlocks());
     }
 }

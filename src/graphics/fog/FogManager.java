@@ -14,6 +14,7 @@ public final class FogManager {
     /* ------------------------------------------------------------------ */
     /* texture variants */
     /* ------------------------------------------------------------------ */
+
     private static final BlockType[] FOG_TYPES = {
             /* 0 */ new BlockType("fog100", new Texture[] {
                     Texture.createBasicTexture(
@@ -54,7 +55,6 @@ public final class FogManager {
     private static final Block FOG25 = FOG_TYPES[3].getInstance();
     private static final Block FOG10 = FOG_TYPES[4].getInstance();
 
-    /* ------------------------------------------------------------------ */
     public Map<Vector, Block> getFogMap(Block[][][] blocks) {
 
         Map<Vector, Block> fog = new HashMap<>();
@@ -92,7 +92,6 @@ public final class FogManager {
         return fog;
     }
 
-    /* ------------------------------------------------------------------ */
     private static void maybeAddGroup(Block[][][] blocks,
             Map<Vector, Block> fog,
             int x, int y, int z,
@@ -127,13 +126,13 @@ public final class FogManager {
         fog.put(new Vector(x + 0.5 + jx,
                 y + 0.5 + jy,
                 aboveZc),
-                FOG75);
+                (Math.random() < 0.5 ? FOG50 : FOG25));
 
         /* half-step inward haze (fog50, height 1) -------------------------- */
         fog.put(new Vector(x + 0.5 - ox * 0.5 + jx,
                 y + 0.5 - oy * 0.5 + jy,
                 aboveZc),
-                FOG50);
+                (Math.random() < 0.5 ? FOG25 : FOG50));
 
         /* ------------------------------------------------------------------ */
         /* add the deeper inner wisps (fog25 & fog10) **only if** the cell */
@@ -151,7 +150,7 @@ public final class FogManager {
             fog.put(new Vector(x + 0.5 - ox + jx,
                     y + 0.5 - oy + jy,
                     aboveZc),
-                    FOG25);
+                    FOG10);
 
             /* 1¼-step inward, fog10 */
             fog.put(new Vector(x + 0.5 - ox * 1.25 + jx,
@@ -169,6 +168,21 @@ public final class FogManager {
         fog.put(new Vector(x + 0.5 + ox + jx,
                 y + 0.5 + oy + jy,
                 aboveZc + 0.5 + jz),
-                FOG50);
+                FOG10);
+    }
+
+    public Map<Vector,Block> randomizeFogMap(Map<Vector,Block> currentFogMap) {
+        Map<Vector, Block> randomizedFog = new HashMap<>();
+        for (Map.Entry<Vector, Block> entry : currentFogMap.entrySet()) {
+                Vector v = entry.getKey();
+                Block b = entry.getValue();
+                double dx = (Math.random() - 0.5) * 0.1; // random between -0.1 and 0.1
+                double dy = (Math.random() - 0.5) * 0.1;
+                double dz = (Math.random() - 0.5) * 0.1;
+                Vector newV = new Vector(v.x + dx, v.y + dy, v.z + dz);
+                randomizedFog.put(newV, b);
+        }
+        return randomizedFog;
+
     }
 }

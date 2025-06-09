@@ -12,8 +12,10 @@ import world.WorldLoader.WorldData;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import engine.GameControls;
+import graphics.fog.FogManager;
 
 public class World {
 
@@ -32,6 +34,8 @@ public class World {
     private Block[][][] blocks;
     private ArrayList<Entity> entities;
     private ArrayList<Vector> spawnPoints;
+
+    private Map<Vector, Block> fogMap = new HashMap();
 
     private HashMap<String,WorldData> worlds = new HashMap<>();
     private ArrayList<Runnable> afterUpdateTasks = new ArrayList<>();
@@ -85,6 +89,10 @@ public class World {
         return null;
     }
 
+    public Map<Vector, Block> getFogMap() {
+        return fogMap;
+    }
+
     public void loadWorld(String filename, int spawnPoint) {
         currentWorld = filename;
         WorldData data;
@@ -110,6 +118,9 @@ public class World {
             start();
             worlds.put(filename, data);
         }
+
+        FogManager fogManager = new FogManager();
+        fogMap = fogManager.getFogMap(blocks);
     }
 
     public void loadWorld(String filename) {

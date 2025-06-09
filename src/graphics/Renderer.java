@@ -56,7 +56,6 @@ public final class Renderer {
         this.fogManager = new FogManager();
     }
 
-
     public void render(Graphics2D g2, int w, int h, long tick) {
         Block[][][] blocks = world.getBlocks();
         if (blocks == null)

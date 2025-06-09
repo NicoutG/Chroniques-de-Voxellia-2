@@ -1,12 +1,14 @@
 /*  graphics/Renderer.java  */
 package graphics;
 
+import graphics.fog.FogManager;
 import graphics.ligth.ColorRGB;
 import graphics.ligth.FaceLighting;
 import graphics.ligth.LightingEngine;
 import graphics.shape.Face;
 import objects.block.Block;
 import objects.entity.Entity;
+import tools.Vector;
 import world.World;
 
 import java.awt.*;
@@ -15,7 +17,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Renders an isometric world while …
@@ -37,6 +41,10 @@ public final class Renderer {
     private final List<TextLabel> textLabels = new ArrayList<>(128);
 
     private static final Font PIXEL_FONT;
+
+    private Map<Vector, Block> fogMap = new HashMap();
+
+    private final FogManager fogManager = new FogManager();
 
     static {
         Font f;
@@ -60,11 +68,15 @@ public final class Renderer {
 
     public void render(Graphics2D g2, int w, int h, long tick) {
         Block[][][] blocks = world.getBlocks();
+        if (blocks == null)
+            return;
+
         ArrayList<Entity> entities = world.getEntities();
         FaceLighting[][][] faceLightings = lighthinEngine.getLightings(world, tick);
 
-        if (blocks == null)
-            return;
+        if (fogMap.size() == 0) {
+            fogMap = fogManager.getFogMap(blocks);
+        }
 
         /* ---------- compute camera offset ---------- */
         double camX = w / 2.0;
@@ -137,21 +149,49 @@ public final class Renderer {
 
                     FaceLighting faceLighting = faceLightings[x][y][z];
 
-                    boolean alwaysBehind =  b.getProperty("floor") != null;
+                    boolean alwaysBehind = b.getProperty("floor") != null;
 
                     Texture text = b.getTexture();
                     if (visibleFaces[Face.LEFT.index]) {
-                        drawables.add(new Drawable(text.shade(text.left(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
+                        drawables.add(new Drawable(text.shade(text.left(tick), faceLighting.left(),
+                                faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
                     }
                     if (visibleFaces[Face.RIGHT.index]) {
-                        drawables.add(new Drawable(text.shade(text.right(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
+                        drawables.add(new Drawable(text.shade(text.right(tick), faceLighting.left(),
+                                faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
                     }
                     if (visibleFaces[Face.TOP.index]) {
-                        drawables.add(new Drawable(text.shade(text.top(tick), faceLighting.left(), faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
+                        drawables.add(new Drawable(text.shade(text.top(tick), faceLighting.left(), faceLighting.right(),
+                                faceLighting.top()), x, y, z, false, alwaysBehind));
                     }
 
                 }
             }
+        }
+
+        /*
+         * =================================================================
+         * 1-bis) FOG – border voxels above solid blocks
+         * =================================================================
+         */
+        for (Map.Entry<Vector, Block> f : fogMap.entrySet()) {
+            Vector v = f.getKey();
+            Block b = f.getValue();
+            if (b.getTexture() == null)
+                continue;
+
+            /* simple visibility cull */
+            IsoMath.toScreen(v.x, v.y, v.z, scratchPoint);
+            double drawX = originXi + scratchPoint.x;
+            double drawY = originYi + scratchPoint.y;
+            if (drawX + IsoMath.DRAW_TILE_SIZE < 0 || drawX > w ||
+                    drawY + IsoMath.DRAW_TILE_SIZE < 0 || drawY > h)
+                continue;
+
+            /* one quad is enough: use the texture’s full sprite */
+            drawables.add(new Drawable(b.getTexture().full(tick),
+                    v.x, v.y, v.z,
+                    true));
         }
 
         /*
@@ -168,7 +208,7 @@ public final class Renderer {
                 if (lbl != null && !lbl.isBlank())
                     textLabels.add(new TextLabel(lbl, e.getX(), e.getY(), e.getZ()));
 
-                if(e.getTexture() == null)
+                if (e.getTexture() == null)
                     continue;
 
                 IsoMath.toScreen(e.getX(), e.getY(), e.getZ(), scratchPoint);
@@ -186,13 +226,13 @@ public final class Renderer {
                         e.getZ() - 0.5);
 
                 Texture text = e.getTexture();
-                drawables.add(new Drawable(text.shade(text.left(tick), 
+                drawables.add(new Drawable(text.shade(text.left(tick),
                         faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
                         e.getZ(), true));
-                drawables.add(new Drawable(text.shade(text.right(tick), 
+                drawables.add(new Drawable(text.shade(text.right(tick),
                         faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
                         e.getZ(), true));
-                drawables.add(new Drawable(text.shade(text.top(tick), 
+                drawables.add(new Drawable(text.shade(text.top(tick),
                         faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
                         e.getZ(), true));
 

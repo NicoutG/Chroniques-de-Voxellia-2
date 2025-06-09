@@ -19,6 +19,7 @@ public class PathManager {
         try {
             return ImageIO.read(World.class.getResource(PathManager.TEXTURE_PATH + filePath));
         } catch (Exception e) {
+            System.out.println("Error loading : "+filePath);
             e.printStackTrace();
         }
         return null;

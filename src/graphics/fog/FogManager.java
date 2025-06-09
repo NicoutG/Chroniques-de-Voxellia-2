@@ -117,27 +117,58 @@ public final class FogManager {
         double jy = (oy != 0) ? rand : 0.0;
         double jz = rand / 5 - 0.1;
 
+        /* 1-voxel OUTER ring (fog100, height 1) ----------------------------- */
         fog.put(new Vector(x + 0.5 + ox + jx,
                 y + 0.5 + oy + jy,
-                aboveZc), FOG100);
+                aboveZc),
+                FOG100);
+
+        /* on-edge ring (fog75, height 1) ----------------------------------- */
         fog.put(new Vector(x + 0.5 + jx,
                 y + 0.5 + jy,
-                aboveZc), FOG75);
+                aboveZc),
+                FOG75);
+
+        /* half-step inward haze (fog50, height 1) -------------------------- */
         fog.put(new Vector(x + 0.5 - ox * 0.5 + jx,
                 y + 0.5 - oy * 0.5 + jy,
-                aboveZc), FOG50);
-        fog.put(new Vector(x + 0.5 - ox + jx,
-                y + 0.5 - oy + jy,
-                aboveZc), FOG25);
-        fog.put(new Vector(x + 0.5 - ox * 1.25 + jx,
-                y + 0.5 - oy * 1.25 + jy,
-                aboveZc), FOG10);
+                aboveZc),
+                FOG50);
 
+        /* ------------------------------------------------------------------ */
+        /* add the deeper inner wisps (fog25 & fog10) **only if** the cell */
+        /* two steps inward at ground and z+1 are empty. */
+        /* ------------------------------------------------------------------ */
+        int ix2 = x - 2 * ox;
+        int iy2 = y - 2 * oy;
+        boolean innerClear = ix2 >= 0 && ix2 < dimX &&
+                iy2 >= 0 && iy2 < dimY &&
+                blocks[ix2][iy2][z] == null &&
+                blocks[ix2][iy2][aboveZ] == null;
+
+        if (innerClear) {
+            /* one-step inward, fog25 */
+            fog.put(new Vector(x + 0.5 - ox + jx,
+                    y + 0.5 - oy + jy,
+                    aboveZc),
+                    FOG25);
+
+            /* 1¼-step inward, fog10 */
+            fog.put(new Vector(x + 0.5 - ox * 1.25 + jx,
+                    y + 0.5 - oy * 1.25 + jy,
+                    aboveZc),
+                    FOG10);
+        }
+
+        /* wisps that rise a bit (fog25 & fog50) ---------------------------- */
         fog.put(new Vector(x + 0.5 + jx,
                 y + 0.5 + jy,
-                aboveZc + 0.5 + jz), FOG25);
+                aboveZc + 0.5 + jz),
+                FOG25);
+
         fog.put(new Vector(x + 0.5 + ox + jx,
                 y + 0.5 + oy + jy,
-                aboveZc + 0.5 + jz), FOG50);
+                aboveZc + 0.5 + jz),
+                FOG50);
     }
 }

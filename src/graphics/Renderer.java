@@ -21,18 +21,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Renders an isometric world while …
- * • skipping interior blocks (every neighbour present);
- * • culling anything whose quad never reaches the viewport;
- * • re-using the same Point2D & ArrayList between frames.
- */
 public final class Renderer {
 
     private static final Comparator<Drawable> DEPTH = Comparator.comparingDouble(Drawable::getSortKey);
 
     private final World world;
     private final LightingEngine lighthinEngine;
+    private final FogManager fogManager;
 
     /* ---- reusable scratch objects to avoid GC thrash ---- */
     private final List<Drawable> drawables = new ArrayList<>(1024);
@@ -44,7 +39,6 @@ public final class Renderer {
 
     private Map<Vector, Block> fogMap = new HashMap();
 
-    private final FogManager fogManager = new FogManager();
 
     static {
         Font f;
@@ -62,9 +56,9 @@ public final class Renderer {
     public Renderer(World world) {
         this.world = world;
         this.lighthinEngine = new LightingEngine();
+        this.fogManager = new FogManager();
     }
 
-    /* =================================================================== */
 
     public void render(Graphics2D g2, int w, int h, long tick) {
         Block[][][] blocks = world.getBlocks();
@@ -445,4 +439,7 @@ public final class Renderer {
         return lines;
     }
 
+    public void updateFog() {
+        this.fogMap = fogManager.getFogMap(world.getBlocks());
+    }
 }

@@ -10,7 +10,7 @@ public enum SoundType {
     JUMP1("movements/jump1.wav", false, 0.2),
     JUMP2("movements/jump2.wav", false, 0.4),
     DEATH("death.wav", false, 2),
-    WORLD_LOADER_ACTIVATION("world-loader-activation.wav", false, 6),
+    WORLD_LOADER_ACTIVATION("world-loader-activation.wav", false, 7),
     TELEPORTER_ACTIVATION("teleporter-activation.wav", false, 4),
     TYPING("typing.wav", false, 0.5),
     // Ambient :

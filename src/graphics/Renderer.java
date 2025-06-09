@@ -1,14 +1,12 @@
 /*  graphics/Renderer.java  */
 package graphics;
 
-import graphics.fog.FogManager;
 import graphics.ligth.ColorRGB;
 import graphics.ligth.FaceLighting;
 import graphics.ligth.LightingEngine;
 import graphics.shape.Face;
 import objects.block.Block;
 import objects.entity.Entity;
-import tools.DurationTester;
 import tools.Vector;
 import world.World;
 
@@ -237,7 +235,6 @@ public final class Renderer {
                     0, 0, IsoMath.TILE_SIZE, IsoMath.TILE_SIZE,
                     null);
         }
-        DurationTester.endRecord(0);
 
         /*
          * ──────────────────────────────────────────────────────────────

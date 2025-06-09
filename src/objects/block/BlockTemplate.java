@@ -647,12 +647,12 @@ public enum BlockTemplate {
                         null)),
         WATER_FAKE(new BlockType("waterFake",
                         new Texture[] {
-                                        Texture.createBasicTexture(ShapeList.RECTANGLE2,
-                                                        new String[] { "water/water-2-0.png", "water/water-2-1.png",
-                                                                        "water/water-2-2.png" },
+                                        Texture.createBasicTexture(ShapeList.RECTANGLE3,
+                                                        new String[] { "water/water-3-0.png", "water/water-3-1.png",
+                                                                        "water/water-3-2.png" },
                                                         4) },
                         0,
-                        new Collision[] { CollisionList.RECTANGLE2 },
+                        new Collision[] { CollisionList.RECTANGLE3 },
                         new Property[] {
                                         new Property("noCollision"),
                                         new PropertySound(SoundType.WATER) },

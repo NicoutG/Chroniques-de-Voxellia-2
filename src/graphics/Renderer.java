@@ -7,11 +7,13 @@ import graphics.ligth.LightingEngine;
 import graphics.shape.Face;
 import objects.block.Block;
 import objects.entity.Entity;
+import tools.DurationTester;
 import tools.Vector;
 import world.World;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -59,7 +61,7 @@ public final class Renderer {
 
         ArrayList<Entity> entities = world.getEntities();
         FaceLighting[][][] faceLightings = lighthinEngine.getLightings(world, tick);
-
+        DurationTester.beginRecord();
         /* ---------- compute camera offset ---------- */
         double camX = w / 2.0;
         double camY = h / 2.0;
@@ -134,18 +136,20 @@ public final class Renderer {
                     boolean alwaysBehind = b.getProperty("floor") != null;
 
                     Texture text = b.getTexture();
-                    if (visibleFaces[Face.LEFT.index]) {
-                        drawables.add(new Drawable(text.shade(text.left(tick), faceLighting.left(),
+                    drawables.add(new Drawable(text.shade(text.full(tick), faceLighting.left(),
                                 faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
-                    }
-                    if (visibleFaces[Face.RIGHT.index]) {
-                        drawables.add(new Drawable(text.shade(text.right(tick), faceLighting.left(),
-                                faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
-                    }
-                    if (visibleFaces[Face.TOP.index]) {
-                        drawables.add(new Drawable(text.shade(text.top(tick), faceLighting.left(), faceLighting.right(),
-                                faceLighting.top()), x, y, z, false, alwaysBehind));
-                    }
+                    // if (visibleFaces[Face.LEFT.index]) {
+                    //     drawables.add(new Drawable(text.shade(text.left(tick), faceLighting.left(),
+                    //             faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
+                    // }
+                    // if (visibleFaces[Face.RIGHT.index]) {
+                    //     drawables.add(new Drawable(text.shade(text.right(tick), faceLighting.left(),
+                    //             faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
+                    // }
+                    // if (visibleFaces[Face.TOP.index]) {
+                    //     drawables.add(new Drawable(text.shade(text.top(tick), faceLighting.left(), faceLighting.right(),
+                    //             faceLighting.top()), x, y, z, false, alwaysBehind));
+                    // }
 
                 }
             }
@@ -201,40 +205,44 @@ public final class Renderer {
                     continue;
                 }
 
-                drawables.add(new Drawable(
-                        e.getTexture().full(tick), e.getX(), e.getY(), e.getZ(), true));
-
                 FaceLighting faceLighting = sampleLighting(faceLightings, e.getX() - 0.5, e.getY() - 0.5,
                         e.getZ() - 0.5);
 
                 Texture text = e.getTexture();
-                drawables.add(new Drawable(text.shade(text.left(tick),
-                        faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
-                        e.getZ(), true));
-                drawables.add(new Drawable(text.shade(text.right(tick),
-                        faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
-                        e.getZ(), true));
-                drawables.add(new Drawable(text.shade(text.top(tick),
-                        faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
-                        e.getZ(), true));
+                drawables.add(new Drawable(text.shade(
+                        text.full(tick),faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(), e.getZ(), true));
+                // drawables.add(new Drawable(text.shade(text.left(tick),
+                //         faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
+                //         e.getZ(), true));
+                // drawables.add(new Drawable(text.shade(text.right(tick),
+                //         faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
+                //         e.getZ(), true));
+                // drawables.add(new Drawable(text.shade(text.top(tick),
+                //         faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
+                //         e.getZ(), true));
 
             }
         }
 
         /* ---------- depth sort & draw ---------- */
         drawables.sort(DEPTH);
+        BufferedImage frameBuffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D gBuffer = frameBuffer.createGraphics();
+
+        // draw drawables (avec culling ici)
         for (Drawable d : drawables) {
             IsoMath.toScreen(d.x, d.y, d.z, scratchPoint);
             int dx = originXi + (int) scratchPoint.x;
             int dy = originYi + (int) scratchPoint.y;
-
-            g2.drawImage(d.texture,
+            gBuffer.drawImage(d.texture,
                     dx, dy,
                     dx + IsoMath.DRAW_TILE_SIZE,
                     dy + IsoMath.DRAW_TILE_SIZE,
                     0, 0, IsoMath.TILE_SIZE, IsoMath.TILE_SIZE,
                     null);
         }
+        gBuffer.dispose();
+        g2.drawImage(frameBuffer, 0, 0, null);
 
         /*
          * ──────────────────────────────────────────────────────────────
@@ -275,6 +283,9 @@ public final class Renderer {
                 g2.drawString(line, tx, ty);
             }
         }
+        DurationTester.endRecord();
+        if (tick%50 == 0)
+            System.out.println(DurationTester.getDurationMsPerRepet());
 
     }
 

@@ -7,7 +7,6 @@ import graphics.ligth.LightingEngine;
 import graphics.shape.Face;
 import objects.block.Block;
 import objects.entity.Entity;
-import tools.DurationTester;
 import tools.Vector;
 import world.World;
 
@@ -61,7 +60,6 @@ public final class Renderer {
 
         ArrayList<Entity> entities = world.getEntities();
         FaceLighting[][][] faceLightings = lighthinEngine.getLightings(world, tick);
-        DurationTester.beginRecord();
         /* ---------- compute camera offset ---------- */
         double camX = w / 2.0;
         double camY = h / 2.0;
@@ -283,9 +281,6 @@ public final class Renderer {
                 g2.drawString(line, tx, ty);
             }
         }
-        DurationTester.endRecord();
-        if (tick%50 == 0)
-            System.out.println(DurationTester.getDurationMsPerRepet());
 
     }
 

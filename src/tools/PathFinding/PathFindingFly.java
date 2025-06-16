@@ -32,6 +32,32 @@ public class PathFindingFly extends PathFindingType {
     }
 
     @Override
+    public Vector getRandomDestination(World world, Entity entity, int distance) {
+        Random random = new Random();
+        int nbSteps = Math.max(1, distance/2 + random.nextInt(distance/2));
+        ArrayList<Vector> closedList = new ArrayList<>();
+        closedList.add(0,PathFinding.adaptPosition(world, entity.getPosition()));
+        for (int i = 0; i < nbSteps; i++) {
+            Vector pos = closedList.get(0);
+            ArrayList<Vector> neighboors = getNeighboors(world, entity, pos, null);
+            Vector next = null;
+            boolean found = false;
+            while(0 < neighboors.size() && !found) {
+                int index = random.nextInt(neighboors.size());
+                next = neighboors.get(index);
+                if (closedList.contains(next))
+                    neighboors.remove(next);
+                else
+                    found = true;
+            }
+            if (!found)
+                return closedList.get(0);
+            closedList.add(0,next);
+        }
+        return closedList.get(0);
+    }
+
+    @Override
     public ArrayList<Vector> refinePath(World world, Entity entity, ArrayList<Vector> path) {
         for (int i = 0; i < path.size() - 2; i++) {
             Vector pos1 = path.get(i);

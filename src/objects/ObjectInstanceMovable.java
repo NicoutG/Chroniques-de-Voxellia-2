@@ -132,6 +132,13 @@ public class ObjectInstanceMovable <
         return null;
     }
 
+    public double getDistance(ObjectInstanceMovable objectInstanceMovable) {
+        double x = position.x - objectInstanceMovable.getX();
+        double y = position.y - objectInstanceMovable.getY();
+        double z = position.z - objectInstanceMovable.getZ();
+        return Math.sqrt(x * x + y * y + z * z);
+    }
+
     public Entity getCollidingEntity(World world) {
         for (Entity entity : world.getEntities())
             if (entity != this)

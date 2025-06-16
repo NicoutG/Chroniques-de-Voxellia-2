@@ -43,7 +43,7 @@ public enum EntityTemplate {
             "crate-wood.png",
             new Collision[] { CollisionList.BLOCK_ENTITY },
             null,
-            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorFollowPlayer(new PathFindingFalling()) })),
+            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorMoving(new PathFindingFalling()) })),
     LILY(new EntityType("lily",
             "lily.png",
             new Collision[] { CollisionList.BLOCK_ENTITY },
@@ -64,7 +64,7 @@ public enum EntityTemplate {
                  new PropertySound(SoundType.HELICOPTER) ,
                 new PropertyLight(
                     new LightSource(new ColorRGB(0.2, 0.9, 0.2), 0.5, 0.8, 0))},
-            new EntityBehavior[] { new EntityBehaviorPushable(), new EntityBehaviorFollowPlayer(new PathFindingFly()) })),
+            new EntityBehavior[] { new EntityBehaviorPushable(), new EntityBehaviorMoving(new PathFindingFly()) })),
     ;
 
     public final EntityType entityType;

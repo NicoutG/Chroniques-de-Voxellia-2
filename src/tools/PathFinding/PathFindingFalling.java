@@ -30,7 +30,7 @@ public class PathFindingFalling extends PathFindingType {
         };
         for (Vector posSide : positionsSide)
             if ((posSide.equals(destination) || isValidNeighboor(world, entity, posSide)) && 
-                    (hasFloor || (!isValidNeighboor(world, entity, new Vector(posSide.x, posSide.y, posSide.z - 1)) && 2 < posSide.z && !isValidNeighboor(world, entity, posBelowBelow))))
+                    (hasFloor || (!isValidNeighboor(world, entity, new Vector(posSide.x, posSide.y, posSide.z - 1)) && 1 < posSide.z && !isValidNeighboor(world, entity, posBelowBelow))))
                 neighboors.add(posSide);
         if (hasFloor) {
             Vector posAbove = new Vector(x,y,z+1);
@@ -38,6 +38,54 @@ public class PathFindingFalling extends PathFindingType {
                 neighboors.add(posAbove);
         }
         return neighboors;
+    }
+
+    @Override
+    public Vector getRandomDestination(World world, Entity entity, int distance) {
+        Random random = new Random();
+        int nbSteps = Math.max(1, distance/2 + random.nextInt(distance/2));
+        ArrayList<Vector> closedList = new ArrayList<>();
+        closedList.add(0,PathFinding.adaptPosition(world, entity.getPosition()));
+        for (int i = 0; i < nbSteps; i++) {
+            Vector pos = closedList.get(0);
+            ArrayList<Vector> neighboors = getNeighboors(world, entity, pos, null);
+            Vector next = null;
+            boolean found = false;
+            while(0 < neighboors.size() && !found) {
+                int index = random.nextInt(neighboors.size());
+                next = neighboors.get(index);
+                if (closedList.contains(next))
+                    neighboors.remove(next);
+                else
+                    found = true;
+            }
+            if (!found) {
+                do {
+                    pos = closedList.get(0);
+                    if (!hasFloor(world, entity, pos))
+                        closedList.remove(0);
+                    else
+                        return pos;
+                }while (0 < closedList.size());
+                return pos;
+            }
+            closedList.add(0,next);
+        }
+        Vector pos;
+        do {
+            pos = closedList.get(0);
+            if (!hasFloor(world, entity, pos))
+                closedList.remove(0);
+            else
+                return pos;
+        }while (0 < closedList.size());
+        return pos;
+    }
+
+    private boolean hasFloor(World world, Entity entity, Vector position) {
+        Vector posBelow = new Vector(position.x,position.y,position.z-1);
+        boolean hasFloor = !isValidNeighboor(world, entity, posBelow) && (0 < posBelow.z);
+        return hasFloor;
     }
 
     @Override

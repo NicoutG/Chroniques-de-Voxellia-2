@@ -13,7 +13,6 @@ public class EntityBehaviorMoving extends EntityBehavior {
     private final static String MOVE_RANDOMLY = "moveRandomly";
 
     private MovingFunctions movingFunctions;
-    private String previousMovingState = null;
 
     public EntityBehaviorMoving(PathFindingType pathFindingType) {
         movingFunctions = new MovingFunctions(pathFindingType);
@@ -26,27 +25,20 @@ public class EntityBehaviorMoving extends EntityBehavior {
     }
 
     @Override
-    public void onUpdate(World world, Entity entity) {
-        entity.setState(MovingFunctions.ENTITY_TO_FOLLOW, world.getPlayer());
+    public void onStart(World world, Entity entity) {
+        entity.setState(MovingFunctions.ENTITY_TO_CHASE, world.getPlayer());
         entity.setState(MovingFunctions.ENTITY_TO_FLEE, world.getPlayer());
+    }
+
+    @Override
+    public void onUpdate(World world, Entity entity) {
         movingFunctions.move(world, entity);
-        Entity entityFlee = movingFunctions.getEntityToFlee(entity);
-        double distance = entity.getDistance(entityFlee);
-        if (distance <= 10)
-            entity.setState(MOVING_STATE, MOVE_RANDOMLY);
-        if (20 <= distance)
-            entity.setState(MOVING_STATE, CHASE);
 
         String movingState = getMovingState(entity);
-        if ((movingState == null && previousMovingState != null) || !movingState.equals(previousMovingState)) {
-            movingFunctions.reinitiPath();
-            previousMovingState = movingState;
-            System.out.println(movingState);
-        }
         switch (movingState) {
             case CHASE: movingFunctions.chase(world, entity);break;
             case FLEE: movingFunctions.flee(world, entity);break;
-            case MOVE_RANDOMLY: movingFunctions.moveRandomly(world, entityFlee);break;
+            case MOVE_RANDOMLY: movingFunctions.moveRandomly(world, entity);break;
         }
     }
 
@@ -55,5 +47,13 @@ public class EntityBehaviorMoving extends EntityBehavior {
         if (state != null && state instanceof String)
             return (String)state;
         return null;
+    }
+
+    public Entity getEntityToChase(Entity entity) {
+        return movingFunctions.getEntityToChase(entity);
+    }
+
+    public Entity getEntityToFlee(Entity entity) {
+        return movingFunctions.getEntityToFlee(entity);
     }
 }

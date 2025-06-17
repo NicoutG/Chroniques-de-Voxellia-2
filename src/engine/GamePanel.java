@@ -24,9 +24,9 @@ public class GamePanel extends JPanel {
         setFocusable(true);
         requestFocusInWindow();
 
-        // this.world = new World("tests/lost-city.txt");
+        this.world = new World("tests/lost-city.txt");
         // this.world = new World(z"chapter1/1-1.txt");
-        this.world = new World("chapter1/1-3/1-3-1.txt");
+        // this.world = new World("chapter1/1-3/1-3-1.txt");
         // this.world = new World("chapter1/1-1.txt");
         // this.world = new World("testLiquid.txt");
 

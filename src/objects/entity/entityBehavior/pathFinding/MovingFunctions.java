@@ -2,6 +2,7 @@ package objects.entity.entityBehavior.pathFinding;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 
 import objects.entity.Entity;
 import objects.entity.EntityAction;
@@ -12,12 +13,13 @@ import tools.PathFinding.PathFindingType;
 import world.World;
 
 public class MovingFunctions {
-    public final static String ENTITY_TO_FOLLOW = "entityToFollow";
+    public final static String ENTITY_TO_CHASE = "entityToFollow";
     public final static String ENTITY_TO_FLEE = "entityToFlee";
 
     private final static int MAX_SEARCH_PER_TICK = 100;
     private final static int MAX_SEARCH = 2000;
-    private final static int TICK_TO_UPDATE = 50;
+    private final static int DISTANCE_TO_MOVE = 10;
+    private final static int MAX_TICK_TO_UPDATE = 50;
 
     private PathFindingType pathFindingType;
     private ArrayList<Node> openList = null;
@@ -26,18 +28,15 @@ public class MovingFunctions {
     private Vector destination = null;
 
     private int tick = 0;
-    private int lastUpdate = 0;
+    private int nextUpdate = 0;
 
     public MovingFunctions(PathFindingType pathFindingType) {
         this.pathFindingType = pathFindingType;
     }
 
     public void onAttachTo(Entity entity) {
-        entity.setState(ENTITY_TO_FOLLOW, null);
-    }
-
-    public void reinitiPath() {
-        path = null;
+        entity.setState(ENTITY_TO_CHASE, null);
+        entity.setState(ENTITY_TO_FLEE, null);
     }
 
     public int getDistanceToDestination() {
@@ -47,7 +46,6 @@ public class MovingFunctions {
     }
 
     public void move(World world, Entity entity) {
-        tick++;
         if (path != null && !path.isEmpty()) {
             Vector nextStep = path.get(0);
             EntityAction[] actions = pathFindingType.convertToAction(entity, nextStep, entity.getSpeed());
@@ -58,7 +56,7 @@ public class MovingFunctions {
     }
 
     public void chase(World world, Entity entity) {
-        Entity entityToChase = getEntityToFollow(entity);
+        Entity entityToChase = getEntityToChase(entity);
         if (entityToChase != null) {
             if (openList == null)
                 initPathFinding(world, entity.getPosition(), entityToChase.getPosition());
@@ -75,45 +73,63 @@ public class MovingFunctions {
     }
 
     public void moveRandomly(World world, Entity entity) {
-        if (path == null || path.isEmpty() || TICK_TO_UPDATE < tick - lastUpdate) {
-            lastUpdate = tick;
-            Vector goal = pathFindingType.getRandomDestination(world, entity, 10);
-            initPathFinding(world, entity.getPosition(), goal);
-            Boolean findPath = PathFinding.findPath(world, entity, destination, openList, closedList, MAX_SEARCH_PER_TICK, pathFindingType);
-            if (findPath != null && findPath) {
-                path = PathFinding.getPathAndLinkToEntity(world, entity, openList, pathFindingType);
-            }
-            else if ((findPath != null && !findPath) || MAX_SEARCH <= closedList.size())
-                path = null;
+        tick++;
+        if (nextUpdate <= tick) {
+            openList = null;
+            tick = 0;
+            Random random = new Random();
+            nextUpdate = 1 + MAX_TICK_TO_UPDATE/2 + random.nextInt(MAX_TICK_TO_UPDATE/2);
+        }
+        if (openList == null || path.isEmpty()) {
+            initPathFinding(world, entity.getPosition(), pathFindingType.getRandomDestination(world, entity, DISTANCE_TO_MOVE));
+        }
+        Boolean findPath = PathFinding.findPath(world, entity, destination, openList, closedList, MAX_SEARCH_PER_TICK, pathFindingType);
+        if (findPath != null && findPath) {
+            path = PathFinding.getPathAndLinkToEntity(world, entity, openList, pathFindingType);
+            initPathFinding(world, entity.getPosition(), destination);
+        }
+        else if ((findPath != null && !findPath) || MAX_SEARCH <= closedList.size()) {
+            path = null;
+            initPathFinding(world, entity.getPosition(), pathFindingType.getRandomDestination(world, entity, DISTANCE_TO_MOVE));
         }
     }
 
     public void flee(World world, Entity entity) {
-        if (path == null || path.isEmpty() || TICK_TO_UPDATE < tick - lastUpdate) {
-            lastUpdate = tick;
-            Entity entityToFlee = getEntityToFlee(entity);
-            if (entityToFlee != null) {
-                Vector fleePos = entityToFlee.getPosition();
-                Vector furthestPos = null;
-                double furthestDist = -1;
-                for (int i = 0; i < 50; i++) {
-                    Vector goal = pathFindingType.getRandomDestination(world, entity, 10);
-                    double dist = goal.sub(fleePos).getNorm();
-                    if (furthestDist < dist) {
-                        furthestDist = dist;
-                        furthestPos = goal;
-                    }
-                }
-                
-                initPathFinding(world, entity.getPosition(), furthestPos);
-                Boolean findPath = PathFinding.findPath(world, entity, destination, openList, closedList, MAX_SEARCH_PER_TICK, pathFindingType);
-                if (findPath != null && findPath) {
-                    path = PathFinding.getPathAndLinkToEntity(world, entity, openList, pathFindingType);
-                }
-                else if ((findPath != null && !findPath) || MAX_SEARCH <= closedList.size())
-                    path = null;
+        Entity entityToFlee = getEntityToFlee(entity);
+        if (entityToFlee != null) {
+            tick++;
+            if (nextUpdate <= tick) {
+                openList = null;
+                tick = 0;
+                Random random = new Random();
+                nextUpdate = 1 + MAX_TICK_TO_UPDATE/2 + random.nextInt(MAX_TICK_TO_UPDATE/2);
+            }
+            if (openList == null || path.isEmpty())
+                initPathFinding(world, entity.getPosition(), findFurthestPosition(world, entity, entityToFlee.getPosition()));
+            Boolean findPath = PathFinding.findPath(world, entity, destination, openList, closedList, MAX_SEARCH_PER_TICK, pathFindingType);
+            if (findPath != null && findPath) {
+                path = PathFinding.getPathAndLinkToEntity(world, entity, openList, pathFindingType);
+                initPathFinding(world, entity.getPosition(), destination);
+            }
+            else if ((findPath != null && !findPath) || MAX_SEARCH <= closedList.size()) {
+                path = null;
+                initPathFinding(world, entity.getPosition(), findFurthestPosition(world, entity, entityToFlee.getPosition()));
             }
         }
+    }
+
+    private Vector findFurthestPosition(World world, Entity entity, Vector fleePos) {
+        Vector furthestPos = null;
+        double furthestDist = -1;
+        for (int i = 0; i < 50; i++) {
+            Vector goal = pathFindingType.getRandomDestination(world, entity, DISTANCE_TO_MOVE);
+            double dist = goal.sub(fleePos).getNorm();
+            if (furthestDist < dist) {
+                furthestDist = dist;
+                furthestPos = goal;
+            }
+        }
+        return furthestPos;
     }
 
     public void initPathFinding(World world, Vector position, Vector goal) {
@@ -123,8 +139,8 @@ public class MovingFunctions {
         destination = PathFinding.adaptPosition(world, goal);
     }
 
-    public Entity getEntityToFollow(Entity entity) {
-        Object state = entity.getState(ENTITY_TO_FOLLOW);
+    public Entity getEntityToChase(Entity entity) {
+        Object state = entity.getState(ENTITY_TO_CHASE);
         if (state != null && state instanceof Entity)
             return (Entity)state;
         return null;

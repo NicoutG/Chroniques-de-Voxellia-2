@@ -67,7 +67,7 @@ public final class FogManager {
         private static boolean hasHorizontalSolidNeighbor(Block[][][] blocks,
                         int x, int y, int z,
                         int dimX, int dimY) {
-                int[][] dirs = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+                int[][] dirs = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 }, { 1, 1 }, { -1, -1 }, { 1, -1 }, { -1, 1 } };
                 for (int[] d : dirs) {
                         int nx = x + d[0];
                         int ny = y + d[1];
@@ -122,11 +122,12 @@ public final class FogManager {
                                         final boolean borderY = (y == 0 || y == dimY - 1);
                                         final boolean isBorder = borderX || borderY;
 
-                                        final boolean candidate = (isBorder &&
-                                                        hasSolidAbove || hasSolidBelow) ||
-                                                        ((isBottomFace || isTopFace) &&
-                                                                        hasHorizontalSolidNeighbor(blocks, x, y, z,
-                                                                                        dimX, dimY));
+                                        final boolean border = isBorder && (hasSolidAbove || hasSolidBelow);
+                                        final boolean face = (isBottomFace || isTopFace) &&
+                                                        hasHorizontalSolidNeighbor(blocks, x, y, z,
+                                                                        dimX, dimY);
+
+                                        final boolean candidate = border || face;
 
                                         if (!candidate)
                                                 continue; // pas de brume
@@ -157,11 +158,12 @@ public final class FogManager {
                                                 if (borderX && borderY) { // cellule située sur un vrai coin
                                                         addCornerFog(fog, x, y, z, ox, oy);
                                                 }
-                                        } else if (isBottomFace || isTopFace) {
+                                        } else if (face) {
                                                 /* -------------------------------------------------- */
                                                 /* Traitement des faces haut/bas */
                                                 /* -------------------------------------------------- */
-                                                processHorizontalFaceCell(blocks, fog, x, y, z, dimX, dimY, dimZ);
+                                                processHorizontalFaceCell(blocks, fog, x, y, z, dimX, dimY, dimZ,
+                                                                isBottomFace);
                                         }
                                 }
                         }
@@ -183,8 +185,8 @@ public final class FogManager {
 
                 // petit jitter commun pour ne jamais avoir deux identiques
                 double rand = Math.random();
-                double jx = (ox != 0 ? rand : 0.0);
-                double jy = (oy != 0 ? rand : 0.0);
+                double jx = (ox != 0 ? rand - 0.5 : 0.0);
+                double jy = (oy != 0 ? rand - 0.5 : 0.0);
                 double jz = (rand / 5.0) - 0.1;
 
                 fog.put(new Vector(cx + jx, cy + jy, cz), FOG10);
@@ -253,25 +255,10 @@ public final class FogManager {
         /* ------------------------------------------------------------------ */
         private static void processHorizontalFaceCell(Block[][][] blocks, Map<Vector, Block> fog,
                         int x, int y, int z,
-                        int dimX, int dimY, int dimZ) {
-                boolean neighbourSolid = false;
-                int dirX = 0, dirY = 0;
-                // 4 directions horizontales
-                int[][] dirs = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
-                for (int[] d : dirs) {
-                        int nx = x + d[0];
-                        int ny = y + d[1];
-                        if (nx < 0 || nx >= dimX || ny < 0 || ny >= dimY)
-                                continue;
-                        if (isSolid(blocks[nx][ny][z])) {
-                                neighbourSolid = true;
-                                dirX = d[0];
-                                dirY = d[1];
-                                break;
-                        }
-                }
-                if (!neighbourSolid)
-                        return;
+                        int dimX, int dimY, int dimZ, boolean isBottomFace) {
+
+                double dirZ = isBottomFace ? 1 : -1;
+                double adj = isBottomFace ? 0.25 : 0;
 
                 double cx = x + 0.5;
                 double cy = y + 0.5;
@@ -280,22 +267,24 @@ public final class FogManager {
                 double rand = Math.random();
                 double jx = rand / 4 - 0.125;
                 double jy = rand / 4 - 0.125;
-                double jz = (rand / 5) - 0.1;
 
                 // Couche principale
-                fog.put(new Vector(cx + jx, cy + jy, cz), FOG75);
+                fog.put(new Vector(cx + jx, cy + jy, cz - dirZ + adj), FOG100);
+                fog.put(new Vector(cx + jx, cy + jy, cz - dirZ * 0.75 + adj), FOG75);
+                fog.put(new Vector(cx + jx, cy + jy, cz - dirZ * 0.5 + adj), FOG50);
+                fog.put(new Vector(cx + jx, cy + jy, cz - dirZ * 0.25 + adj), FOG25);
+                fog.put(new Vector(cx + jx, cy + jy, cz + adj), FOG10);
                 // Petite remontée
-                fog.put(new Vector(cx + jx, cy + jy, cz + (z == 0 ? 0.5 : -0.5) + jz), fog25or50());
+                // fog.put(new Vector(cx + jx, cy + jy, cz + (z == 0 ? 0.5 : -0.5) + jz),
+                // fog25or50());
 
-                // éventuelle propagation verticale si la place est libre
-                int vz = (z == 0 ? 1 : -1); // vers le haut si bottom, vers le bas si top
-                int nz = z + vz;
-                if (nz >= 0 && nz < dimZ && !isSolid(blocks[x][y][nz])) {
-                        fog.put(new Vector(cx + jx, cy + jy, nz + 0.5), fog10or25());
-                }
+                // // éventuelle propagation verticale si la place est libre
+                // int vz = (z == 0 ? 1 : -1); // vers le haut si bottom, vers le bas si top
+                // int nz = z + vz;
+                // if (nz >= 0 && nz < dimZ && !isSolid(blocks[x][y][nz])) {
+                // fog.put(new Vector(cx + jx, cy + jy, nz + 0.5), fog10or25());
+                // }
 
-                // propagation horizontale douce vers le voisin solide
-                fog.put(new Vector(cx + dirX * 0.4 + jx, cy + dirY * 0.4 + jy, cz + 0.1), fog10or25());
         }
 
         /* ------------------------------------------------------------------ */

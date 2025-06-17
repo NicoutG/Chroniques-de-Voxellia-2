@@ -9,24 +9,6 @@ import tools.Vector;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Nouveau gestionnaire de brume.
- * <p>
- * Le principe est désormais :
- * <ul>
- * <li>On parcourt les cellules <b>nulles</b>.</li>
- * <li>Si la cellule possède un bloc non nul au‑dessus ou en‑dessous, alors on
- * peut générer de la fog.</li>
- * <li>Pour les cellules en bordure (x==0, y==0, x==max, y==max) on regarde vers
- * l'intérieur ; si la cellule intérieure est nulle on fait « déborder » la
- * fumée.</li>
- * <li>Pour les faces du haut (z==max) et du bas (z==0) on parcourt toutes les
- * cellules et on regarde les 4 voisins horizontaux pour savoir si on est au
- * contact d'un bloc solide.</li>
- * <li>Les motifs de brume conservent la même logique d'opacité
- * 100 → 75 → 50 → 25 → 10 avec un léger jitter aléatoire.</li>
- * </ul>
- */
 public final class FogManager {
 
         /* ------------------------------------------------------------------ */
@@ -81,6 +63,22 @@ public final class FogManager {
                 return b != null;
         }
 
+        /** Indique si la cellule a au moins un voisin horizontal solide (même z) */
+        private static boolean hasHorizontalSolidNeighbor(Block[][][] blocks,
+                        int x, int y, int z,
+                        int dimX, int dimY) {
+                int[][] dirs = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+                for (int[] d : dirs) {
+                        int nx = x + d[0];
+                        int ny = y + d[1];
+                        if (nx < 0 || nx >= dimX || ny < 0 || ny >= dimY)
+                                continue;
+                        if (isSolid(blocks[nx][ny][z]))
+                                return true;
+                }
+                return false;
+        }
+
         /** Retourne aléatoirement FOG25 ou FOG50 pour créer un aspect vivant */
         private static Block fog25or50() {
                 return Math.random() < 0.5 ? FOG25 : FOG50;
@@ -112,20 +110,26 @@ public final class FogManager {
                                 for (int z = 0; z < dimZ; z++) {
 
                                         if (isSolid(blocks[x][y][z]))
-                                                continue; // On ne traite que les cellules vides
+                                                continue; // on ne traite que les cellules vides
+
+                                        final boolean isBottomFace = (z == 0);
+                                        final boolean isTopFace = (z == dimZ - 1);
 
                                         final boolean hasSolidAbove = (z + 1 < dimZ) && isSolid(blocks[x][y][z + 1]);
                                         final boolean hasSolidBelow = (z - 1 >= 0) && isSolid(blocks[x][y][z - 1]);
-                                        final boolean candidate = hasSolidAbove || hasSolidBelow;
-
-                                        if (!candidate)
-                                                continue; // inutile de générer de la fog ici
 
                                         final boolean borderX = (x == 0 || x == dimX - 1);
                                         final boolean borderY = (y == 0 || y == dimY - 1);
                                         final boolean isBorder = borderX || borderY;
-                                        final boolean isBottomFace = (z == 0);
-                                        final boolean isTopFace = (z == dimZ - 1);
+
+                                        final boolean candidate = (isBorder &&
+                                                        hasSolidAbove || hasSolidBelow) ||
+                                                        ((isBottomFace || isTopFace) &&
+                                                                        hasHorizontalSolidNeighbor(blocks, x, y, z,
+                                                                                        dimX, dimY));
+
+                                        if (!candidate)
+                                                continue; // pas de brume
 
                                         if (isBorder) {
                                                 /* -------------------------------------------------- */

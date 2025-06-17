@@ -9,6 +9,24 @@ import tools.Vector;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Nouveau gestionnaire de brume.
+ * <p>
+ * Le principe est désormais :
+ * <ul>
+ * <li>On parcourt les cellules <b>nulles</b>.</li>
+ * <li>Si la cellule possède un bloc non nul au‑dessus ou en‑dessous, alors on
+ * peut générer de la fog.</li>
+ * <li>Pour les cellules en bordure (x==0, y==0, x==max, y==max) on regarde vers
+ * l'intérieur ; si la cellule intérieure est nulle on fait « déborder » la
+ * fumée.</li>
+ * <li>Pour les faces du haut (z==max) et du bas (z==0) on parcourt toutes les
+ * cellules et on regarde les 4 voisins horizontaux pour savoir si on est au
+ * contact d'un bloc solide.</li>
+ * <li>Les motifs de brume conservent la même logique d'opacité
+ * 100 → 75 → 50 → 25 → 10 avec un léger jitter aléatoire.</li>
+ * </ul>
+ */
 public final class FogManager {
 
         /* ------------------------------------------------------------------ */
@@ -24,8 +42,8 @@ public final class FogManager {
                                         0, null, null, null),
                         /* 1 */ new BlockType("fog75", new Texture[] {
                                         Texture.createBasicTexture(
-                                                        new String[] { "fog/75/fog-0.png", "fog/75/fog-1.png",
-                                                                        "fog/75/fog-2.png", "fog/75/fog-3.png" },
+                                                        new String[] { "fog/75/fog-2.png", "fog/75/fog-1.png",
+                                                                        "fog/75/fog-3.png", "fog/75/fog-0.png" },
                                                         3) },
                                         0, null, null, null),
                         /* 2 */ new BlockType("fog50", new Texture[] {
@@ -36,8 +54,8 @@ public final class FogManager {
                                         0, null, null, null),
                         /* 3 */ new BlockType("fog25", new Texture[] {
                                         Texture.createBasicTexture(
-                                                        new String[] { "fog/25/fog-0.png", "fog/25/fog-1.png",
-                                                                        "fog/25/fog-2.png", "fog/25/fog-3.png" },
+                                                        new String[] { "fog/25/fog-1.png", "fog/25/fog-2.png",
+                                                                        "fog/25/fog-3.png", "fog/25/fog-0.png" },
                                                         3) },
                                         0, null, null, null),
                         /* 4 */ new BlockType("fog10", new Texture[] {
@@ -55,133 +73,230 @@ public final class FogManager {
         private static final Block FOG25 = FOG_TYPES[3].getInstance();
         private static final Block FOG10 = FOG_TYPES[4].getInstance();
 
-        public Map<Vector, Block> getFogMap(Block[][][] blocks) {
+        /* -------------------------------------------------------------- */
+        /* Utilitaires internes */
+        /* -------------------------------------------------------------- */
 
+        private static boolean isSolid(Block b) {
+                return b != null;
+        }
+
+        /** Retourne aléatoirement FOG25 ou FOG50 pour créer un aspect vivant */
+        private static Block fog25or50() {
+                return Math.random() < 0.5 ? FOG25 : FOG50;
+        }
+
+        /** Retourne aléatoirement FOG10 ou FOG25 : couche très légère */
+        private static Block fog10or25() {
+                return Math.random() < 0.5 ? FOG10 : FOG25;
+        }
+
+        /* -------------------------------------------------------------- */
+        /* Méthode publique */
+        /* -------------------------------------------------------------- */
+
+        public Map<Vector, Block> getFogMap(Block[][][] blocks) {
                 Map<Vector, Block> fog = new HashMap<>();
                 if (blocks == null || blocks.length == 0)
                         return fog;
 
-                int dimX = blocks.length;
-                int dimY = blocks[0].length;
-                int dimZ = blocks[0][0].length;
+                final int dimX = blocks.length;
+                final int dimY = blocks[0].length;
+                final int dimZ = blocks[0][0].length;
 
-                for (int z = 0; z < dimZ; z++) {
+                /* ---------------------------------------------------------- */
+                /* Parcours de TOUTES les cellules nulles */
+                /* ---------------------------------------------------------- */
+                for (int x = 0; x < dimX; x++) {
+                        for (int y = 0; y < dimY; y++) {
+                                for (int z = 0; z < dimZ; z++) {
 
-                        int aboveZ = z + 1;
-                        int topZ = z + 2;
-                        double aboveZc = aboveZ + 0.5;
-                        double topZc = topZ + 0.5;
+                                        if (isSolid(blocks[x][y][z]))
+                                                continue; // On ne traite que les cellules vides
 
-                        /* west, north, east, south borders */
-                        for (int y = 0; y < dimY; y++)
-                                maybeAddGroup(blocks, fog, 0, y, z, -1, 0,
-                                                aboveZc, topZc, dimZ, dimX, dimY);
+                                        final boolean hasSolidAbove = (z + 1 < dimZ) && isSolid(blocks[x][y][z + 1]);
+                                        final boolean hasSolidBelow = (z - 1 >= 0) && isSolid(blocks[x][y][z - 1]);
+                                        final boolean candidate = hasSolidAbove || hasSolidBelow;
 
-                        for (int x = 0; x < dimX; x++)
-                                maybeAddGroup(blocks, fog, x, 0, z, 0, -1,
-                                                aboveZc, topZc, dimZ, dimX, dimY);
+                                        if (!candidate)
+                                                continue; // inutile de générer de la fog ici
 
-                        for (int y = 0; y < dimY; y++)
-                                maybeAddGroup(blocks, fog, dimX - 1, y, z, 1, 0,
-                                                aboveZc, topZc, dimZ, dimX, dimY);
+                                        final boolean borderX = (x == 0 || x == dimX - 1);
+                                        final boolean borderY = (y == 0 || y == dimY - 1);
+                                        final boolean isBorder = borderX || borderY;
+                                        final boolean isBottomFace = (z == 0);
+                                        final boolean isTopFace = (z == dimZ - 1);
 
-                        for (int x = 0; x < dimX; x++)
-                                maybeAddGroup(blocks, fog, x, dimY - 1, z, 0, 1,
-                                                aboveZc, topZc, dimZ, dimX, dimY);
+                                        if (isBorder) {
+                                                /* -------------------------------------------------- */
+                                                /* Traitement des bords */
+                                                /* -------------------------------------------------- */
+                                                int ox = 0, oy = 0;
+                                                if (x == 0)
+                                                        ox = 1;
+                                                else if (x == dimX - 1)
+                                                        ox = -1;
+                                                if (y == 0)
+                                                        oy = 1;
+                                                else if (y == dimY - 1)
+                                                        oy = -1;
 
-                        /* ── corners (diagonal outward) ─────────────────────────── */
-                        maybeAddGroup(blocks, fog, 0, 0, z, -1, -1,
-                                        aboveZc, topZc, dimZ, dimX, dimY); // NW
-                        maybeAddGroup(blocks, fog, 0, dimY - 1, z, -1, 1,
-                                        aboveZc, topZc, dimZ, dimX, dimY); // SW
-                        maybeAddGroup(blocks, fog, dimX - 1, 0, z, 1, -1,
-                                        aboveZc, topZc, dimZ, dimX, dimY); // NE
-                        maybeAddGroup(blocks, fog, dimX - 1, dimY - 1, z, 1, 1,
-                                        aboveZc, topZc, dimZ, dimX, dimY); // SE
+                                                boolean spill = false;
+                                                int ix = x + ox;
+                                                int iy = y + oy;
+                                                if (ix >= 0 && ix < dimX && iy >= 0 && iy < dimY) {
+                                                        spill = !isSolid(blocks[ix][iy][z]);
+                                                }
+                                                addBorderFog(fog, x, y, z, ox, oy, spill);
 
+                                                /* ── renforcement de la brume dans les coins ─────────────────────── */
+                                                if (borderX && borderY) { // cellule située sur un vrai coin
+                                                        addCornerFog(fog, x, y, z, ox, oy);
+                                                }
+                                        } else if (isBottomFace || isTopFace) {
+                                                /* -------------------------------------------------- */
+                                                /* Traitement des faces haut/bas */
+                                                /* -------------------------------------------------- */
+                                                processHorizontalFaceCell(blocks, fog, x, y, z, dimX, dimY, dimZ);
+                                        }
+                                }
+                        }
                 }
+
                 return fog;
         }
 
-        private static void maybeAddGroup(Block[][][] blocks,
-                        Map<Vector, Block> fog,
+        /* ------------------------------------------------------------------ */
+        /* Ajout de fog pour une cellule de bordure */
+        /* ------------------------------------------------------------------ */
+        private static void addBorderFog(Map<Vector, Block> fog,
                         int x, int y, int z,
-                        int ox, int oy, // outward dir
-                        double aboveZc, double topZc,
-                        int dimZ, int dimX, int dimY) {
+                        int ox, int oy, boolean spillInterior) {
 
-                /* anchor must be solid */
-                if (blocks[x][y][z] == null)
-                        return;
+                double cx = x + 0.5;
+                double cy = y + 0.5;
+                double cz = z + 0.5;
 
-                int aboveZ = z + 1;
-                if (aboveZ >= dimZ)
-                        return;
-
-                if (blocks[x][y][aboveZ] != null)
-                        return; // space already occupied
-
-                /* jitter only outward ------------------------------------------------ */
+                // petit jitter commun pour ne jamais avoir deux identiques
                 double rand = Math.random();
-                double jx = (ox != 0) ? rand : 0.0;
-                double jy = (oy != 0) ? rand : 0.0;
-                double jz = rand / 5 - 0.1;
+                double jx = (ox != 0 ? rand : 0.0);
+                double jy = (oy != 0 ? rand : 0.0);
+                double jz = (rand / 5.0) - 0.1;
 
-                /* 1-voxel OUTER ring (fog100, height 1) ----------------------------- */
-                fog.put(new Vector(x + 0.5 + ox + jx,
-                                y + 0.5 + oy + jy,
-                                aboveZc),
-                                FOG100);
+                fog.put(new Vector(cx + jx, cy + jy, cz), FOG10);
+                fog.put(new Vector(cx + jx - ox * 0.25, cy + jy - oy * 0.25, cz), FOG25);
+                fog.put(new Vector(cx + jx - ox * 0.5, cy + jy - oy * 0.5, cz), FOG50);
+                fog.put(new Vector(cx + jx - ox * 0.75, cy + jy - oy * 0.75, cz), FOG75);
+                fog.put(new Vector(cx + jx - ox, cy + jy - oy, cz), FOG100);
 
-                /* on-edge ring (fog75, height 1) ----------------------------------- */
-                fog.put(new Vector(x + 0.5 + jx,
-                                y + 0.5 + jy,
-                                aboveZc),
-                                (Math.random() < 0.5 ? FOG50 : FOG25));
+                /* Légère remontée */
+                fog.put(new Vector(cx + jx - ox * 0.33, cy + jy - oy * 0.25, cz + 0.5 + jz), FOG25);
+                fog.put(new Vector(cx + jx - ox * 0.66, cy + jy - oy * 0.5, cz + 0.5 + jz), FOG50);
+                fog.put(new Vector(cx + jx - ox, cy + jy - oy, cz + 0.5 + jz), FOG75);
 
-                /* half-step inward haze (fog50, height 1) -------------------------- */
-                fog.put(new Vector(x + 0.5 - ox * 0.5 + jx,
-                                y + 0.5 - oy * 0.5 + jy,
-                                aboveZc),
-                                (Math.random() < 0.5 ? FOG25 : FOG50));
-
-                /* ------------------------------------------------------------------ */
-                /* add the deeper inner wisps (fog25 & fog10) **only if** the cell */
-                /* two steps inward at ground and z+1 are empty. */
-                /* ------------------------------------------------------------------ */
-                int ix2 = x - 2 * ox;
-                int iy2 = y - 2 * oy;
-                boolean innerClear = ix2 >= 0 && ix2 < dimX &&
-                                iy2 >= 0 && iy2 < dimY &&
-                                blocks[ix2][iy2][z] == null &&
-                                blocks[ix2][iy2][aboveZ] == null;
-
-                if (innerClear) {
-                        /* one-step inward, fog25 */
-                        fog.put(new Vector(x + 0.5 - ox + jx,
-                                        y + 0.5 - oy + jy,
-                                        aboveZc),
-                                        FOG10);
-
-                        /* 1¼-step inward, fog10 */
-                        fog.put(new Vector(x + 0.5 - ox * 1.25 + jx,
-                                        y + 0.5 - oy * 1.25 + jy,
-                                        aboveZc),
-                                        FOG10);
+                /* Propagation éventuelle vers l'intérieur */
+                if (spillInterior) {
+                        fog.put(new Vector(cx + jx + 0.25 * ox, cy + jy + 0.25 * oy, cz), FOG10);
                 }
-
-                /* wisps that rise a bit (fog25 & fog50) ---------------------------- */
-                fog.put(new Vector(x + 0.5 + jx,
-                                y + 0.5 + jy,
-                                aboveZc + 0.5 + jz),
-                                FOG25);
-
-                fog.put(new Vector(x + 0.5 + ox + jx,
-                                y + 0.5 + oy + jy,
-                                aboveZc + 0.5 + jz),
-                                FOG10);
         }
 
+        /* ------------------------------------------------------------------ */
+        /* Renforcement de la brume sur les coins (plus sombre) */
+        /* ------------------------------------------------------------------ */
+        private static void addCornerFog(Map<Vector, Block> fog,
+                        int x, int y, int z,
+                        int ix, int iy) { // ix/iy pointent vers l’intérieur
+
+                double cx = x + 0.5;
+                double cy = y + 0.5;
+                double cz = z + 0.5;
+
+                double rand = Math.random();
+                double jx = (ix != 0 ? rand / 3.0 : 0.0);
+                double jy = (iy != 0 ? rand / 3.0 : 0.0);
+                double jz = (rand / 5.0) - 0.1;
+
+                /* Couche très opaque juste à l’extérieur du coin */
+                fog.put(new Vector(cx - ix + jx,
+                                cy - iy + jy,
+                                cz),
+                                FOG100);
+
+                /* ── comble l’espace entre le coin et les bords ─────────────── */
+                fog.put(new Vector(cx - ix * 0.85 + jx, cy + jy, cz), FOG75); // vers le bord X
+                fog.put(new Vector(cx + jx, cy - iy * 0.85 + jy, cz), FOG75); // vers le bord Y
+
+                /* Transition vers l’intérieur : 75 → 50 */
+                fog.put(new Vector(cx - ix * 0.75 + jx,
+                                cy - iy * 0.75 + jy,
+                                cz + 0.25),
+                                FOG75);
+
+                fog.put(new Vector(cx - ix * 0.5 + jx,
+                                cy - iy * 0.5 + jy,
+                                cz + 0.5),
+                                fog25or50());
+
+                /* Filaments plus légers qui montent / descendent */
+                fog.put(new Vector(cx - ix * 0.25 + jx,
+                                cy - iy * 0.25 + jy,
+                                cz + 0.5 + jz),
+                                fog10or25());
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Ajout de fog pour une cellule sur la face z==0 ou z==max */
+        /* ------------------------------------------------------------------ */
+        private static void processHorizontalFaceCell(Block[][][] blocks, Map<Vector, Block> fog,
+                        int x, int y, int z,
+                        int dimX, int dimY, int dimZ) {
+                boolean neighbourSolid = false;
+                int dirX = 0, dirY = 0;
+                // 4 directions horizontales
+                int[][] dirs = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+                for (int[] d : dirs) {
+                        int nx = x + d[0];
+                        int ny = y + d[1];
+                        if (nx < 0 || nx >= dimX || ny < 0 || ny >= dimY)
+                                continue;
+                        if (isSolid(blocks[nx][ny][z])) {
+                                neighbourSolid = true;
+                                dirX = d[0];
+                                dirY = d[1];
+                                break;
+                        }
+                }
+                if (!neighbourSolid)
+                        return;
+
+                double cx = x + 0.5;
+                double cy = y + 0.5;
+                double cz = z + 0.5;
+
+                double rand = Math.random();
+                double jx = rand / 4 - 0.125;
+                double jy = rand / 4 - 0.125;
+                double jz = (rand / 5) - 0.1;
+
+                // Couche principale
+                fog.put(new Vector(cx + jx, cy + jy, cz), FOG75);
+                // Petite remontée
+                fog.put(new Vector(cx + jx, cy + jy, cz + (z == 0 ? 0.5 : -0.5) + jz), fog25or50());
+
+                // éventuelle propagation verticale si la place est libre
+                int vz = (z == 0 ? 1 : -1); // vers le haut si bottom, vers le bas si top
+                int nz = z + vz;
+                if (nz >= 0 && nz < dimZ && !isSolid(blocks[x][y][nz])) {
+                        fog.put(new Vector(cx + jx, cy + jy, nz + 0.5), fog10or25());
+                }
+
+                // propagation horizontale douce vers le voisin solide
+                fog.put(new Vector(cx + dirX * 0.4 + jx, cy + dirY * 0.4 + jy, cz + 0.1), fog10or25());
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Animation légère : identique à l'ancienne implémentation */
+        /* ------------------------------------------------------------------ */
         public Map<Vector, Block> randomizeFogMap(Map<Vector, Block> currentFogMap) {
                 Map<Vector, Block> randomizedFog = new HashMap<>();
                 for (Map.Entry<Vector, Block> entry : currentFogMap.entrySet()) {
@@ -191,15 +306,14 @@ public final class FogManager {
                         double dy = (Math.random() - 0.5) * 0.05;
                         double dz = (Math.random() - 0.5) * 0.05;
                         Vector newV = new Vector(v.x + dx, v.y + dy, v.z + dz);
-                        // If block is FOG25 or FOG50, 50% chance to swap between them
+                        // Swap occasionnel entre FOG25 et FOG50
                         if (b == FOG25 || b == FOG50) {
                                 if (Math.random() < 0.05) {
-                                        b = (b == FOG25) ? FOG50 : FOG25;
+                                        b = (b == FOG25 ? FOG50 : FOG25);
                                 }
                         }
                         randomizedFog.put(newV, b);
                 }
                 return randomizedFog;
-
         }
 }

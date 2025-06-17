@@ -15,13 +15,13 @@ public class BlockBehaviorChangeWorld extends BlockBehaviorActivable {
      @Override
     protected void activate(World world, Block block, Vector position, int network) {
         block.setIndexTexture(1);
-        SoundManager.playSound(SoundType.WORLD_LOADER_ACTIVATION);
+        SoundManager.playSoundFromCoordinates(SoundType.WORLD_LOADER_ACTIVATION, position.x, position.y, position.z);
     }
     
     @Override
     protected void desactivate(World world, Block block, Vector position, int network) {
         block.setIndexTexture(0);
-        SoundManager.playSound(SoundType.WORLD_LOADER_ACTIVATION);
+        SoundManager.playSoundFromCoordinates(SoundType.WORLD_LOADER_ACTIVATION, position.x, position.y, position.z);
     }
 
     @Override

@@ -67,13 +67,13 @@ public final class FogManager {
         private static boolean hasHorizontalSolidNeighbor(Block[][][] blocks,
                         int x, int y, int z,
                         int dimX, int dimY, boolean checkCorners) {
-                
+
                 int[][] dirs = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
                 if (checkCorners) {
-                                dirs = new int[][] {
-                                                { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 },
-                                                { 1, 1 }, { -1, -1 }, { 1, -1 }, { -1, 1 }
-                                };
+                        dirs = new int[][] {
+                                        { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 },
+                                        { 1, 1 }, { -1, -1 }, { 1, -1 }, { -1, 1 }
+                        };
                 }
                 for (int[] d : dirs) {
                         int nx = x + d[0];
@@ -197,21 +197,20 @@ public final class FogManager {
                 double jy = (oy != 0 ? rand * oy : 0.0);
                 double jz = (rand / 5.0) - 0.1;
 
-                fog.put(new Vector(cx + jx, cy + jy, cz), FOG10);
+                // fog.put(new Vector(cx + jx, cy + jy, cz), FOG10);
                 fog.put(new Vector(cx + jx - ox * 0.25, cy + jy - oy * 0.25, cz), FOG25);
                 fog.put(new Vector(cx + jx - ox * 0.5, cy + jy - oy * 0.5, cz), FOG50);
-                fog.put(new Vector(cx + jx - ox * 0.75, cy + jy - oy * 0.75, cz), FOG75);
-                fog.put(new Vector(cx + jx - ox, cy + jy - oy, cz), FOG100);
+                // fog.put(new Vector(cx + jx - ox * 0.75, cy + jy - oy * 0.75, cz), FOG75);
+                fog.put(new Vector(cx + jx - ox, cy + jy - oy, cz), FOG75);
 
-                /* Légère remontée */
-                fog.put(new Vector(cx + jx - ox * 0.33, cy + jy - oy * 0.25, cz + 0.5 + jz), FOG25);
-                fog.put(new Vector(cx + jx - ox * 0.66, cy + jy - oy * 0.5, cz + 0.5 + jz), FOG50);
+                // fog.put(new Vector(cx + jx - ox * 0.33, cy + jy - oy * 0.25, cz + 0.5 + jz), FOG25);
+                // fog.put(new Vector(cx + jx - ox * 0.66, cy + jy - oy * 0.5, cz + 0.5 + jz),FOG50);
                 fog.put(new Vector(cx + jx - ox, cy + jy - oy, cz + 0.5 + jz), FOG75);
 
-                /* Propagation éventuelle vers l'intérieur */
-                if (spillInterior) {
-                        fog.put(new Vector(cx + jx + 0.25 * ox, cy + jy + 0.25 * oy, cz), FOG10);
-                }
+                // /* Propagation éventuelle vers l'intérieur */
+                // if (spillInterior) {
+                // fog.put(new Vector(cx + jx + 0.25 * ox, cy + jy + 0.25 * oy, cz), FOG10);
+                // }
         }
 
         /* ------------------------------------------------------------------ */
@@ -225,34 +224,16 @@ public final class FogManager {
                 double cy = y + 0.5;
                 double cz = z + 0.5;
 
-                double rand = Math.random();
-
                 /* Couche très opaque juste à l’extérieur du coin */
-                fog.put(new Vector(cx - ix,
-                                cy - iy,
-                                cz),
-                                FOG100);
-
-                /* ── comble l’espace entre le coin et les bords ─────────────── */
+                fog.put(new Vector(cx - ix, cy - iy, cz), FOG100);
                 fog.put(new Vector(cx - ix * 0.85, cy, cz), FOG75); // vers le bord X
                 fog.put(new Vector(cx, cy - iy * 0.85, cz), FOG75); // vers le bord Y
 
-                /* Transition vers l’intérieur : 75 → 50 */
-                fog.put(new Vector(cx - ix * 0.75,
-                                cy - iy * 0.75,
-                                cz + 0.25),
-                                FOG75);
+                // fog.put(new Vector(cx - ix * 0.75, cy - iy * 0.75, cz + 0.25), FOG75);
 
-                fog.put(new Vector(cx - ix * 0.5,
-                                cy - iy * 0.5,
-                                cz + 0.5),
-                                fog25or50());
+                fog.put(new Vector(cx - ix * 0.5, cy - iy * 0.5, cz + 0.5), fog25or50());
 
-                /* Filaments plus légers qui montent / descendent */
-                fog.put(new Vector(cx - ix * 0.25,
-                                cy - iy * 0.25,
-                                cz + 0.5),
-                                fog10or25());
+                // fog.put(new Vector(cx - ix * 0.25, cy - iy * 0.25, cz + 0.5), fog10or25());
         }
 
         /* ------------------------------------------------------------------ */
@@ -279,17 +260,7 @@ public final class FogManager {
                 fog.put(new Vector(cx + jx, cy + jy, cz - dirZ * 0.5 + adj), FOG50);
                 fog.put(new Vector(cx + jx, cy + jy, cz - dirZ * 0.25 + adj), FOG25);
                 fog.put(new Vector(cx + jx, cy + jy, cz + adj), FOG10);
-                // Petite remontée
-                // fog.put(new Vector(cx + jx, cy + jy, cz + (z == 0 ? 0.5 : -0.5) + jz),
-                // fog25or50());
-
-                // // éventuelle propagation verticale si la place est libre
-                // int vz = (z == 0 ? 1 : -1); // vers le haut si bottom, vers le bas si top
-                // int nz = z + vz;
-                // if (nz >= 0 && nz < dimZ && !isSolid(blocks[x][y][nz])) {
-                // fog.put(new Vector(cx + jx, cy + jy, nz + 0.5), fog10or25());
-                // }
-
+        
         }
 
         /* ------------------------------------------------------------------ */

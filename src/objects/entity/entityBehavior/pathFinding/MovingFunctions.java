@@ -80,7 +80,7 @@ public class MovingFunctions {
             Random random = new Random();
             nextUpdate = 1 + MAX_TICK_TO_UPDATE/2 + random.nextInt(MAX_TICK_TO_UPDATE/2);
         }
-        if (openList == null || path.isEmpty()) {
+        if (openList == null || path == null || path.isEmpty()) {
             initPathFinding(world, entity.getPosition(), pathFindingType.getRandomDestination(world, entity, DISTANCE_TO_MOVE));
         }
         Boolean findPath = PathFinding.findPath(world, entity, destination, openList, closedList, MAX_SEARCH_PER_TICK, pathFindingType);
@@ -104,7 +104,7 @@ public class MovingFunctions {
                 Random random = new Random();
                 nextUpdate = 1 + MAX_TICK_TO_UPDATE/2 + random.nextInt(MAX_TICK_TO_UPDATE/2);
             }
-            if (openList == null || path.isEmpty())
+            if (openList == null || path == null || path.isEmpty())
                 initPathFinding(world, entity.getPosition(), findFurthestPosition(world, entity, entityToFlee.getPosition()));
             Boolean findPath = PathFinding.findPath(world, entity, destination, openList, closedList, MAX_SEARCH_PER_TICK, pathFindingType);
             if (findPath != null && findPath) {

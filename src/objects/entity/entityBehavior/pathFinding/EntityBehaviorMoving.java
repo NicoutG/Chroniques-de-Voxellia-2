@@ -6,11 +6,12 @@ import tools.PathFinding.PathFindingType;
 import world.World;
 
 public class EntityBehaviorMoving extends EntityBehavior {
-    private final static String MOVING_STATE = "movingState";
+    public final static String MOVING_STATE = "movingState";
 
-    private final static String CHASE = "chase";
-    private final static String FLEE = "flee";
-    private final static String MOVE_RANDOMLY = "moveRandomly";
+    public final static String CHASE = "chase";
+    public final static String FLEE = "flee";
+    public final static String MOVE_RANDOMLY = "moveRandomly";
+    public final static String WAIT = "wait";
 
     private MovingFunctions movingFunctions;
 

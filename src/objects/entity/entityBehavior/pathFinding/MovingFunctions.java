@@ -152,4 +152,8 @@ public class MovingFunctions {
             return (Entity)state;
         return null;
     }
+
+    public MovingFunctions clone() {
+        return new MovingFunctions(pathFindingType);
+    }
 }

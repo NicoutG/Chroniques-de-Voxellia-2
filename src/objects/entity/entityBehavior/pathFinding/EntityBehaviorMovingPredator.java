@@ -4,28 +4,28 @@ import objects.entity.Entity;
 import tools.PathFinding.PathFindingType;
 import world.World;
 
-public class EntityBehaviorMovingAnimal extends EntityBehaviorMovingPassive {
+public class EntityBehaviorMovingPredator extends EntityBehaviorMovingPassive {
     public static final String DISTANCE_TO_CHANGE = "distanceToChange";
     public static final String SPEED_CHANGE = "speedChange";
 
     private double distanceToChange = 5;
     private double speedChange = 1.2;
 
-    public EntityBehaviorMovingAnimal(PathFindingType pathFindingType) {
+    public EntityBehaviorMovingPredator(PathFindingType pathFindingType) {
         super(pathFindingType);
     }
 
-    public EntityBehaviorMovingAnimal(PathFindingType pathFindingType, double distanceToChange) {
+    public EntityBehaviorMovingPredator(PathFindingType pathFindingType, double distanceToChange) {
         this(pathFindingType);
         this.distanceToChange = distanceToChange;
     }
 
-    public EntityBehaviorMovingAnimal(PathFindingType pathFindingType, double distanceToChange, double speedChange) {
+    public EntityBehaviorMovingPredator(PathFindingType pathFindingType, double distanceToChange, double speedChange) {
         this(pathFindingType, distanceToChange);
         this.speedChange = speedChange;
     }
 
-    public EntityBehaviorMovingAnimal(PathFindingType pathFindingType, double distanceToChange, double speedChange, int tickMove, int tickStop) {
+    public EntityBehaviorMovingPredator(PathFindingType pathFindingType, double distanceToChange, double speedChange, int tickMove, int tickStop) {
         super(pathFindingType, tickMove, tickStop);
         this.distanceToChange = distanceToChange;
         this.speedChange = speedChange;
@@ -46,14 +46,14 @@ public class EntityBehaviorMovingAnimal extends EntityBehaviorMovingPassive {
         String movingState = getMovingState(entity);
         double distanceToChange = getDistanceToChange(entity);
 
-        // flee when player is close, move randomly otherwise
+        // chase when player is close, move randomly otherwise
         if (distance <= distanceToChange) {
-            if (!movingState.equals(FLEE))
+            if (!movingState.equals(CHASE))
                 entity.setSpeed(entity.getSpeed() * getSpeedChange(entity));
-            entity.setState(MOVING_STATE, FLEE);
+            entity.setState(MOVING_STATE, CHASE);
         }
         else if (distanceToChange + 10 <= distance) {
-            if (movingState.equals(FLEE))
+            if (movingState.equals(CHASE))
                 entity.setSpeed(entity.getSpeed()/getSpeedChange(entity));
             entity.setState(MOVING_STATE, MOVE_RANDOMLY);
         }

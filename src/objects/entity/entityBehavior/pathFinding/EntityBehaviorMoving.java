@@ -5,7 +5,7 @@ import objects.entity.entityBehavior.EntityBehavior;
 import tools.PathFinding.PathFindingType;
 import world.World;
 
-public class EntityBehaviorMoving extends EntityBehavior {
+public abstract class EntityBehaviorMoving extends EntityBehavior {
     public final static String MOVING_STATE = "movingState";
 
     public final static String CHASE = "chase";
@@ -56,5 +56,12 @@ public class EntityBehaviorMoving extends EntityBehavior {
 
     public Entity getEntityToFlee(Entity entity) {
         return movingFunctions.getEntityToFlee(entity);
+    }
+
+    @Override
+    public EntityBehavior clone() {
+        EntityBehaviorMoving clone = (EntityBehaviorMoving)super.clone();
+        clone.movingFunctions = (MovingFunctions)movingFunctions.clone();
+        return clone;
     }
 }

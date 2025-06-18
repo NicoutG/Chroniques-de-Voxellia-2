@@ -240,6 +240,8 @@ public class World {
             actions.add(EntityAction.JUMP);
         if (GameControls.isPressed(KeyEvent.VK_E))
             actions.add(EntityAction.INTERACT);
+        if (GameControls.isPressed(KeyEvent.VK_R))
+            reloadWorld();
         
         if (!actions.isEmpty())
             player.doActions(this, actions.toArray(new EntityAction[0]));

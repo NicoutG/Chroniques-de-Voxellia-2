@@ -39,6 +39,14 @@ public class MovingFunctions {
         entity.setState(ENTITY_TO_FLEE, null);
     }
 
+    public void reset() {
+        openList = null;
+    }
+
+    public void stop() {
+        path = null;
+    }
+
     public int getDistanceToDestination() {
         if (path == null)
             return -1;

@@ -14,6 +14,7 @@ public abstract class EntityBehaviorMoving extends EntityBehavior {
     public final static String WAIT = "wait";
 
     private MovingFunctions movingFunctions;
+    private String previousMovingState = "";
 
     public EntityBehaviorMoving(PathFindingType pathFindingType) {
         movingFunctions = new MovingFunctions(pathFindingType);
@@ -36,10 +37,15 @@ public abstract class EntityBehaviorMoving extends EntityBehavior {
         movingFunctions.move(world, entity);
 
         String movingState = getMovingState(entity);
+        if (!previousMovingState.equals(movingState)) {
+            movingFunctions.reset();
+            previousMovingState = movingState;
+        }
         switch (movingState) {
             case CHASE: movingFunctions.chase(world, entity);break;
             case FLEE: movingFunctions.flee(world, entity);break;
             case MOVE_RANDOMLY: movingFunctions.moveRandomly(world, entity);break;
+            case WAIT: movingFunctions.stop();break;
         }
     }
 

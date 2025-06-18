@@ -43,7 +43,7 @@ public enum EntityTemplate {
             "crate-wood.png",
             new Collision[] { CollisionList.BLOCK_ENTITY },
             null,
-            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorMovingPredator(new PathFindingFalling()) })),
+            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorMovingObserver(new PathFindingFalling()) })),
     LILY(new EntityType("lily",
             "lily.png",
             new Collision[] { CollisionList.BLOCK_ENTITY },

@@ -1,4 +1,3 @@
-/*  graphics/fog/FogManager.java  */
 package graphics.fog;
 
 import graphics.Texture;
@@ -86,14 +85,34 @@ public final class FogManager {
                 return false;
         }
 
-        /** Retourne aléatoirement FOG25 ou FOG50 pour créer un aspect vivant */
-        private static Block fog25or50() {
-                return Math.random() < 0.5 ? FOG25 : FOG50;
+        private static boolean hasHorizontalNeighborsX(Block[][][] blocks,
+                        int x, int y, int z,
+                        int dimX, int dimY) {
+                int[][] dirs = { { 1, 0 }, { -1, 0 } };
+                for (int[] d : dirs) {
+                        int nx = x + d[0];
+                        int ny = y + d[1];
+                        if (nx < 0 || nx >= dimX || ny < 0 || ny >= dimY)
+                                continue;
+                        if (isSolid(blocks[nx][ny][z]))
+                                return true;
+                }
+                return false;
         }
 
-        /** Retourne aléatoirement FOG10 ou FOG25 : couche très légère */
-        private static Block fog10or25() {
-                return Math.random() < 0.5 ? FOG10 : FOG25;
+        private static boolean hasHorizontalNeighborsY(Block[][][] blocks,
+                        int x, int y, int z,
+                        int dimX, int dimY) {
+                int[][] dirs = { { 0, 1 }, { 0, -1 } };
+                for (int[] d : dirs) {
+                        int nx = x + d[0];
+                        int ny = y + d[1];
+                        if (nx < 0 || nx >= dimX || ny < 0 || ny >= dimY)
+                                continue;
+                        if (isSolid(blocks[nx][ny][z]))
+                                return true;
+                }
+                return false;
         }
 
         /* -------------------------------------------------------------- */
@@ -116,6 +135,8 @@ public final class FogManager {
                         for (int y = 0; y < dimY; y++) {
                                 for (int z = 0; z < dimZ; z++) {
 
+                                        if(isSolid(blocks[x][y][z])) continue;
+
                                         final boolean isBottomFace = (z == 0);
                                         final boolean isTopFace = (z == dimZ - 1);
 
@@ -124,23 +145,25 @@ public final class FogManager {
 
                                         final boolean borderX = (x == 0 || x == dimX - 1);
                                         final boolean borderY = (y == 0 || y == dimY - 1);
-                                        final boolean isBorder = borderX || borderY;
 
-                                        final boolean border = (isBorder && ((hasSolidAbove || hasSolidBelow
-                                                        || hasHorizontalSolidNeighbor(blocks, x, y, z,
-                                                                        dimX, dimY, false))
-                                                        || (isSolid(blocks[x][y][z]) && !hasSolidAbove)));
+                                        final boolean isBorder = (
+                                                (borderX || borderY) && 
+                                                (
+                                                        (hasSolidAbove || hasSolidBelow) ||
+                                                        (
+                                                                (hasHorizontalNeighborsX(blocks, x, y, z, dimX, dimY) && borderY) ||
+                                                                (hasHorizontalNeighborsY(blocks, x, y, z, dimX, dimY) && borderX)
+                                                        )
+                                                )
+                                        );
 
-                                        final boolean face = !isSolid(blocks[x][y][z]) && (isBottomFace || isTopFace) &&
-                                                        hasHorizontalSolidNeighbor(blocks, x, y, z,
-                                                                        dimX, dimY, true);
+                                        final boolean isFace = (isBottomFace || isTopFace) &&
+                                                        hasHorizontalSolidNeighbor(blocks, x, y, z, dimX, dimY, true);
 
-                                        final boolean candidate = border || face;
-
-                                        if (!candidate)
+                                        if (!(isBorder || isFace))
                                                 continue; // pas de brume
 
-                                        if (border) {
+                                        if (isBorder) {
                                                 /* -------------------------------------------------- */
                                                 /* Traitement des bords */
                                                 /* -------------------------------------------------- */
@@ -166,7 +189,7 @@ public final class FogManager {
                                                 if (borderX && borderY) {
                                                         addCornerFog(fog, x, y, z, ox, oy);
                                                 }
-                                        } else if (face) {
+                                        } else if (isFace) {
                                                 /* -------------------------------------------------- */
                                                 /* Traitement des faces haut/bas */
                                                 /* -------------------------------------------------- */
@@ -192,10 +215,10 @@ public final class FogManager {
                 double cz = z + 0.5;
 
                 // petit jitter commun pour ne jamais avoir deux identiques
-                double rand = Math.random();
+                double rand = 0;
+                Math.random();
                 double jx = (ox != 0 ? rand * ox : 0.0);
                 double jy = (oy != 0 ? rand * oy : 0.0);
-                double jz = (rand / 5.0) - 0.1;
 
                 // fog.put(new Vector(cx + jx, cy + jy, cz), FOG10);
                 // fog.put(new Vector(cx + jx - ox * 0.25, cy + jy - oy * 0.25, cz), FOG25);
@@ -221,7 +244,7 @@ public final class FogManager {
                 // fog.put(new Vector(cx - ix, cy - iy, cz), FOG100);
                 fog.put(new Vector(cx - ix * 0.75, cy, cz), FOG75); // vers le bord X
                 fog.put(new Vector(cx, cy - iy * 0.75, cz), FOG75); // vers le bord Y
-                
+
                 // fog.put(new Vector(cx - ix * 0.75, cy - iy * 0.75, cz + 0.25), FOG75);
                 // fog.put(new Vector(cx - ix * 0.5, cy - iy * 0.5, cz + 0.5), fog25or50());
                 // fog.put(new Vector(cx - ix * 0.25, cy - iy * 0.25, cz + 0.5), fog10or25());
@@ -246,12 +269,12 @@ public final class FogManager {
                 double jy = rand / 4 - 0.125;
 
                 // Couche principale
-                fog.put(new Vector(cx + jx, cy + jy, cz - dirZ + adj), FOG100);
-                fog.put(new Vector(cx + jx, cy + jy, cz - dirZ * 0.75 + adj), FOG75);
-                fog.put(new Vector(cx + jx, cy + jy, cz - dirZ * 0.5 + adj), FOG50);
+                fog.put(new Vector(cx + jx, cy + jy, cz - dirZ + adj), FOG75);
+                fog.put(new Vector(cx + jx, cy + jy, cz - dirZ * 0.75 + adj), FOG50);
+                // fog.put(new Vector(cx + jx, cy + jy, cz - dirZ * 0.5 + adj), FOG50);
                 // fog.put(new Vector(cx + jx, cy + jy, cz - dirZ * 0.25 + adj), FOG25);
                 // fog.put(new Vector(cx + jx, cy + jy, cz + adj), FOG10);
-        
+
         }
 
         /* ------------------------------------------------------------------ */

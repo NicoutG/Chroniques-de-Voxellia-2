@@ -883,7 +883,15 @@ public enum BlockTemplate {
                                         new PropertyLight(new LightSource(
                                                         new ColorRGB(1, 1, 1), 1, 0.65, 0)) },
                         null)),
-                        ;
+        TNT(new BlockType("tnt",
+                        new Texture[] { new Texture(ShapeList.CUBE,
+                                        PathManager.loadImage("tnt.png")) },
+                        null,
+                        new Property[] {new Property("destructible")},
+                        new BlockBehavior[] {new BlockBehaviorExploding(2.5)}
+                        )),
+                        
+        ;
 
         public final BlockType blockType;
 

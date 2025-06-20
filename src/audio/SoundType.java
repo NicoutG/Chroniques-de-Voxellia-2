@@ -13,6 +13,7 @@ public enum SoundType {
     WORLD_LOADER_ACTIVATION("world-loader-activation.wav", false, 7),
     TELEPORTER_ACTIVATION("teleporter-activation.wav", false, 4),
     TYPING("typing.wav", false, 0.5),
+    EXPLOSION("explosion.wav", false, 2),
     // Ambient :
     AMBIENT1("ambient/moon-origin-loop.wav", true, 1, true),
     AMBIENT2("ambient/lost-in-forest-loop.wav", true, 1, true),

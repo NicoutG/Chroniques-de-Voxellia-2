@@ -890,6 +890,16 @@ public enum BlockTemplate {
                         new Property[] {new Property("destructible")},
                         new BlockBehavior[] {new BlockBehaviorExploding(2.5)}
                         )),
+        EXPLOSION(new BlockType("explosion",
+                        new Texture[] { Texture.createBasicTexture(ShapeList.TRANSPARENT_CUBE,
+                                                        new String[] { "explosion/explosion-0.png", "explosion/explosion-1.png", "explosion/explosion-2.png","explosion/explosion-3.png", "explosion/explosion-4.png", "explosion/explosion-5.png" }, 
+                                                        2) },
+                        null,
+                        new Property[] {new Property("noCollision"),
+                                        new PropertyLight(new LightSource(
+                                                new ColorRGB(1, 0.5, 0.5), 1, 0.5, 0.1))},
+                        new BlockBehavior[] {new BlockBehaviorEffect(12)}
+                        )),
                         
         ;
 

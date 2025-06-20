@@ -13,7 +13,7 @@ public class GamePanel extends JPanel {
     private final Renderer renderer;
     private final SoundManager soundManager;
     private final World world;
-    private long tick = 0;
+    private static long tick = 0;
 
     private long time = 0;
     public double fps = 0;
@@ -44,6 +44,10 @@ public class GamePanel extends JPanel {
             long dif = (System.currentTimeMillis() - time);
             fps = 1000.0 * TICK_FPS / dif;
         }
+    }
+
+    public static long getTick() {
+        return tick;
     }
 
     @Override

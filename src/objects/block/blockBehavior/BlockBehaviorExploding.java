@@ -12,6 +12,7 @@ import world.World;
 public class BlockBehaviorExploding extends BlockBehaviorActivable {
     private final static String RADIUS = "radius";
     private final static String DESTRUCTIBLE_PROPERTY = "destructible";
+    private final static String EXPLOSION_BLOCK = "explosionBlock";
     private final double DEFAULT_RADIUS;
 
     public BlockBehaviorExploding() {
@@ -26,6 +27,7 @@ public class BlockBehaviorExploding extends BlockBehaviorActivable {
     public void onAttachTo(Block block) {
         super.onAttachTo(block);
         block.setState(RADIUS, DEFAULT_RADIUS);
+        block.setState(EXPLOSION_BLOCK, "explosion");
     }
 
     @Override
@@ -44,12 +46,12 @@ public class BlockBehaviorExploding extends BlockBehaviorActivable {
             for (int y = minY; y <= maxY; y++) {
                 dif.y = y + 0.5 - position.y;
                 for (int x = minX; x <= maxX; x++) {
-                    Block blockWorld = world.getBlock(x,y,z);
-                    if (blockWorld != null && blockWorld.getProperty(DESTRUCTIBLE_PROPERTY) != null) {
-                        dif.x = x + 0.5 - position.x;
-                        double distance = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
-                        if (distance <= radius * radius)
-                            world.getBlocks()[x][y][z] = null;
+                    dif.x = x + 0.5 - position.x;
+                    double distance = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
+                    if (distance <= radius * radius) {
+                        Block blockWorld = world.getBlock(x,y,z);
+                        if (blockWorld == null || (blockWorld != null && blockWorld.getProperty(DESTRUCTIBLE_PROPERTY) != null))
+                            world.getBlocks()[x][y][z] = world.getBlock(getExplosionBlock(block));
                     }
                 }
             }
@@ -73,5 +75,12 @@ public class BlockBehaviorExploding extends BlockBehaviorActivable {
         if (state != null && state instanceof Double)
             return (double)state;
         return -1;
+    }
+
+    public String getExplosionBlock(Block block) {
+        Object state = block.getState(EXPLOSION_BLOCK);
+        if (state != null && state instanceof String)
+            return (String)state;
+        return null;
     }
 }

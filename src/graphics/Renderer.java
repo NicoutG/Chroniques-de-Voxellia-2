@@ -134,7 +134,7 @@ public final class Renderer {
                     boolean alwaysBehind = b.getProperty("floor") != null;
 
                     Texture text = b.getTexture();
-                    drawables.add(new Drawable(text.shade(text.full(tick), faceLighting.left(),
+                    drawables.add(new Drawable(text.shade(text.full(tick - b.getTickFrame0()), faceLighting.left(),
                                 faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
                     // if (visibleFaces[Face.LEFT.index]) {
                     //     drawables.add(new Drawable(text.shade(text.left(tick), faceLighting.left(),
@@ -173,7 +173,7 @@ public final class Renderer {
                 continue;
 
             /* one quad is enough: use the texture’s full sprite */
-            drawables.add(new Drawable(b.getTexture().full(tick),
+            drawables.add(new Drawable(b.getTexture().full(tick - b.getTickFrame0()),
                     v.x, v.y, v.z,
                     true));
         }
@@ -208,7 +208,7 @@ public final class Renderer {
 
                 Texture text = e.getTexture();
                 drawables.add(new Drawable(text.shade(
-                        text.full(tick),faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(), e.getZ(), true));
+                        text.full(tick - e.getTickFrame0()),faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(), e.getZ(), true));
                 // drawables.add(new Drawable(text.shade(text.left(tick),
                 //         faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
                 //         e.getZ(), true));

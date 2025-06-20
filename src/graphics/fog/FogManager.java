@@ -215,8 +215,7 @@ public final class FogManager {
                 double cz = z + 0.5;
 
                 // petit jitter commun pour ne jamais avoir deux identiques
-                double rand = 0;
-                Math.random();
+                double rand = Math.random() / 1.5 - 0.4;
                 double jx = (ox != 0 ? rand * ox : 0.0);
                 double jy = (oy != 0 ? rand * oy : 0.0);
 

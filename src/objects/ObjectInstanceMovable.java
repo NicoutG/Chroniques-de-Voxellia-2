@@ -3,6 +3,7 @@ package objects;
 import java.util.ArrayList;
 
 import objects.block.Block;
+import objects.collision.Collision;
 import objects.entity.Entity;
 import objects.objectBehavior.ObjectBehavior;
 import tools.Vector;
@@ -189,8 +190,14 @@ public class ObjectInstanceMovable <
             position.x += stepX;
             position.y += stepY;
             position.z += stepZ;
+            Collision collision = getCollision();
+            double[] boundingBox;
+            if (collision == null)
+                boundingBox = new double[] {position.x,position.x,position.y,position.y,position.z,position.z};
+            else
+                boundingBox = collision.getBounds(position);
 
-            boolean colliding = position.x < 0 || X <= position.x || position.y < 0 || Y <= position.y;
+            boolean colliding = boundingBox[0] < 0 || X <= boundingBox[1] || boundingBox[2] < 0 || Y <= boundingBox[3];
             if (!colliding)
                 colliding = isCollidingBlock(world);
             if (!colliding)

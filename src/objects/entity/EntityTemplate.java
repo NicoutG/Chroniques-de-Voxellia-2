@@ -32,12 +32,12 @@ public enum EntityTemplate {
     CRATE_WOOD(new EntityType("crateWood",
             "crate-wood.png",
             new Collision[] { CollisionList.BLOCK_ENTITY },
-            null,
+            new Property[] { new Property(PropertyList.BURNABLE) },
             new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable() })),
     MOVING_BLOCK(new EntityType("movingBlock",
             "block.png",
             new Collision[] { CollisionList.CUBE },
-            new Property[] { new Property("noCollisionSame"), new Property("noCollisionBlock")},
+            new Property[] { new Property(PropertyList.NO_COLLISION_SAME), new Property(PropertyList.NO_COLLISION_BLOCK)},
             new EntityBehavior[] { new EntityBehaviorActivableMoving() })),
     FOLLOW_CRATE_WOOD(new EntityType("followCrateWood",
             "crate-wood.png",
@@ -61,10 +61,22 @@ public enum EntityTemplate {
             },
             new Collision[] { CollisionList.BLOCK_ENTITY },
             new Property[] { 
-                 new PropertySound(SoundType.HELICOPTER) ,
+                new PropertySound(SoundType.HELICOPTER) ,
                 new PropertyLight(
                     new LightSource(new ColorRGB(0.2, 0.9, 0.2), 0.5, 0.8, 0))},
             new EntityBehavior[] { new EntityBehaviorPushable(), new EntityBehaviorMovingPassive(new PathFindingFly()) })),
+    FIRE(new EntityType("fire",
+            new Texture[] { Texture.createBasicTexture(ShapeList.COMPLETE,
+                        new String[] { "fire/fire-0.png", "fire/fire-1.png", "fire/fire-2.png", "fire/fire-3.png" }, 
+                        2) },
+            0,
+            null,
+            new Property[]{ new Property(PropertyList.NO_COLLISION_ENTITY),
+                        new PropertySound(SoundType.FIRE),
+                        new PropertyLight(
+                                new LightSource(new ColorRGB(1, 0.6, 0.2), 0.5, 0.8, 0.1)) },
+            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorBlazable(), new EntityBehaviorEffect(100) })),
+
     ;
 
     public final EntityType entityType;

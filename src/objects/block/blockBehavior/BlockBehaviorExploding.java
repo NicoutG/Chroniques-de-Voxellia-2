@@ -6,12 +6,13 @@ import audio.SoundManager;
 import audio.SoundType;
 import objects.block.Block;
 import objects.entity.Entity;
+import objects.property.PropertyList;
 import tools.Vector;
 import world.World;
 
 public class BlockBehaviorExploding extends BlockBehaviorActivable {
     private final static String RADIUS = "radius";
-    private final static String DESTRUCTIBLE_PROPERTY = "destructible";
+    private final static String EXPLOSION_BLOCK_NAME = "explosion";
     private final static String EXPLOSION_BLOCK = "explosionBlock";
     private final double DEFAULT_RADIUS;
 
@@ -27,7 +28,7 @@ public class BlockBehaviorExploding extends BlockBehaviorActivable {
     public void onAttachTo(Block block) {
         super.onAttachTo(block);
         block.setState(RADIUS, DEFAULT_RADIUS);
-        block.setState(EXPLOSION_BLOCK, "explosion");
+        block.setState(EXPLOSION_BLOCK, EXPLOSION_BLOCK_NAME);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class BlockBehaviorExploding extends BlockBehaviorActivable {
                     double distance = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
                     if (distance <= radius * radius) {
                         Block blockWorld = world.getBlock(x,y,z);
-                        if (blockWorld == null || (blockWorld != null && blockWorld.getProperty(DESTRUCTIBLE_PROPERTY) != null))
+                        if (blockWorld == null || (blockWorld != null && blockWorld.getProperty(PropertyList.DESTRUCTIBLE) != null))
                             world.getBlocks()[x][y][z] = world.getBlock(getExplosionBlock(block));
                     }
                 }
@@ -58,14 +59,12 @@ public class BlockBehaviorExploding extends BlockBehaviorActivable {
         }
 
         ArrayList<Entity> entities = world.getEntities();
-        for (int i = 0; i < entities.size(); i++) {
-            Entity entity = entities.get(i);
+        for (Entity entity : entities) {
             dif = position.sub(entity.getPosition());
             double distance = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
             if (distance <= radius * radius) {
                 entity.onDeath(world);
-                entities.remove(i);
-                i--;
+                world.executeAfterUpdate(() -> entities.remove(entity));
             }
         }
     }

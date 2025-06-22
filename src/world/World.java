@@ -185,6 +185,7 @@ public class World {
     public void executeTasks() {
         for (Runnable task : afterUpdateTasks)
             task.run();
+        afterUpdateTasks = new ArrayList<>();
     }
 
     public void activate(int network) {

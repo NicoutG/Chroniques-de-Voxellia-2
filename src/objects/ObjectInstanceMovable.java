@@ -6,6 +6,7 @@ import objects.block.Block;
 import objects.collision.Collision;
 import objects.entity.Entity;
 import objects.objectBehavior.ObjectBehavior;
+import objects.property.PropertyList;
 import tools.Vector;
 import world.World;
 
@@ -15,10 +16,6 @@ public class ObjectInstanceMovable <
     B extends ObjectBehavior<T, I, B>
 > extends ObjectInstance<T,I,B> {
 
-    public static final String NO_COLLISION = "noCollision";
-    public static final String NO_COLLISION_BLOCK = "noCollisionBlock";
-    public static final String NO_COLLISION_ENTITY = "noCollisionEntity";
-    public static final String NO_COLLISION_SAME = "noCollisionSame";
     protected static final double MAX_VELOCITY = 2.5;
 
     protected Vector position;
@@ -158,19 +155,19 @@ public class ObjectInstanceMovable <
     }
 
     public static boolean noCollision(ObjectInstance objectInstance) {
-        return (objectInstance.getProperty(NO_COLLISION) != null);
+        return (objectInstance.getProperty(PropertyList.NO_COLLISION) != null);
     }
 
     public static boolean noCollisionBlock(ObjectInstance objectInstance) {
-        return (objectInstance.getProperty(NO_COLLISION_BLOCK) != null);
+        return (objectInstance.getProperty(PropertyList.NO_COLLISION_BLOCK) != null);
     }
 
     public static boolean noCollisionEntity(ObjectInstance objectInstance) {
-        return (objectInstance.getProperty(NO_COLLISION_ENTITY) != null);
+        return (objectInstance.getProperty(PropertyList.NO_COLLISION_ENTITY) != null);
     }
 
     public static boolean noCollisionSame(ObjectInstance objectInstance) {
-        return (objectInstance.getProperty(NO_COLLISION_SAME) != null);
+        return (objectInstance.getProperty(PropertyList.NO_COLLISION_SAME) != null);
     }
 
     private double moveAxis(World world, double dx, double dy, double dz) {

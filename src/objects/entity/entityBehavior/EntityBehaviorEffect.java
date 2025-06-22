@@ -21,7 +21,7 @@ public class EntityBehaviorEffect extends EntityBehavior {
     @Override
     public void onUpdate(World world, Entity entity) {
         if (entity.getTickFrame0() + commonBehavior.effectDuration <= GamePanel.getTick()) {
-            world.getEntities().remove(entity);
+            world.executeAfterUpdate(() -> world.getEntities().remove(entity));
         }
     }
 }

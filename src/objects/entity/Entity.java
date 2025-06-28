@@ -53,6 +53,7 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
     public void doActions(World world, EntityAction ... entityActions) {
         Vector move = new Vector(0,0,0);
         for (EntityAction action : entityActions) {
+            executeEvent(e -> e.onAction(world,this,action));
             switch (action) {
                 case LEFT: move.x -= 1;break;
                 case RIGHT: move.x += 1;break;

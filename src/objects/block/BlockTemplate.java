@@ -18,14 +18,15 @@ public enum BlockTemplate {
         FIRE_CAMP(new BlockType("fireCamp",
                         new Texture[] {
                                         Texture.createBasicTexture(
-                                                        new String[] { "fire-0.png", "fire-1.png", "fire-2.png" }, 1) },
+                                                        new String[] { "fire-camp/fire-0.png", "fire-camp/fire-1.png", "fire-camp/fire-2.png" }, 
+                                                        1) },
                         0,
                         null,
                         new Property[] { new PropertyLight(
                                         new LightSource(new ColorRGB(1, 0.6, 0.2), 1.2, 0.8, 0.1)),
-                                        new Property("noCollision"),
+                                        new Property(PropertyList.NO_COLLISION),
                                         new PropertySound(SoundType.FIRE) },
-                        null)),
+                        new BlockBehavior[] { new BlockBehaviorBlazable() })),
         BLUE_STAIRS_RIGHT(new BlockType("blueStairsRight",
                         new Texture[] { new Texture(ShapeList.STAIR2, PathManager.loadImage("blue-stairs-right.png")) },
                         new Collision[] { CollisionList.STAIR2 },
@@ -57,16 +58,17 @@ public enum BlockTemplate {
                         new Collision[] { CollisionList.RECTANGLE1, CollisionList.RECTANGLE2, CollisionList.RECTANGLE3,
                                         CollisionList.CUBE },
                         new Property[] {
-                                        new Property("noCollision"),
+                                        new Property(PropertyList.NO_COLLISION),
                                         new PropertySound(SoundType.LAVA),
                                         new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 1.5, 0.5, 0.15)) },
                         new BlockBehavior[] { new BlockBehaviorLiquid(4, 6),
                                         new BlockBehaviorKill(),
-                                        new BlockBehaviorApplyForce(0, 0, 0.5) })),
+                                        new BlockBehaviorApplyForce(0, 0, 0.5),
+                                        new BlockBehaviorBlazable() })),
         SUN(new BlockType("sun",
                         (Texture[]) null,
                         null,
-                        new Property[] { new Property("noCollision"),
+                        new Property[] { new Property(PropertyList.NO_COLLISION),
                                         new PropertyLight(new LightSource(new ColorRGB[] {
                                                         new ColorRGB(1, 1, 1), // plain day (white)
                                                         new ColorRGB(1, 1, 1), // (white)
@@ -98,7 +100,7 @@ public enum BlockTemplate {
                                         new Texture(ShapeList.LEVER_ON, PathManager.loadImage("lever/lever-T.png")) },
                         0,
                         null,
-                        new Property[] { new Property("noCollision") },
+                        new Property[] { new Property(PropertyList.NO_COLLISION) },
                         new BlockBehavior[] {
                                         new BlockBehaviorLever()
                         })),
@@ -441,7 +443,7 @@ public enum BlockTemplate {
         SUNLIGHT(new BlockType("sunlight",
                         (Texture[]) null,
                         null,
-                        new Property[] { new Property("noCollision"),
+                        new Property[] { new Property(PropertyList.NO_COLLISION),
                                         new PropertyLight(new LightSource(new ColorRGB[] {
                                                         new ColorRGB(1, 1, 1), // plain day (white)
                                                         new ColorRGB(1, 1, 1), // (white)
@@ -466,7 +468,7 @@ public enum BlockTemplate {
                                                         PathManager.loadImage("linkedLever/linked-lever-T.png")) },
                         0,
                         null,
-                        new Property[] { new Property("noCollision") },
+                        new Property[] { new Property(PropertyList.NO_COLLISION) },
                         new BlockBehavior[] { new BlockBehaviorLever(), new BlockBehaviorActivable() })),
         WATER(new BlockType("water",
                         new Texture[] {
@@ -490,40 +492,40 @@ public enum BlockTemplate {
                         new Collision[] { CollisionList.RECTANGLE1, CollisionList.RECTANGLE2, CollisionList.RECTANGLE3,
                                         CollisionList.CUBE },
                         new Property[] {
-                                        new Property("noCollision"),
+                                        new Property(PropertyList.NO_COLLISION),
                                         new PropertySound(SoundType.WATER) },
                         new BlockBehavior[] { new BlockBehaviorLiquid(4, 2),
                                         new BlockBehaviorApplyForce(0, 0, 0.5) })),
         AND(new BlockType("and",
                         (Texture[]) null,
                         null,
-                        new Property[] { new Property("noCollision") },
+                        new Property[] { new Property(PropertyList.NO_COLLISION) },
                         new BlockBehavior[] { new BlockBehaviorAnd() })),
         OR(new BlockType("or",
                         (Texture[]) null,
                         null,
-                        new Property[] { new Property("noCollision") },
+                        new Property[] { new Property(PropertyList.NO_COLLISION) },
                         new BlockBehavior[] { new BlockBehaviorOr() })),
         /* 110 */
         NOT(new BlockType("not",
                         (Texture[]) null,
                         null,
-                        new Property[] { new Property("noCollision") },
+                        new Property[] { new Property(PropertyList.NO_COLLISION) },
                         new BlockBehavior[] { new BlockBehaviorNot() })),
         DELAY(new BlockType("delay",
                         (Texture[]) null,
                         null,
-                        new Property[] { new Property("noCollision") },
+                        new Property[] { new Property(PropertyList.NO_COLLISION) },
                         new BlockBehavior[] { new BlockBehaviorDelay() })),
         LOOP(new BlockType("loop",
                         (Texture[]) null,
                         null,
-                        new Property[] { new Property("noCollision") },
+                        new Property[] { new Property(PropertyList.NO_COLLISION) },
                         new BlockBehavior[] { new BlockBehaviorLoop() })),
         AMBIENT1(new BlockType("ambient1",
                         (Texture[]) null,
                         null,
-                        new Property[] { new Property("noCollision"),
+                        new Property[] { new Property(PropertyList.NO_COLLISION),
                                         new PropertySound(SoundType.AMBIENT1) },
                         null)),
         STAIRS3(new BlockType("blockStairs3",
@@ -615,27 +617,27 @@ public enum BlockTemplate {
         AMBIENT2(new BlockType("ambient2",
                         (Texture[]) null,
                         null,
-                        new Property[] { new Property("noCollision"),
+                        new Property[] { new Property(PropertyList.NO_COLLISION),
                                         new PropertySound(SoundType.AMBIENT2) },
                         null)),
         BACKGROUND_NATURE(new BlockType("backgroundNature",
                         (Texture[]) null,
                         null,
-                        new Property[] { new Property("noCollision"),
+                        new Property[] { new Property(PropertyList.NO_COLLISION),
                                         new PropertySound(SoundType.BACKGROUND_NATURE) },
                         null)),
         FLOWERS(new BlockType("flowers",
                         new Texture[] { new Texture(ShapeList.FLOWERS, PathManager.loadImage("herbs/flowers.png")) },
                         0,
                         null,
-                        new Property[] { new Property("noCollision"), new Property("floor") },
+                        new Property[] { new Property(PropertyList.NO_COLLISION), new Property("floor") },
                         null)),
         GRASS_BIG(new BlockType("grassBig",
                         new Texture[] { new Texture(ShapeList.GRASS_BIG,
                                         PathManager.loadImage("herbs/grass-big.png")) },
                         0,
                         null,
-                        new Property[] { new Property("noCollision"), new Property("floor") },
+                        new Property[] { new Property(PropertyList.NO_COLLISION), new Property("floor") },
                         null)),
         /* 130 */
         GRASS_SMALL(new BlockType("grassSmall",
@@ -643,7 +645,7 @@ public enum BlockTemplate {
                                         PathManager.loadImage("herbs/grass-small.png")) },
                         0,
                         null,
-                        new Property[] { new Property("noCollision"), new Property("floor") },
+                        new Property[] { new Property(PropertyList.NO_COLLISION), new Property("floor") },
                         null)),
         WATER_FAKE(new BlockType("waterFake",
                         new Texture[] {
@@ -654,7 +656,7 @@ public enum BlockTemplate {
                         0,
                         new Collision[] { CollisionList.RECTANGLE3 },
                         new Property[] {
-                                        new Property("noCollision"),
+                                        new Property(PropertyList.NO_COLLISION),
                                         new PropertySound(SoundType.WATER) },
                         new BlockBehavior[] {
                                         new BlockBehaviorApplyForce(0, 0, 0.5) })),
@@ -668,12 +670,13 @@ public enum BlockTemplate {
                         0,
                         new Collision[] { CollisionList.RECTANGLE2 },
                         new Property[] {
-                                        new Property("noCollision"),
+                                        new Property(PropertyList.NO_COLLISION),
                                         new PropertySound(SoundType.LAVA),
                                         new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 1.5, 0.5, 0.15)) },
                         new BlockBehavior[] {
                                         new BlockBehaviorKill(),
-                                        new BlockBehaviorApplyForce(0, 0, 0.5) })),
+                                        new BlockBehaviorApplyForce(0, 0, 0.5),
+                                        new BlockBehaviorBlazable() })),
         SLOPE1(new BlockType("blockSlope1",
                         new Texture[] { new Texture(ShapeList.SLOPE1,
                                         PathManager.loadImage("blockSlopes/block-slope1.png")) },
@@ -879,11 +882,29 @@ public enum BlockTemplate {
         WHITE_LIGHT(new BlockType("whiteLight",
                         (Texture[]) null,
                         null,
-                        new Property[] { new Property("noCollision"),
+                        new Property[] { new Property(PropertyList.NO_COLLISION),
                                         new PropertyLight(new LightSource(
                                                         new ColorRGB(1, 1, 1), 1, 0.65, 0)) },
                         null)),
-                        ;
+        TNT(new BlockType("tnt",
+                        new Texture[] { new Texture(ShapeList.CUBE,
+                                        PathManager.loadImage("tnt.png")) },
+                        null,
+                        new Property[] {new Property(PropertyList.DESTRUCTIBLE)},
+                        new BlockBehavior[] {new BlockBehaviorExploding(2.5)}
+                        )),
+        EXPLOSION(new BlockType("explosion",
+                        new Texture[] { Texture.createBasicTexture(ShapeList.TRANSPARENT_CUBE,
+                                                        new String[] { "explosion/explosion-0.png", "explosion/explosion-1.png", "explosion/explosion-2.png","explosion/explosion-3.png", "explosion/explosion-4.png", "explosion/explosion-5.png" }, 
+                                                        2) },
+                        null,
+                        new Property[] {new Property(PropertyList.NO_COLLISION),
+                                        new PropertyLight(new LightSource(
+                                                new ColorRGB(1, 0.5, 0.5), 1, 0.5, 0.1))},
+                        new BlockBehavior[] {new BlockBehaviorEffect(12)}
+                        )),
+                        
+        ;
 
         public final BlockType blockType;
 

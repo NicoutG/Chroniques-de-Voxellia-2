@@ -22,7 +22,7 @@ public class BlockBehaviorLever extends BlockBehaviorConnected {
         boolean activationState = getActivationState(block);
         world.executeAfterUpdate(() -> block.setState(ACTIVATION_STATE, !activationState));
         int network = getNetwork(block);
-        SoundManager.playSound(SoundType.LEVER);
+        SoundManager.playSoundFromCoordinates(SoundType.LEVER, position.x, position.y, position.z);
         if (activationState) {
             world.desactivate(network);
             block.setIndexTexture(0);

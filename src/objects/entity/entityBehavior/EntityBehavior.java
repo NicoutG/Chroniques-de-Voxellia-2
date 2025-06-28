@@ -1,6 +1,7 @@
 package objects.entity.entityBehavior;
 
 import objects.entity.Entity;
+import objects.entity.EntityAction;
 import objects.entity.EntityType;
 import objects.objectBehavior.ObjectBehavior;
 import tools.Vector;
@@ -33,6 +34,9 @@ public abstract class EntityBehavior extends ObjectBehavior<EntityType, Entity, 
     }
 
     public void onDeath(World world, Entity entity) {
+    }
+
+    public void onAction(World world, Entity entity, EntityAction action) {
     }
 
 

@@ -21,6 +21,7 @@ public class ObjectInstance<
     protected int indexCollision = 0;
     private HashMap<String, Object> states = new HashMap<>();
     protected ArrayList<B> behaviors = new ArrayList<>();
+    private long tickFrame0 = 0;
 
     public ObjectInstance(T type) {
         this.type = type;
@@ -28,6 +29,14 @@ public class ObjectInstance<
 
     public String getName() {
         return type.getName();
+    }
+
+    public void initTickFrame0(long tick) {
+        tickFrame0 = tick;
+    }
+
+    public long getTickFrame0() {
+        return tickFrame0;
     }
 
     public int getIndexTexture() { return indexTexture; }

@@ -27,23 +27,25 @@ public class GamePanel extends JPanel {
         // this.world = new World("tests/lost-city.txt");
         this.world = new World("chapter1/1-1.txt");
         // this.world = new World("chapter1/1-3/1-3-1.txt");
-        // this.world = new World("tests/test-fog.txt");
+        // this.world = new World("tests/testDoor.txt");
 
         this.renderer = new Renderer(world);
         this.soundManager = new SoundManager(world);
     }
 
     public void tick() {
-        if (tick % TICK_FPS == 0)
-            time = System.currentTimeMillis();
+        synchronized (world) {
+            if (tick % TICK_FPS == 0)
+                time = System.currentTimeMillis();
 
-        tick++;
-        world.update();
-        
-        if (tick % TICK_FPS == 0) {
-            long dif = (System.currentTimeMillis() - time);
-            fps = 1000.0 * TICK_FPS / dif;
-            // System.out.println(fps);
+            tick++;
+            world.update();
+            
+            if (tick % TICK_FPS == 0) {
+                long dif = (System.currentTimeMillis() - time);
+                fps = 1000.0 * TICK_FPS / dif;
+                // System.out.println(fps);
+            }
         }
     }
 
@@ -53,8 +55,10 @@ public class GamePanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        renderer.render((Graphics2D) g, getWidth(), getHeight(), tick);
-        soundManager.tick();
+        synchronized (world) {
+            super.paintComponent(g);
+            renderer.render((Graphics2D) g, getWidth(), getHeight(), tick);
+            soundManager.tick();
+        }
     }
 }

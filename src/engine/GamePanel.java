@@ -43,6 +43,7 @@ public class GamePanel extends JPanel {
         if (tick % TICK_FPS == 0) {
             long dif = (System.currentTimeMillis() - time);
             fps = 1000.0 * TICK_FPS / dif;
+            // System.out.println(fps);
         }
     }
 

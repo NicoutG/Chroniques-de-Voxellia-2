@@ -74,8 +74,8 @@ public final class Renderer {
         }
 
         /* ── snap the camera once ───────────────────────────────────── */
-        int originXi = (int) Math.floor(camX);
-        int originYi = (int) Math.floor(camY);
+        double originXi = Math.floor(camX);
+        double originYi = Math.floor(camY);
 
         /* ---------- clear & prepare canvas ---------- */
         g2.setColor(Color.BLACK);
@@ -83,14 +83,73 @@ public final class Renderer {
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 
+        /* ---------- depth sort & draw ---------- */
+        getDrawablesLabels(w, h, tick, originXi, originYi, blocks, entities, faceLightings);
+        
+        BufferedImage frameBuffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D gBuffer = frameBuffer.createGraphics();
+
+        // draw drawables (avec culling ici)
+        for (Drawable d : drawables) {
+            IsoMath.toScreen(d.x, d.y, d.z, scratchPoint);
+            int dx = (int) (originXi + scratchPoint.x);
+            int dy = (int) (originYi + scratchPoint.y);
+            gBuffer.drawImage(d.texture,
+                    dx, dy,
+                    dx + IsoMath.DRAW_TILE_SIZE,
+                    dy + IsoMath.DRAW_TILE_SIZE,
+                    0, 0, IsoMath.TILE_SIZE, IsoMath.TILE_SIZE,
+                    null);
+        }
+        gBuffer.dispose();
+        g2.drawImage(frameBuffer, 0, 0, null);
+
+        /*
+         * ──────────────────────────────────────────────────────────────
+         * 3) draw all labels last
+         * ----------------------------------------------------------------
+         */
+        g2.setFont(PIXEL_FONT);
+
+        for (TextLabel tl : textLabels) {
+            /* world → screen */
+            IsoMath.toScreen(tl.x, tl.y, tl.z, scratchPoint);
+            int sx = (int)(originXi + scratchPoint.x + IsoMath.DRAW_TILE_SIZE / 2.0);
+            int sy = (int)(originYi + scratchPoint.y - 32); // anchor (bottom)
+
+            /* word-wrap once per label */
+            List<String> lines = wrapLines(tl.text, 50);
+
+            FontMetrics fm = g2.getFontMetrics();
+            int lineH = fm.getHeight();
+            int ascent = fm.getAscent(); // baseline offset inside a line
+            int blockTopY = sy - (lines.size() - 1) * lineH; // topmost line Y
+
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+
+                int tx = sx - fm.stringWidth(line) / 2; // center this line
+                int ty = blockTopY + i * lineH + ascent; // baseline of line i
+
+                /* outline */
+                g2.setColor(new Color(0, 0, 0, 150));
+                g2.drawString(line, tx - 2, ty);
+                g2.drawString(line, tx + 2, ty);
+                g2.drawString(line, tx, ty - 2);
+                g2.drawString(line, tx, ty + 2);
+
+                /* interior */
+                g2.setColor(new Color(255, 255, 255, 240));
+                g2.drawString(line, tx, ty);
+            }
+        }
+
+    }
+
+    private void getDrawablesLabels(int w, int h, long tick, double originXi, double originYi, Block[][][] blocks, ArrayList<Entity> entities, FaceLighting[][][] faceLightings) {
         drawables.clear();
         textLabels.clear();
 
-        /*
-         * =================================================================
-         * 1) BLOCKS – add only when visible
-         * ==================================================================
-         */
         final int maxX = blocks.length - 1;
         final int maxY = blocks[0].length - 1;
         final int maxZ = blocks[0][0].length - 1;
@@ -136,19 +195,6 @@ public final class Renderer {
                     Texture text = b.getTexture();
                     drawables.add(new Drawable(text.shade(text.full(tick - b.getTickFrame0()), faceLighting.left(),
                                 faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
-                    // if (visibleFaces[Face.LEFT.index]) {
-                    //     drawables.add(new Drawable(text.shade(text.left(tick), faceLighting.left(),
-                    //             faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
-                    // }
-                    // if (visibleFaces[Face.RIGHT.index]) {
-                    //     drawables.add(new Drawable(text.shade(text.right(tick), faceLighting.left(),
-                    //             faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
-                    // }
-                    // if (visibleFaces[Face.TOP.index]) {
-                    //     drawables.add(new Drawable(text.shade(text.top(tick), faceLighting.left(), faceLighting.right(),
-                    //             faceLighting.top()), x, y, z, false, alwaysBehind));
-                    // }
-
                 }
             }
         }
@@ -209,79 +255,10 @@ public final class Renderer {
                 Texture text = e.getTexture();
                 drawables.add(new Drawable(text.shade(
                         text.full(tick - e.getTickFrame0()),faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(), e.getZ(), true));
-                // drawables.add(new Drawable(text.shade(text.left(tick),
-                //         faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
-                //         e.getZ(), true));
-                // drawables.add(new Drawable(text.shade(text.right(tick),
-                //         faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
-                //         e.getZ(), true));
-                // drawables.add(new Drawable(text.shade(text.top(tick),
-                //         faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(),
-                //         e.getZ(), true));
-
             }
         }
 
-        /* ---------- depth sort & draw ---------- */
         drawables.sort(DEPTH);
-        BufferedImage frameBuffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D gBuffer = frameBuffer.createGraphics();
-
-        // draw drawables (avec culling ici)
-        for (Drawable d : drawables) {
-            IsoMath.toScreen(d.x, d.y, d.z, scratchPoint);
-            int dx = originXi + (int) scratchPoint.x;
-            int dy = originYi + (int) scratchPoint.y;
-            gBuffer.drawImage(d.texture,
-                    dx, dy,
-                    dx + IsoMath.DRAW_TILE_SIZE,
-                    dy + IsoMath.DRAW_TILE_SIZE,
-                    0, 0, IsoMath.TILE_SIZE, IsoMath.TILE_SIZE,
-                    null);
-        }
-        gBuffer.dispose();
-        g2.drawImage(frameBuffer, 0, 0, null);
-
-        /*
-         * ──────────────────────────────────────────────────────────────
-         * 3) draw all labels last
-         * ----------------------------------------------------------------
-         */
-        g2.setFont(PIXEL_FONT);
-
-        for (TextLabel tl : textLabels) {
-            /* world → screen */
-            IsoMath.toScreen(tl.x, tl.y, tl.z, scratchPoint);
-            int sx = originXi + (int) scratchPoint.x + IsoMath.DRAW_TILE_SIZE / 2;
-            int sy = originYi + (int) scratchPoint.y - 32; // anchor (bottom)
-
-            /* word-wrap once per label */
-            List<String> lines = wrapLines(tl.text, 50);
-
-            FontMetrics fm = g2.getFontMetrics();
-            int lineH = fm.getHeight();
-            int ascent = fm.getAscent(); // baseline offset inside a line
-            int blockTopY = sy - (lines.size() - 1) * lineH; // topmost line Y
-
-            for (int i = 0; i < lines.size(); i++) {
-                String line = lines.get(i);
-
-                int tx = sx - fm.stringWidth(line) / 2; // center this line
-                int ty = blockTopY + i * lineH + ascent; // baseline of line i
-
-                /* outline */
-                g2.setColor(new Color(0, 0, 0, 150));
-                g2.drawString(line, tx - 2, ty);
-                g2.drawString(line, tx + 2, ty);
-                g2.drawString(line, tx, ty - 2);
-                g2.drawString(line, tx, ty + 2);
-
-                /* interior */
-                g2.setColor(new Color(255, 255, 255, 240));
-                g2.drawString(line, tx, ty);
-            }
-        }
-
     }
 
     /* =================================================================== */

@@ -5,6 +5,8 @@ import java.awt.*;
 
 public class GameApp extends JFrame {
 
+    private static final int TARGET_FPS = 25;
+
     @SuppressWarnings("unused")
     public GameApp() {
         super("Chroniques de Voxellia 2");
@@ -19,10 +21,25 @@ public class GameApp extends JFrame {
                 .getDefaultScreenDevice();
         gd.setFullScreenWindow(this);
 
-        int delayMs = 1000 / 20;
-        new Timer(delayMs, e -> {
-            panel.tick();
-            panel.repaint();
+        final long FRAME_TIME = 1000 / TARGET_FPS; // en ms
+
+        new Thread(() -> {
+            while (panel.isDisplayable()) {
+                long startTime = System.currentTimeMillis();
+
+                panel.tick();
+                panel.repaint();
+
+                long elapsed = System.currentTimeMillis() - startTime;
+                long sleepTime = FRAME_TIME - elapsed;
+                if (sleepTime > 0) {
+                    try {
+                        Thread.sleep(sleepTime);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }).start();
     }
 

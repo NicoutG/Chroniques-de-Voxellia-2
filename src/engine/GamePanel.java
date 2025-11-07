@@ -55,10 +55,8 @@ public class GamePanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        synchronized (world) {
-            super.paintComponent(g);
-            renderer.render((Graphics2D) g, getWidth(), getHeight(), tick);
-            soundManager.tick();
-        }
+        super.paintComponent(g);
+        renderer.render((Graphics2D) g, getWidth(), getHeight(), tick);
+        soundManager.tick();
     }
 }

@@ -27,7 +27,7 @@ public class GamePanel extends JPanel {
         // this.world = new World("tests/lost-city.txt");
         this.world = new World("chapter1/1-1.txt");
         // this.world = new World("chapter1/1-3/1-3-1.txt");
-        // this.world = new World("tests/testDoor.txt");
+        // this.world = new World("tests/testPathFinding.txt");
 
         this.renderer = new Renderer(world);
         this.soundManager = new SoundManager(world);

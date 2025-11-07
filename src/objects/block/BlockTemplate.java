@@ -63,7 +63,7 @@ public enum BlockTemplate {
                                         new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 1.5, 0.5, 0.15)) },
                         new BlockBehavior[] { new BlockBehaviorLiquid(4, 6),
                                         new BlockBehaviorKill(),
-                                        new BlockBehaviorApplyForce(0, 0, 0.5),
+                                        new BlockBehaviorApplyForce(0, 0, 0.4),
                                         new BlockBehaviorBlazable() })),
         SUN(new BlockType("sun",
                         (Texture[]) null,
@@ -495,7 +495,7 @@ public enum BlockTemplate {
                                         new Property(PropertyList.NO_COLLISION),
                                         new PropertySound(SoundType.WATER) },
                         new BlockBehavior[] { new BlockBehaviorLiquid(4, 2),
-                                        new BlockBehaviorApplyForce(0, 0, 0.5) })),
+                                        new BlockBehaviorApplyForce(0, 0, 0.4) })),
         AND(new BlockType("and",
                         (Texture[]) null,
                         null,
@@ -659,7 +659,7 @@ public enum BlockTemplate {
                                         new Property(PropertyList.NO_COLLISION),
                                         new PropertySound(SoundType.WATER) },
                         new BlockBehavior[] {
-                                        new BlockBehaviorApplyForce(0, 0, 0.5) })),
+                                        new BlockBehaviorApplyForce(0, 0, 0.4) })),
         LAVA_FAKE(new BlockType("lavaFake",
                         new Texture[] {
                                         Texture.createBasicTexture(ShapeList.RECTANGLE2,
@@ -675,7 +675,7 @@ public enum BlockTemplate {
                                         new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 1.5, 0.5, 0.15)) },
                         new BlockBehavior[] {
                                         new BlockBehaviorKill(),
-                                        new BlockBehaviorApplyForce(0, 0, 0.5),
+                                        new BlockBehaviorApplyForce(0, 0, 0.4),
                                         new BlockBehaviorBlazable() })),
         SLOPE1(new BlockType("blockSlope1",
                         new Texture[] { new Texture(ShapeList.SLOPE1,

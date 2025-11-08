@@ -13,7 +13,7 @@ public class BlockBehaviorLiquid extends BlockBehavior {
     private final int VISCOSITY;
 
     protected final static String LIQUID = "liquid";
-    protected final static String LIQUID_NEXT = "liquidNext";
+    protected final static String CONFLICTS = "conflicts";
 
     public BlockBehaviorLiquid(int maxLiquid, int viscosity) {
         MAX_LIQUID = maxLiquid;
@@ -30,7 +30,7 @@ public class BlockBehaviorLiquid extends BlockBehavior {
     @Override
     public void onAttachTo(Block block) {
         block.setState(LIQUID, MAX_LIQUID);
-        block.setState(LIQUID_NEXT, 0);
+        block.setState(CONFLICTS, new ArrayList<BlockFlow>());
     }
 
     @Override
@@ -40,7 +40,6 @@ public class BlockBehaviorLiquid extends BlockBehavior {
         int z = (int)position.z; 
         if (tick % VISCOSITY == 0)
             propageLiquid(world, block, x, y, z);
-        endPropageLiquid(world, block, x, y, z);
         tick++;
     }
 
@@ -48,28 +47,33 @@ public class BlockBehaviorLiquid extends BlockBehavior {
         Block[][][] blocks = world.getBlocks();
         int liquid = getLiquid(block);
         if (liquid <= 0)
-            return;
+            if (getConflicts(block).isEmpty()) {
+                blocks[x][y][z] = null;
+                updateLiquid(world, block, x, y, z, 0);
+                return;
+            }
+        
         // falling liquid
         if (z > 0) {
             Block blockDown = world.getBlock(x, y, z - 1);
             if (blockDown == null) {
-                Block newBlock = world.getBlock(block.getName());
-                blocks[x][y][z - 1] = newBlock;
-                newBlock.setState(LIQUID, Math.min(liquid,MAX_LIQUID));
-                block.setState(LIQUID, 0);
-                newBlock.onStart(world, new Vector(x,y,z - 1));
-                return;
+                blockDown = world.getBlock(block.getName());
+                blocks[x][y][z - 1] = blockDown;
+                blockDown.setState(LIQUID, 0);
+                blockDown.onStart(world, new Vector(x,y,z - 1));
             }
-            else if (blockDown.areSameType(block)) {
+            if (blockDown.areSameType(block)) {
                 int liquidDown = getLiquid(blockDown);
                 if (liquidDown < MAX_LIQUID) {
-                    int maxLiquidDif = Math.min(liquid,MAX_LIQUID - liquidDown);
-                    blockDown.setState(LIQUID, liquidDown + maxLiquidDif);
-                    block.setState(LIQUID, liquid - maxLiquidDif);
+                    ArrayList<BlockFlow> conflicts = getConflicts(blockDown);
+                    if (conflicts.isEmpty())
+                        world.executeAfterUpdate(() -> solveConflicts(world, x, y , z-1));
+                    conflicts.add(new BlockFlow(block, x, y, z));
                     return;
                 }
             }
         }
+        
         // on the side
         if (1 < liquid) {
             ArrayList<int[]> possibleFlows = getPossibleFlows(blocks, block, x, y, z, liquid);
@@ -80,23 +84,15 @@ public class BlockBehaviorLiquid extends BlockBehavior {
                 int xFlow = flow[0];
                 int yFlow = flow[1];
                 Block blockFlow = blocks[xFlow][yFlow][z];
-                boolean isNewBlock = false;
                 if (blockFlow == null) {
-                    isNewBlock = true;
                     blockFlow = world.getBlock(block.getName());
                     blockFlow.setState(LIQUID, 0);
                     blocks[xFlow][yFlow][z] = blockFlow;
                 }
-                if (x < xFlow || y < yFlow)
-                    blockFlow.setState(LIQUID_NEXT, getLiquidNext(blockFlow) + 1);
-                else {
-                    int liquidFlow = getLiquid(blockFlow) + 1;
-                    blockFlow.setState(LIQUID, liquidFlow);
-                    setCollisionTexture(world, blockFlow, xFlow, yFlow, z, liquidFlow);
-                }
-                if (isNewBlock)
-                    blockFlow.onStart(world, new Vector(xFlow, yFlow, z));
-                block.setState(LIQUID, liquid - 1);
+                ArrayList<BlockFlow> conflicts = getConflicts(blockFlow);
+                if (conflicts.isEmpty())
+                    world.executeAfterUpdate(() -> solveConflicts(world, xFlow, yFlow , z));
+                conflicts.add(new BlockFlow(block, x, y, z));
             }
         }
     }
@@ -125,10 +121,8 @@ public class BlockBehaviorLiquid extends BlockBehavior {
             if (blockSide == null)
                 return 0;
             else
-                if(blockSide.areSameType(block)) {
-                    int liquidSide = getLiquid(blockSide) + getLiquidNext(blockSide);
-                    return liquidSide;
-                }
+                if(blockSide.areSameType(block))
+                    return getLiquid(blockSide);
         }
         return MAX_LIQUID;
     }
@@ -148,18 +142,8 @@ public class BlockBehaviorLiquid extends BlockBehavior {
         }
     }
 
-    private void endPropageLiquid(World world, Block block, int x, int y, int z) {
-        int liquidNext = getLiquidNext(block);
-        // add the liquid added by previous update
-        int liquid = Math.min(getLiquid(block) + liquidNext, MAX_LIQUID);
-        if (liquidNext > 0) {
-            block.setState(LIQUID, liquid);
-            block.setState(LIQUID_NEXT, 0);
-        }
-        if (liquid <= 0) {
-            world.getBlocks()[x][y][z] = null;
-            return;
-        }
+    private void updateLiquid(World world, Block block, int x, int y, int z, int liquid) {
+        block.setState(LIQUID, liquid);
         setCollisionTexture(world, block, x, y, z, liquid);
         if(0 < z) {
             Block blockDown = world.getBlock(x,y,z - 1);
@@ -180,6 +164,39 @@ public class BlockBehaviorLiquid extends BlockBehavior {
         }
     }
 
+    private void solveConflicts(World world, int x, int y, int z) {
+        Block block = world.getBlocks()[x][y][z];
+        ArrayList<BlockFlow> conflicts = getConflicts(block);
+        if (!conflicts.isEmpty()) {
+            int liquid = getLiquid(block);
+            for (BlockFlow confBlockFlow : conflicts) {
+                if (z < confBlockFlow.z) {
+                    Block confBlock = confBlockFlow.block;
+                    int liquidConf = getLiquid(confBlock);
+                    int diff = Math.min(liquidConf, MAX_LIQUID - liquid);
+                    liquid += diff;
+                    liquidConf = liquidConf - diff;
+                    updateLiquid(world, confBlock, x, y, z + 1, liquidConf);
+                    conflicts.remove(confBlockFlow);
+                    break;
+                }
+            }
+            if (!conflicts.isEmpty() && liquid < MAX_LIQUID) {
+                Random random = new Random();
+                int selectedFlow = random.nextInt(conflicts.size());
+                BlockFlow confBlockFlow = conflicts.get(selectedFlow);
+                Block confBlock = confBlockFlow.block;
+                int liquidConf = getLiquid(confBlock);
+                liquid += 1;
+                liquidConf = liquidConf - 1;
+                updateLiquid(world, confBlock, confBlockFlow.x, confBlockFlow.y, confBlockFlow.z, liquidConf);
+            }
+
+            updateLiquid(world, block, x, y, z, liquid);
+            conflicts.clear();
+        }
+    }
+
     public int getLiquid(Block block) {
         Object state = block.getState(LIQUID);
         if (state != null && state instanceof Integer)
@@ -187,11 +204,12 @@ public class BlockBehaviorLiquid extends BlockBehavior {
         return -1;
     }
 
-    public int getLiquidNext(Block block) {
-        Object state = block.getState(LIQUID_NEXT);
-        if (state != null && state instanceof Integer)
-            return (int)state;
-        return -1;
+    public ArrayList<BlockFlow> getConflicts(Block block) {
+        Object state = block.getState(CONFLICTS);
+        if (state != null && state instanceof ArrayList)
+            return (ArrayList<BlockFlow>)state;
+        return null;
     }
     
+    public record BlockFlow(Block block, int x, int y, int z) {}
 }

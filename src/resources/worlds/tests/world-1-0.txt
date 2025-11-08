@@ -2,14 +2,14 @@
 Level 0
 1 1 1 1 1 1 1 1 1 1
 1 1 1 1 1 1 1 1 1 1
-12/world=world-0-0.txt/spawnPoint=0 1 1 1 1 1 1 1 1 1
+12/world="tests/world-0-0.txt"/spawnPoint=0/activated=true 1 1 1 1 1 1 1 1 1
 1 1 1 1 1 1 1 1 1 1
 1 1 1 1 1 1 1 1 1 1
 1 1 1 1 1 1 1 1 1 1
 1 1 1 1 1 1 1 1 1 1
 1 1 1 1 1 1 1 1 1 1
 1 1 1 1 1 1 1 1 1 1
-1 1 12/world=world-1-1.txt/spawnPoint=0 1 1 1 1 1 1 1
+1 1 12/world="tests/world-1-1.txt"/spawnPoint=0/activated=true 1 1 1 1 1 1 1
 Level 1
 0 0 0 0 0 0 0 0 10 10
 . . . . . . . 0 . 10

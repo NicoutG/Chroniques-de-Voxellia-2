@@ -94,7 +94,11 @@ public enum BlockTemplate {
         DIRT(new BlockType("dirtBlock", "dirt.png")),
         GRASS(new BlockType("grassBlock", "grass.png")),
         /* 10 */
-        HEDGE(new BlockType("hedge", "hedge.png")),
+        HEDGE(new BlockType("hedge", "hedge.png",
+                null,
+                new Property[] { new Property(PropertyList.BURNABLE) },
+                null
+        )),
         LEVER(new BlockType("lever",
                         new Texture[] { new Texture(ShapeList.LEVER_OFF, PathManager.loadImage("lever/lever-F.png")),
                                         new Texture(ShapeList.LEVER_ON, PathManager.loadImage("lever/lever-T.png")) },
@@ -139,7 +143,11 @@ public enum BlockTemplate {
         RED_GOLDEN_CARPET(new BlockType("redGoldenCarpet", "red-golden-carpet-block.png")),
         RED_GOLDEN_CARPET2(new BlockType("redGoldenCarpet2", "red-golden-carpet-2-block.png")),
         RED_GOLDEN_CARPET3(new BlockType("redGoldenCarpet3", "red-golden-carpet-3-block.png")),
-        LEAVES(new BlockType("leaves", "leaves.png")),
+        LEAVES(new BlockType("leaves", "leaves.png",
+        null,
+                new Property[] { new Property(PropertyList.BURNABLE) },
+                null
+        )),
         SAND(new BlockType("sand", "sand-block.png")),
         /* 20 */
         WOOD(new BlockType("wood", "wood.png")),

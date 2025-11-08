@@ -11,7 +11,7 @@ import objects.property.PropertyLight;
 import world.World;
 import graphics.shape.Face;
 
-public final class LightingEngine {
+public class LightingEngine {
 
     private static final double EPS = 0.01; // perceptible limit
     private static final int MAX_NEIGHBOURS = 6; // axis-aligned

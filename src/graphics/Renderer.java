@@ -3,7 +3,7 @@ package graphics;
 
 import graphics.ligth.ColorRGB;
 import graphics.ligth.FaceLighting;
-import graphics.ligth.LightingEngine;
+import graphics.ligth.LightingEngineAsync;
 import graphics.shape.Face;
 import objects.block.Block;
 import objects.entity.Entity;
@@ -25,7 +25,7 @@ public final class Renderer {
     private static final Comparator<Drawable> DEPTH = Comparator.comparingDouble(Drawable::getSortKey);
 
     private final World world;
-    private final LightingEngine lighthinEngine;
+    private final LightingEngineAsync lighthingEngine;
 
     /* ---- reusable scratch objects to avoid GC thrash ---- */
     private final List<Drawable> drawables = new ArrayList<>(1024);
@@ -50,7 +50,7 @@ public final class Renderer {
 
     public Renderer(World world) {
         this.world = world;
-        this.lighthinEngine = new LightingEngine();
+        this.lighthingEngine = new LightingEngineAsync();
     }
 
     public void render(Graphics2D g2, int w, int h, long tick) {
@@ -59,7 +59,7 @@ public final class Renderer {
             return;
 
         ArrayList<Entity> entities = world.getEntities();
-        FaceLighting[][][] faceLightings = lighthinEngine.getLightings(world, tick);
+        FaceLighting[][][] faceLightings = lighthingEngine.getLightings(world, tick);
 
         synchronized (world) {
             /* ---------- compute camera offset ---------- */

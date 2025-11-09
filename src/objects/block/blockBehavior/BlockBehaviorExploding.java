@@ -32,7 +32,7 @@ public class BlockBehaviorExploding extends BlockBehaviorActivable {
     }
 
     @Override
-    public void onActivated(World world, Block block, Vector position, int network) {
+    public void activate(World world, Block block, Vector position, int network) {
         SoundManager.playSoundFromCoordinates(SoundType.EXPLOSION, position.x, position.y, position.z);
         double radius = getRadius(block);
         int minX = Math.max(0,(int)(position.x - radius));

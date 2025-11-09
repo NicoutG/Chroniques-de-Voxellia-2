@@ -156,7 +156,11 @@ public enum BlockTemplate {
         BRICK1(new BlockType("blockBrick1", "block-brick-1.png")),
         BRICK2(new BlockType("blockBrick2", "block-brick-2.png")),
         /* 25 */
-        BROKEN(new BlockType("blockBroken", "block-broken.png")),
+        BROKEN(new BlockType("blockBroken", "block-broken.png",
+                        null,
+                        new Property[] { new Property(PropertyList.DESTRUCTIBLE)},
+                        null
+        )),
         COLUMN_MOSSY(new BlockType("blockColumnMossy", "block-column-mossy.png")),
         COLUMN(new BlockType("blockColumn", "block-column.png")),
         HALF_GRASS1(new BlockType("blockHalfGrass1", "block-half-grass-1.png")),

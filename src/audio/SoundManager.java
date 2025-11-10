@@ -5,6 +5,7 @@ import objects.entity.Entity;
 import objects.entity.Player;
 import objects.property.PropertySound;
 import tools.PathManager;
+import tools.ManagedClip;
 import world.World;
 
 import javax.sound.sampled.*;
@@ -28,9 +29,6 @@ public final class SoundManager {
 
     /* ------------------------------------------------------------------ */
 
-    private record ManagedClip(Clip clip, boolean looping) {
-    }
-
     private static final Map<SoundType, ManagedClip> clips = new EnumMap<>(SoundType.class);
 
     private static List<SoundType> eventSounds = new ArrayList<>();
@@ -42,11 +40,40 @@ public final class SoundManager {
 
         /* ----------- load & cache every clip once -------------- */
         for (SoundType st : SoundType.values()) {
-            Clip c = PathManager.loadSound(st.path);
-            if (c != null) {
-                clips.put(st, new ManagedClip(c, st.looping));
-            }
+            ManagedClip manC = PathManager.loadSound(st.path, st.looping);
+            if (manC != null)
+                clips.put(st, manC);
         }
+
+        warmupAudio();
+    }
+
+    /* Fonction pour démarrer le mixeur audio à l'avance */
+    public static void warmupAudio() {
+        try {
+            AudioFormat format = new AudioFormat(44100, 16, 1, true, false);
+            Clip clip = AudioSystem.getClip();
+
+            byte[] silence = new byte[4410]; // 0.1 s
+            clip.open(format, silence, 0, silence.length);
+            clip.start();
+            Thread.sleep(10);
+            clip.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Clip cloneClip(ManagedClip mClip) {
+        try {
+            Clip clip = AudioSystem.getClip();
+            clip.open(mClip.clip.getFormat(), mClip.data, 0, mClip.data.length);
+            return clip;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -191,17 +218,17 @@ public final class SoundManager {
                 : (1.0 - (d / MAX_DISTANCE)) * globalVolume * st.volume;
 
         /* -------- play exactly like the queued event path -------- */
-        if (st.looping) { // use managed clip
-            ManagedClip mc = clips.get(st);
+        ManagedClip mc = clips.get(st);
             if (mc == null)
                 return;
+        if (st.looping) { // use managed clip
             if (mc.clip.isRunning())
                 mc.clip.stop();
             mc.clip.setFramePosition(0);
             setVolume(mc.clip, vol);
             mc.clip.loop(Clip.LOOP_CONTINUOUSLY);
         } else { // spawn throw-away
-            Clip c = PathManager.loadSound(st.path); // lightweight copy
+            Clip c = cloneClip(mc);
             if (c == null)
                 return;
             setVolume(c, vol);

@@ -17,14 +17,12 @@ public class BlockBehaviorNot extends BlockBehaviorConnectedExit {
     }
 
     @Override
-    public void onActivated(World world, Block block, Vector position, int network) {
-        if (network == getNetwork(block))
-            world.desactivate(getNetworkExit(block));
+    public void activate(World world, Block block, Vector position, int network) {
+        world.desactivate(getNetworkExit(block));
     }
 
     @Override
-    public void onDesactivated(World world, Block block, Vector position, int network) {
-        if (network == getNetwork(block))
-            world.activate(getNetworkExit(block));
+    public void desactivate(World world, Block block, Vector position, int network) {
+        world.activate(getNetworkExit(block));
     }
 }

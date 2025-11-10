@@ -1,9 +1,9 @@
 package objects.block.blockBehavior.logic;
 
 import objects.block.Block;
-import objects.block.blockBehavior.BlockBehaviorConnected;
+import objects.block.blockBehavior.BlockBehaviorActivable;
 
-public class BlockBehaviorConnectedExit extends BlockBehaviorConnected{
+public class BlockBehaviorConnectedExit extends BlockBehaviorActivable {
     public final static String NETWORK_EXIT = "networkExit";
     
     @Override

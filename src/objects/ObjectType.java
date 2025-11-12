@@ -96,6 +96,10 @@ public abstract class ObjectType<I extends ObjectInstance<?, ?, ?>, B extends Ob
         return null;
     }
 
+    public int getNbTextures() {
+        return textures.size();
+    }
+
     public void addTexture(Texture texture) {
         textures.add(texture);
     }
@@ -115,6 +119,10 @@ public abstract class ObjectType<I extends ObjectInstance<?, ?, ?>, B extends Ob
         if (0 <= index && index < nbCollisions)
             return collisions.get(index);
         return null;
+    }
+
+    public int getNbCollisions() {
+        return collisions.size();
     }
 
     public void addCollision(Collision collision) {

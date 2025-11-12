@@ -16,6 +16,7 @@ public class PathManager {
     public static final String MASK_PATH = "/resources/masks/";
     public static final String WORLD_PATH = "src/resources/worlds/";
     public static final String SOUND_PATH = "src/resources/sounds/";
+    public static final String DOC_PATH = "doc/";
 
     public static BufferedImage loadImage(String filePath) {
         try {

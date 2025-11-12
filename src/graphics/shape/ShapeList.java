@@ -1,5 +1,9 @@
 package graphics.shape;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.lang.reflect.Field;
+
 public final class ShapeList {
     public static final Shape BORDER_LEFT = new Shape("borders/borderLeft/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape BORDER_RIGHT = new Shape("borders/borderRight/","mask-left.png","mask-right.png","mask-top.png",false);
@@ -67,4 +71,36 @@ public final class ShapeList {
     
 
     private ShapeList() {}
+
+    public static List<Shape> getAllShapes() {
+        List<Shape> shapes = new ArrayList<>();
+        Field[] fields = ShapeList.class.getDeclaredFields();
+
+        for (Field field : fields) {
+            if (java.lang.reflect.Modifier.isStatic(field.getModifiers())
+                && field.getType() == Shape.class) {
+                try {
+                    shapes.add((Shape) field.get(null));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return shapes;
+    }
+
+    public static List<String> getAllShapeNames() {
+        List<String> names = new ArrayList<>();
+        Field[] fields = ShapeList.class.getDeclaredFields();
+
+        for (Field field : fields) {
+            if (java.lang.reflect.Modifier.isStatic(field.getModifiers())
+                    && field.getType() == Shape.class) {
+                names.add(field.getName());
+            }
+        }
+
+        return names;
+    }
 }

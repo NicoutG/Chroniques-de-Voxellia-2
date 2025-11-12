@@ -674,13 +674,13 @@ public enum BlockTemplate {
                                         new BlockBehaviorApplyForce(0, 0, 0.4) })),
         LAVA_FAKE(new BlockType("lavaFake",
                         new Texture[] {
-                                        Texture.createBasicTexture(ShapeList.RECTANGLE2,
-                                                        new String[] { "lava/lava-2-0.png", "lava/lava-2-1.png",
-                                                                        "lava/lava-2-2.png",
-                                                                        "lava/lava-2-3.png" },
+                                        Texture.createBasicTexture(ShapeList.RECTANGLE3,
+                                                        new String[] { "lava/lava-3-0.png", "lava/lava-3-1.png",
+                                                                        "lava/lava-3-2.png",
+                                                                        "lava/lava-3-3.png" },
                                                         5) },
                         0,
-                        new Collision[] { CollisionList.RECTANGLE2 },
+                        new Collision[] { CollisionList.RECTANGLE3 },
                         new Property[] {
                                         new Property(PropertyList.NO_COLLISION),
                                         new PropertySound(SoundType.LAVA),

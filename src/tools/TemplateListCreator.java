@@ -11,10 +11,12 @@ import javax.imageio.ImageIO;
 
 import graphics.shape.Shape;
 import graphics.shape.ShapeList;
+import objects.block.Block;
 import objects.block.BlockTemplate;
 import objects.block.BlockType;
 import objects.collision.Collision;
 import objects.collision.CollisionList;
+import objects.entity.Entity;
 import objects.entity.EntityTemplate;
 import objects.entity.EntityType;
 
@@ -40,14 +42,14 @@ public class TemplateListCreator {
         img { width: 64px; height: 64px; }
         </style>
         </head><body>
-        <h1>Liste des Blocs</h1>
-        <table><tr><th>Index</th><th>Nom</th><th>Image</th><th>Shape</th><th>Collision</th></tr>
+        <h1>Block List</h1>
+        <table><tr><th>Index</th><th>Name</th><th>Images</th><th>Shapes</th><th>Collisions</th><th>States</th></tr>
         """);
 
         int index = 0;
         for (BlockTemplate bt : BlockTemplate.values()) {
             BlockType block = bt.blockType;
-            writer.write("<tr>");
+            writer.write("<tr "+ ((index%2 != 0) ? "style='background-color: lightgray;'" : "") +">");
             writer.write("<td>" + index + "</td>");
             writer.write("<td>" + block.getName() + "</td>");
             // Images
@@ -89,7 +91,15 @@ public class TemplateListCreator {
                     writer.write("<img src='data:image/png;base64," + base64 + "'>");
                 }
             writer.write("</td>");
-            writer.write("</tr>");
+            // States
+            writer.write("<td>");
+            Block blockInstance = block.getInstance();
+            for (String state : blockInstance.getAllStateNames()) {
+                Object value = blockInstance.getState(state);
+                writer.write("- "+state+" : "+ ((value != null) ? value.getClass().getSimpleName() : "null") + "</br>");
+            }
+            writer.write("</td>");
+            writer.write("</tr>\n");
             index++;
         }
 
@@ -110,14 +120,14 @@ public class TemplateListCreator {
         img { width: 64px; height: 64px; }
         </style>
         </head><body>
-        <h1>Liste des Entités</h1>
-        <table><tr><th>Index</th><th>Nom</th><th>Image</th><th>Shape</th><th>Collision</th></tr>
+        <h1>Entity List</h1>
+        <table><tr><th>Index</th><th>Name</th><th>Images</th><th>Shapes</th><th>Collisions</th><th>States</th></tr>
         """);
 
         int index = 0;
         for (EntityTemplate et : EntityTemplate.values()) {
             EntityType entity = et.entityType;
-            writer.write("<tr>");
+            writer.write("<tr "+ ((index%2 != 0) ? "style='background-color: lightgray;'" : "") +">");
             writer.write("<td>" + index + "</td>");
             writer.write("<td>" + entity.getName() + "</td>");
             // Images
@@ -159,7 +169,15 @@ public class TemplateListCreator {
                     writer.write("<img src='data:image/png;base64," + base64 + "'>");
                 }
             writer.write("</td>");
-            writer.write("</tr>");
+            // States
+            writer.write("<td>");
+            Entity entityInstance = entity.getInstance();
+            for (String state : entityInstance.getAllStateNames()) {
+                Object value = entityInstance.getState(state);
+                writer.write("- "+state+" : "+ ((value != null) ? value.getClass().getSimpleName() : "null") + "</br>");
+            }
+            writer.write("</td>");
+            writer.write("</tr>\n");
             index++;
         }
 
@@ -180,8 +198,8 @@ public class TemplateListCreator {
         img { width: 64px; height: 64px; }
         </style>
         </head><body>
-        <h1>Liste des Shapes</h1>
-        <table><tr><th>Nom</th><th>Global</th><th>Top</th><th>Left</th><th>Right</th></tr>
+        <h1>Shape List</h1>
+        <table><tr><th>Name</th><th>Global</th><th>Top</th><th>Left</th><th>Right</th></tr>
         """);
 
         List<Shape> shapes = ShapeList.getAllShapes();
@@ -193,13 +211,13 @@ public class TemplateListCreator {
             String base64Left = imageToBase64(shape.getLeftMask());
             String base64Right = imageToBase64(shape.getRightMask());
             String base64Global = imageToBase64(shape.getGlobalMask());
-            writer.write("<tr>");
+            writer.write("<tr "+ ((i%2 != 0) ? "style='background-color: lightgray;'" : "") +">");
             writer.write("<td>" + name + "</td>");
             writer.write("<td style='background-color: black;'><img src='data:image/png;base64," + base64Global + "'></td>");
             writer.write("<td><img src='data:image/png;base64," + base64Top + "'></td>");
             writer.write("<td><img src='data:image/png;base64," + base64Left + "'></td>");
             writer.write("<td><img src='data:image/png;base64," + base64Right + "'></td>");
-            writer.write("</tr>");
+            writer.write("</tr>\n");
         }
 
         writer.write("</table></body></html>");
@@ -219,8 +237,8 @@ public class TemplateListCreator {
         img { width: 64px; height: 64px; }
         </style>
         </head><body>
-        <h1>Liste des Collisions</h1>
-        <table><tr><th>Nom</th><th>Image</th></tr>
+        <h1>Collision List</h1>
+        <table><tr><th>Name</th><th>Image</th></tr>
         """);
 
         List<Collision> collisions = CollisionList.getAllCollisions();
@@ -229,10 +247,10 @@ public class TemplateListCreator {
             Collision collision = collisions.get(i);
             String name = collisionNames.get(i);
             String base64 = imageToBase64(collision.getImage(64));
-            writer.write("<tr>");
+            writer.write("<tr "+ ((i%2 != 0) ? "style='background-color: lightgray;'" : "") +">");
             writer.write("<td>" + name + "</td>");
             writer.write("<td><img src='data:image/png;base64," + base64 + "'></td>");
-            writer.write("</tr>");
+            writer.write("</tr>\n");
         }
 
         writer.write("</table></body></html>");

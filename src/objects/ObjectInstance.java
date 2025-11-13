@@ -2,6 +2,7 @@ package objects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.Consumer;
 
 import graphics.Texture;
@@ -95,6 +96,13 @@ public class ObjectInstance<
 
     public Object getState(String stateName) {
         return states.get(stateName);
+    }
+
+    public List<String> getAllStateNames() {
+        List<String> stateNames = new ArrayList<>();
+        for (String stateName : states.keySet())
+            stateNames.add(stateName);
+        return stateNames;
     }
 
     public boolean setState(String stateName, Object value) {

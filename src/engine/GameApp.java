@@ -7,7 +7,6 @@ public class GameApp extends JFrame {
 
     private static final int TARGET_FPS = 25;
 
-    @SuppressWarnings("unused")
     public GameApp() {
         super("Chroniques de Voxellia 2");
         setUndecorated(true);

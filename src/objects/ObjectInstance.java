@@ -132,4 +132,8 @@ public class ObjectInstance<
     public boolean areSameType(I objectInstance) {
         return objectInstance.type == type;
     }
+
+    public double getAdherency() {
+        return type.getAdherency();
+    }
 }

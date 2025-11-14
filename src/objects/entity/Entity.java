@@ -69,7 +69,20 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
         double norm = move.getNorm();
         if (norm != 0) {
             double speed = getSpeed();
-            move(world, speed * move.x / norm, speed * move.y / norm, speed * move.z / norm);
+            double adherency = World.AIR_ADHERENCY;
+            if (getFloor() != null)
+                adherency = getFloor().getAdherency();
+            
+            double velocityX = velocity.x;
+            if ((move.x < 0 && velocityX > -speed) || (move.x > 0 && velocityX < speed))
+                velocityX += adherency * speed * move.x / norm;
+            double velocityY = velocity.y;
+            if ((move.y < 0 && velocityY > -speed) || (move.y > 0 && velocityY < speed))
+                velocityY += adherency * speed * move.y / norm;
+            double velocityZ = velocity.z;
+            if ((move.z < 0 && velocityZ > -speed) || (move.z > 0 && velocityZ < speed))
+                velocityZ += adherency * speed * move.z / norm;
+            setVelocity(velocityX, velocityY, velocityZ);
         }
     }
 
@@ -108,7 +121,7 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
         long now = System.currentTimeMillis();
         if (lastJump + WAITING_TIME_JUMP <= now) {
             if (getFloor() != null) {
-                addVelocity(0, 0, 1.05);
+                addVelocity(0, 0, 1);
                 lastJump = now;
                 SoundManager.playSoundFromCoordinates(SoundType.JUMP2, this.getX(), this.getY(), this.getZ());
                 return true;
@@ -128,12 +141,14 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
     }
 
     public void onUpdate(World world) {
-        double coef = 0.9;
         move(world, velocity.x, velocity.y, velocity.z);
         executeEvent(e -> e.onUpdate(world,this));
         heightCheck(world);
         updateFloor(world);
         notifyCloseBlocks(world);
+        double coef = 1- World.AIR_ADHERENCY;
+        if (getFloor() != null)
+            coef = 1 - getFloor().getAdherency();
         setVelocity(coef * velocity.x, coef * velocity.y, coef * velocity.z);
     }
 

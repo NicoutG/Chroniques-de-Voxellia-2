@@ -31,6 +31,8 @@ public class World {
     /* INSTANCE STATE & API */
     /* ------------------------------------------------------------------ */
 
+    public final static double AIR_ADHERENCY = 0.2;
+
     private Block[][][] blocks;
     private ArrayList<Entity> entities;
     private ArrayList<Vector> spawnPoints;

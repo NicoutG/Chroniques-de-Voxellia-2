@@ -370,6 +370,7 @@ public enum BlockTemplate {
         ICE(new BlockType("ice", "ice.png") {
                 {
                         setOpacity(0.5);
+                        setAdherency(0.01);
                 }
         }),
         SNOW(new BlockType("snow", "snow.png")),
@@ -1104,7 +1105,11 @@ public enum BlockTemplate {
                         null)),
         /* 190 */
         WOOD_WHITE(new BlockType("woodWhite", "wood-white.png")),
-        
+        WIND(new BlockType("wind",
+                        new Texture[] {},
+                        new Property[] { new Property(PropertyList.NO_COLLISION) },
+                        new BlockBehavior[] {
+                                        new BlockBehaviorApplyForce(1,0,0) })),
         ;
 
         public final BlockType blockType;

@@ -51,8 +51,11 @@ public class BlockBehaviorExploding extends BlockBehaviorActivable {
                     double distance = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
                     if (distance <= radius * radius) {
                         Block blockWorld = world.getBlock(x,y,z);
-                        if (blockWorld == null || (blockWorld != null && blockWorld.getProperty(PropertyList.DESTRUCTIBLE) != null))
-                            world.getBlocks()[x][y][z] = world.getBlock(getExplosionBlock(block));
+                        if (blockWorld == null || (blockWorld != null && blockWorld.getProperty(PropertyList.DESTRUCTIBLE) != null)) {
+                            Block explosionBlock = world.getBlock(getExplosionBlock(block));
+                            world.getBlocks()[x][y][z] = explosionBlock;
+                            explosionBlock.onStart(world, new Vector(x + 0.5, y + 0.5, z + 0.5));
+                        }
                     }
                 }
             }

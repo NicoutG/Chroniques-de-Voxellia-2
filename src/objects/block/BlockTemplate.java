@@ -914,7 +914,9 @@ public enum BlockTemplate {
                         new Property[] {new Property(PropertyList.NO_COLLISION),
                                         new PropertyLight(new LightSource(
                                                 new ColorRGB(1, 0.5, 0.5), 1, 0.5, 0.1))},
-                        new BlockBehavior[] {new BlockBehaviorEffect(12)}
+                        new BlockBehavior[] {new BlockBehaviorEffect(12), 
+                                        new BlockBehaviorKill(),
+                                        new BlockBehaviorBlazable()}
                         )),
         STONE_BARRIER_LEFT(new BlockType("stoneBarrierLeft",
                         new Texture[] { new Texture(ShapeList.BORDER_LEFT,

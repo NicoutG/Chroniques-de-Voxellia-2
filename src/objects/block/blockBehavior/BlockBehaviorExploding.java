@@ -63,11 +63,13 @@ public class BlockBehaviorExploding extends BlockBehaviorActivable {
 
         ArrayList<Entity> entities = world.getEntities();
         for (Entity entity : entities) {
-            dif = position.sub(entity.getPosition());
-            double distance = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
-            if (distance <= radius * radius) {
-                entity.onDeath(world);
-                world.executeAfterUpdate(() -> entities.remove(entity));
+            if (entity.getProperty(PropertyList.DESTRUCTIBLE) != null) {
+                dif = position.sub(entity.getPosition());
+                double distance = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
+                if (distance <= radius * radius) {
+                    entity.onDeath(world);
+                    world.executeAfterUpdate(() -> entities.remove(entity));
+                }
             }
         }
     }

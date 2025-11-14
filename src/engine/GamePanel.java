@@ -49,14 +49,10 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public static long getTick() {
-        return tick;
-    }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        renderer.render((Graphics2D) g, getWidth(), getHeight(), tick);
+        renderer.render((Graphics2D) g, getWidth(), getHeight(), World.getTick());
         soundManager.tick();
     }
 }

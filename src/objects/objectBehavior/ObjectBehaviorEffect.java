@@ -1,8 +1,8 @@
 package objects.objectBehavior;
 
-import engine.GamePanel;
 import objects.ObjectInstance;
 import objects.ObjectType;
+import world.World;
 
 public class ObjectBehaviorEffect<
     T extends ObjectType<?, ?>,
@@ -18,7 +18,7 @@ public class ObjectBehaviorEffect<
 
     @Override
     public void onAttachTo(I objectInstance) {
-        long tick0 = GamePanel.getTick();
+        long tick0 = World.getTick();
         objectInstance.initTickFrame0(tick0);
     }
     

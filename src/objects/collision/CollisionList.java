@@ -45,6 +45,7 @@ public final class CollisionList {
     public static final ComplexCollision BARRIER_ANGLE2 = new ComplexCollision(new BoundingCollision(-0.5, 0.25, -0.25, 0.25, -0.5, 0.5), new BoundingCollision(-0.25, 0.25, -0.25, 0.5, -0.5, 0.5));
     public static final ComplexCollision BARRIER_ANGLE3 = new ComplexCollision(new BoundingCollision(-0.5, 0.25, -0.25, 0.25, -0.5, 0.5), new BoundingCollision(-0.25, 0.25, -0.5, 0.25, -0.5, 0.5));
     public static final ComplexCollision BARRIER_ANGLE4 = new ComplexCollision(new BoundingCollision(-0.25, 0.5, -0.25, 0.25, -0.5, 0.5), new BoundingCollision(-0.25, 0.25, -0.5, 0.25, -0.5, 0.5));
+    public static final ComplexCollision COLUMN = new ComplexCollision(new BoundingCollision(-0.5, 0.5, -0.25, 0.25, -0.5, 0.5), new BoundingCollision(-0.25, 0.25, -0.5, 0.5, -0.5, 0.5), new BoundingCollision(-0.35, 0.35, -0.35, 0.35, -0.5, 0.5));
 
     private CollisionList() {}
 

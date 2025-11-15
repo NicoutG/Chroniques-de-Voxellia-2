@@ -50,10 +50,10 @@ public class ObjectInstance<
 
     public double getOpacity() {
         Object state = getState("opacity");
-        if (state == null || !(state instanceof Double))
-            return type.getOpacity();
+        if (state != null && (state instanceof Number num))
+            return num.doubleValue();
         else
-            return (double)state;
+            return type.getOpacity();
     }
 
     public Texture getTexture() {

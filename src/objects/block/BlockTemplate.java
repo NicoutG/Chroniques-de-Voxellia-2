@@ -161,8 +161,8 @@ public enum BlockTemplate {
                         new Property[] { new Property(PropertyList.DESTRUCTIBLE)},
                         null
         )),
-        COLUMN_MOSSY(new BlockType("blockColumnMossy", "block-column-mossy.png")),
-        COLUMN(new BlockType("blockColumn", "block-column.png")),
+        BLOCK_COLUMN_MOSSY(new BlockType("blockColumnMossy", "block-column-mossy.png")),
+        BLOCK_COLUMN(new BlockType("blockColumn", "block-column.png")),
         HALF_GRASS1(new BlockType("blockHalfGrass1", "block-half-grass-1.png")),
         HALF_GRASS2(new BlockType("blockHalfGrass2", "block-half-grass-2.png")),
         /* 30 */
@@ -1173,6 +1173,21 @@ public enum BlockTemplate {
                                         PathManager.loadImage("wood/woodStairs/wood-white-stairs2.png")) },
                         0,
                         new Collision[] { CollisionList.STAIR2 },
+                        null,
+                        null)),
+        /* 205 */
+        COLUMN(new BlockType("column",
+                        new Texture[] { new Texture(ShapeList.COLUMN,
+                                        PathManager.loadImage("column.png")) },
+                        0.5,
+                        new Collision[] { CollisionList.COLUMN },
+                        null,
+                        null)),
+        WHITE_COLUMN(new BlockType("whiteColumn",
+                        new Texture[] { new Texture(ShapeList.COLUMN,
+                                        PathManager.loadImage("white-column.png")) },
+                        0.5,
+                        new Collision[] { CollisionList.COLUMN },
                         null,
                         null)),
         ;

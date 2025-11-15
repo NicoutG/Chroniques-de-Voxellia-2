@@ -71,6 +71,7 @@ public final class ShapeList {
     public static final Shape BARRIER1 = new Shape("barriers/barrier1/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape BARRIER2 = new Shape("barriers/barrier2/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape BARRIER3 = new Shape("barriers/barrier3/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape COLUMN = new Shape("column/","mask-left.png","mask-right.png","mask-top.png",false);
     
 
     private ShapeList() {}

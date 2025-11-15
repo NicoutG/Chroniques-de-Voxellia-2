@@ -164,7 +164,7 @@ public class LightingEngine {
 
                         newRule[ruleCnt++] = OPPOSITE_IDX[n.getOriginDirIdx()];
 
-                    } else if (nb != null && nb.getOpacity() == 1 &&
+                    } else if (nb != null && nb.getOpacity() > 0 &&
                             !nb.isLightAllowed(n.getOriginAxisFace().index)) {
 
                         newRule[ruleCnt++] = OPPOSITE_IDX[n.getOriginDirIdx()];

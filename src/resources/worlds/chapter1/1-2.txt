@@ -76,8 +76,8 @@ Level 2
 91 91 91 91 91 91 91 91 . . . . 26 91 91 27 . . . . . .
 . 91 91 91 91 91 91 . . . . 91 91 91 91 91 91 . . . . .
 . . 89 87 91 91 91 . . . . . 91 91 91 91 89 . . . . .
-. . . . 91 89 . . . . . . . 91 50 88/texts={"Ne vous aventurez pas trop loin.","Certaines portes feraient mieux de rester scéllées..."} 129 . . . . .
-. . . . . . . . . . . . . 129 . . . . . . . .
+. . . . 91 89 . . . . . . . 91 50 91 129 . . . . .
+. . . . . . . . . . . . . 129 . 207/texts={"Ne vous aventurez pas trop loin.","Certaines portes feraient mieux de rester scéllées..."} . . . . . .
 . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . 115 . . . . . .

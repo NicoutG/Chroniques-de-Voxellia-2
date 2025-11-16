@@ -75,7 +75,7 @@ public class BlockBehaviorLiquid extends BlockBehavior {
         }
         
         // on the side
-        if (1 < liquid) {
+        if (1 < liquid || (0 < z && blocks[x][y][z - 1] != null && block.areSameType(blocks[x][y][z - 1]))) {
             ArrayList<int[]> possibleFlows = getPossibleFlows(blocks, block, x, y, z, liquid);
             if (0 < possibleFlows.size()) {
                 Random random = new Random();

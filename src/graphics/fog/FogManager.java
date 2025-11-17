@@ -193,7 +193,8 @@ public final class FogManager {
                                                 /* -------------------------------------------------- */
                                                 /* Traitement des faces haut/bas */
                                                 /* -------------------------------------------------- */
-                                                processHorizontalFaceCell(blocks, fog, x, y, z, dimX, dimY, dimZ,
+                                                if (isBottomFace)
+                                                        processHorizontalFaceCell(blocks, fog, x, y, z, dimX, dimY, dimZ,
                                                                 isBottomFace);
                                         }
                                 }

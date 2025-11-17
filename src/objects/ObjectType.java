@@ -14,6 +14,7 @@ public abstract class ObjectType<I extends ObjectInstance<?, ?, ?>, B extends Ob
     private double opacity = 1;
     private ColorRGB color; // When 0 < opacity < 1
     private boolean[] allowLight = new boolean[] { false, false, false };
+    private double adherency = 0.8;
     private ArrayList<Texture> textures = new ArrayList<>();
     private ArrayList<Collision> collisions = new ArrayList<>();
     private HashMap<String, Property> properties = new HashMap<>();
@@ -96,6 +97,10 @@ public abstract class ObjectType<I extends ObjectInstance<?, ?, ?>, B extends Ob
         return null;
     }
 
+    public int getNbTextures() {
+        return textures.size();
+    }
+
     public void addTexture(Texture texture) {
         textures.add(texture);
     }
@@ -117,6 +122,10 @@ public abstract class ObjectType<I extends ObjectInstance<?, ?, ?>, B extends Ob
         return null;
     }
 
+    public int getNbCollisions() {
+        return collisions.size();
+    }
+
     public void addCollision(Collision collision) {
         collisions.add(collision);
     }
@@ -134,6 +143,14 @@ public abstract class ObjectType<I extends ObjectInstance<?, ?, ?>, B extends Ob
 
     public void addBehavior(B behavior) {
         behaviors.add(behavior);
+    }
+
+    public double getAdherency() {
+        return adherency;
+    }
+
+    public void setAdherency(double adherency) {
+        this.adherency = Math.max(0, Math.min(1, adherency));
     }
 
     public abstract I getInstance();

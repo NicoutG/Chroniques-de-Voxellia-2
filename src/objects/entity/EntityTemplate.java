@@ -24,7 +24,7 @@ public enum EntityTemplate {
                                     PathManager.loadImage("player/right/player-right-1.png"),
                                     PathManager.loadImage("player/right/player-right-2.png"),
                                     PathManager.loadImage("player/right/player-right-3.png")
-                            }, 1)
+                            }, 2)
             },
             new Collision[] { CollisionList.BLOCK_ENTITY },
             null,
@@ -68,7 +68,7 @@ public enum EntityTemplate {
     FIRE(new EntityType("fire",
             new Texture[] { Texture.createBasicTexture(ShapeList.COMPLETE,
                         new String[] { "fire/fire-0.png", "fire/fire-1.png", "fire/fire-2.png", "fire/fire-3.png" }, 
-                        2) },
+                        3) },
             0,
             null,
             new Property[]{ new Property(PropertyList.NO_COLLISION_ENTITY),

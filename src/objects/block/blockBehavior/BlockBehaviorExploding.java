@@ -32,7 +32,7 @@ public class BlockBehaviorExploding extends BlockBehaviorActivable {
     }
 
     @Override
-    public void onActivated(World world, Block block, Vector position, int network) {
+    public void activate(World world, Block block, Vector position, int network) {
         SoundManager.playSoundFromCoordinates(SoundType.EXPLOSION, position.x, position.y, position.z);
         double radius = getRadius(block);
         int minX = Math.max(0,(int)(position.x - radius));
@@ -51,8 +51,11 @@ public class BlockBehaviorExploding extends BlockBehaviorActivable {
                     double distance = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
                     if (distance <= radius * radius) {
                         Block blockWorld = world.getBlock(x,y,z);
-                        if (blockWorld == null || (blockWorld != null && blockWorld.getProperty(PropertyList.DESTRUCTIBLE) != null))
-                            world.getBlocks()[x][y][z] = world.getBlock(getExplosionBlock(block));
+                        if (blockWorld == null || (blockWorld != null && blockWorld.getProperty(PropertyList.DESTRUCTIBLE) != null)) {
+                            Block explosionBlock = world.getBlock(getExplosionBlock(block));
+                            world.getBlocks()[x][y][z] = explosionBlock;
+                            explosionBlock.onStart(world, new Vector(x + 0.5, y + 0.5, z + 0.5));
+                        }
                     }
                 }
             }
@@ -60,11 +63,13 @@ public class BlockBehaviorExploding extends BlockBehaviorActivable {
 
         ArrayList<Entity> entities = world.getEntities();
         for (Entity entity : entities) {
-            dif = position.sub(entity.getPosition());
-            double distance = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
-            if (distance <= radius * radius) {
-                entity.onDeath(world);
-                world.executeAfterUpdate(() -> entities.remove(entity));
+            if (entity.getProperty(PropertyList.DESTRUCTIBLE) != null) {
+                dif = position.sub(entity.getPosition());
+                double distance = dif.x * dif.x + dif.y * dif.y + dif.z * dif.z;
+                if (distance <= radius * radius) {
+                    entity.onDeath(world);
+                    world.executeAfterUpdate(() -> entities.remove(entity));
+                }
             }
         }
     }

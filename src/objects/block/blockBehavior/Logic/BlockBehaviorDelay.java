@@ -33,13 +33,13 @@ public class BlockBehaviorDelay extends BlockBehaviorConnectedExit {
     }
 
     @Override
-    public void onActivated(World world, Block block, Vector position, int network) {
+    public void activate(World world, Block block, Vector position, int network) {
         int delay = getDelay(block);
         delays.add(new AbstractMap.SimpleEntry<>(tick + delay, true));
     }
 
     @Override
-    public void onDesactivated(World world, Block block, Vector position, int network) {
+    public void desactivate(World world, Block block, Vector position, int network) {
         int delay = getDelay(block);
         delays.add(new AbstractMap.SimpleEntry<>(tick + delay, false));
     }

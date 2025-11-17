@@ -87,7 +87,7 @@ public final class Voxel {
         intensity *= fallOff;
         if (objectInstance != null) {
             double o = objectInstance.getOpacity();
-            if (o > 0 && o < 1)
+            if (o > 0 && o <= 1)
                 intensity *= 1.0 - o;
         }
     }

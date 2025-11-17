@@ -7,7 +7,7 @@ public class EntityBehaviorApplyForce extends EntityBehavior {
     private static final String FORCE = "force";
 
     public void onAttachTo(Entity entity) {
-        entity.setState(FORCE, new double[] {0, 0, -0.3});
+        entity.setState(FORCE, new double[] {0, 0, -0.24});
     }
 
     @Override

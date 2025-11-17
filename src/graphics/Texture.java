@@ -92,6 +92,10 @@ public final class Texture {
         return full[frameIndex(tick)];
     }
 
+    public Shape getShape() {
+        return shape;
+    }
+
     /** A single face of the current frame. */
     public BufferedImage face(Face f, long tick) {
         return faces[frameIndex(tick)][f.index];

@@ -1,6 +1,5 @@
 package objects.block.blockBehavior;
 
-import engine.GamePanel;
 import objects.block.Block;
 import objects.block.BlockType;
 import objects.objectBehavior.ObjectBehaviorEffect;
@@ -21,7 +20,7 @@ public class BlockBehaviorEffect extends BlockBehavior {
 
     @Override
     public void onUpdate(World world, Block block, Vector position) {
-        if (block.getTickFrame0() + commonBehavior.effectDuration <= GamePanel.getTick()) {
+        if (block.getTickFrame0() + commonBehavior.effectDuration <= World.getTick()) {
             Block[][][] blocks = world.getBlocks();
             blocks[(int)position.x][(int)position.y][(int)position.z] = null;
         }

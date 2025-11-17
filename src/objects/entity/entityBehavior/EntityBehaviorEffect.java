@@ -1,6 +1,5 @@
 package objects.entity.entityBehavior;
 
-import engine.GamePanel;
 import objects.entity.Entity;
 import objects.entity.EntityType;
 import objects.objectBehavior.ObjectBehaviorEffect;
@@ -20,7 +19,7 @@ public class EntityBehaviorEffect extends EntityBehavior {
 
     @Override
     public void onUpdate(World world, Entity entity) {
-        if (entity.getTickFrame0() + commonBehavior.effectDuration <= GamePanel.getTick()) {
+        if (entity.getTickFrame0() + commonBehavior.effectDuration <= World.getTick()) {
             world.executeAfterUpdate(() -> world.getEntities().remove(entity));
         }
     }

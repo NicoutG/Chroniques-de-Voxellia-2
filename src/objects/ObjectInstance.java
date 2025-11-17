@@ -2,6 +2,7 @@ package objects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.Consumer;
 
 import graphics.Texture;
@@ -49,10 +50,10 @@ public class ObjectInstance<
 
     public double getOpacity() {
         Object state = getState("opacity");
-        if (state == null || !(state instanceof Double))
-            return type.getOpacity();
+        if (state != null && (state instanceof Number num))
+            return num.doubleValue();
         else
-            return (double)state;
+            return type.getOpacity();
     }
 
     public Texture getTexture() {
@@ -97,6 +98,13 @@ public class ObjectInstance<
         return states.get(stateName);
     }
 
+    public List<String> getAllStateNames() {
+        List<String> stateNames = new ArrayList<>();
+        for (String stateName : states.keySet())
+            stateNames.add(stateName);
+        return stateNames;
+    }
+
     public boolean setState(String stateName, Object value) {
         if(existingState(stateName)) {
             states.replace(stateName, value);
@@ -123,5 +131,9 @@ public class ObjectInstance<
 
     public boolean areSameType(I objectInstance) {
         return objectInstance.type == type;
+    }
+
+    public double getAdherency() {
+        return type.getAdherency();
     }
 }

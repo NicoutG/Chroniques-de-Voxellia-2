@@ -1,5 +1,10 @@
 package objects.collision;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
 import tools.*;;
 
 public class Collision {
@@ -44,4 +49,78 @@ public class Collision {
         }
         return false;
     }
+
+    public BufferedImage getImage(int size) {
+        BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = image.createGraphics();
+
+        g.setComposite(AlphaComposite.Clear);
+        g.fillRect(0, 0, size, size);
+        g.setComposite(AlphaComposite.SrcOver);
+
+        g.setColor(Color.BLACK);
+
+        double[] bounds = getBounds(new Vector(0, 0, 0));
+        
+        double xMin = bounds[0], xMax = bounds[1];
+        double yMin = bounds[2], yMax = bounds[3];
+        double zMin = bounds[4], zMax = bounds[5];
+
+        double[][] corners = new double[][] {
+            {xMin, yMin, zMin},
+            {xMax, yMin, zMin},
+            {xMax, yMax, zMin},
+            {xMin, yMax, zMin},
+            {xMin, yMin, zMax},
+            {xMax, yMin, zMax},
+            {xMax, yMax, zMax},
+            {xMin, yMax, zMax},
+        };
+
+        double sqrt3 = Math.sqrt(3)/2;
+        double[] isoXArr = new double[8];
+        double[] isoYArr = new double[8];
+
+        double xMinIso = -1, xMaxIso = 1;
+        double yMinIso = -1, yMaxIso = 1;
+
+        for (int i = 0; i < 8; i++) {
+            double x = corners[i][0];
+            double y = corners[i][1];
+            double z = corners[i][2];
+
+            double isoX = (x - y) * sqrt3;
+            double isoY = z - (x + y)/2;
+
+            isoXArr[i] = isoX;
+            isoYArr[i] = isoY;
+        }
+
+        int[][] projected = new int[8][2];
+        for (int i = 0; i < 8; i++) {
+            int px = (int) Math.round((isoXArr[i] - xMinIso) / (xMaxIso - xMinIso) * (size - 1));
+            int py = (int) Math.round((yMaxIso - isoYArr[i]) / (yMaxIso - yMinIso) * (size - 1));
+            projected[i][0] = px;
+            projected[i][1] = py;
+        }
+
+        int[][] edges = new int[][] {
+            {1,2},{2,3}, // bottom
+            {4,5},{5,6},{6,7},{7,4}, // up
+            {1,5},{2,6},{3,7}  // vertical
+        };
+
+        for (int[] e : edges) {
+            int x0 = projected[e[0]][0];
+            int y0 = projected[e[0]][1];
+            int x1 = projected[e[1]][0];
+            int y1 = projected[e[1]][1];
+            g.drawLine(x0, y0, x1, y1);
+        }
+
+        g.dispose();
+        return image;
+    }
+
+
 }

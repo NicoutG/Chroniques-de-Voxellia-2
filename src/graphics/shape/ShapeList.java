@@ -1,5 +1,9 @@
 package graphics.shape;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.lang.reflect.Field;
+
 public final class ShapeList {
     public static final Shape BORDER_LEFT = new Shape("borders/borderLeft/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape BORDER_RIGHT = new Shape("borders/borderRight/","mask-left.png","mask-right.png","mask-top.png",false);
@@ -56,7 +60,52 @@ public final class ShapeList {
     public static final Shape GRASS_BIG = new Shape("herbs/grass-big/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape GRASS_SMALL = new Shape("herbs/grass-small/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape FLOWERS = new Shape("herbs/flowers/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape BORDER_ANGLE1 = new Shape("borders/borderAngle1/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape BORDER_ANGLE2 = new Shape("borders/borderAngle2/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape BORDER_ANGLE3 = new Shape("borders/borderAngle3/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape BORDER_ANGLE4 = new Shape("borders/borderAngle4/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape HOLDER = new Shape("holders/holder/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape HOLDER_ROPE1 = new Shape("holders/holder-rope1/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape HOLDER_ROPE2 = new Shape("holders/holder-rope2/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape HOLDER_ROPE3 = new Shape("holders/holder-rope3/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape BARRIER1 = new Shape("barriers/barrier1/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape BARRIER2 = new Shape("barriers/barrier2/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape BARRIER3 = new Shape("barriers/barrier3/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape COLUMN = new Shape("column/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape INSIDE = new Shape("inside/","mask-left.png","mask-right.png","mask-top.png",false);
     
 
     private ShapeList() {}
+
+    public static List<Shape> getAllShapes() {
+        List<Shape> shapes = new ArrayList<>();
+        Field[] fields = ShapeList.class.getDeclaredFields();
+
+        for (Field field : fields) {
+            if (java.lang.reflect.Modifier.isStatic(field.getModifiers())
+                && field.getType() == Shape.class) {
+                try {
+                    shapes.add((Shape) field.get(null));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return shapes;
+    }
+
+    public static List<String> getAllShapeNames() {
+        List<String> names = new ArrayList<>();
+        Field[] fields = ShapeList.class.getDeclaredFields();
+
+        for (Field field : fields) {
+            if (java.lang.reflect.Modifier.isStatic(field.getModifiers())
+                    && field.getType() == Shape.class) {
+                names.add(field.getName());
+            }
+        }
+
+        return names;
+    }
 }

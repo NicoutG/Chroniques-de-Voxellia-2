@@ -31,6 +31,8 @@ public class World {
     /* INSTANCE STATE & API */
     /* ------------------------------------------------------------------ */
 
+    public final static double AIR_ADHERENCY = 0.2;
+
     private Block[][][] blocks;
     private ArrayList<Entity> entities;
     private ArrayList<Vector> spawnPoints;
@@ -43,6 +45,7 @@ public class World {
     private String currentWorld;
     private String startingWorld;
     private int startingSpawnPoint;
+    private static int tick = 0;
 
     public World(String worldPath) {
         loadWorld0(worldPath);
@@ -128,6 +131,7 @@ public class World {
     }
 
     public void loadWorld0(String filename, int spawnPoint) {
+        tick = 0;
         worlds.clear();
         startingWorld = filename;
         startingSpawnPoint = spawnPoint;
@@ -176,6 +180,8 @@ public class World {
             e.onUpdate(this);
 
         executeTasks();
+
+        tick++;
     }
 
     public void executeAfterUpdate(Runnable task) {
@@ -284,5 +290,9 @@ public class World {
         if (blocks == null)
             return 0;
         return blocks[0][0].length;
+    }
+
+    public static int getTick() {
+        return tick;
     }
 }

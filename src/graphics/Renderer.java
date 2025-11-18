@@ -157,6 +157,8 @@ public final class Renderer {
         final int maxY = blocks[0].length - 1;
         final int maxZ = blocks[0][0].length - 1;
 
+        boolean[][][] visibles = getVisibleBlocks(blocks, originXi, originYi, w, h);
+
         for (int z = 0; z <= maxZ; z++) {
             for (int y = 0; y <= maxY; y++) {
                 for (int x = 0; x <= maxX; x++) {
@@ -171,13 +173,11 @@ public final class Renderer {
                     if (b.getTexture() == null)
                         continue;
 
-                    boolean[] visibleFaces = getVisibleFaces(blocks, x, y, z, maxX, maxY, maxZ, originXi, originYi, w,
-                            h);
-                    if (!visibleFaces[Face.LEFT.index] &&
-                            !visibleFaces[Face.RIGHT.index] &&
-                            !visibleFaces[Face.TOP.index]) {
+                    if (!visibles[x][y][z])
                         continue;
-                    }
+
+                    if (!getVisibleFace(blocks, x, y, z, maxX, maxY, maxZ))
+                        continue;
 
                     /* --- screen-space cull before allocating Drawable --- */
                     IsoMath.toScreen(x, y, z, scratchPoint);
@@ -261,6 +261,7 @@ public final class Renderer {
             }
         }
 
+        // System.out.println(drawables.size());
         drawables.sort(DEPTH);
     }
 
@@ -289,26 +290,61 @@ public final class Renderer {
             return true;
         }
         return false;
-
     }
 
-    private boolean[] getVisibleFaces(Block[][][] b, int x, int y, int z,
-            int maxX, int maxY, int maxZ, double originX, double originY, int w, int h) {
-        boolean[] faces = new boolean[] { false, false, false };
-        if (!isInScreenRange(x, y, z, originX, originY, w, h))
-            return faces;
+    private boolean[][][] getVisibleBlocks(Block[][][] b, double originX, double originY, int screenW, int screenH) {
+        final int SIZE_X = b.length;
+        final int SIZE_Y = b[0].length;
+        final int SIZE_Z = b[0][0].length;
+        boolean visibles[][][] = new boolean[SIZE_X][SIZE_Y][SIZE_Z];
+        // top
+        final int zS = SIZE_Z - 1;
+        for (int x = 0; x < SIZE_X; x++)
+            for (int y = 0; y < SIZE_Y; y++)
+                if (isInScreenRange(x, y, zS, originX, originY, screenW, screenH))
+                    getVisibleBlockLine(b, visibles, x, y, zS);
+        // left
+        final int yS = SIZE_Y - 1;
+        for (int x = 0; x < SIZE_X; x++)
+            for (int z = 0; z < SIZE_Z - 1; z++)
+                if (isInScreenRange(x, yS, z, originX, originY, screenW, screenH))
+                    getVisibleBlockLine(b, visibles, x, yS, z);
+        // right
+        final int xS = SIZE_X - 1;
+        for (int y = 0; y < SIZE_Y - 1; y++)
+            for (int z = 0; z < SIZE_Z - 1; z++)
+                if (isInScreenRange(xS, y, z, originX, originY, screenW, screenH))
+                    getVisibleBlockLine(b, visibles, xS, y, z);
+        
+        return visibles;
+    }
+
+    private void getVisibleBlockLine(Block[][][] b, boolean visibles[][][], int x, int y, int z) {
+        visibles[x][y][z] = true;
+        boolean hideBehind = false;
+        Block block = b[x][y][z];
+        if (block != null) {
+            Texture texture = block.getTexture();
+            if (texture != null)
+                hideBehind = texture.getHideBehind();
+        }
+        if (!hideBehind && x > 0 && y > 0 && z > 0)
+            getVisibleBlockLine(b, visibles, x - 1, y - 1, z - 1);
+    }
+
+    private boolean getVisibleFace(Block[][][] b, int x, int y, int z, int maxX, int maxY, int maxZ) {
 
         if (x == maxX || visibilityChecker(b[x + 1][y][z], Face.TOP.index)) {
-            faces[Face.RIGHT.index] = true;
+            return true;
         }
         if (y == maxY || visibilityChecker(b[x][y + 1][z], Face.RIGHT.index)) {
-            faces[Face.LEFT.index] = true;
+            return true;
         }
         if (z == maxZ || visibilityChecker(b[x][y][z + 1], Face.LEFT.index)) {
-            faces[Face.TOP.index] = true;
+            return true;
         }
 
-        return faces;
+        return false;
     }
 
     /**

@@ -27,30 +27,51 @@ public final class Texture {
     private final BufferedImage[] full; // original frames
     private final BufferedImage[][] faces; // [frame][Face.index]
     private final int ticksPerFrame;
+    private boolean hideBehind = true;
 
     /* =========================== CTORS ================================= */
 
     public static Texture createBasicTexture(String texturePath) {
-        return new Texture(ShapeList.CUBE, PathManager.loadImage(texturePath));
+        return createBasicTexture(texturePath, true);
+    }
+
+    public static Texture createBasicTexture(String texturePath, boolean hideBehind) {
+        return new Texture(ShapeList.CUBE, PathManager.loadImage(texturePath), hideBehind);
     }
 
     public static Texture createBasicTexture(String[] texturePaths, int ticksPerFrame) {
-        BufferedImage[] images = new BufferedImage[texturePaths.length];
-        for (int i = 0; i < texturePaths.length; i++)
-            images[i] = PathManager.loadImage(texturePaths[i]);
-        return new Texture(ShapeList.CUBE, images, ticksPerFrame);
+        return createBasicTexture(texturePaths, ticksPerFrame, true);
     }
 
-    public static Texture createBasicTexture(Shape shape,String[] texturePaths, int ticksPerFrame) {
+    public static Texture createBasicTexture(String[] texturePaths, int ticksPerFrame, boolean hideBehind) {
         BufferedImage[] images = new BufferedImage[texturePaths.length];
         for (int i = 0; i < texturePaths.length; i++)
             images[i] = PathManager.loadImage(texturePaths[i]);
-        return new Texture(shape, images, ticksPerFrame);
+        return new Texture(ShapeList.CUBE, images, ticksPerFrame, hideBehind);
+    }
+
+    public static Texture createBasicTexture(Shape shape, String[] texturePaths, int ticksPerFrame) {
+        return createBasicTexture(shape, texturePaths, ticksPerFrame, true); 
+    }
+
+    public static Texture createBasicTexture(Shape shape, String[] texturePaths, int ticksPerFrame, boolean hideBehind) {
+        BufferedImage[] images = new BufferedImage[texturePaths.length];
+        for (int i = 0; i < texturePaths.length; i++)
+            images[i] = PathManager.loadImage(texturePaths[i]);
+        return new Texture(shape, images, ticksPerFrame, hideBehind);
     }
 
     /** Static sprite – one frame, no animation. */
     public Texture(Shape shape, BufferedImage frame) {
-        this(shape, new BufferedImage[] { frame }, Integer.MAX_VALUE);
+        this(shape, frame, true);
+    }
+
+    public Texture(Shape shape, BufferedImage frame, boolean hideBehind) {
+        this(shape, new BufferedImage[] { frame }, Integer.MAX_VALUE, hideBehind);
+    }
+
+    public Texture(Shape shape, BufferedImage[] frames, int ticksPerFrame) {
+        this(shape, frames, Integer.MAX_VALUE, true);
     }
 
     /**
@@ -60,7 +81,7 @@ public final class Texture {
      * @param frames        64×64 frames (must be ≥ 1)
      * @param ticksPerFrame game ticks between two frames (≥ 1)
      */
-    public Texture(Shape shape, BufferedImage[] frames, int ticksPerFrame) {
+    public Texture(Shape shape, BufferedImage[] frames, int ticksPerFrame, boolean hideBehind) {
         this.shape = Objects.requireNonNull(shape, "shape");
         Objects.requireNonNull(frames, "frames");
         if (frames.length == 0)
@@ -70,6 +91,7 @@ public final class Texture {
 
         this.full = frames.clone();
         this.ticksPerFrame = ticksPerFrame;
+        this.hideBehind = hideBehind;
 
         /* ---- pre-cut all faces exactly once ---- */
         faces = new BufferedImage[frames.length][Face.values().length];
@@ -94,6 +116,14 @@ public final class Texture {
 
     public Shape getShape() {
         return shape;
+    }
+
+    public boolean getHideBehind() {
+        return hideBehind;
+    }
+
+    public void setHideBehind(boolean hideBehind) {
+        this.hideBehind = hideBehind;
     }
 
     /** A single face of the current frame. */

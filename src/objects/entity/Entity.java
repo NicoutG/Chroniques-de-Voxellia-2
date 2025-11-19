@@ -120,7 +120,7 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
         long now = System.currentTimeMillis();
         if (lastJump + WAITING_TIME_JUMP <= now) {
             if (getFloor() != null) {
-                addVelocity(0, 0, 1);
+                addVelocity(0, 0, 1.05);
                 lastJump = now;
                 SoundManager.playSoundFromCoordinates(SoundType.JUMP2, this.getX(), this.getY(), this.getZ());
                 return true;

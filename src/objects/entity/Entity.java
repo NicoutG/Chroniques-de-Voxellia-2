@@ -72,7 +72,6 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
             double adherency = World.AIR_ADHERENCY;
             if (getFloor() != null)
                 adherency = getFloor().getAdherency();
-            
             double velocityX = velocity.x;
             if ((move.x < 0 && velocityX > -speed) || (move.x > 0 && velocityX < speed))
                 velocityX += adherency * speed * move.x / norm;
@@ -142,14 +141,25 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
 
     public void onUpdate(World world) {
         move(world, velocity.x, velocity.y, velocity.z);
-        executeEvent(e -> e.onUpdate(world,this));
         heightCheck(world);
         updateFloor(world);
+        updateVelocity();
+        executeEvent(e -> e.onUpdate(world,this));
         notifyCloseBlocks(world);
+    }
+
+    private void updateVelocity() {
         double coef = 1- World.AIR_ADHERENCY;
         if (getFloor() != null)
             coef = 1 - getFloor().getAdherency();
         setVelocity(coef * velocity.x, coef * velocity.y, coef * velocity.z);
+        final double epsilon = 0.01;
+        if (Math.abs(velocity.x) < epsilon)
+            velocity.x = 0;
+        if (Math.abs(velocity.y) < epsilon)
+            velocity.y = 0;
+        if (Math.abs(velocity.z) < epsilon)
+            velocity.z = 0;
     }
 
     public void onInteraction(World world, Entity entityInteract) {

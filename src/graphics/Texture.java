@@ -71,7 +71,7 @@ public final class Texture {
     }
 
     public Texture(Shape shape, BufferedImage[] frames, int ticksPerFrame) {
-        this(shape, frames, Integer.MAX_VALUE, true);
+        this(shape, frames, ticksPerFrame, true);
     }
 
     /**

@@ -35,6 +35,9 @@ public final class Renderer {
 
     private static final Font PIXEL_FONT;
 
+    private static BufferedImage frameBuffer;
+    private static Graphics2D gBuffer;
+
     static {
         Font f;
         try (InputStream is = Renderer.class.getResourceAsStream("/resources/fonts/basis33.ttf")) {
@@ -53,6 +56,19 @@ public final class Renderer {
         this.lighthingEngine = new LightingEngineAsync();
     }
 
+    public void initRenderer(int w, int h) {
+        GraphicsConfiguration gc = GraphicsEnvironment
+                .getLocalGraphicsEnvironment()
+                .getDefaultScreenDevice()
+                .getDefaultConfiguration();
+
+        frameBuffer = gc.createCompatibleImage(w, h, Transparency.TRANSLUCENT);
+        gBuffer = frameBuffer.createGraphics();
+
+        gBuffer.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        gBuffer.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+    }
+
     public void render(Graphics2D g2, int w, int h, long tick) {
         Block[][][] blocks = world.getBlocks();
         if (blocks == null)
@@ -60,6 +76,9 @@ public final class Renderer {
 
         ArrayList<Entity> entities = world.getEntities();
         FaceLighting[][][] faceLightings = lighthingEngine.getLightings(world, tick);
+
+        double originXi;
+        double originYi;
 
         synchronized (world) {
             /* ---------- compute camera offset ---------- */
@@ -76,8 +95,8 @@ public final class Renderer {
             }
 
             /* ── snap the camera once ───────────────────────────────────── */
-            double originXi = Math.floor(camX);
-            double originYi = Math.floor(camY);
+            originXi = Math.floor(camX);
+            originYi = Math.floor(camY);
 
             /* ---------- clear & prepare canvas ---------- */
             g2.setColor(Color.BLACK);
@@ -86,65 +105,68 @@ public final class Renderer {
                     RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 
             /* ---------- depth sort & draw ---------- */
-        
             getDrawablesLabels(w, h, tick, originXi, originYi, blocks, entities, faceLightings);
+        }
+        
+        if (frameBuffer == null)
+            initRenderer(w, h);
+        else {
+            gBuffer.setComposite(AlphaComposite.Clear);
+            gBuffer.fillRect(0, 0, frameBuffer.getWidth(), frameBuffer.getHeight());
+            gBuffer.setComposite(AlphaComposite.SrcOver);
+        }
 
-            BufferedImage frameBuffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D gBuffer = frameBuffer.createGraphics();
+        // draw drawables (avec culling ici)
+        for (Drawable d : drawables) {
+            IsoMath.toScreen(d.x, d.y, d.z, scratchPoint);
+            int dx = (int) (originXi + scratchPoint.x);
+            int dy = (int) (originYi + scratchPoint.y);
+            gBuffer.drawImage(d.texture,
+                    dx, dy,
+                    dx + IsoMath.DRAW_TILE_SIZE,
+                    dy + IsoMath.DRAW_TILE_SIZE,
+                    0, 0, IsoMath.TILE_SIZE, IsoMath.TILE_SIZE,
+                    null);
+        }
+        g2.drawImage(frameBuffer, 0, 0, null);
 
-            // draw drawables (avec culling ici)
-            for (Drawable d : drawables) {
-                IsoMath.toScreen(d.x, d.y, d.z, scratchPoint);
-                int dx = (int) (originXi + scratchPoint.x);
-                int dy = (int) (originYi + scratchPoint.y);
-                gBuffer.drawImage(d.texture,
-                        dx, dy,
-                        dx + IsoMath.DRAW_TILE_SIZE,
-                        dy + IsoMath.DRAW_TILE_SIZE,
-                        0, 0, IsoMath.TILE_SIZE, IsoMath.TILE_SIZE,
-                        null);
-            }
-            gBuffer.dispose();
-            g2.drawImage(frameBuffer, 0, 0, null);
+        /*
+        * ──────────────────────────────────────────────────────────────
+        * 3) draw all labels last
+        * ----------------------------------------------------------------
+        */
+        g2.setFont(PIXEL_FONT);
 
-            /*
-            * ──────────────────────────────────────────────────────────────
-            * 3) draw all labels last
-            * ----------------------------------------------------------------
-            */
-            g2.setFont(PIXEL_FONT);
+        for (TextLabel tl : textLabels) {
+            /* world → screen */
+            IsoMath.toScreen(tl.x, tl.y, tl.z, scratchPoint);
+            int sx = (int)(originXi + scratchPoint.x + IsoMath.DRAW_TILE_SIZE / 2.0);
+            int sy = (int)(originYi + scratchPoint.y - 32); // anchor (bottom)
 
-            for (TextLabel tl : textLabels) {
-                /* world → screen */
-                IsoMath.toScreen(tl.x, tl.y, tl.z, scratchPoint);
-                int sx = (int)(originXi + scratchPoint.x + IsoMath.DRAW_TILE_SIZE / 2.0);
-                int sy = (int)(originYi + scratchPoint.y - 32); // anchor (bottom)
+            /* word-wrap once per label */
+            List<String> lines = wrapLines(tl.text, 50);
 
-                /* word-wrap once per label */
-                List<String> lines = wrapLines(tl.text, 50);
+            FontMetrics fm = g2.getFontMetrics();
+            int lineH = fm.getHeight();
+            int ascent = fm.getAscent(); // baseline offset inside a line
+            int blockTopY = sy - (lines.size() - 1) * lineH; // topmost line Y
 
-                FontMetrics fm = g2.getFontMetrics();
-                int lineH = fm.getHeight();
-                int ascent = fm.getAscent(); // baseline offset inside a line
-                int blockTopY = sy - (lines.size() - 1) * lineH; // topmost line Y
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
 
-                for (int i = 0; i < lines.size(); i++) {
-                    String line = lines.get(i);
+                int tx = sx - fm.stringWidth(line) / 2; // center this line
+                int ty = blockTopY + i * lineH + ascent; // baseline of line i
 
-                    int tx = sx - fm.stringWidth(line) / 2; // center this line
-                    int ty = blockTopY + i * lineH + ascent; // baseline of line i
+                /* outline */
+                g2.setColor(new Color(0, 0, 0, 150));
+                g2.drawString(line, tx - 2, ty);
+                g2.drawString(line, tx + 2, ty);
+                g2.drawString(line, tx, ty - 2);
+                g2.drawString(line, tx, ty + 2);
 
-                    /* outline */
-                    g2.setColor(new Color(0, 0, 0, 150));
-                    g2.drawString(line, tx - 2, ty);
-                    g2.drawString(line, tx + 2, ty);
-                    g2.drawString(line, tx, ty - 2);
-                    g2.drawString(line, tx, ty + 2);
-
-                    /* interior */
-                    g2.setColor(new Color(255, 255, 255, 240));
-                    g2.drawString(line, tx, ty);
-                }
+                /* interior */
+                g2.setColor(new Color(255, 255, 255, 240));
+                g2.drawString(line, tx, ty);
             }
         }
     }

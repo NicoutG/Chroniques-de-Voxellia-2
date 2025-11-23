@@ -121,8 +121,8 @@ public final class Voxel {
             Block nb = grid[nx][ny][nz];
             ColorRGB newColor = color;
 
-            if (nb != null && nb.getOpacity() > 0 && nb.getOpacity() < 1 && nb.getColor() != null) {
-                newColor = nb.getColor().add(color).mul(0.5);
+            if (nb != null && nb.getOpacity() > 0 && nb.getOpacity() < 1 && nb.getColorLight() != null) {
+                newColor = nb.getColorLight().add(color).mul(0.5);
             }
 
             out.add(new Voxel(

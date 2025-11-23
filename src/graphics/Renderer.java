@@ -218,7 +218,8 @@ public final class Renderer {
                     boolean alwaysBehind = b.getProperty("floor") != null;
 
                     Texture text = b.getTexture();
-                    drawables.add(new Drawable(text.shade(text.full(tick - b.getTickFrame0()), faceLighting.left(),
+                    BufferedImage image = applyColor(text.full(tick - b.getTickFrame0()), b.getColor());
+                    drawables.add(new Drawable(text.shade(image, faceLighting.left(),
                                 faceLighting.right(), faceLighting.top()), x, y, z, false, alwaysBehind));
                 }
             }
@@ -278,8 +279,9 @@ public final class Renderer {
                         e.getZ() - 0.5);
 
                 Texture text = e.getTexture();
+                BufferedImage image = applyColor(text.full(tick - e.getTickFrame0()), e.getColor());
                 drawables.add(new Drawable(text.shade(
-                        text.full(tick - e.getTickFrame0()),faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(), e.getZ(), true));
+                        image,faceLighting.left(), faceLighting.right(), faceLighting.top()), e.getX(), e.getY(), e.getZ(), true));
             }
         }
 
@@ -469,5 +471,42 @@ public final class Renderer {
             lines.add(current.toString());
 
         return lines;
+    }
+
+    public static BufferedImage applyColor(BufferedImage img, int[] color) {
+        if (img == null || color == null || color.length != 3)
+            return img;
+
+        int width = img.getWidth();
+        int height = img.getHeight();
+        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+        int rTarget = color[0];
+        int gTarget = color[1];
+        int bTarget = color[2];
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int argb = img.getRGB(x, y);
+
+                int alpha = (argb >> 24) & 0xFF;
+                int r = (argb >> 16) & 0xFF;
+                int g = (argb >> 8) & 0xFF;
+                int b = argb & 0xFF;
+
+                // calcul de la luminosité du pixel (0-255)
+                int lum = (int) (0.299 * r + 0.587 * g + 0.114 * b);
+
+                // applique la couleur en conservant la luminosité
+                int newR = Math.min(255, (rTarget * lum) / 255);
+                int newG = Math.min(255, (gTarget * lum) / 255);
+                int newB = Math.min(255, (bTarget * lum) / 255);
+
+                int newArgb = (alpha << 24) | (newR << 16) | (newG << 8) | newB;
+                result.setRGB(x, y, newArgb);
+            }
+        }
+
+        return result;
     }
 }

@@ -24,8 +24,11 @@ public class ObjectInstance<
     protected ArrayList<B> behaviors = new ArrayList<>();
     private long tickFrame0 = 0;
 
+    private static final String COLOR = "color";
+
     public ObjectInstance(T type) {
         this.type = type;
+        setState(COLOR, new int[0]);
     }
 
     public String getName() {
@@ -56,6 +59,16 @@ public class ObjectInstance<
             return type.getOpacity();
     }
 
+    public int[] getColor() {
+        Object state = getState(COLOR);
+        if (state != null && (state instanceof int[])) {
+            int[] color = (int[]) state;
+            if (color.length == 3)
+                return color;
+        }
+        return null;
+    }
+
     public Texture getTexture() {
         return type.getTexture(indexTexture);
     }
@@ -64,7 +77,7 @@ public class ObjectInstance<
         return type.isLightAllowed(index);
     }
     
-    public ColorRGB getColor() {
+    public ColorRGB getColorLight() {
         Object state = getState("color");
         if (state == null || !(state instanceof ColorRGB))
             return type.getColor();

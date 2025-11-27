@@ -64,6 +64,7 @@ public final class ShapeList {
     public static final Shape BORDER_ANGLE2 = new Shape("borders/borderAngle2/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape BORDER_ANGLE3 = new Shape("borders/borderAngle3/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape BORDER_ANGLE4 = new Shape("borders/borderAngle4/","mask-left.png","mask-right.png","mask-top.png",false);
+    public static final Shape BORDER_HORIZONTAL = new Shape("borders/borderHorizontal/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape HOLDER = new Shape("holders/holder/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape HOLDER_ROPE1 = new Shape("holders/holder-rope1/","mask-left.png","mask-right.png","mask-top.png",false);
     public static final Shape HOLDER_ROPE2 = new Shape("holders/holder-rope2/","mask-left.png","mask-right.png","mask-top.png",false);

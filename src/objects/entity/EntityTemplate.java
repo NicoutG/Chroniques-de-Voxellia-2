@@ -49,7 +49,7 @@ public enum EntityTemplate {
             new Collision[] { CollisionList.BLOCK_ENTITY },
             null,
             new EntityBehavior[] { new EntityBehaviorApplyForce() })),
-            /* 5 */
+    /* 5 */
     FLYING_SLIME(new EntityType("flyingSlime",
             new Texture[] {
                     new Texture(
@@ -76,6 +76,24 @@ public enum EntityTemplate {
                         new PropertyLight(
                                 new LightSource(new ColorRGB(1, 0.6, 0.2), 0.5, 0.8, 0.1)) },
             new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorBlazable(), new EntityBehaviorEffect(100) })),
+    MOVING_GRID_LEFT(new EntityType("movingGridLeft",
+            new Texture[] { new Texture(ShapeList.BORDER_LEFT,
+                                        PathManager.loadImage("grids/grid-left.png")) },
+            new Collision[] { CollisionList.BARRIER_LEFT },
+            new Property[] { new Property(PropertyList.NO_COLLISION_SAME), new Property(PropertyList.NO_COLLISION_BLOCK)},
+            new EntityBehavior[] { new EntityBehaviorActivableMoving() })),
+    MOVING_GRID_RIGHT(new EntityType("movingGridRight",
+            new Texture[] { new Texture(ShapeList.BORDER_RIGHT,
+                                        PathManager.loadImage("grids/grid-right.png")) },
+            new Collision[] { CollisionList.BARRIER_RIGHT },
+            new Property[] { new Property(PropertyList.NO_COLLISION_SAME), new Property(PropertyList.NO_COLLISION_BLOCK)},
+            new EntityBehavior[] { new EntityBehaviorActivableMoving() })),
+    MOVING_GRID_HORIZONTAL(new EntityType("movingGridHorizontal",
+            new Texture[] { new Texture(ShapeList.BORDER_HORIZONTAL,
+                                        PathManager.loadImage("grids/grid-horizontal.png")) },
+            new Collision[] { CollisionList.BARRIER_HORIZONTAL },
+            new Property[] { new Property(PropertyList.NO_COLLISION_SAME), new Property(PropertyList.NO_COLLISION_BLOCK)},
+            new EntityBehavior[] { new EntityBehaviorActivableMoving() })),
 
     ;
 

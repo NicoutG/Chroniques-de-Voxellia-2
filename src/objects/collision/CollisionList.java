@@ -41,6 +41,7 @@ public final class CollisionList {
     public static final BoundingCollision POLE = new BoundingCollision(-0.25, 0.25, -0.25, 0.25, -0.5, 0.5);
     public static final BoundingCollision BARRIER_RIGHT = new BoundingCollision(-0.5, 0.5, -0.25, 0.25, -0.5, 0.5);
     public static final BoundingCollision BARRIER_LEFT = new BoundingCollision(-0.25, 0.25, -0.5, 0.5, -0.5, 0.5);
+    public static final BoundingCollision BARRIER_HORIZONTAL = new BoundingCollision(-0.5, 0.5, -0.5, 0.5, -0.25, 0.25);
     public static final ComplexCollision BARRIER_ANGLE1 = new ComplexCollision(new BoundingCollision(-0.25, 0.5, -0.25, 0.25, -0.5, 0.5), new BoundingCollision(-0.25, 0.25, -0.25, 0.5, -0.5, 0.5));
     public static final ComplexCollision BARRIER_ANGLE2 = new ComplexCollision(new BoundingCollision(-0.5, 0.25, -0.25, 0.25, -0.5, 0.5), new BoundingCollision(-0.25, 0.25, -0.25, 0.5, -0.5, 0.5));
     public static final ComplexCollision BARRIER_ANGLE3 = new ComplexCollision(new BoundingCollision(-0.5, 0.25, -0.25, 0.25, -0.5, 0.5), new BoundingCollision(-0.25, 0.25, -0.5, 0.25, -0.5, 0.5));

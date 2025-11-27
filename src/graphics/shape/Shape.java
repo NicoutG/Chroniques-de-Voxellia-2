@@ -15,24 +15,30 @@ public class Shape {
     private final BufferedImage rightMask;
     private final BufferedImage topMask;
     private final boolean fullSpace;
+    private final double opacity;
+    private boolean[] allowLight = new boolean[] { false, false, false };
 
     public Shape(BufferedImage leftMask,
                     BufferedImage rightMask,
                     BufferedImage topMask,
-                    boolean fullSpace) {
+                    boolean fullSpace, double opacity, boolean leftLight, boolean rightLight, boolean topLight) {
 
         this.leftMask  = Objects.requireNonNull(leftMask,  "leftMask");
         this.rightMask = Objects.requireNonNull(rightMask, "rightMask");
         this.topMask   = Objects.requireNonNull(topMask,   "topMask");
         this.fullSpace = fullSpace;
+        this.opacity = opacity;
+        this.allowLight[Face.LEFT.index] = leftLight;
+        this.allowLight[Face.RIGHT.index] = rightLight;
+        this.allowLight[Face.TOP.index] = topLight;
     }
 
-    public Shape(String leftMask, String rightMask, String topMask, boolean fullSpace) {
-        this(loadMask(leftMask), loadMask(rightMask), loadMask(topMask), fullSpace);
+    public Shape(String leftMask, String rightMask, String topMask, boolean fullSpace, double opacity, boolean leftLight, boolean rightLight, boolean topLight) {
+        this(loadMask(leftMask), loadMask(rightMask), loadMask(topMask), fullSpace, opacity, leftLight, rightLight, topLight);
     }
 
-    public Shape(String commonPath, String leftMask, String rightMask, String topMask, boolean fullSpace) {
-        this(loadMask(commonPath+leftMask), loadMask(commonPath+rightMask), loadMask(commonPath+topMask), fullSpace);
+    public Shape(String commonPath, String leftMask, String rightMask, String topMask, boolean fullSpace, double opacity, boolean leftLight, boolean rightLight, boolean topLight) {
+        this(loadMask(commonPath+leftMask), loadMask(commonPath+rightMask), loadMask(commonPath+topMask), fullSpace, opacity, leftLight, rightLight, topLight);
     }
 
 
@@ -43,6 +49,11 @@ public class Shape {
     public final BufferedImage getRightMask() { return rightMask; }
     public final BufferedImage getTopMask()   { return topMask;   }
     public final boolean takesFullSpace() {return fullSpace;}
+    public final double getOpacity() {return opacity;}
+
+    public boolean isLightAllowed(int index) {
+        return allowLight[index];
+    }
 
     public BufferedImage getGlobalMask() {
         int width = topMask.getWidth();

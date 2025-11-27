@@ -13,7 +13,7 @@ public abstract class ObjectType<I extends ObjectInstance<?, ?, ?>, B extends Ob
     private String name;
     private double opacity = 1;
     private ColorRGB color; // When 0 < opacity < 1
-    private boolean[] allowLight = new boolean[] { false, false, false };
+    private Boolean[] allowLight = new Boolean[] { null, null, null };
     private double adherency = 0.8;
     private ArrayList<Texture> textures = new ArrayList<>();
     private ArrayList<Collision> collisions = new ArrayList<>();
@@ -105,7 +105,7 @@ public abstract class ObjectType<I extends ObjectInstance<?, ?, ?>, B extends Ob
         textures.add(texture);
     }
 
-    public boolean isLightAllowed(int index) {
+    public Boolean isLightAllowed(int index) {
         return allowLight[index];
     }
 

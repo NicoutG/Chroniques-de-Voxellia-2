@@ -69,7 +69,6 @@ public enum EntityTemplate {
             new Texture[] { Texture.createBasicTexture(ShapeList.COMPLETE,
                         new String[] { "fire/fire-0.png", "fire/fire-1.png", "fire/fire-2.png", "fire/fire-3.png" }, 
                         3) },
-            0,
             null,
             new Property[]{ new Property(PropertyList.NO_COLLISION_ENTITY),
                         new PropertySound(SoundType.FIRE),

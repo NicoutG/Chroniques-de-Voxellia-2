@@ -52,11 +52,12 @@ public class ObjectInstance<
     public void setIndexCollision(int index) { indexCollision = index; }
 
     public double getOpacity() {
-        Object state = getState("opacity");
-        if (state != null && (state instanceof Number num))
-            return num.doubleValue();
-        else
+        if (type.getOpacity() != 1)
             return type.getOpacity();
+        Texture texture = getTexture();
+        if (texture != null)
+            return texture.getShape().getOpacity();
+        return 0;
     }
 
     public int[] getColor() {
@@ -74,7 +75,13 @@ public class ObjectInstance<
     }
 
     public boolean isLightAllowed(int index) {
-        return type.isLightAllowed(index);
+        Boolean light = type.isLightAllowed(index);
+        if (light != null)
+            return light;
+        Texture texture = getTexture();
+        if (texture != null)
+            return texture.getShape().isLightAllowed(index);
+        return true;
     }
     
     public ColorRGB getColorLight() {

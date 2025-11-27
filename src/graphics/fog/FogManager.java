@@ -20,31 +20,41 @@ public final class FogManager {
                                                         new String[] { "fog/100/fog-0.png", "fog/100/fog-1.png",
                                                                         "fog/100/fog-2.png", "fog/100/fog-3.png" },
                                                         3) },
-                                        0, null, null, null),
+                                        null, null, null) {{
+                                                setOpacity(0);
+                                        }},
                         /* 1 */ new BlockType("fog75", new Texture[] {
                                         Texture.createBasicTexture(
                                                         new String[] { "fog/75/fog-2.png", "fog/75/fog-1.png",
                                                                         "fog/75/fog-3.png", "fog/75/fog-0.png" },
                                                         3) },
-                                        0, null, null, null),
+                                        null, null, null) {{
+                                                setOpacity(0);
+                                        }},
                         /* 2 */ new BlockType("fog50", new Texture[] {
                                         Texture.createBasicTexture(
                                                         new String[] { "fog/50/fog-0.png", "fog/50/fog-1.png",
                                                                         "fog/50/fog-2.png", "fog/50/fog-3.png" },
                                                         3) },
-                                        0, null, null, null),
+                                        null, null, null) {{
+                                                setOpacity(0);
+                                        }},
                         /* 3 */ new BlockType("fog25", new Texture[] {
                                         Texture.createBasicTexture(
                                                         new String[] { "fog/25/fog-1.png", "fog/25/fog-2.png",
                                                                         "fog/25/fog-3.png", "fog/25/fog-0.png" },
                                                         3) },
-                                        0, null, null, null),
+                                        null, null, null) {{
+                                                setOpacity(0);
+                                        }},
                         /* 4 */ new BlockType("fog10", new Texture[] {
                                         Texture.createBasicTexture(
                                                         new String[] { "fog/10/fog-0.png", "fog/10/fog-1.png",
                                                                         "fog/10/fog-2.png", "fog/10/fog-3.png" },
                                                         3) },
-                                        0, null, null, null)
+                                        null, null, null) {{
+                                                setOpacity(0);
+                                        }},
         };
 
         /* convenient handles */

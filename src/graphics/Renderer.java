@@ -309,7 +309,7 @@ public final class Renderer {
     }
 
     private boolean visibilityChecker(Block b, int direction) {
-        if (b == null || b.getTexture() == null || b.getOpacity() < 1 || b.isLightAllowed(direction)
+        if (b == null || b.getTexture() == null || b.isLightAllowed(direction)
                 || (b.getTexture() != null && !b.getTexture().takesFullSpace())) {
             return true;
         }
@@ -350,7 +350,7 @@ public final class Renderer {
         if (block != null) {
             Texture texture = block.getTexture();
             if (texture != null)
-                hideBehind = texture.getHideBehind();
+                hideBehind = texture.takesFullSpace();
         }
         if (!hideBehind && x > 0 && y > 0 && z > 0)
             getVisibleBlockLine(b, visibles, x - 1, y - 1, z - 1);

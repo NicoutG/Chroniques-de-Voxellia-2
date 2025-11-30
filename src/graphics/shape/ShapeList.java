@@ -75,6 +75,14 @@ public final class ShapeList {
     public static final Shape INSIDE = new Shape("inside/","mask-left.png","mask-right.png","mask-top.png",false, 0, true, true, true);
     
 
+
+    public static final Shape[] SLOPES = new Shape[] {SLOPE1, SLOPE2, SLOPE3, SLOPE4, SLOPE5, SLOPE6, SLOPE7, SLOPE8, SLOPE_ANGLE1, SLOPE_ANGLE2, SLOPE_ANGLE3, SLOPE_ANGLE4, SLOPE_ANGLE5, SLOPE_ANGLE6, SLOPE_ANGLE7, SLOPE_ANGLE8, SLOPE_HALF1, SLOPE_HALF2, SLOPE_HALF3, SLOPE_HALF4};
+    public static final Shape[] STAIRS = new Shape[] {STAIR1, STAIR2, STAIR3, STAIR4, STAIR_ANGLE1, STAIR_ANGLE2, STAIR_ANGLE3, STAIR_ANGLE4, STAIR_ANGLE5, STAIR_ANGLE6, STAIR_ANGLE7, STAIR_ANGLE8};
+    public static final Shape[] BARRIERS = new Shape[] {HOLDER, BARRIER1, BARRIER2, BARRIER3};
+    public static final Shape[] HOLDERS_ROPE = new Shape[] {HOLDER, HOLDER_ROPE1, HOLDER_ROPE2, HOLDER_ROPE3};
+    public static final Shape[] SLABS = new Shape[] {SLAB_TOP, SLAB_VERTICAL1, SLAB_VERTICAL2, SLAB_VERTICAL3, SLAB_VERTICAL4};
+    public static final Shape[] BORDERS = new Shape[] {BORDER_LEFT, BORDER_RIGHT, BORDER_ANGLE1, BORDER_ANGLE2, BORDER_ANGLE3, BORDER_ANGLE4, BORDER_HORIZONTAL};
+
     private ShapeList() {}
 
     public static List<Shape> getAllShapes() {

@@ -2,6 +2,7 @@ package objects.block;
 
 import audio.SoundType;
 import graphics.Texture;
+import graphics.VariantTextureMaker;
 import graphics.ligth.*;
 import graphics.shape.*;
 import objects.block.blockBehavior.*;
@@ -12,9 +13,9 @@ import tools.PathManager;
 
 public enum BlockTemplate {
         /* 0 */
-        BLUE_BLOCK(new BlockType("blueBlock", "blue-block.png")),
-        RED_BLOCK(new BlockType("redBlock", "red-block.png")),
-        PURPLE_BLOCK(new BlockType("purpleBlock", "purple-block.png")),
+        BLUE_BLOCK(VariantTextureMaker.createBlockType("blueBlock", "blue-block.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS)),
+        RED_BLOCK(VariantTextureMaker.createBlockType("redBlock", "red-block.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS)),
+        PURPLE_BLOCK(VariantTextureMaker.createBlockType("purpleBlock", "purple-block.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS)),
         FIRE_CAMP(new BlockType("fireCamp",
                         new Texture[] {
                                         Texture.createBasicTexture(ShapeList.TRANSPARENT_CUBE,
@@ -148,8 +149,8 @@ public enum BlockTemplate {
         )),
         SAND(new BlockType("sand", "sand-block.png")),
         /* 20 */
-        PINE_LOG(new BlockType("pineLog", "wood/pine-log.png")),
-        BLOCK(new BlockType("block", "block.png")),
+        PINE_LOG(VariantTextureMaker.createBlockType("pineLog", "wood/pine-log.png", ShapeList.COLUMN)),
+        BLOCK(VariantTextureMaker.createBlockType("block", "block.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS)),
         TRAY(new BlockType("blockTray", "block-tray.png")),
         BRICK1(new BlockType("blockBrick1", "block-brick-1.png")),
         BRICK2(new BlockType("blockBrick2", "block-brick-2.png")),
@@ -159,8 +160,8 @@ public enum BlockTemplate {
                         new Property[] { new Property(PropertyList.DESTRUCTIBLE)},
                         null
         )),
-        BLOCK_COLUMN_MOSSY(new BlockType("blockColumnMossy", "block-column-mossy.png")),
-        BLOCK_COLUMN(new BlockType("blockColumn", "block-column.png")),
+        BLOCK_COLUMN_MOSSY(VariantTextureMaker.createBlockType("blockColumnMossy", "block-column-mossy.png", ShapeList.COLUMN)),
+        BLOCK_COLUMN(VariantTextureMaker.createBlockType("blockColumn", "block-column.png", ShapeList.COLUMN)),
         HALF_GRASS1(new BlockType("blockHalfGrass1", "block-half-grass-1.png")),
         HALF_GRASS2(new BlockType("blockHalfGrass2", "block-half-grass-2.png")),
         /* 30 */
@@ -207,8 +208,8 @@ public enum BlockTemplate {
         HOLE2(new BlockType("blockHole2", "block-hole-2.png")),
         /* 40 */
         LINES(new BlockType("blockLines", "block-lines.png")),
-        MOSSY1(new BlockType("blockMossy1", "block-mossy-1.png")),
-        MOSSY2(new BlockType("blockMossy2", "block-mossy-2.png")),
+        MOSSY1(VariantTextureMaker.createBlockType("blockMossy1", "block-mossy-1.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS)),
+        MOSSY2(VariantTextureMaker.createBlockType("blockMossy2", "block-mossy-2.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS)),
         SLOPE_HALF1(new BlockType("blockSlopeHalf1",
                         new Texture[] { new Texture(ShapeList.SLOPE_HALF1,
                                         PathManager.loadImage("blockSlopes/block-slope-half1.png")) },
@@ -299,12 +300,12 @@ public enum BlockTemplate {
         /* 70 */
         BLUE_BLOCK_BROKEN(new BlockType("blueBlockBroken", "blue-block-broken.png")),
         BLUE_BLOCK_CLUBS(new BlockType("blueBlockClubs", "blue-block-clubs.png")),
-        BLUE_BLOCK_COLUMN(new BlockType("blueBlockColumn", "blue-block-column.png")),
+        BLUE_BLOCK_COLUMN(VariantTextureMaker.createBlockType("blueBlockColumn", "blue-block-column.png", ShapeList.COLUMN)),
         BLUE_BLOCK_RAYS(new BlockType("blueBlockRays", "blue-block-rays.png")),
         BOOK_SHELVE_1(new BlockType("bookShelve1", "book-shelve-1.png")),
         /* 75 */
         BOOK_SHELVE_2(new BlockType("bookShelve2", "book-shelve-2.png")),
-        BROWN_BLOCK(new BlockType("brownBlock", "brown-block.png")),
+        BROWN_BLOCK(VariantTextureMaker.createBlockType("brownBlock", "brown-block.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS)),
         DISTORTED_BLOCK_BLUE(new BlockType("distortedBlockBlue", "distorted-block-blue.png")),
         DISTORTED_BLOCK_GREEN(new BlockType("distortedBlockGreen", "distorted-block-green.png")),
         DISTORTED_BLOCK_ORANGE(new BlockType("distortedBlockOrange", "distorted-block-orange.png")),
@@ -315,7 +316,7 @@ public enum BlockTemplate {
         GRAVEL_DARK(new BlockType("gravelDark", "gravel-dark.png")),
         GRAVEL(new BlockType("gravel", "gravel.png")),
         /* 85 */
-        GREEN_BLOCK(new BlockType("greenBlock", "green-block.png")),
+        GREEN_BLOCK(VariantTextureMaker.createBlockType("greenBlock", "green-block.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS)),
         SHELVE(new BlockType("shelve",
                 new Texture[] { new Texture(ShapeList.TRANSPARENT_CUBE, PathManager.loadImage("shelve.png")) },
                 null
@@ -331,15 +332,15 @@ public enum BlockTemplate {
                                         new LightSource(new ColorRGB(1, 0.6, 0.2), 1.2, 0.8, 0.1)),
                                         new PropertySound(SoundType.FIRE) },
                         new BlockBehavior[] { new BlockBehaviorBlazable() })),
-        STONE_MOSSY(new BlockType("stoneMossy", "stone-mossy.png")),
+        STONE_MOSSY(VariantTextureMaker.createBlockType("stoneMossy", "stone-mossy.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS)),
         /* 90 */
         STONE_POLISHED(new BlockType("stonePolished", "stone-polished.png")),
-        STONE(new BlockType("stone", "stone.png")),
-        WHITE_BLOCK(new BlockType("whiteBlock", "white-block.png")),
-        WOOD_ACACIA(new BlockType("woodAcacia", "wood/wood-acacia.png")),
-        WOOD_OAK(new BlockType("woodOak", "wood/wood-oak.png")),
+        STONE(VariantTextureMaker.createBlockType("stone", "stone.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS)),
+        WHITE_BLOCK(VariantTextureMaker.createBlockType("whiteBlock", "white-block.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS)),
+        WOOD_ACACIA(VariantTextureMaker.createBlockType("woodAcacia", "wood/wood-acacia.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BARRIERS)),
+        WOOD_OAK(VariantTextureMaker.createBlockType("woodOak", "wood/wood-oak.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BARRIERS)),
         /* 95 */
-        WOOD_PINE(new BlockType("woodPine", "wood/wood-pine.png")),
+        WOOD_PINE(VariantTextureMaker.createBlockType("woodPine", "wood/wood-pine.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BARRIERS)),
         ICE(new BlockType("ice", "ice.png") {
                 {
                         setOpacity(0.5);
@@ -1012,18 +1013,18 @@ public enum BlockTemplate {
                         null,
                         null)),
         /* 190 */
-        WOOD_WHITE(new BlockType("woodWhite", "wood/wood-white.png")),
+        WOOD_WHITE(VariantTextureMaker.createBlockType("woodWhite", "wood/wood-white.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BARRIERS)),
         WIND(new BlockType("wind",
                         new Texture[] {},
                         new Property[] { new Property(PropertyList.NO_COLLISION) },
                         new BlockBehavior[] {
                                         new BlockBehaviorApplyForce(1,0,0) })),
-        BLOCK_BRICKS(new BlockType("blockBricks", "block-bricks.png")),
-        YELLOW_BRICKS(new BlockType("yellowBricks", "yellow-bricks.png")),
-        ACACIA_LOG(new BlockType("acaciaLog", "wood/acacia-log.png")),
+        BLOCK_BRICKS(VariantTextureMaker.createBlockType("blockBricks", "block-bricks.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS)),
+        YELLOW_BRICKS(VariantTextureMaker.createBlockType("yellowBricks", "yellow-bricks.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS)),
+        ACACIA_LOG(VariantTextureMaker.createBlockType("acaciaLog", "wood/acacia-log.png", ShapeList.COLUMN)),
         /* 195 */
-        OAK_LOG(new BlockType("oakLog", "wood/oak-log.png")),
-        WHITE_LOG(new BlockType("whiteLog", "wood/white-log.png")),
+        OAK_LOG(VariantTextureMaker.createBlockType("oakLog", "wood/oak-log.png", ShapeList.COLUMN)),
+        WHITE_LOG(VariantTextureMaker.createBlockType("whiteLog", "wood/white-log.png", ShapeList.COLUMN)),
         ACACIA_STAIRS_LEFT(new BlockType("acaciaStairs1",
                         new Texture[] { new Texture(ShapeList.STAIR1,
                                         PathManager.loadImage("wood/woodStairs/wood-acacia-stairs1.png")) },

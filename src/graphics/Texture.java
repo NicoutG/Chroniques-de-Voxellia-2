@@ -229,5 +229,13 @@ public final class Texture {
             }
         return dst;
     }
+
+    public BufferedImage[] getAllImages() {
+        return full;
+    }
+
+    public int getTicksPerFrame() {
+        return ticksPerFrame;
+    }
 }
 

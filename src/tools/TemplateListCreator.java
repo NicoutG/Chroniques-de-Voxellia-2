@@ -24,6 +24,8 @@ public class TemplateListCreator {
 
     private final static String FOLDER = PathManager.DOC_PATH + "templateLists/";
 
+    private final static int NB_IMAGES_PER_LINE = 8;
+
     public static void main (String ... args) throws Exception {
         createBlockTemplateList(FOLDER+"blocks.html");
         createEntityTemplateList(FOLDER+"entities.html");
@@ -31,6 +33,7 @@ public class TemplateListCreator {
         createCollisionTemplateList(FOLDER+"collisions.html");
     }
 
+    // ------------------ BLOCKS ------------------
     public static void createBlockTemplateList(String path) throws Exception {
         FileWriter writer = new FileWriter(path);
 
@@ -54,42 +57,54 @@ public class TemplateListCreator {
             writer.write("<td>" + block.getName() + "</td>");
             // Images
             writer.write("<td>");
+            int count = 0;
             if (block.getNbTextures() == 0) {
                 String base64 = imageToBase64(null);
                 writer.write("<img src='data:image/png;base64," + base64 + "'>");
             }
-            else
+            else {
                 for (int i = 0; i < block.getNbTextures(); i++) {
                     BufferedImage img = block.getTexture(i).full(0);
                     String base64 = imageToBase64(img);
                     writer.write("<img src='data:image/png;base64," + base64 + "'>");
+                    count++;
+                    if (count % NB_IMAGES_PER_LINE == 0) writer.write("<br>"); // retour à la ligne toutes les 8 images
                 }
+            }
             writer.write("</td>");
             // Shapes
             writer.write("<td style='background-color: black;'>");
+            count = 0;
             if (block.getNbTextures() == 0) {
                 String base64 = imageToBase64(null);
                 writer.write("<img src='data:image/png;base64," + base64 + "'>");
             }
-            else
+            else {
                 for (int i = 0; i < block.getNbTextures(); i++) {
                     BufferedImage img = block.getTexture(i).getShape().getGlobalMask();
                     String base64 = imageToBase64(img);
                     writer.write("<img src='data:image/png;base64," + base64 + "'>");
+                    count++;
+                    if (count % NB_IMAGES_PER_LINE == 0) writer.write("<br>");
                 }
+            }
             writer.write("</td>");
             // Collisions
             writer.write("<td>");
+            count = 0;
             if (block.getNbCollisions() == 0) {
                 String base64 = imageToBase64(null);
                 writer.write("<img src='data:image/png;base64," + base64 + "'>");
             }
-            else
+            else {
                 for (int i = 0; i < block.getNbCollisions(); i++) {
                     BufferedImage img = block.getCollision(i).getImage(64);
                     String base64 = imageToBase64(img);
                     writer.write("<img src='data:image/png;base64," + base64 + "'>");
+                    count++;
+                    if (count % NB_IMAGES_PER_LINE == 0) writer.write("<br>");
                 }
+            }
             writer.write("</td>");
             // States
             writer.write("<td>");
@@ -109,6 +124,7 @@ public class TemplateListCreator {
         System.out.println("Block list created");
     }
 
+    // ------------------ ENTITIES ------------------
     public static void createEntityTemplateList(String path) throws Exception {
         FileWriter writer = new FileWriter(path);
 
@@ -132,42 +148,54 @@ public class TemplateListCreator {
             writer.write("<td>" + entity.getName() + "</td>");
             // Images
             writer.write("<td>");
+            int count = 0;
             if (entity.getNbTextures() == 0) {
                 String base64 = imageToBase64(null);
                 writer.write("<img src='data:image/png;base64," + base64 + "'>");
             }
-            else
+            else {
                 for (int i = 0; i < entity.getNbTextures(); i++) {
                     BufferedImage img = entity.getTexture(i).full(0);
                     String base64 = imageToBase64(img);
                     writer.write("<img src='data:image/png;base64," + base64 + "'>");
+                    count++;
+                    if (count % NB_IMAGES_PER_LINE == 0) writer.write("<br>");
                 }
+            }
             writer.write("</td>");
             // Shapes
             writer.write("<td style='background-color: black;'>");
+            count = 0;
             if (entity.getNbTextures() == 0) {
                 String base64 = imageToBase64(null);
                 writer.write("<img src='data:image/png;base64," + base64 + "'>");
             }
-            else
+            else {
                 for (int i = 0; i < entity.getNbTextures(); i++) {
                     BufferedImage img = entity.getTexture(i).getShape().getGlobalMask();
                     String base64 = imageToBase64(img);
                     writer.write("<img src='data:image/png;base64," + base64 + "'>");
+                    count++;
+                    if (count % NB_IMAGES_PER_LINE == 0) writer.write("<br>");
                 }
+            }
             writer.write("</td>");
             // Collisions
             writer.write("<td>");
+            count = 0;
             if (entity.getNbCollisions() == 0) {
                 String base64 = imageToBase64(null);
                 writer.write("<img src='data:image/png;base64," + base64 + "'>");
             }
-            else
+            else {
                 for (int i = 0; i < entity.getNbCollisions(); i++) {
                     BufferedImage img = entity.getCollision(i).getImage(64);
                     String base64 = imageToBase64(img);
                     writer.write("<img src='data:image/png;base64," + base64 + "'>");
+                    count++;
+                    if (count % NB_IMAGES_PER_LINE == 0) writer.write("<br>");
                 }
+            }
             writer.write("</td>");
             // States
             writer.write("<td>");
@@ -187,6 +215,7 @@ public class TemplateListCreator {
         System.out.println("Entity list created");
     }
 
+    // ------------------ SHAPES ------------------
     public static void createShapeTemplateList(String path) throws Exception {
         FileWriter writer = new FileWriter(path);
 
@@ -226,6 +255,7 @@ public class TemplateListCreator {
         System.out.println("Shape List created");
     }
 
+    // ------------------ COLLISIONS ------------------
     public static void createCollisionTemplateList(String path) throws Exception {
         FileWriter writer = new FileWriter(path);
 
@@ -259,15 +289,15 @@ public class TemplateListCreator {
         System.out.println("Collision List created");
     }
 
+    // ------------------ UTIL ------------------
     private static String imageToBase64(BufferedImage image) throws IOException {
         if (image == null) {
-            // crée une petite image 64x64 transparente ou grise
             image = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
             var g = image.createGraphics();
-            g.setColor(new java.awt.Color(200, 200, 200, 255)); // gris clair
+            g.setColor(new java.awt.Color(200, 200, 200, 255));
             g.fillRect(0, 0, 64, 64);
             g.setColor(java.awt.Color.DARK_GRAY);
-            g.drawString("N/A", 20, 35); // texte de secours
+            g.drawString("N/A", 20, 35);
             g.dispose();
         }
 

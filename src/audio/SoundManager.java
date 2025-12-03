@@ -11,7 +11,7 @@ import world.World;
 import javax.sound.sampled.*;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,9 +29,11 @@ public final class SoundManager {
 
     /* ------------------------------------------------------------------ */
 
-    private static final Map<SoundType, ManagedClip> clips = new EnumMap<>(SoundType.class);
+    private static final Map<ISoundType, ManagedClip> clips = new HashMap<>();
 
     private static List<SoundType> eventSounds = new ArrayList<>();
+
+    private final static String SOUND = "ambiantSound";
 
     public SoundManager(World world) {
 
@@ -39,13 +41,16 @@ public final class SoundManager {
         SoundManager.globalVolume = 0.2;
 
         /* ----------- load & cache every clip once -------------- */
-        for (SoundType st : SoundType.values()) {
-            ManagedClip manC = PathManager.loadSound(st.path, st.looping);
-            if (manC != null)
-                clips.put(st, manC);
-        }
+        for (ISoundType st : SoundType.values())
+            loadSound(st);
 
         warmupAudio();
+    }
+
+    private static void loadSound(ISoundType sound) {
+        ManagedClip manC = PathManager.loadSound(sound.getPath(), sound.isLooping());
+        if (manC != null)
+            clips.put(sound, manC);
     }
 
     /* Fonction pour démarrer le mixeur audio à l'avance */
@@ -123,7 +128,7 @@ public final class SoundManager {
             return;
 
         /* 1) Find the closest source for each SoundType. */
-        Map<SoundType, Double> nearestSq = new EnumMap<>(SoundType.class);
+        Map<ISoundType, Double> nearestSq = new HashMap<ISoundType, Double>();
 
         /* ---- blocks ---- */
         Block[][][] blocks = world.getBlocks();
@@ -134,14 +139,27 @@ public final class SoundManager {
                         Block b = blocks[x][y][z];
                         if (b == null)
                             continue;
-                        if (b.getProperty(PropertySound.NAME) == null)
-                            continue;
-                        PropertySound soundProp = (PropertySound) b.getProperty(PropertySound.NAME);
-                        if (soundProp.getSound() == null)
-                            continue;
-                        double d2 = dist2(player.getX(), player.getY(), player.getZ(),
-                                x + 0.5, y + 0.5, z + 0.5);
-                        nearestSq.merge(soundProp.getSound(), d2, Math::min);
+
+                        ArrayList<ISoundType> sounds = new ArrayList<>();
+
+                        if (b.getProperty(PropertySound.NAME) != null) {
+                            PropertySound soundProp = (PropertySound) b.getProperty(PropertySound.NAME);
+                            if (soundProp.getSound() != null)
+                                sounds.add(soundProp.getSound());
+                        }
+
+                        Object state = b.getState(SOUND);
+                        if (state != null && state instanceof String soundPath) {
+                            ISoundType sound = SoundType.getSoundType(soundPath);
+                            if (sound != null)
+                                sounds.add(sound);
+                        }
+
+                        for (ISoundType sound : sounds) {
+                            double d2 = dist2(player.getX(), player.getY(), player.getZ(),
+                                    x + 0.5, y + 0.5, z + 0.5);
+                            nearestSq.merge(sound, d2, Math::min);
+                        }
                     }
         }
 
@@ -149,27 +167,48 @@ public final class SoundManager {
         for (Entity e : world.getEntities()) {
             if (e == null)
                 continue;
-            if (e.getProperty(PropertySound.NAME) == null)
-                continue;
-            PropertySound soundProp = (PropertySound) e.getProperty(PropertySound.NAME);
-            if (soundProp.getSound() == null)
-                continue;
-            double d2 = dist2(player.getX(), player.getY(), player.getZ(),
-                    e.getX(), e.getY(), e.getZ());
-            nearestSq.merge(soundProp.getSound(), d2, Math::min);
+            ArrayList<ISoundType> sounds = new ArrayList<>();
+
+            if (e.getProperty(PropertySound.NAME) != null) {
+                PropertySound soundProp = (PropertySound) e.getProperty(PropertySound.NAME);
+                if (soundProp.getSound() != null)
+                    sounds.add(soundProp.getSound());
+            }
+
+            Object state = e.getState(SOUND);
+            if (state != null && state instanceof String soundPath) {
+                ISoundType sound = SoundType.getSoundType(soundPath);
+                if (sound != null)
+                    sounds.add(sound);
+            }
+
+            for (ISoundType sound : sounds) {
+                double d2 = dist2(player.getX(), player.getY(), player.getZ(),
+                        e.getX(), e.getY(), e.getZ());
+                nearestSq.merge(sound, d2, Math::min);
+            }
         }
 
-        for (Map.Entry<SoundType, ManagedClip> entry : clips.entrySet()) {
-            SoundType st = entry.getKey();
+        /*
+         * ----------------------------------------------------------
+         *  Load unknown sounds
+         * ----------------------------------------------------------
+         */
+        for (ISoundType sound : SoundType.getOtherSounds())
+            if (!clips.containsKey(sound))
+                loadSound(sound);
+
+        for (Map.Entry<ISoundType, ManagedClip> entry : clips.entrySet()) {
+            ISoundType st = entry.getKey();
             ManagedClip mc = entry.getValue();
             Double d2 = nearestSq.get(st); // null = no source this frame
 
             /* ---------- 1) AMBIENT LOOP HANDLING ------------------------- */
-            if (st.ambient) {
+            if (st.isAmbient()) {
                 if (d2 == null) { // no ambient block -> stop
                     pause(mc);
                 } else { // at least one present
-                    double vol = globalVolume * st.volume;
+                    double vol = globalVolume * st.getVolume();
                     ensurePlaying(mc, vol);
                     setVolume(mc.clip, vol);
                 }
@@ -183,7 +222,7 @@ public final class SoundManager {
             }
 
             double d = Math.sqrt(d2);
-            double volLinear = (1.0 - (d / MAX_DISTANCE)) * globalVolume * st.volume;
+            double volLinear = (1.0 - (d / MAX_DISTANCE)) * globalVolume * st.getVolume();
 
             if (volLinear < EPSILON) {
                 pause(mc);

@@ -139,6 +139,7 @@ public class VariantTextureMaker {
                 out.setRGB(x, y, (a << 24) | (r << 16) | (g << 8) | b);
             }
         }
+        out = addShadow(out, 0.7);
 
         return out;
     }
@@ -234,4 +235,63 @@ public class VariantTextureMaker {
         int y = index / 16;
         return cube.getRGB(x, y);
     }
+
+    private static BufferedImage addShadow(BufferedImage image, double shadow) {
+        int w = image.getWidth();
+        int h = image.getHeight();
+
+        BufferedImage result = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+
+                int argb = image.getRGB(x, y);
+                int alpha = (argb >> 24) & 0xFF;
+
+                // Pixel transparent => on le recopie tel quel
+                if (alpha == 0) {
+                    result.setRGB(x, y, argb);
+                    continue;
+                }
+
+                // Test si c'est un pixel de bord
+                boolean isBorder = hasTransparentNeighbor(image, x, y, w, h);
+
+                if (isBorder) {
+                    int r = (argb >> 16) & 0xFF;
+                    int g = (argb >> 8) & 0xFF;
+                    int b = argb & 0xFF;
+
+                    r = (int) Math.max(0, Math.min(255, r * shadow));
+                    g = (int) Math.max(0, Math.min(255, g * shadow));
+                    b = (int) Math.max(0, Math.min(255, b * shadow));
+
+                    int shaded = (alpha << 24) | (r << 16) | (g << 8) | b;
+                    result.setRGB(x, y, shaded);
+                } else {
+                    result.setRGB(x, y, argb);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private static boolean hasTransparentNeighbor(BufferedImage image, int x, int y, int w, int h) {
+        return isTransparent(image, x - 1, y, w, h) || // gauche
+            isTransparent(image, x + 1, y, w, h) || // droite
+            isTransparent(image, x, y - 1, w, h) || // haut
+            isTransparent(image, x, y + 1, w, h);   // bas
+    }
+
+    private static boolean isTransparent(BufferedImage image, int x, int y, int w, int h) {
+        if (x < 0 || y < 0 || x >= w || y >= h)
+            return true; // hors image = vide
+
+        int alpha = (image.getRGB(x, y) >> 24) & 0xFF;
+        return alpha == 0;
+    }
+
+
+
 }

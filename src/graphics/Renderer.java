@@ -42,7 +42,7 @@ public final class Renderer {
 
     private double lastOriginX = 0;
     private double lastOriginY = 0;
-    private final static double TRANSITION = 0.005;
+    private final static double TRANSITION = 0.004;
 
     static {
         Font f;
@@ -523,16 +523,23 @@ public final class Renderer {
     }
 
     private void updateOrigin(double newOriginX, double newOriginY) {
-        double difX = newOriginX - lastOriginX;
-        double difY = newOriginY - lastOriginY;
-        double coef = Math.min(1, TRANSITION * difLastRenderer);
-        if (Math.abs(difX) < 1)
-            lastOriginX = newOriginX;
-        else
-            lastOriginX += coef * difX ;
-        if (Math.abs(difY) < 1)
-            lastOriginY = newOriginY;
-        else
-            lastOriginY += coef * difY ;
+        for (int i = 0; i < difLastRenderer; i++) {
+            double difX = newOriginX - lastOriginX;
+            if (Math.abs(difX) < 2) {
+                lastOriginX = newOriginX;
+                break;
+            }
+            else
+                lastOriginX += TRANSITION * difX ;
+        }
+        for (int i = 0; i < difLastRenderer; i++) {
+            double difY = newOriginY - lastOriginY;
+            if (Math.abs(difY) < 2) {
+                lastOriginY = newOriginY;
+                break;
+            }
+            else
+                lastOriginY += TRANSITION * difY ;
+        }
     }
 }

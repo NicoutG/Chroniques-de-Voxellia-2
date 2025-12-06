@@ -37,6 +37,12 @@ public final class Renderer {
 
     private static BufferedImage frameBuffer;
     private static Graphics2D gBuffer;
+    private static long lastRenderer = 0;
+    private static long difLastRenderer = 0;
+
+    private double lastOriginX = 0;
+    private double lastOriginY = 0;
+    private final static double TRANSITION = 0.005;
 
     static {
         Font f;
@@ -70,6 +76,8 @@ public final class Renderer {
     }
 
     public void render(Graphics2D g2, int w, int h, long tick) {
+        long now = System.currentTimeMillis();
+        difLastRenderer = now - lastRenderer;
         Block[][][] blocks = world.getBlocks();
         if (blocks == null)
             return;
@@ -97,6 +105,9 @@ public final class Renderer {
             /* ── snap the camera once ───────────────────────────────────── */
             originXi = Math.floor(camX);
             originYi = Math.floor(camY);
+            updateOrigin(originXi, originYi);
+            originXi = lastOriginX;
+            originYi = lastOriginY;
 
             /* ---------- clear & prepare canvas ---------- */
             g2.setColor(Color.BLACK);
@@ -169,6 +180,7 @@ public final class Renderer {
                 g2.drawString(line, tx, ty);
             }
         }
+        lastRenderer = now;
     }
 
     private void getDrawablesLabels(int w, int h, long tick, double originXi, double originYi, Block[][][] blocks, ArrayList<Entity> entities, FaceLighting[][][] faceLightings) {
@@ -508,5 +520,19 @@ public final class Renderer {
         }
 
         return result;
+    }
+
+    private void updateOrigin(double newOriginX, double newOriginY) {
+        double difX = newOriginX - lastOriginX;
+        double difY = newOriginY - lastOriginY;
+        double coef = Math.min(1, TRANSITION * difLastRenderer);
+        if (Math.abs(difX) < 1)
+            lastOriginX = newOriginX;
+        else
+            lastOriginX += coef * difX ;
+        if (Math.abs(difY) < 1)
+            lastOriginY = newOriginY;
+        else
+            lastOriginY += coef * difY ;
     }
 }

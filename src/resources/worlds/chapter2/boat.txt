@@ -735,7 +735,7 @@ Level 17
 . . . . . . . . . . . . . . . .
 . 108/network={1,2,3}/networkExit=4 . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . .
-. 6/ambiantSound="ambient/pirate-music-loop.wav" . . . . . . . . . . . . . .
+. 6/ambientSound="ambient/pirate-music-loop.wav" . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . .
 Level 18
 . . . . . . . . . . . . . . . .

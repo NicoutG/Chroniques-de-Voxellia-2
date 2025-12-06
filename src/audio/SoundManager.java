@@ -33,7 +33,7 @@ public final class SoundManager {
 
     private static List<SoundType> eventSounds = new ArrayList<>();
 
-    private final static String SOUND = "ambiantSound";
+    private final static String SOUND = "ambientSound";
 
     public SoundManager(World world) {
 

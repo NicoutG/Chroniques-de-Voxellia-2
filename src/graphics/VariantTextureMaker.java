@@ -139,7 +139,7 @@ public class VariantTextureMaker {
                 out.setRGB(x, y, (a << 24) | (r << 16) | (g << 8) | b);
             }
         }
-        out = addShadow(out, 0.7);
+        out = addShadow(out, 0.85);
 
         return out;
     }

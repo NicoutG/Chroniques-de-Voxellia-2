@@ -50,38 +50,37 @@ public class EntityBehaviorActivableMoving extends EntityBehaviorActivable {
 
     public Vector getPosition1(Entity entity) {
         Vector position = new Vector();
-        Object state = entity.getState(X1);
-        if (state != null && state instanceof Double) {
-            position.x = (double)state;
-            state = entity.getState(Y1);
-            if (state != null && state instanceof Double) {
-                position.y = (double)state;
-                state = entity.getState(Z1);
-                if (state != null && state instanceof Double) {
-                    position.z = (double)state;
-                    return position;
-                }
-            }
+
+        Object stateX = entity.getState(X1);
+        Object stateY = entity.getState(Y1);
+        Object stateZ = entity.getState(Z1);
+
+        if (stateX instanceof Number && stateY instanceof Number && stateZ instanceof Number) {
+            position.x = ((Number) stateX).doubleValue();
+            position.y = ((Number) stateY).doubleValue();
+            position.z = ((Number) stateZ).doubleValue();
+            return position;
         }
+
         return null;
     }
 
     public Vector getPosition2(Entity entity) {
         Vector position = new Vector();
-        Object state = entity.getState(X2);
-        if (state != null && state instanceof Double) {
-            position.x = (double)state;
-            state = entity.getState(Y2);
-            if (state != null && state instanceof Double) {
-                position.y = (double)state;
-                state = entity.getState(Z2);
-                if (state != null && state instanceof Double) {
-                    position.z = (double)state;
-                    return position;
-                }
-            }
+
+        Object stateX = entity.getState(X2);
+        Object stateY = entity.getState(Y2);
+        Object stateZ = entity.getState(Z2);
+
+        if (stateX instanceof Number && stateY instanceof Number && stateZ instanceof Number) {
+            position.x = ((Number) stateX).doubleValue();
+            position.y = ((Number) stateY).doubleValue();
+            position.z = ((Number) stateZ).doubleValue();
+            return position;
         }
+
         return null;
     }
+
     
 }

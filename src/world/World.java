@@ -7,6 +7,7 @@ import objects.entity.EntityAction;
 import objects.entity.EntityType;
 import objects.entity.Player;
 import tools.Vector;
+import world.WorldLoader.SpawnPoint;
 import world.WorldLoader.WorldData;
 
 import java.awt.event.KeyEvent;
@@ -35,7 +36,7 @@ public class World {
 
     private Block[][][] blocks;
     private ArrayList<Entity> entities;
-    private ArrayList<Vector> spawnPoints;
+    private ArrayList<SpawnPoint> spawnPoints;
 
     private Map<Vector, Block> fogMap = new HashMap();
 
@@ -147,13 +148,18 @@ public class World {
     }
 
     private void spawnPlayer(int spawnPoint) {
-        Player player = getPlayer();
-        Vector position;
+        SpawnPoint spawn;
         if (spawnPoint < 0 || spawnPoints.size() <= spawnPoint)
-            position = spawnPoints.get((int) (Math.random() * spawnPoints.size()));
+            spawn = spawnPoints.get((int) (Math.random() * spawnPoints.size()));
         else
-            position = spawnPoints.get(spawnPoint);
-        player.setPosition(position.x, position.y, position.z);
+            spawn = spawnPoints.get(spawnPoint);
+
+        Player newPlayer = ENTITY_TYPES.get(spawn.playerId()).getInstancePlayer();
+        newPlayer.setPosition(spawn.x(), spawn.y(), spawn.z());
+        for (var param : spawn.parameters().entrySet())
+            newPlayer.setState(param.getKey(), param.getValue());
+
+        entities.add(newPlayer);
     }
 
     /* -------------------------- update loop -------------------------- */

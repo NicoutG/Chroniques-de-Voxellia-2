@@ -8,12 +8,19 @@ import tools.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.*;
 
 /** Loads worlds from human-readable text files. */
 public class WorldLoader {
 
     /* Small record that bundles both arrays for the World ctor */
-    public record WorldData(Block[][][] blocks, ArrayList<Entity> entities, ArrayList<Vector> spawnPoints) {}
+    public record WorldData(Block[][][] blocks, ArrayList<Entity> entities, ArrayList<SpawnPoint> spawnPoints) {}
+
+    public record SpawnPoint(int playerId, double x, double y, double z, Map<String, Object> parameters) {}
+
 
     /* ------------------------------------------------------------------ */
     /*  Public helpers                                                     */
@@ -33,56 +40,59 @@ public class WorldLoader {
         return entityTypes;
     }
 
-    /** Parses <code>WORLD_PATH + file</code> and returns blocks + entities. */
     public static WorldData loadWorld(String file, ArrayList<BlockType> blockTypes, ArrayList<EntityType> entityTypes) {
 
-        Block[][][]       blocks        = null;
-        ArrayList<Entity> entities      = new ArrayList<>();
-        ArrayList<Vector>  spawnPoints  = new ArrayList<>();
-
-        Player player = entityTypes.get(0).getInstancePlayer();
-        entities.add(player);
+        Block[][][] blocks = null;
+        ArrayList<Entity> entities = new ArrayList<>();
+        ArrayList<SpawnPoint> spawnPoints = new ArrayList<>();
 
         try {
-            String[] lines = Files.readString(Paths.get(PathManager.WORLD_PATH + file))
-                                   .split("\r?\n");
+            String json = Files.readString(Paths.get(PathManager.WORLD_PATH + file));
+            JSONObject root = new JSONObject(json);
 
-            /* ---- dimensions header ---- */
-            String[] dims = split(lines[0].trim(),' ');
-            int dimX = Integer.parseInt(dims[0]);
-            int dimY = Integer.parseInt(dims[1]);
-            int dimZ = Integer.parseInt(dims[2]);
-            blocks   = new Block[dimX][dimY][dimZ];
+            int dimX = root.getInt("dX");
+            int dimY = root.getInt("dY");
+            int dimZ = root.getInt("dZ");
 
-            /* ---- quick sanity check ---- */
-            int expected = 1 + dimZ * (dimY + 1);
-            if (lines.length != expected)
-                throw new IllegalStateException("Malformed world file " + file);
+            blocks = new Block[dimX][dimY][dimZ];
 
-            /* ---- walk through every layer ---- */
-            int line = 1;
+            JSONArray layers = root.getJSONArray("blocks");
+
             for (int z = 0; z < dimZ; z++) {
-                line++;                       // skip blank separator
-                for (int y = 0; y < dimY; y++) {
+                JSONArray layer = layers.getJSONArray(z);
 
-                    String[] toks = split(lines[line++].trim(),' ');
-                    if (toks.length != dimX)
-                        throw new IllegalStateException("Malformed row in " + file);
+                for (int y = 0; y < dimY; y++) {
+                    JSONArray row = layer.getJSONArray(y);
 
                     for (int x = 0; x < dimX; x++) {
-                        String tok = toks[x];
 
-                        if (tok.equals("."))                     // air
-                            blocks[x][y][z] = null;
-                        else if (tok.length() > 0 && (tok.charAt(0) == 'p' || tok.charAt(0) == 'P')) {   // spawn point
-                            /* spawn point → remember coords, store AIR */
-                            blocks[x][y][z] = null;
-                            loadSpawnPoint(tok.substring(1), x, y, z, spawnPoints, player);
+                        Object cell = row.isNull(x) ? null : row.get(x);
 
-                        } else if (tok.length() > 0 && (tok.charAt(0) == 'e' || tok.charAt(0) == 'E'))   // block
-                            entities.add(loadEntity(tok.substring(1), x+0.5,y+0.5,z+0.5, entityTypes));
-                        else
-                            blocks[x][y][z] = loadBlock(tok, blockTypes);
+                        if (cell == null) {
+                            blocks[x][y][z] = null;
+                            continue;
+                        }
+
+                        JSONObject obj = (JSONObject) cell;
+
+                        String type = obj.getString("type");
+                        int id = obj.getInt("id");
+                        JSONArray params = obj.getJSONArray("parameters");
+
+                        if (type.equals("block")) {
+                            Block block = blockTypes.get(id).getInstance();
+                            applyParameters(block, params);
+                            blocks[x][y][z] = block;
+                        }
+                        else if (type.equals("entity")) {
+                            Entity entity = entityTypes.get(id).getInstance(x + 0.5, y + 0.5, z + 0.5);
+                            applyParameters(entity, params);
+                            entities.add(entity);
+                        }
+                        else if (type.equals("player")) {
+                            Map<String, Object> parameters = parseParameters(params);
+                            spawnPoints.add(new SpawnPoint(id, x+0.5, y+0.5, z+0.5, parameters));
+                        }
                     }
                 }
             }
@@ -95,118 +105,74 @@ public class WorldLoader {
     }
 
     /* ------------------------------------------------------------------ */
-    /*  Internal helpers                                                   */
+    /*  Apply parameters from JSON                                         */
     /* ------------------------------------------------------------------ */
 
+    private static void applyParameters(ObjectInstance instance, JSONArray params) {
 
-    private static void loadSpawnPoint(String token, double x, double y, double z, ArrayList<Vector> spawnPoints, Player player) {
-        spawnPoints.add(new Vector(x+0.5,y+0.5,z+0.5));
-        String[] parts = split(token,'/');
-        setStates(player, parts);
-    }
+        for (int i = 0; i < params.length(); i++) {
+            JSONObject obj = params.getJSONObject(i);
 
-    private static Block loadBlock(String token, ArrayList<BlockType> blockTypes) {
-        String[] parts = split(token,'/');
-        Block block = blockTypes.get(Integer.parseInt(parts[0])).getInstance();
-        setStates(block, parts);
-        return block;
-    }
+            for (String key : obj.keySet()) {
+                Object value = obj.get(key);
 
-    private static Entity loadEntity(String token, double x, double y, double z, ArrayList<EntityType> entityTypes) {
-
-        String[] parts = split(token,'/');
-        Entity entity = entityTypes.get(Integer.parseInt(parts[0])).getInstance(x,y,z);
-        setStates(entity, parts);
-        return entity;
-    }
-
-    private static void setStates(ObjectInstance instance, String ... states) {
-        if (states != null) {
-            for (int i = 1; i < states.length; i++) {
-                String[] nv = split(states[i],'=');
-                setState(instance, nv[0], nv[1]);
+                if (value instanceof JSONArray)
+                    instance.setState(key, jsonArrayToJavaArray((JSONArray) value));
+                else
+                    instance.setState(key, value);
             }
         }
     }
 
-    private static void setState(ObjectInstance instance, String name, String value) {
-        Object cur = instance.getState(name);
-        if (cur instanceof Double) instance.setState(name, Double.parseDouble(value));
-        else if (cur instanceof Integer) instance.setState(name, Integer.parseInt(value));
-        else if (cur instanceof Boolean) instance.setState(name, Boolean.parseBoolean(value));
-        else if (cur instanceof double[]) instance.setState(name, parseDoubleArray(value));
-        else if (cur instanceof int[]) instance.setState(name, parseIntArray(value));
-        else if (cur instanceof boolean[]) instance.setState(name, parseBooleanArray(value));
-        else if (cur instanceof String[]) instance.setState(name, parseStringArray(value));
-        else instance.setState(name, convertToString(value));
-    }
+    private static Object jsonArrayToJavaArray(JSONArray arr) {
+        if (arr.length() == 0) 
+            return new Object[0];
 
-    private static double[] parseDoubleArray(String input) {
-        input = input.replaceAll("[{}\\s\"]", "");
-        if (input.isEmpty()) return new double[0];
+        Object first = arr.get(0);
 
-        String[] parts = input.split(",");
-        double[] result = new double[parts.length];
-        for (int i = 0; i < parts.length; i++) {
-            result[i] = Double.parseDouble(parts[i]);
+        if (first instanceof Integer) {
+            int[] out = new int[arr.length()];
+            for (int i = 0; i < arr.length(); i++) 
+                out[i] = arr.getInt(i);
+            return out;
         }
-        return result;
-    }
-
-    private static int[] parseIntArray(String input) {
-        input = input.replaceAll("[{}\\s\"]", "");
-        if (input.isEmpty()) return new int[0];
-
-        String[] parts = input.split(",");
-        int[] result = new int[parts.length];
-        for (int i = 0; i < parts.length; i++) {
-            result[i] = Integer.parseInt(parts[i]);
+        if (first instanceof Double) {
+            double[] out = new double[arr.length()];
+            for (int i = 0; i < arr.length(); i++) 
+                out[i] = arr.getDouble(i);
+            return out;
         }
-        return result;
-    }
-
-    private static boolean[] parseBooleanArray(String input) {
-        input = input.replaceAll("[{}\\s\"]", "");
-        if (input.isEmpty()) return new boolean[0];
-
-        String[] parts = input.split(",");
-        boolean[] result = new boolean[parts.length];
-        for (int i = 0; i < parts.length; i++) {
-            result[i] = Boolean.parseBoolean(parts[i]);
+        if (first instanceof Boolean) {
+            boolean[] out = new boolean[arr.length()];
+            for (int i = 0; i < arr.length(); i++) 
+                out[i] = arr.getBoolean(i);
+            return out;
         }
-        return result;
+
+        String[] out = new String[arr.length()];
+        for (int i = 0; i < arr.length(); i++) 
+            out[i] = arr.get(i).toString();
+
+        return out;
     }
 
-    private static String[] parseStringArray(String input) {
-        input = input.replaceAll("[{}\"]", "");
-        if (input.isEmpty()) return new String[0];
-        String[] results = split(input,',');
-        for (int i = 0; i < results.length; i++)
-            results[i] = convertToString(results[i]);
-        return results;
-    }
+    private static Map<String, Object> parseParameters(JSONArray jsonParams) {
+        Map<String, Object> params = new HashMap<>();
 
-    private static String convertToString(String text) {
-        if (text.charAt(0) == '"' && text.charAt(text.length() - 1) == '"')
-            return text.substring(1, text.length() - 1);
-        return text;
-    }
+        for (int i = 0; i < jsonParams.length(); i++) {
+            JSONObject obj = jsonParams.getJSONObject(i);
 
-    private static String[] split(String text, char separator) {
-        ArrayList<String> texts = new ArrayList<>();
-        boolean isInString = false;
-        int begin = 0;
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == separator && !isInString) {
-                texts.add(text.substring(begin, i));
-                begin = i + 1;
+            for (String key : obj.keySet()) {
+                Object value = obj.get(key);
+
+                if (value instanceof JSONArray)
+                    params.put(key, jsonArrayToJavaArray((JSONArray) value));
+                else
+                    params.put(key, value);
             }
-            if(text.charAt(i) == '"')
-                isInString = !isInString;
         }
-        if(begin < text.length())
-            texts.add(text.substring(begin, text.length()));
-        return texts.toArray(new String[0]);
+        return params;
     }
+
 
 }

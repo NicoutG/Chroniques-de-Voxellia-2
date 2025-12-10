@@ -12,7 +12,8 @@ public class Player extends Entity {
 
     @Override
     public void onDeath(World world) {
-        SoundManager.playSound(SoundType.DEATH);
         super.onDeath(world);
+        SoundManager.playSound(SoundType.DEATH);
+        world.reloadWorld();
     }
 }

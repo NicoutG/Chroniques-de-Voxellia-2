@@ -25,10 +25,19 @@ public class ObjectInstance<
     private long tickFrame0 = 0;
 
     private static final String COLOR = "color";
+    private static final String TYPE = "type";
 
     public ObjectInstance(T type) {
         this.type = type;
         setState(COLOR, new int[0]);
+    }
+
+    public void onStart() {
+        int type = getType();
+        if (0 <= type) {
+            setIndexTexture(type);
+            setIndexCollision(type);
+        }
     }
 
     public String getName() {
@@ -155,5 +164,12 @@ public class ObjectInstance<
 
     public double getAdherency() {
         return type.getAdherency();
+    }
+
+    public int getType() {
+        Object state = getState(TYPE);
+        if (state != null && state instanceof Integer)
+            return (int)state;
+        return -1;
     }
 }

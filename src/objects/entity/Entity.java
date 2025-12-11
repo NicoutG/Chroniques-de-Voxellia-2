@@ -136,6 +136,7 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
     //#region behavior events
 
     public void onStart(World world) {
+        onStart();
         executeEvent(e -> e.onStart(world,this));
     }
 

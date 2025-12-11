@@ -9,9 +9,9 @@ import objects.property.Property;
 public class EntityType extends ObjectType<Entity, EntityBehavior>{
     private double speed = 0.2;
 
-    public EntityType(String name, Texture[] textures, double opacity, Collision[] collisions, Property[] properties, EntityBehavior[] behaviors) {
-        super(name, textures, opacity, collisions, properties, behaviors);
-    }
+    // public EntityType(String name, Texture[] textures, double opacity, Collision[] collisions, Property[] properties, EntityBehavior[] behaviors) {
+    //     super(name, textures, opacity, collisions, properties, behaviors);
+    // }
 
     public EntityType(String name, Texture[] textures, Collision[] collisions, Property[] properties, EntityBehavior[] behaviors) {
         super(name,textures,collisions,properties,behaviors);

@@ -15,6 +15,7 @@ public class Block extends ObjectInstance<BlockType, Block, BlockBehavior>{
     //#region behavior events
 
     public void onStart(World world, Vector position) {
+        onStart();
         executeEvent(b -> b.onStart(world,this,position));
     }
 

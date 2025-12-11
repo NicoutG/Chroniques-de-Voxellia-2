@@ -1,19 +1,14 @@
-package graphics;
+package graphics.variantTexture;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
+import graphics.ShapeCollisionLink;
+import graphics.Texture;
 import graphics.shape.Shape;
-import objects.block.BlockType;
-import objects.block.blockBehavior.BlockBehavior;
-import objects.block.blockBehavior.BlockBehaviorVariant;
 import objects.collision.Collision;
-import objects.collision.CollisionList;
-import objects.property.Property;
 
 public class VariantTextureMaker {
+
     private final static int[] LEFT_TEXTURE_MAP = {
         166,113,114,115,116,117,230,177,178,179,180,181,182,129,130,131,
         182,129,130,131,132,133,134,81,194,195,196,197,198,145,146,147,
@@ -163,62 +158,30 @@ public class VariantTextureMaker {
         return result;
     }
 
-    public static BlockType createBlockType(String name, Texture texture, Property[] properties, BlockBehavior[] behaviors, Shape ... variants) {
+    public static Texture[] createTextures(Texture texture, Shape ... variants) {
         if (variants == null || variants.length == 0)
-            return new BlockType(name, new Texture[]{texture},null, properties, behaviors);
+            return new Texture[] {texture};
 
         BufferedImage[] cubes = texture.getAllImages();
         int ticksPerFrame = texture.getTicksPerFrame();
         Texture[] textures = new Texture[variants.length + 1];
         textures[0] = texture;
-        Collision[] collisions = new Collision[variants.length + 1];
-        collisions[0] = CollisionList.CUBE;
         for (int i = 0; i < variants.length; i++) {
             BufferedImage[] images = new BufferedImage[cubes.length];
             Shape variant = variants[i];
             for (int j = 0; j < cubes.length; j++)
                 images[j] = createVariantTexture(cubes[j], variant);
             textures[i + 1] = new Texture(variant, images, ticksPerFrame);
-            collisions[i + 1] = ShapeCollisionLink.getCollision(variant);
         }
-        BlockType blockType = new BlockType(name, textures, collisions, properties, behaviors);
-        blockType.addBehavior(new BlockBehaviorVariant());
-        return blockType;
+        return textures;
     }
 
-    public static BlockType createBlockType(String name, Texture texture, Property[] properties, BlockBehavior[] behaviors, Shape[]... variants)
-    {
-        List<Shape> shapes = new ArrayList<>();
-        for (Shape[] arr : variants)
-            shapes.addAll(Arrays.asList(arr));
-
-        return createBlockType(name, texture, properties, behaviors, shapes.toArray(new Shape[0]));
+    public static Collision[] getCollisions(Texture[] textures) {
+        Collision[] collisions = new Collision[textures.length];
+        for (int i = 0; i < textures.length; i++) 
+            collisions[i] = ShapeCollisionLink.getCollision(textures[i].getShape());
+        return collisions;
     }
-
-    public static BlockType createBlockType(String name, Texture texture, Shape ... variants) {
-        return createBlockType(name, texture, null, null, variants);
-    }
-
-    public static BlockType createBlockType(String name, Texture texture, Shape[]... variants) {
-        return createBlockType(name, texture, null, null, variants);
-    }
-
-    public static BlockType createBlockType(String name, String texturePath, Property[] properties, BlockBehavior[] behaviors, Shape ... variants) {
-        return createBlockType(name, Texture.createBasicTexture(texturePath), properties, behaviors, variants);
-    }
-
-    public static BlockType createBlockType(String name, String texturePath, Property[] properties, BlockBehavior[] behaviors, Shape[]... variants) {
-        return createBlockType(name, Texture.createBasicTexture(texturePath), properties, behaviors, variants);
-    }
-
-    public static BlockType createBlockType(String name, String texturePath, Shape ... variants) {
-        return createBlockType(name, texturePath, null, null, variants);
-    }
-
-    public static BlockType createBlockType(String name, String texturePath, Shape[]... variants) {
-        return createBlockType(name, texturePath, null, null, variants);
-    }
-
 
     /* ============================================
     * Help Functions

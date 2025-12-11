@@ -66,7 +66,10 @@ public class TemplateListCreator {
                 for (int i = 0; i < block.getNbTextures(); i++) {
                     BufferedImage img = block.getTexture(i).full(0);
                     String base64 = imageToBase64(img);
-                    writer.write("<img src='data:image/png;base64," + base64 + "'>");
+                    String fileName = block.getName() + "_texture_" + i + ".png";
+                    writer.write("<a href='data:image/png;base64," + base64 + "' download='" + fileName + "'>"
+                            + "<img src='data:image/png;base64," + base64 + "'>"
+                            + "</a>");
                     count++;
                     if (count % NB_IMAGES_PER_LINE == 0) writer.write("<br>"); // retour à la ligne toutes les 8 images
                 }
@@ -174,7 +177,10 @@ public class TemplateListCreator {
                 for (int i = 0; i < entity.getNbTextures(); i++) {
                     BufferedImage img = entity.getTexture(i).getShape().getGlobalMask();
                     String base64 = imageToBase64(img);
-                    writer.write("<img src='data:image/png;base64," + base64 + "'>");
+                    String fileName = entity.getName() + "_texture_" + i + ".png";
+                    writer.write("<a href='data:image/png;base64," + base64 + "' download='" + fileName + "'>"
+                            + "<img src='data:image/png;base64," + base64 + "'>"
+                            + "</a>");
                     count++;
                     if (count % NB_IMAGES_PER_LINE == 0) writer.write("<br>");
                 }

@@ -1,6 +1,7 @@
 package objects.entity;
 
 import java.awt.image.BufferedImage;
+import java.util.function.Consumer;
 
 import audio.SoundType;
 import graphics.Texture;
@@ -107,5 +108,10 @@ public enum EntityTemplate {
         for (int i = 0; i < entityTypes.length; i++)
             res += i + " " + entityTypes[i].entityType.getName() + "\n";
         return res;
+    }
+
+    public static <T> T apply(T obj, Consumer<T> fn) {
+        fn.accept(obj);
+        return obj;
     }
 }

@@ -29,7 +29,6 @@ public class ObjectInstance<
 
     public ObjectInstance(T type) {
         this.type = type;
-        setState(COLOR, new int[0]);
     }
 
     public void onStart() {

@@ -1,5 +1,7 @@
 package objects.block;
 
+import java.util.function.Consumer;
+
 import audio.SoundType;
 import graphics.Texture;
 import graphics.variantTexture.VariantBlockMaker;
@@ -254,10 +256,24 @@ public enum BlockTemplate {
         BOOK_SHELVE_1(new BlockType("bookShelve1", "book-shelve-1.png")),
         BOOK_SHELVE_2(new BlockType("bookShelve2", "book-shelve-2.png")),
 
-        GLASS(new BlockType("glassBlock", 
-                new Texture[] { new Texture(ShapeList.TRANSPARENT_CUBE, PathManager.loadImage("glass-block.png")) },
-                null
-        )),
+        GLASS(
+                apply(
+                        VariantBlockMaker.createBlockType(
+                                "glassBlock",
+                                new Texture(
+                                        ShapeList.TRANSPARENT_CUBE,
+                                        PathManager.loadImage("glass-block.png")
+                                ),
+                                ShapeList.BORDERS
+                                ),
+                        block -> 
+                {
+                        block.setColor(new ColorRGB(1, 0, 0));
+                        block.setOpacity(0.1);
+                        block.setAllowLight(Face.LEFT.index, true);
+                        block.setAllowLight(Face.RIGHT.index, true);
+                        block.setAllowLight(Face.TOP.index, true);
+                })),
         STAINED_GLASS_RED_LEFT(new BlockType("stainedGlassRedLeft",
                         new Texture[] { new Texture(ShapeList.BORDER_LEFT,
                                         PathManager.loadImage("stained-glass/stained-glass-red-left.png")) },
@@ -654,6 +670,62 @@ public enum BlockTemplate {
                         new Property[] { new Property(PropertyList.NO_COLLISION) },
                         new BlockBehavior[] {
                                         new BlockBehaviorApplyForce(1,0,0) })),
+
+        STAINED_GLASS_RED(
+                apply(
+                        VariantBlockMaker.createBlockType(
+                                "stainedGlassRed",
+                                new Texture(
+                                        ShapeList.TRANSPARENT_CUBE,
+                                        PathManager.loadImage("stained-glass/stained-glass-red.png")
+                                ),
+                                ShapeList.BORDERS
+                                ),
+                        block -> 
+                {
+                        block.setColor(new ColorRGB(1, 0, 0));
+                        block.setOpacity(0.1);
+                        block.setAllowLight(Face.LEFT.index, true);
+                        block.setAllowLight(Face.RIGHT.index, true);
+                        block.setAllowLight(Face.TOP.index, true);
+                })),
+        STAINED_GLASS_BLUE(
+                apply(
+                        VariantBlockMaker.createBlockType(
+                                "stainedGlassBlue",
+                                new Texture(
+                                        ShapeList.TRANSPARENT_CUBE,
+                                        PathManager.loadImage("stained-glass/stained-glass-blue.png")
+                                ),
+                                ShapeList.BORDERS
+                                ),
+                        block -> 
+                {
+                        block.setColor(new ColorRGB(0, 0, 1));
+                        block.setOpacity(0.1);
+                        block.setAllowLight(Face.LEFT.index, true);
+                        block.setAllowLight(Face.RIGHT.index, true);
+                        block.setAllowLight(Face.TOP.index, true);
+                })),
+        STAINED_GLASS_GREEN(
+                apply(
+                        VariantBlockMaker.createBlockType(
+                                "stainedGlassGreen",
+                                new Texture(
+                                        ShapeList.TRANSPARENT_CUBE,
+                                        PathManager.loadImage("stained-glass/stained-glass-green.png")
+                                ),
+                                ShapeList.BORDERS
+                                ),
+                        block -> 
+                {
+                        block.setColor(new ColorRGB(0, 1, 0));
+                        block.setOpacity(0.1);
+                        block.setAllowLight(Face.LEFT.index, true);
+                        block.setAllowLight(Face.RIGHT.index, true);
+                        block.setAllowLight(Face.TOP.index, true);
+                })),
+
         
         ;
 
@@ -669,4 +741,10 @@ public enum BlockTemplate {
                         res += i + " " + blockTypes[i].blockType.getName() + "\n";
                 return res;
         }
+
+        public static <T> T apply(T obj, Consumer<T> fn) {
+                fn.accept(obj);
+                return obj;
+        }
+
 }

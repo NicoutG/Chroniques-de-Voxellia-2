@@ -29,8 +29,6 @@ public enum BlockTemplate {
                  },
                 null
         )),
-        RED_GOLDEN_CARPET2(new BlockType("redGoldenCarpet2", "red-golden-carpet-2-block.png")),
-        RED_GOLDEN_CARPET3(new BlockType("redGoldenCarpet3", "red-golden-carpet-3-block.png")),
 
         BLUE_BLOCK(VariantBlockMaker.createBlockType("blueBlock", "blue-block.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS, ShapeList.SLABS)),
         BLUE_BLOCK_BROKEN(new BlockType("blueBlockBroken", "blue-block-broken.png")),
@@ -46,7 +44,6 @@ public enum BlockTemplate {
                 },
                 null
         )),
-        BRICK2(new BlockType("blockBrick2", "block-brick-2.png")),
         BROKEN(new BlockType("blockBroken", "block-broken.png",
                         null,
                         new Property[] { new Property(PropertyList.DESTRUCTIBLE)},
@@ -58,7 +55,6 @@ public enum BlockTemplate {
                  },
                 null
         )),
-        HOLE2(new BlockType("blockHole2", "block-hole-2.png")),
         LINES(new BlockType("blockLines", "block-lines.png")),
         BLOCK_FLOWER(new BlockType("blockFlower", "block-flower.png")),
         BLOCK_CLUBS(new BlockType("blockClubs", "block-clubs.png")),
@@ -68,7 +64,6 @@ public enum BlockTemplate {
         YELLOW_BRICKS(VariantBlockMaker.createBlockType("yellowBricks", "yellow-bricks.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS, ShapeList.SLABS)),
         
         MOSSY1(VariantBlockMaker.createBlockType("blockMossy1", "block-mossy-1.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS, ShapeList.SLABS)),
-        MOSSY2(VariantBlockMaker.createBlockType("blockMossy2", "block-mossy-2.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS, ShapeList.SLABS)),
         BLOCK_COLUMN_MOSSY(VariantBlockMaker.createBlockType("blockColumnMossy", "block-column-mossy.png", ShapeList.COLUMN)),
 
         HALF_GRASS1(new BlockType("blockHalfGrass1",
@@ -87,26 +82,6 @@ public enum BlockTemplate {
                  },
                 null
         )),
-        HALF_GRASS2(new BlockType("blockHalfGrass2", "block-half-grass-2.png")),
-        HALF_GRASS3(new BlockType("blockHalfGrass3", "block-half-grass-3.png")),
-        HALF_GRASS4(new BlockType("blockHalfGrass4", "block-half-grass-4.png")),
-        BLOCK_GRASS_CORNER_OUT_LEFT(new BlockType("blockGrassCornerOuterLeft", "block-grass-corner-outer-left.png")),
-        BLOCK_GRASS_CORNER_OUT_RIGHT(new BlockType("blockGrassCornerOuterRight", "block-grass-corner-outer-right.png")),
-        BLOCK_GRASS_CORNER_OUT_TOP(new BlockType("blockGrassCornerOuterTop", "block-grass-corner-outer-top.png")),
-        BLOCK_GRASS_CORNER_OUT_BOTTOM(
-                        new BlockType("blockGrassCornerOuterBottom", "block-grass-corner-outer-bottom.png")),
-        BLOCK_GRASS_CORNER_IN_LEFT(new BlockType("blockGrassCornerInnerLeft", "block-grass-corner-inner-left.png")),
-        BLOCK_GRASS_CORNER_IN_RIGHT(new BlockType("blockGrassCornerInnerRight", "block-grass-corner-inner-right.png")),
-        BLOCK_GRASS_CORNER_IN_TOP(new BlockType("blockGrassCornerInnerTop", "block-grass-corner-inner-top.png")),
-        BLOCK_GRASS_CORNER_IN_BOTTOM(
-                        new BlockType("blockGrassCornerInnerBottom", "block-grass-corner-inner-bottom.png")),
-
-        GRASS_HALF_SLAB_1(new BlockType("grassHalfSlab1", "grass-half-slab-1.png")),
-        GRASS_HALF_SLAB_2(new BlockType("grassHalfSlab2", "grass-half-slab-2.png")),
-        GRASS_SLAB(new BlockType("grassSlab", "grass-slab.png")),
-        GRASS_SLABS(new BlockType("grassSlabs", "grass-slabs.png")),
-        GRASS_HALF_SLAB_3(new BlockType("GrassHalfSlab3", "grass-half-slab-3.png")),
-        GRASS_HALF_SLAB_4(new BlockType("GrassHalfSlab4", "grass-half-slab-4.png")),
         GRASS(new BlockType("grassBlock",
                 new Texture[] { Texture.createBasicTexture("grass.png"),
                         Texture.createBasicTexture("grass-half-slab-1.png"),
@@ -138,18 +113,12 @@ public enum BlockTemplate {
                  },
                 null
         )),
-        DISTORTED_BLOCK_GREEN(new BlockType("distortedBlockGreen", "distorted-block-green.png")),
-        DISTORTED_BLOCK_ORANGE(new BlockType("distortedBlockOrange", "distorted-block-orange.png")),
-        DISTORTED_BLOCK_PURPLE(new BlockType("distortedBlockPurple", "distorted-block-purple.png")),
-        DISTORTED_BLOCK_RED(new BlockType("distortedBlockRed", "distorted-block-red.png")),
-        DISTORTED_BLOCK_YELLOW(new BlockType("distortedBlockYellow", "distorted-block-yellow.png")),
         GRAVEL_DARK(new BlockType("gravelDark",
                 new Texture[] { Texture.createBasicTexture("gravel-dark.png"),
                         Texture.createBasicTexture("gravel.png")
                  },
                 null
         )),
-        GRAVEL(new BlockType("gravel", "gravel.png")),
 
         STONE(VariantBlockMaker.createBlockType("stone", "stone.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS, ShapeList.SLABS)),
         STONE_MOSSY(VariantBlockMaker.createBlockType("stoneMossy", "stone-mossy.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS, ShapeList.SLABS)),
@@ -249,25 +218,7 @@ public enum BlockTemplate {
                         new Collision[] { CollisionList.BARRIER_LEFT, CollisionList.BARRIER_RIGHT, CollisionList.BARRIER_HORIZONTAL },
                         null,
                         null)),
-        GRID_RIGHT(new BlockType("gridRight",
-                        new Texture[] { new Texture(ShapeList.BORDER_RIGHT,
-                                        PathManager.loadImage("grids/grid-right.png")) },
-                        new Collision[] { CollisionList.BARRIER_RIGHT },
-                        null,
-                        null)),
-        GRID_HORIZONTAL(new BlockType("gridHorizontal",
-                        new Texture[] { new Texture(ShapeList.BORDER_HORIZONTAL,
-                                        PathManager.loadImage("grids/grid-horizontal.png")) },
-                        new Collision[] { CollisionList.BARRIER_HORIZONTAL },
-                        null,
-                        null)),
 
-        SIGN_LEFT(new BlockType("SignLeft",
-                        new Texture[] { new Texture(ShapeList.SIGN_LEFT, PathManager.loadImage("sign-left.png"))
-                        },
-                        null,
-                        null,
-                        new BlockBehavior[] { new BlockBehaviorText() })),
         SIGN_RIGHT(new BlockType("SignRight",
                         new Texture[] { new Texture(ShapeList.SIGN_RIGHT, PathManager.loadImage("sign-right.png")),
                                 new Texture(ShapeList.SIGN_LEFT, PathManager.loadImage("sign-left.png")), 
@@ -283,12 +234,6 @@ public enum BlockTemplate {
                         null,
                         new Property[] {new Property(PropertyList.NO_COLLISION), new Property("floor")},
                         new BlockBehavior[] { new BlockBehaviorText() })),
-        FRAME_RIGHT(new BlockType("frameRight",
-                        new Texture[] { new Texture(ShapeList.INSIDE, PathManager.loadImage("frame-right.png"))
-                        },
-                        null,
-                        new Property[] {new Property(PropertyList.NO_COLLISION), new Property("floor")},
-                        new BlockBehavior[] { new BlockBehaviorText() })),
 
         ACACIA_LOG(VariantBlockMaker.createBlockType("acaciaLog", "wood/acacia-log.png", ShapeList.COLUMN)),
         OAK_LOG(VariantBlockMaker.createBlockType("oakLog", "wood/oak-log.png", ShapeList.COLUMN)),
@@ -298,18 +243,12 @@ public enum BlockTemplate {
         WOOD_OAK(VariantBlockMaker.createBlockType("woodOak", "wood/wood-oak.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BARRIERS, ShapeList.SLABS)),
         WOOD_PINE(VariantBlockMaker.createBlockType("woodPine", "wood/wood-pine.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BARRIERS, ShapeList.SLABS)),
         WOOD_WHITE(VariantBlockMaker.createBlockType("woodWhite", "wood/wood-white.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BARRIERS, ShapeList.SLABS)),
-        
 
         HEDGE(new BlockType("hedge",
                 new Texture[] { Texture.createBasicTexture("hedge.png"),
                         Texture.createBasicTexture("leaves.png")
                 },
                 null,
-                new Property[] { new Property(PropertyList.BURNABLE) },
-                null
-        )),
-        LEAVES(new BlockType("leaves", "leaves.png",
-        null,
                 new Property[] { new Property(PropertyList.BURNABLE) },
                 null
         )),
@@ -321,8 +260,6 @@ public enum BlockTemplate {
                  },
                 null
         )),
-        BOOK_SHELVE_1(new BlockType("bookShelve1", "book-shelve-1.png")),
-        BOOK_SHELVE_2(new BlockType("bookShelve2", "book-shelve-2.png")),
 
         GLASS(
                 apply(
@@ -342,82 +279,60 @@ public enum BlockTemplate {
                         block.setAllowLight(Face.RIGHT.index, true);
                         block.setAllowLight(Face.TOP.index, true);
                 })),
-        STAINED_GLASS_RED_LEFT(new BlockType("stainedGlassRedLeft",
-                        new Texture[] { new Texture(ShapeList.BORDER_LEFT,
-                                        PathManager.loadImage("stained-glass/stained-glass-red-left.png")) },
-                        new Collision[] { CollisionList.BARRIER_LEFT },
-                        null,
-                        null) {
+        STAINED_GLASS_RED(
+                apply(
+                        VariantBlockMaker.createBlockType(
+                                "stainedGlassRed",
+                                new Texture(
+                                        ShapeList.TRANSPARENT_CUBE,
+                                        PathManager.loadImage("stained-glass/stained-glass-red.png")
+                                ),
+                                ShapeList.BORDERS
+                                ),
+                        block -> 
                 {
-                        setColor(new ColorRGB(1, 0, 0));
-                        setOpacity(0.1);
-                        setAllowLight(Face.RIGHT.index,true);
-                }
-        }),
-        STAINED_GLASS_RED_RIGHT(new BlockType("stainedGlassRedRight",
-                        new Texture[] { new Texture(ShapeList.BORDER_RIGHT,
-                                        PathManager.loadImage("stained-glass/stained-glass-red-right.png")) },
-                        new Collision[] { CollisionList.BARRIER_RIGHT },
-                        null,
-                        null) {
+                        block.setColor(new ColorRGB(1, 0, 0));
+                        block.setOpacity(0.1);
+                        block.setAllowLight(Face.LEFT.index, true);
+                        block.setAllowLight(Face.RIGHT.index, true);
+                        block.setAllowLight(Face.TOP.index, true);
+                })),
+        STAINED_GLASS_BLUE(
+                apply(
+                        VariantBlockMaker.createBlockType(
+                                "stainedGlassBlue",
+                                new Texture(
+                                        ShapeList.TRANSPARENT_CUBE,
+                                        PathManager.loadImage("stained-glass/stained-glass-blue.png")
+                                ),
+                                ShapeList.BORDERS
+                                ),
+                        block -> 
                 {
-                        setColor(new ColorRGB(1, 0, 0));
-                        setOpacity(0.1);
-                        setAllowLight(Face.LEFT.index,true);
-                }
-        }),
-        STAINED_GLASS_BLUE_LEFT(new BlockType("stainedGlassBlueLeft",
-                        new Texture[] { new Texture(ShapeList.BORDER_LEFT,
-                                        PathManager.loadImage("stained-glass/stained-glass-blue-left.png")) },
-                        new Collision[] { CollisionList.BARRIER_LEFT },
-                        null,
-                        null) {
+                        block.setColor(new ColorRGB(0, 0, 1));
+                        block.setOpacity(0.1);
+                        block.setAllowLight(Face.LEFT.index, true);
+                        block.setAllowLight(Face.RIGHT.index, true);
+                        block.setAllowLight(Face.TOP.index, true);
+                })),
+        STAINED_GLASS_GREEN(
+                apply(
+                        VariantBlockMaker.createBlockType(
+                                "stainedGlassGreen",
+                                new Texture(
+                                        ShapeList.TRANSPARENT_CUBE,
+                                        PathManager.loadImage("stained-glass/stained-glass-green.png")
+                                ),
+                                ShapeList.BORDERS
+                                ),
+                        block -> 
                 {
-                        setColor(new ColorRGB(0, 0, 1));
-                        setOpacity(0.1);
-                        setAllowLight(Face.RIGHT.index,true);
-                }
-        }),
-        STAINED_GLASS_BLUE_RIGHT(new BlockType("stainedGlassBlueRight",
-                        new Texture[] { new Texture(ShapeList.BORDER_RIGHT,
-                                        PathManager.loadImage("stained-glass/stained-glass-blue-right.png")) },
-                        new Collision[] { CollisionList.BARRIER_RIGHT },
-                        null,
-                        null) {
-                {
-                        setColor(new ColorRGB(0, 0, 1));
-                        setOpacity(0.1);
-                        setAllowLight(Face.LEFT.index,true);
-                }
-        }),
-        STAINED_GLASS_GREEN_LEFT(new BlockType("stainedGlassGreenLeft",
-                        new Texture[] {
-                                        new Texture(ShapeList.BORDER_LEFT,
-                                                        PathManager.loadImage(
-                                                                        "stained-glass/stained-glass-green-left.png")) },
-                        new Collision[] { CollisionList.BARRIER_LEFT },
-                        null,
-                        null) {
-                {
-                        setColor(new ColorRGB(0, 1, 0));
-                        setOpacity(0.1);
-                        setAllowLight(Face.RIGHT.index,true);
-                }
-        }),
-        STAINED_GLASS_GREEN_RIGHT(new BlockType("stainedGlassGreenRight",
-                        new Texture[] {
-                                        new Texture(ShapeList.BORDER_RIGHT,
-                                                        PathManager.loadImage(
-                                                                        "stained-glass/stained-glass-green-right.png")) },
-                        new Collision[] { CollisionList.BARRIER_RIGHT },
-                        null,
-                        null) {
-                {
-                        setColor(new ColorRGB(0, 1, 0));
-                        setOpacity(0.1);
-                        setAllowLight(Face.LEFT.index,true);
-                }
-        }),
+                        block.setColor(new ColorRGB(0, 1, 0));
+                        block.setOpacity(0.1);
+                        block.setAllowLight(Face.LEFT.index, true);
+                        block.setAllowLight(Face.RIGHT.index, true);
+                        block.setAllowLight(Face.TOP.index, true);
+                })),
 
         LEVER(new BlockType("lever",
                         new Texture[] { new Texture(ShapeList.LEVER_OFF, PathManager.loadImage("lever/lever-F.png")),
@@ -556,72 +471,6 @@ public enum BlockTemplate {
                          },
                         null,
                         null)),
-        ROOF_TILES_RED2(new BlockType("roofTilesRed2",
-                        new Texture[] { new Texture(ShapeList.SLOPE2,
-                                        PathManager.loadImage("roofTilesRed/roof-tiles-red2.png")) },
-                        new Collision[] { CollisionList.STAIR2 },
-                        null,
-                        null)),
-        ROOF_TILES_RED_ANGLE1(new BlockType("roofTilesRedAngle1",
-                        new Texture[] { new Texture(ShapeList.SLOPE_ANGLE1,
-                                        PathManager.loadImage("roofTilesRed/roof-tiles-red-angle1.png")) },
-                        new Collision[] { CollisionList.STAIR_ANGLE1 },
-                        null,
-                        null)),
-        ROOF_TILES_RED_ANGLE2(new BlockType("roofTilesRedAngle2",
-                        new Texture[] { new Texture(ShapeList.SLOPE_ANGLE2,
-                                        PathManager.loadImage("roofTilesRed/roof-tiles-red-angle2.png")) },
-                        new Collision[] { CollisionList.STAIR_ANGLE2 },
-                        null,
-                        null)),
-        ROOF_TILES_RED_ANGLE4(new BlockType("roofTilesRedAngle4",
-                        new Texture[] { new Texture(ShapeList.SLOPE_ANGLE4,
-                                        PathManager.loadImage("roofTilesRed/roof-tiles-red-angle4.png")) },
-                        new Collision[] { CollisionList.STAIR_ANGLE4 },
-                        null,
-                        null)),
-        ROOF_TILES_RED_ANGLE5(new BlockType("roofTilesRedAngle5",
-                        new Texture[] { new Texture(ShapeList.SLOPE_ANGLE5,
-                                        PathManager.loadImage("roofTilesRed/roof-tiles-red-angle5.png")) },
-                        new Collision[] { CollisionList.STAIR_ANGLE5 },
-                        null,
-                        null)),
-        ROOF_TILES_RED_ANGLE6(new BlockType("roofTilesRedAngle6",
-                        new Texture[] { new Texture(ShapeList.SLOPE_ANGLE6,
-                                        PathManager.loadImage("roofTilesRed/roof-tiles-red-angle6.png")) },
-                        new Collision[] { CollisionList.STAIR_ANGLE6 },
-                        null,
-                        null)),
-        ROOF_TILES_RED_ANGLE8(new BlockType("roofTilesRedAngle8",
-                        new Texture[] { new Texture(ShapeList.SLOPE_ANGLE8,
-                                        PathManager.loadImage("roofTilesRed/roof-tiles-red-angle8.png")) },
-                        new Collision[] { CollisionList.STAIR_ANGLE8 },
-                        null,
-                        null)),
-        ROOF_TILES_RED_WOOD_ANGLE1(new BlockType("roofTilesRedWoodAngle1",
-                        new Texture[] { new Texture(ShapeList.SLOPE_ANGLE1,
-                                        PathManager.loadImage("roofTilesRed/roof-tiles-red-wood-angle1.png")) },
-                        new Collision[] { CollisionList.STAIR_ANGLE1 },
-                        null,
-                        null)),
-        ROOF_TILES_RED_WOOD_ANGLE2(new BlockType("roofTilesRedWoodAngle2",
-                        new Texture[] { new Texture(ShapeList.SLOPE_ANGLE2,
-                                        PathManager.loadImage("roofTilesRed/roof-tiles-red-wood-angle2.png")) },
-                        new Collision[] { CollisionList.STAIR_ANGLE2 },
-                        null,
-                        null)),
-        ROOF_TILES_RED_WOOD_ANGLE4(new BlockType("roofTilesRedWoodAngle4",
-                        new Texture[] { new Texture(ShapeList.SLOPE_ANGLE4,
-                                        PathManager.loadImage("roofTilesRed/roof-tiles-red-wood-angle4.png")) },
-                        new Collision[] { CollisionList.STAIR_ANGLE4 },
-                        null,
-                        null)),
-        ROOF_TILES_RED_WOOD_ANGLE5(new BlockType("roofTilesRedWoodAngle5",
-                        new Texture[] { new Texture(ShapeList.SLOPE_ANGLE5,
-                                        PathManager.loadImage("roofTilesRed/roof-tiles-red-wood-angle5.png")) },
-                        new Collision[] { CollisionList.STAIR_ANGLE5 },
-                        null,
-                        null)),
 
         HOLDER(new BlockType("holder",
                         new Texture[] { new Texture(ShapeList.HOLDER, PathManager.loadImage("holders/holder.png")),
@@ -630,24 +479,6 @@ public enum BlockTemplate {
                                 new Texture(ShapeList.HOLDER_ROPE3, PathManager.loadImage("holders/holder-rope3.png")),
                         },
                         new Collision[] { CollisionList.POLE, CollisionList.POLE, CollisionList.POLE, CollisionList.POLE },
-                        null,
-                        null)),
-        HOLDER_ROPE1(new BlockType("holderRope1",
-                        new Texture[] { new Texture(ShapeList.HOLDER_ROPE1,
-                                        PathManager.loadImage("holders/holder-rope1.png")) },
-                        new Collision[] { CollisionList.POLE },
-                        null,
-                        null)),
-        HOLDER_ROPE2(new BlockType("holderRope2",
-                        new Texture[] { new Texture(ShapeList.HOLDER_ROPE2,
-                                        PathManager.loadImage("holders/holder-rope2.png")) },
-                        new Collision[] { CollisionList.POLE },
-                        null,
-                        null)),
-        HOLDER_ROPE3(new BlockType("holderRope3",
-                        new Texture[] { new Texture(ShapeList.HOLDER_ROPE3,
-                                        PathManager.loadImage("holders/holder-rope3.png")) },
-                        new Collision[] { CollisionList.POLE },
                         null,
                         null)),
 
@@ -731,29 +562,11 @@ public enum BlockTemplate {
                         null,
                         new Property[] { new Property(PropertyList.NO_COLLISION), new Property("floor") },
                         null)),
-        GRASS_BIG(new BlockType("grassBig",
-                        new Texture[] { new Texture(ShapeList.GRASS_BIG,
-                                        PathManager.loadImage("herbs/grass-big.png")) },
-                        null,
-                        new Property[] { new Property(PropertyList.NO_COLLISION), new Property("floor") },
-                        null)),
-        GRASS_SMALL(new BlockType("grassSmall",
-                        new Texture[] { new Texture(ShapeList.GRASS_SMALL,
-                                        PathManager.loadImage("herbs/grass-small.png")) },
-                        null,
-                        new Property[] { new Property(PropertyList.NO_COLLISION), new Property("floor") },
-                        null)),
         
         LIAN_LEFT(new BlockType("lianLeft",
                         new Texture[] { new Texture(ShapeList.INSIDE, PathManager.loadImage("lian-left.png")),
                                         new Texture(ShapeList.INSIDE, PathManager.loadImage("lian-right.png"))
                                 },
-                        null,
-                        new Property[] {new Property(PropertyList.NO_COLLISION), new Property(PropertyList.BURNABLE)},
-                        null)),
-        LIAN_RIGHT(new BlockType("lianRight",
-                        new Texture[] { new Texture(ShapeList.INSIDE,
-                                        PathManager.loadImage("lian-right.png")) },
                         null,
                         new Property[] {new Property(PropertyList.NO_COLLISION), new Property(PropertyList.BURNABLE)},
                         null)),
@@ -763,61 +576,6 @@ public enum BlockTemplate {
                         new Property[] { new Property(PropertyList.NO_COLLISION) },
                         new BlockBehavior[] {
                                         new BlockBehaviorApplyForce(1,0,0) })),
-
-        STAINED_GLASS_RED(
-                apply(
-                        VariantBlockMaker.createBlockType(
-                                "stainedGlassRed",
-                                new Texture(
-                                        ShapeList.TRANSPARENT_CUBE,
-                                        PathManager.loadImage("stained-glass/stained-glass-red.png")
-                                ),
-                                ShapeList.BORDERS
-                                ),
-                        block -> 
-                {
-                        block.setColor(new ColorRGB(1, 0, 0));
-                        block.setOpacity(0.1);
-                        block.setAllowLight(Face.LEFT.index, true);
-                        block.setAllowLight(Face.RIGHT.index, true);
-                        block.setAllowLight(Face.TOP.index, true);
-                })),
-        STAINED_GLASS_BLUE(
-                apply(
-                        VariantBlockMaker.createBlockType(
-                                "stainedGlassBlue",
-                                new Texture(
-                                        ShapeList.TRANSPARENT_CUBE,
-                                        PathManager.loadImage("stained-glass/stained-glass-blue.png")
-                                ),
-                                ShapeList.BORDERS
-                                ),
-                        block -> 
-                {
-                        block.setColor(new ColorRGB(0, 0, 1));
-                        block.setOpacity(0.1);
-                        block.setAllowLight(Face.LEFT.index, true);
-                        block.setAllowLight(Face.RIGHT.index, true);
-                        block.setAllowLight(Face.TOP.index, true);
-                })),
-        STAINED_GLASS_GREEN(
-                apply(
-                        VariantBlockMaker.createBlockType(
-                                "stainedGlassGreen",
-                                new Texture(
-                                        ShapeList.TRANSPARENT_CUBE,
-                                        PathManager.loadImage("stained-glass/stained-glass-green.png")
-                                ),
-                                ShapeList.BORDERS
-                                ),
-                        block -> 
-                {
-                        block.setColor(new ColorRGB(0, 1, 0));
-                        block.setOpacity(0.1);
-                        block.setAllowLight(Face.LEFT.index, true);
-                        block.setAllowLight(Face.RIGHT.index, true);
-                        block.setAllowLight(Face.TOP.index, true);
-                })),
 
         
         ;

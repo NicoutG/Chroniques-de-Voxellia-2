@@ -111,7 +111,7 @@
             [
                 {
                     "type": "block",
-                    "id": 104,
+                    "id": 66,
                     "parameters": [
                         {
                             "world": "tests/world-0-0.json"
@@ -495,7 +495,7 @@
                 },
                 {
                     "type": "block",
-                    "id": 104,
+                    "id": 66,
                     "parameters": [
                         {
                             "world": "tests/world-1-1.json"
@@ -549,52 +549,52 @@
             [
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 86,
+                    "id": 54,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 86,
+                    "id": 54,
                     "parameters": []
                 }
             ],
@@ -608,13 +608,13 @@
                 null,
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
                 {
                     "type": "block",
-                    "id": 86,
+                    "id": 54,
                     "parameters": []
                 }
             ],
@@ -632,13 +632,13 @@
                 null,
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
                 {
                     "type": "block",
-                    "id": 86,
+                    "id": 54,
                     "parameters": []
                 }
             ],
@@ -652,27 +652,27 @@
                 null,
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
                 {
                     "type": "block",
-                    "id": 86,
+                    "id": 54,
                     "parameters": []
                 }
             ],
             [
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
                 null,
                 {
                     "type": "block",
-                    "id": 130,
+                    "id": 78,
                     "parameters": []
                 },
                 null,
@@ -682,14 +682,14 @@
                 null,
                 {
                     "type": "block",
-                    "id": 86,
+                    "id": 54,
                     "parameters": []
                 }
             ],
             [
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -702,14 +702,14 @@
                 null,
                 {
                     "type": "block",
-                    "id": 86,
+                    "id": 54,
                     "parameters": []
                 }
             ],
             [
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -720,20 +720,20 @@
                 null,
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
                 {
                     "type": "block",
-                    "id": 86,
+                    "id": 54,
                     "parameters": []
                 }
             ],
             [
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -744,20 +744,20 @@
                 null,
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
                 {
                     "type": "block",
-                    "id": 86,
+                    "id": 54,
                     "parameters": []
                 }
             ],
             [
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -772,20 +772,20 @@
                 null,
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
                 {
                     "type": "block",
-                    "id": 86,
+                    "id": 54,
                     "parameters": []
                 }
             ],
             [
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -793,32 +793,32 @@
                 null,
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 86,
+                    "id": 54,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 86,
+                    "id": 54,
                     "parameters": []
                 }
             ]
@@ -827,58 +827,42 @@
             [
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
-                    "parameters": []
-                },
-                null,
-                null
-            ],
-            [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                {
-                    "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -894,7 +878,7 @@
                 null,
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -910,7 +894,23 @@
                 null,
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
+                    "parameters": []
+                },
+                null,
+                null
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                    "type": "block",
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -919,7 +919,7 @@
             [
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -935,7 +935,7 @@
             [
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -951,7 +951,7 @@
             [
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -962,27 +962,7 @@
                 null,
                 {
                     "type": "block",
-                    "id": 10,
-                    "parameters": []
-                },
-                null,
-                null
-            ],
-            [
-                {
-                    "type": "block",
-                    "id": 10,
-                    "parameters": []
-                },
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                {
-                    "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -991,7 +971,7 @@
             [
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -1002,7 +982,7 @@
                 null,
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -1011,7 +991,27 @@
             [
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
+                    "parameters": []
+                },
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                    "type": "block",
+                    "id": 8,
+                    "parameters": []
+                },
+                null,
+                null
+            ],
+            [
+                {
+                    "type": "block",
+                    "id": 8,
                     "parameters": []
                 },
                 null,
@@ -1019,22 +1019,22 @@
                 null,
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 {
                     "type": "block",
-                    "id": 10,
+                    "id": 8,
                     "parameters": []
                 },
                 null,

@@ -22,7 +22,13 @@ public enum BlockTemplate {
         GREEN_BLOCK(VariantBlockMaker.createBlockType("greenBlock", "green-block.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS, ShapeList.SLABS)),
 
         RED_CARPET(VariantBlockMaker.createBlockType("redCarpet", "red-carpet-block.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS, ShapeList.SLABS)),
-        RED_GOLDEN_CARPET(new BlockType("redGoldenCarpet", "red-golden-carpet-block.png")),
+        RED_GOLDEN_CARPET(new BlockType("redGoldenCarpet",
+                new Texture[] { Texture.createBasicTexture("red-golden-carpet-block.png"),
+                        Texture.createBasicTexture("red-golden-carpet-2-block.png"),
+                        Texture.createBasicTexture("red-golden-carpet-3-block.png")
+                 },
+                null
+        )),
         RED_GOLDEN_CARPET2(new BlockType("redGoldenCarpet2", "red-golden-carpet-2-block.png")),
         RED_GOLDEN_CARPET3(new BlockType("redGoldenCarpet3", "red-golden-carpet-3-block.png")),
 
@@ -34,14 +40,24 @@ public enum BlockTemplate {
 
         BLOCK(VariantBlockMaker.createBlockType("block", "block.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS, ShapeList.SLABS)),
         TRAY(new BlockType("blockTray", "block-tray.png")),
-        BRICK1(new BlockType("blockBrick1", "block-brick-1.png")),
+        BRICK1(new BlockType("blockBrick1",
+                new Texture[] { Texture.createBasicTexture("block-brick-1.png"),
+                        Texture.createBasicTexture("block-brick-2.png")
+                 },
+                null
+        )),
         BRICK2(new BlockType("blockBrick2", "block-brick-2.png")),
         BROKEN(new BlockType("blockBroken", "block-broken.png",
                         null,
                         new Property[] { new Property(PropertyList.DESTRUCTIBLE)},
                         null
         )),
-        HOLE1(new BlockType("blockHole1", "block-hole-1.png")),
+        HOLE1(new BlockType("blockHole1",
+                new Texture[] { Texture.createBasicTexture("block-hole-1.png"),
+                        Texture.createBasicTexture("block-hole-2.png")
+                 },
+                null
+        )),
         HOLE2(new BlockType("blockHole2", "block-hole-2.png")),
         LINES(new BlockType("blockLines", "block-lines.png")),
         BLOCK_FLOWER(new BlockType("blockFlower", "block-flower.png")),
@@ -55,7 +71,22 @@ public enum BlockTemplate {
         MOSSY2(VariantBlockMaker.createBlockType("blockMossy2", "block-mossy-2.png", ShapeList.STAIRS, ShapeList.SLOPES, ShapeList.BORDERS, ShapeList.SLABS)),
         BLOCK_COLUMN_MOSSY(VariantBlockMaker.createBlockType("blockColumnMossy", "block-column-mossy.png", ShapeList.COLUMN)),
 
-        HALF_GRASS1(new BlockType("blockHalfGrass1", "block-half-grass-1.png")),
+        HALF_GRASS1(new BlockType("blockHalfGrass1",
+                new Texture[] { Texture.createBasicTexture("block-half-grass-1.png"),
+                        Texture.createBasicTexture("block-half-grass-2.png"),
+                        Texture.createBasicTexture("block-half-grass-3.png"),
+                        Texture.createBasicTexture("block-half-grass-4.png"),
+                        Texture.createBasicTexture("block-grass-corner-outer-left.png"),
+                        Texture.createBasicTexture("block-grass-corner-outer-right.png"),
+                        Texture.createBasicTexture("block-grass-corner-outer-top.png"),
+                        Texture.createBasicTexture("block-grass-corner-outer-bottom.png"),
+                        Texture.createBasicTexture("block-grass-corner-inner-left.png"),
+                        Texture.createBasicTexture("block-grass-corner-inner-right.png"),
+                        Texture.createBasicTexture("block-grass-corner-inner-top.png"),
+                        Texture.createBasicTexture("block-grass-corner-inner-bottom.png")
+                 },
+                null
+        )),
         HALF_GRASS2(new BlockType("blockHalfGrass2", "block-half-grass-2.png")),
         HALF_GRASS3(new BlockType("blockHalfGrass3", "block-half-grass-3.png")),
         HALF_GRASS4(new BlockType("blockHalfGrass4", "block-half-grass-4.png")),
@@ -76,7 +107,17 @@ public enum BlockTemplate {
         GRASS_SLABS(new BlockType("grassSlabs", "grass-slabs.png")),
         GRASS_HALF_SLAB_3(new BlockType("GrassHalfSlab3", "grass-half-slab-3.png")),
         GRASS_HALF_SLAB_4(new BlockType("GrassHalfSlab4", "grass-half-slab-4.png")),
-        GRASS(new BlockType("grassBlock", "grass.png")),
+        GRASS(new BlockType("grassBlock",
+                new Texture[] { Texture.createBasicTexture("grass.png"),
+                        Texture.createBasicTexture("grass-half-slab-1.png"),
+                        Texture.createBasicTexture("grass-half-slab-2.png"),
+                        Texture.createBasicTexture("grass-half-slab-3.png"),
+                        Texture.createBasicTexture("grass-half-slab-4.png"),
+                        Texture.createBasicTexture("grass-slab.png"),
+                        Texture.createBasicTexture("grass-slabs.png"),
+                 },
+                null
+        )),
         
         DIRT(new BlockType("dirtBlock", "dirt.png")),
         SAND(new BlockType("sand", "sand-block.png")),
@@ -187,9 +228,11 @@ public enum BlockTemplate {
                                         new BlockBehaviorBlazable() })),
 
         GRID_LEFT(new BlockType("gridLeft",
-                        new Texture[] { new Texture(ShapeList.BORDER_LEFT,
-                                        PathManager.loadImage("grids/grid-left.png")) },
-                        new Collision[] { CollisionList.BARRIER_LEFT },
+                        new Texture[] { new Texture(ShapeList.BORDER_LEFT, PathManager.loadImage("grids/grid-left.png")), 
+                                new Texture(ShapeList.BORDER_RIGHT, PathManager.loadImage("grids/grid-right.png")),
+                                new Texture(ShapeList.BORDER_RIGHT, PathManager.loadImage("grids/grid-horizontal.png")),
+                        },
+                        new Collision[] { CollisionList.BARRIER_LEFT, CollisionList.BARRIER_RIGHT, CollisionList.BARRIER_HORIZONTAL },
                         null,
                         null)),
         GRID_RIGHT(new BlockType("gridRight",
@@ -206,7 +249,9 @@ public enum BlockTemplate {
                         null)),
 
         SIGN_LEFT(new BlockType("SignLeft",
-                        new Texture[] { new Texture(ShapeList.SIGN_LEFT, PathManager.loadImage("sign-left.png")) },
+                        new Texture[] { new Texture(ShapeList.SIGN_LEFT, PathManager.loadImage("sign-left.png")), 
+                                new Texture(ShapeList.SIGN_RIGHT, PathManager.loadImage("sign-right.png"))
+                        },
                         null,
                         null,
                         new BlockBehavior[] { new BlockBehaviorText() })),
@@ -217,8 +262,9 @@ public enum BlockTemplate {
                         new BlockBehavior[] { new BlockBehaviorText() })),
         
         FRAME_LEFT(new BlockType("frameLeft",
-                        new Texture[] { new Texture(ShapeList.INSIDE,
-                                        PathManager.loadImage("frame-left.png")) },
+                        new Texture[] { new Texture(ShapeList.INSIDE, PathManager.loadImage("frame-left.png")),
+                                        new Texture(ShapeList.INSIDE, PathManager.loadImage("frame-right.png"))
+                        },
                         null,
                         new Property[] {new Property(PropertyList.NO_COLLISION), new Property("floor")},
                         new BlockBehavior[] { new BlockBehaviorText() })),
@@ -250,7 +296,10 @@ public enum BlockTemplate {
         )),
 
         SHELVE(new BlockType("shelve",
-                new Texture[] { new Texture(ShapeList.TRANSPARENT_CUBE, PathManager.loadImage("shelve.png")) },
+                new Texture[] { new Texture(ShapeList.TRANSPARENT_CUBE, PathManager.loadImage("shelve.png")),
+                        new Texture(ShapeList.CUBE, PathManager.loadImage("book-shelve-1.png")),
+                        new Texture(ShapeList.CUBE, PathManager.loadImage("book-shelve-2.png"))
+                 },
                 null
         )),
         BOOK_SHELVE_1(new BlockType("bookShelve1", "book-shelve-1.png")),
@@ -465,9 +514,27 @@ public enum BlockTemplate {
                         new BlockBehavior[] { new BlockBehaviorLoop() })),
 
         ROOF_TILES_RED1(new BlockType("roofTilesRed1",
-                        new Texture[] { new Texture(ShapeList.SLOPE1,
-                                        PathManager.loadImage("roofTilesRed/roof-tiles-red1.png")) },
-                        new Collision[] { CollisionList.STAIR1 },
+                        new Texture[] { new Texture(ShapeList.SLOPE1, PathManager.loadImage("roofTilesRed/roof-tiles-red1.png")),
+                                new Texture(ShapeList.SLOPE2, PathManager.loadImage("roofTilesRed/roof-tiles-red2.png")),
+                                new Texture(ShapeList.SLOPE3, PathManager.loadImage("roofTilesRed/roof-tiles-red3.png")),
+                                new Texture(ShapeList.SLOPE4, PathManager.loadImage("roofTilesRed/roof-tiles-red4.png")),
+                                new Texture(ShapeList.SLOPE_ANGLE1, PathManager.loadImage("roofTilesRed/roof-tiles-red-angle1.png")),
+                                new Texture(ShapeList.SLOPE_ANGLE1, PathManager.loadImage("roofTilesRed/roof-tiles-red-wood-angle1.png")),
+                                new Texture(ShapeList.SLOPE_ANGLE2, PathManager.loadImage("roofTilesRed/roof-tiles-red-angle2.png")),
+                                new Texture(ShapeList.SLOPE_ANGLE2, PathManager.loadImage("roofTilesRed/roof-tiles-red-wood-angle2.png")),
+                                new Texture(ShapeList.SLOPE_ANGLE3, PathManager.loadImage("roofTilesRed/roof-tiles-red-angle3.png")),
+                                new Texture(ShapeList.SLOPE_ANGLE4, PathManager.loadImage("roofTilesRed/roof-tiles-red-angle4.png")),
+                                new Texture(ShapeList.SLOPE_ANGLE4, PathManager.loadImage("roofTilesRed/roof-tiles-red-wood-angle4.png")),
+                                new Texture(ShapeList.SLOPE_ANGLE5, PathManager.loadImage("roofTilesRed/roof-tiles-red-angle5.png")),
+                                new Texture(ShapeList.SLOPE_ANGLE5, PathManager.loadImage("roofTilesRed/roof-tiles-red-wood-angle5.png")),
+                                new Texture(ShapeList.SLOPE_ANGLE6, PathManager.loadImage("roofTilesRed/roof-tiles-red-angle6.png")),
+                                new Texture(ShapeList.SLOPE_ANGLE7, PathManager.loadImage("roofTilesRed/roof-tiles-red-angle7.png")),
+                                new Texture(ShapeList.SLOPE_ANGLE8, PathManager.loadImage("roofTilesRed/roof-tiles-red-angle8.png"))
+                         },
+                        new Collision[] { CollisionList.STAIR1, CollisionList.STAIR2, CollisionList.STAIR3, CollisionList.STAIR4,
+                                CollisionList.STAIR_ANGLE1, CollisionList.STAIR_ANGLE1, CollisionList.STAIR_ANGLE2, CollisionList.STAIR_ANGLE2, CollisionList.STAIR_ANGLE3, CollisionList.STAIR_ANGLE4, CollisionList.STAIR_ANGLE4,
+                                CollisionList.STAIR_ANGLE5, CollisionList.STAIR_ANGLE5, CollisionList.STAIR_ANGLE6, CollisionList.STAIR_ANGLE7, CollisionList.STAIR_ANGLE8
+                         },
                         null,
                         null)),
         ROOF_TILES_RED2(new BlockType("roofTilesRed2",
@@ -538,9 +605,12 @@ public enum BlockTemplate {
                         null)),
 
         HOLDER(new BlockType("holder",
-                        new Texture[] { new Texture(ShapeList.HOLDER,
-                                        PathManager.loadImage("holders/holder.png")) },
-                        new Collision[] { CollisionList.POLE },
+                        new Texture[] { new Texture(ShapeList.HOLDER, PathManager.loadImage("holders/holder.png")),
+                                new Texture(ShapeList.HOLDER_ROPE1, PathManager.loadImage("holders/holder-rope1.png")),
+                                new Texture(ShapeList.HOLDER_ROPE2, PathManager.loadImage("holders/holder-rope2.png")),
+                                new Texture(ShapeList.HOLDER_ROPE3, PathManager.loadImage("holders/holder-rope3.png")),
+                        },
+                        new Collision[] { CollisionList.POLE, CollisionList.POLE, CollisionList.POLE, CollisionList.POLE },
                         null,
                         null)),
         HOLDER_ROPE1(new BlockType("holderRope1",
@@ -635,7 +705,10 @@ public enum BlockTemplate {
                         new BlockBehavior[] { new BlockBehaviorBlazable() })),
         
         FLOWERS(new BlockType("flowers",
-                        new Texture[] { new Texture(ShapeList.FLOWERS, PathManager.loadImage("herbs/flowers.png")) },
+                        new Texture[] { new Texture(ShapeList.FLOWERS, PathManager.loadImage("herbs/flowers.png")),
+                                new Texture(ShapeList.GRASS_BIG, PathManager.loadImage("herbs/grass-big.png")),
+                                new Texture(ShapeList.GRASS_SMALL, PathManager.loadImage("herbs/grass-small.png"))
+                        },
                         null,
                         new Property[] { new Property(PropertyList.NO_COLLISION), new Property("floor") },
                         null)),
@@ -653,8 +726,9 @@ public enum BlockTemplate {
                         null)),
         
         LIAN_LEFT(new BlockType("lianLeft",
-                        new Texture[] { new Texture(ShapeList.INSIDE,
-                                        PathManager.loadImage("lian-left.png")) },
+                        new Texture[] { new Texture(ShapeList.INSIDE, PathManager.loadImage("lian-left.png")),
+                                        new Texture(ShapeList.INSIDE, PathManager.loadImage("lian-right.png"))
+                                },
                         null,
                         new Property[] {new Property(PropertyList.NO_COLLISION), new Property(PropertyList.BURNABLE)},
                         null)),

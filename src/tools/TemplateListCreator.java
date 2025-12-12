@@ -248,7 +248,10 @@ public class TemplateListCreator {
             String base64Global = imageToBase64(shape.getGlobalMask());
             writer.write("<tr "+ ((i%2 != 0) ? "style='background-color: lightgray;'" : "") +">");
             writer.write("<td>" + name + "</td>");
-            writer.write("<td style='background-color: black;'><img src='data:image/png;base64," + base64Global + "'></td>");
+            String fileName = name + "_shape" + ".png";
+            writer.write("<td style='background-color: black;'><a href='data:image/png;base64," + base64Global + "' download='" + fileName + "'>"
+                    + "<img src='data:image/png;base64," + base64Global + "'>"
+                    + "</a></td>");
             writer.write("<td><img src='data:image/png;base64," + base64Top + "'></td>");
             writer.write("<td><img src='data:image/png;base64," + base64Left + "'></td>");
             writer.write("<td><img src='data:image/png;base64," + base64Right + "'></td>");
@@ -285,7 +288,10 @@ public class TemplateListCreator {
             String base64 = imageToBase64(collision.getImage(64));
             writer.write("<tr "+ ((i%2 != 0) ? "style='background-color: lightgray;'" : "") +">");
             writer.write("<td>" + name + "</td>");
-            writer.write("<td><img src='data:image/png;base64," + base64 + "'></td>");
+            String fileName = name + "_shape" + ".png";
+            writer.write("<td style='background-color: black;'><a href='data:image/png;base64," + base64 + "' download='" + fileName + "'>"
+                    + "<img src='data:image/png;base64," + base64 + "'>"
+                    + "</a></td>");
             writer.write("</tr>\n");
         }
 

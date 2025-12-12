@@ -148,6 +148,10 @@ public class World {
     }
 
     private void spawnPlayer(int spawnPoint) {
+        Player player = getPlayer();
+        if (player != null)
+            entities.remove(player);
+
         SpawnPoint spawn;
         if (spawnPoint < 0 || spawnPoints.size() <= spawnPoint)
             spawn = spawnPoints.get((int) (Math.random() * spawnPoints.size()));

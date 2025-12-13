@@ -169,6 +169,6 @@ public class ObjectInstance<
         Object state = getState(TYPE);
         if (state != null && state instanceof Integer)
             return (int)state;
-        return -1;
+        return 0;
     }
 }

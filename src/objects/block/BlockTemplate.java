@@ -339,9 +339,7 @@ public enum BlockTemplate {
                                         new Texture(ShapeList.LEVER_ON, PathManager.loadImage("lever/lever-T.png")) },
                         null,
                         new Property[] { new Property(PropertyList.NO_COLLISION) },
-                        new BlockBehavior[] {
-                                        new BlockBehaviorLever()
-                        })),
+                        new BlockBehavior[] { new BlockBehaviorSwitchTexture(), new BlockBehaviorLever() })),
         LINKED_LEVER(new BlockType("linkedLever",
                         new Texture[] { new Texture(ShapeList.LEVER_OFF,
                                         PathManager.loadImage("linkedLever/linked-lever-F.png")),
@@ -349,13 +347,13 @@ public enum BlockTemplate {
                                                         PathManager.loadImage("linkedLever/linked-lever-T.png")) },
                         null,
                         new Property[] { new Property(PropertyList.NO_COLLISION) },
-                        new BlockBehavior[] { new BlockBehaviorLever(), new BlockBehaviorActivable() })),
+                        new BlockBehavior[] { new BlockBehaviorSwitchTexture(), new BlockBehaviorLever(), new BlockBehaviorActivable() })),
         PRESSURE_PLATE(new BlockType("pressurePlate",
                         new Texture[] { Texture.createBasicTexture("pressure-plate-F.png"),
                                         Texture.createBasicTexture("pressure-plate-T.png") },
                         null,
                         new Property[] { new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 0.2, 0.5, 0)) },
-                        new BlockBehavior[] { new BlockBehaviorPressurePlate(),
+                        new BlockBehavior[] { new BlockBehaviorSwitchTexture(), new BlockBehaviorPressurePlate(),
                                         new BlockBehaviorActivableProperty(PropertyLight.NAME) })),
         TELEPORTER(new BlockType("teleporter",
                         new Texture[] { new Texture(ShapeList.CUBE,
@@ -369,7 +367,8 @@ public enum BlockTemplate {
                         null,
                         new Property[] { new PropertyLight(
                                         new LightSource(new ColorRGB(0.8, 0.2, 0.7), 0.35, 0.5, 0.05)) },
-                        new BlockBehavior[] { new BlockBehaviorTeleportation(),
+                        new BlockBehavior[] { new BlockBehaviorSwitchTexture(), 
+                                        new BlockBehaviorTeleportation(),
                                         new BlockBehaviorActivableProperty(PropertyLight.NAME) })),
         TNT(new BlockType("tnt",
                         new Texture[] { new Texture(ShapeList.CUBE, PathManager.loadImage("tnt.png")),
@@ -403,7 +402,8 @@ public enum BlockTemplate {
 
                         },
                         new Property[] { new PropertyLight(new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0)) },
-                        new BlockBehavior[] { new BlockBehaviorChangeWorld(),
+                        new BlockBehavior[] { new BlockBehaviorSwitchTexture(),
+                                        new BlockBehaviorChangeWorld(),
                                         new BlockBehaviorActivableProperty(PropertyLight.NAME)
                         })),
         NEW_WORLD(new BlockType("newWorldBlock",
@@ -418,7 +418,8 @@ public enum BlockTemplate {
 
                         },
                         new Property[] { new PropertyLight(new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0)) },
-                        new BlockBehavior[] { new BlockBehaviorNewWorld(),
+                        new BlockBehavior[] { new BlockBehaviorSwitchTexture(),
+                                        new BlockBehaviorNewWorld(),
                                         new BlockBehaviorActivableProperty(PropertyLight.NAME)
                         })),
 

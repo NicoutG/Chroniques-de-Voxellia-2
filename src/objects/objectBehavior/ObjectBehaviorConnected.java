@@ -11,12 +11,15 @@ public class ObjectBehaviorConnected<
 
     public final static String ACTIVATION_STATE = "activated";
     public final static String NETWORK = "network";
+
     private static int numNetwork = 1000000;
+    private static ObjectInstance lastObject = null;
 
     @Override
     public void onAttachTo(I objectInstance) {
+        updateNumNetwork(objectInstance);
         objectInstance.setState(ACTIVATION_STATE, false);
-        objectInstance.setState(NETWORK, numNetwork++);
+        objectInstance.setState(NETWORK, numNetwork);
     }
 
     public boolean getActivationState(I objectInstance) {
@@ -31,5 +34,12 @@ public class ObjectBehaviorConnected<
         if (state != null && state instanceof Integer)
             return (int)state;
         return -1;
+    }
+
+    private void updateNumNetwork(I objectInstance) {
+        if (lastObject == null || lastObject != objectInstance) {
+            lastObject = objectInstance;
+            numNetwork++;
+        }
     }
 }

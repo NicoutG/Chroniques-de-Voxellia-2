@@ -17,7 +17,6 @@ public class BlockBehaviorPressurePlate extends BlockBehaviorConnected {
         if (activationState && !entityOn) {
             int network = getNetwork(block);
             world.desactivate(network);
-            block.setIndexTexture(0);
             SoundManager.playSoundFromCoordinates(SoundType.LEVER, position.x, position.y, position.z);
             world.executeAfterUpdate(() -> block.setState(ACTIVATION_STATE, false));
         }
@@ -34,7 +33,6 @@ public class BlockBehaviorPressurePlate extends BlockBehaviorConnected {
                     world.activate(network);
                     SoundManager.playSoundFromCoordinates(SoundType.LEVER, position.x, position.y, position.z);
                 }
-                block.setIndexTexture(1);
                 world.executeAfterUpdate(() -> block.setState(ACTIVATION_STATE, true));
                 entityOn = true;
             }

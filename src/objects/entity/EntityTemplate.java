@@ -75,7 +75,7 @@ public enum EntityTemplate {
     FLYING_SLIME(new EntityType("flyingSlime",
             new Texture[] {
                     new Texture(
-                            ShapeList.FLYING_SLIME, new BufferedImage[] {
+                            ShapeList.BUMP, new BufferedImage[] {
                                     PathManager.loadImage("slime/flying-slime-0.png"),
                                     PathManager.loadImage("slime/flying-slime-1.png"),
                                     PathManager.loadImage("slime/flying-slime-2.png"),

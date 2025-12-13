@@ -10,7 +10,7 @@ public final class ShapeList {
     public static final Shape CUBE = new Shape("cube/","mask-left.png","mask-right.png","mask-top.png",true, 1, false, false, false);
     public static final Shape COMPLETE = new Shape("complete/","mask-left.png","mask-right.png","mask-top.png",false, 1, false, false, false);
     public static final Shape TRANSPARENT_CUBE = new Shape("cube/","mask-left.png","mask-right.png","mask-top.png",false, 0.1, true, true, true);
-    public static final Shape FLYING_SLIME = new Shape("flyingSlime/","mask-left.png","mask-right.png","mask-top.png",true, 1, true, true, true);
+    public static final Shape BUMP = new Shape("bump/","mask-left.png","mask-right.png","mask-top.png",false, 0.2, true, true, true);
     public static final Shape LEVER_ON = new Shape("lever/true/","mask-left.png","mask-right.png","mask-top.png",false, 0, true, true, true);
     public static final Shape LEVER_OFF = new Shape("lever/false/","mask-left.png","mask-right.png","mask-top.png",false, 0, true, true, true);
     public static final Shape PLAYER = new Shape("player/","mask-left.png","mask-right.png","mask-top.png",true, 1, true, true, true);

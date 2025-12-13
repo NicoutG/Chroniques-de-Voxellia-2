@@ -289,7 +289,7 @@ public class TemplateListCreator {
             writer.write("<tr "+ ((i%2 != 0) ? "style='background-color: lightgray;'" : "") +">");
             writer.write("<td>" + name + "</td>");
             String fileName = name + "_shape" + ".png";
-            writer.write("<td style='background-color: black;'><a href='data:image/png;base64," + base64 + "' download='" + fileName + "'>"
+            writer.write("<td><a href='data:image/png;base64," + base64 + "' download='" + fileName + "'>"
                     + "<img src='data:image/png;base64," + base64 + "'>"
                     + "</a></td>");
             writer.write("</tr>\n");

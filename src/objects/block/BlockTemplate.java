@@ -583,10 +583,15 @@ public enum BlockTemplate {
                                         new Texture(ShapeList.COLUMN, PathManager.loadImage("accessories/pot.png")),
                                         new Texture(ShapeList.COLUMN, PathManager.loadImage("accessories/pot-small.png")),
                                 },
+                        new Collision[] { CollisionList.SMALL_CUBE_BOTTOM, CollisionList.SMALL_CUBE_BOTTOM, CollisionList.SMALL_CUBE_BOTTOM },
                         null,
-                        new Property[] {new Property(PropertyList.NO_COLLISION)},
                         null)),
-
+        TOOL(new BlockType("tool",
+                        new Texture[] { new Texture(ShapeList.BUMP, PathManager.loadImage("rope.png")),
+                                },
+                        new Collision[] { CollisionList.SLAB_BOTTOM },
+                        null,
+                        null)),
         
         ;
 

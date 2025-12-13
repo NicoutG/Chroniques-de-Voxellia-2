@@ -9940,7 +9940,9 @@
                 {
                     "type": "block",
                     "id": 66,
-                    "parameters": []
+                    "parameters": [
+                        {"network": 0}
+                    ]
                 },
                 {
                     "type": "block",
@@ -36216,7 +36218,9 @@
                 {
                     "type": "block",
                     "id": 60,
-                    "parameters": []
+                    "parameters": [
+                        {"network": 0}
+                    ]
                 },
                 {
                     "type": "block",

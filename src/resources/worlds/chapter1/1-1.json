@@ -6311,7 +6311,7 @@
                 {
                     "type": "block",
                     "id": 62,
-                    "parameters": []
+                    "parameters": [{"network": 0}]
                 },
                 {
                     "type": "block",
@@ -14753,7 +14753,8 @@
                     "parameters": [
                         {
                             "world": "chapter1/1-2.json"
-                        }
+                        },
+                        {"network": 0}
                     ]
                 },
                 {

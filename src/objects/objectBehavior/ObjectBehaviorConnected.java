@@ -11,11 +11,12 @@ public class ObjectBehaviorConnected<
 
     public final static String ACTIVATION_STATE = "activated";
     public final static String NETWORK = "network";
+    private static int numNetwork = 1000000;
 
     @Override
     public void onAttachTo(I objectInstance) {
         objectInstance.setState(ACTIVATION_STATE, false);
-        objectInstance.setState(NETWORK, 0);
+        objectInstance.setState(NETWORK, numNetwork++);
     }
 
     public boolean getActivationState(I objectInstance) {

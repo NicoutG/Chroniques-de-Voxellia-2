@@ -31,7 +31,10 @@ public class LightingEngine {
     }
 
     public FaceLighting[][][] getLightings(World world, long tick) {
-        FaceLighting[][][] newLightings = compute(world.getBlocks(), world.getEntities(), tick);
+        FaceLighting[][][] newLightings;
+        synchronized (world) {
+            newLightings = compute(world.getBlocks(), world.getEntities(), tick);
+        }
         if (world.getCurrentWorld().equals(previousWorld)) {
             final int X = newLightings.length;
             final int Y = newLightings[0].length;

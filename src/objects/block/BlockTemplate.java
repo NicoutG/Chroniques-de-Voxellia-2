@@ -372,9 +372,10 @@ public enum BlockTemplate {
                         new BlockBehavior[] { new BlockBehaviorTeleportation(),
                                         new BlockBehaviorActivableProperty(PropertyLight.NAME) })),
         TNT(new BlockType("tnt",
-                        new Texture[] { new Texture(ShapeList.CUBE,
-                                        PathManager.loadImage("tnt.png")) },
-                        null,
+                        new Texture[] { new Texture(ShapeList.CUBE, PathManager.loadImage("tnt.png")),
+                                new Texture(ShapeList.COLUMN, PathManager.loadImage("tnt-barrel.png")),
+                        },
+                        new Collision[] {CollisionList.CUBE, CollisionList.COLUMN},
                         new Property[] {new Property(PropertyList.DESTRUCTIBLE)},
                         new BlockBehavior[] {new BlockBehaviorExploding(2.5)}
                         )),
@@ -576,6 +577,15 @@ public enum BlockTemplate {
                         new Property[] { new Property(PropertyList.NO_COLLISION) },
                         new BlockBehavior[] {
                                         new BlockBehaviorApplyForce(1,0,0) })),
+        
+        POT(new BlockType("pot",
+                        new Texture[] { new Texture(ShapeList.COLUMN, PathManager.loadImage("accessories/pot-flower.png")),
+                                        new Texture(ShapeList.COLUMN, PathManager.loadImage("accessories/pot.png")),
+                                        new Texture(ShapeList.COLUMN, PathManager.loadImage("accessories/pot-small.png")),
+                                },
+                        null,
+                        new Property[] {new Property(PropertyList.NO_COLLISION)},
+                        null)),
 
         
         ;

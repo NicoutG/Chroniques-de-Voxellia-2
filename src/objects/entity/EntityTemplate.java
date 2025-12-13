@@ -31,7 +31,9 @@ public enum EntityTemplate {
             null,
             new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable() })),
     CRATE_WOOD(new EntityType("crateWood",
-            "crate-wood.png",
+            new Texture[] { new Texture(ShapeList.CUBE, PathManager.loadImage("crate-wood.png")),
+                new Texture(ShapeList.COLUMN, PathManager.loadImage("barrel.png"))
+            },
             new Collision[] { CollisionList.BLOCK_ENTITY },
             new Property[] { new Property(PropertyList.BURNABLE) },
             new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable() })),
@@ -94,6 +96,11 @@ public enum EntityTemplate {
             new Collision[] { CollisionList.BARRIER_HORIZONTAL },
             new Property[] { new Property(PropertyList.NO_COLLISION_SAME), new Property(PropertyList.NO_COLLISION_BLOCK)},
             new EntityBehavior[] { new EntityBehaviorActivableMoving() })),
+     CRATE_METAL(new EntityType("crateMetal",
+            "crate-metal.png",
+            new Collision[] { CollisionList.BLOCK_ENTITY },
+            null,
+            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable() })),
 
     ;
 

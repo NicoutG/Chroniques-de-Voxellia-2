@@ -339,22 +339,30 @@ public enum BlockTemplate {
                                         new Texture(ShapeList.LEVER_ON, PathManager.loadImage("lever/lever-T.png")) },
                         null,
                         new Property[] { new Property(PropertyList.NO_COLLISION) },
-                        new BlockBehavior[] { new BlockBehaviorSwitchTexture(), new BlockBehaviorLever() })),
+                        new BlockBehavior[] { new BlockBehaviorSwitchTexture(), 
+                                new BlockBehaviorLever(), 
+                                new BlockBehaviorActivableSound(SoundType.LEVER, SoundType.LEVER) 
+                        })),
         LINKED_LEVER(new BlockType("linkedLever",
                         new Texture[] { new Texture(ShapeList.LEVER_OFF,
                                         PathManager.loadImage("linkedLever/linked-lever-F.png")),
-                                        new Texture(ShapeList.LEVER_ON,
-                                                        PathManager.loadImage("linkedLever/linked-lever-T.png")) },
+                                        new Texture(ShapeList.LEVER_ON, PathManager.loadImage("linkedLever/linked-lever-T.png")) },
                         null,
                         new Property[] { new Property(PropertyList.NO_COLLISION) },
-                        new BlockBehavior[] { new BlockBehaviorSwitchTexture(), new BlockBehaviorLever(), new BlockBehaviorActivable() })),
+                        new BlockBehavior[] { new BlockBehaviorSwitchTexture(), 
+                                new BlockBehaviorLever(), 
+                                new BlockBehaviorActivable(),
+                                new BlockBehaviorActivableSound(SoundType.LEVER, SoundType.LEVER)
+                        })),
         PRESSURE_PLATE(new BlockType("pressurePlate",
                         new Texture[] { Texture.createBasicTexture("pressure-plate-F.png"),
                                         Texture.createBasicTexture("pressure-plate-T.png") },
                         null,
                         new Property[] { new PropertyLight(new LightSource(new ColorRGB(1, 0.6, 0.4), 0.2, 0.5, 0)) },
                         new BlockBehavior[] { new BlockBehaviorSwitchTexture(), new BlockBehaviorPressurePlate(),
-                                        new BlockBehaviorActivableProperty(PropertyLight.NAME) })),
+                                        new BlockBehaviorActivableProperty(PropertyLight.NAME),
+                                        new BlockBehaviorActivableSound(SoundType.LEVER, SoundType.LEVER)
+                        })),
         TELEPORTER(new BlockType("teleporter",
                         new Texture[] { new Texture(ShapeList.CUBE,
                                         PathManager.loadImage("teleporter/teleporter-F.png")),
@@ -369,7 +377,9 @@ public enum BlockTemplate {
                                         new LightSource(new ColorRGB(0.8, 0.2, 0.7), 0.35, 0.5, 0.05)) },
                         new BlockBehavior[] { new BlockBehaviorSwitchTexture(), 
                                         new BlockBehaviorTeleportation(),
-                                        new BlockBehaviorActivableProperty(PropertyLight.NAME) })),
+                                        new BlockBehaviorActivableProperty(PropertyLight.NAME),
+                                        new BlockBehaviorActivableSound(SoundType.WORLD_LOADER_ACTIVATION, SoundType.WORLD_LOADER_ACTIVATION)
+                                 })),
         TNT(new BlockType("tnt",
                         new Texture[] { new Texture(ShapeList.CUBE, PathManager.loadImage("tnt.png")),
                                 new Texture(ShapeList.COLUMN, PathManager.loadImage("tnt-barrel.png")),
@@ -404,7 +414,8 @@ public enum BlockTemplate {
                         new Property[] { new PropertyLight(new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0)) },
                         new BlockBehavior[] { new BlockBehaviorSwitchTexture(),
                                         new BlockBehaviorChangeWorld(),
-                                        new BlockBehaviorActivableProperty(PropertyLight.NAME)
+                                        new BlockBehaviorActivableProperty(PropertyLight.NAME),
+                                        new BlockBehaviorActivableSound(SoundType.WORLD_LOADER_ACTIVATION, SoundType.WORLD_LOADER_ACTIVATION)
                         })),
         NEW_WORLD(new BlockType("newWorldBlock",
                         new Texture[] {
@@ -420,7 +431,8 @@ public enum BlockTemplate {
                         new Property[] { new PropertyLight(new LightSource(new ColorRGB(0, 1, 1), 0.7, 0.7, 0)) },
                         new BlockBehavior[] { new BlockBehaviorSwitchTexture(),
                                         new BlockBehaviorNewWorld(),
-                                        new BlockBehaviorActivableProperty(PropertyLight.NAME)
+                                        new BlockBehaviorActivableProperty(PropertyLight.NAME),
+                                        new BlockBehaviorActivableSound(SoundType.WORLD_LOADER_ACTIVATION, SoundType.WORLD_LOADER_ACTIVATION)
                         })),
 
         AND(new BlockType("and",
@@ -580,9 +592,9 @@ public enum BlockTemplate {
                                         new BlockBehaviorApplyForce(1,0,0) })),
         
         POT(new BlockType("pot",
-                        new Texture[] { new Texture(ShapeList.COLUMN, PathManager.loadImage("accessories/pot-flower.png")),
-                                        new Texture(ShapeList.COLUMN, PathManager.loadImage("accessories/pot.png")),
-                                        new Texture(ShapeList.COLUMN, PathManager.loadImage("accessories/pot-small.png")),
+                        new Texture[] { new Texture(ShapeList.BUMP, PathManager.loadImage("accessories/pot-flower.png")),
+                                        new Texture(ShapeList.BUMP, PathManager.loadImage("accessories/pot.png")),
+                                        new Texture(ShapeList.BUMP, PathManager.loadImage("accessories/pot-small.png")),
                                 },
                         new Collision[] { CollisionList.SMALL_CUBE_BOTTOM, CollisionList.SMALL_CUBE_BOTTOM, CollisionList.SMALL_CUBE_BOTTOM },
                         null,
@@ -593,6 +605,28 @@ public enum BlockTemplate {
                         new Collision[] { CollisionList.SLAB_BOTTOM },
                         null,
                         null)),
+        CANDLE(new BlockType("candle",
+                        new Texture[] { new Texture(ShapeList.BUMP, PathManager.loadImage("candle/candle-off.png")),
+                                Texture.createBasicTexture(ShapeList.BUMP,
+                                                                new String[] { "candle/candle-on-0.png", "candle/candle-on-1.png", "candle/candle-on-0.png", "candle/candle-on-2.png" }, 
+                                                                3),
+                                new Texture(ShapeList.BUMP, PathManager.loadImage("candle/candlestick/candlestick-left-off.png")),
+                                Texture.createBasicTexture(ShapeList.BUMP,
+                                                                new String[] { "candle/candlestick/candlestick-left-on-0.png", "candle/candlestick/candlestick-left-on-1.png", "candle/candlestick/candlestick-left-on-0.png", "candle/candlestick/candlestick-left-on-2.png" }, 
+                                                                3),
+                                new Texture(ShapeList.BUMP, PathManager.loadImage("candle/candlestick/candlestick-right-off.png")),
+                                Texture.createBasicTexture(ShapeList.BUMP,
+                                                                new String[] { "candle/candlestick/candlestick-right-on-0.png", "candle/candlestick/candlestick-right-on-1.png", "candle/candlestick/candlestick-right-on-0.png", "candle/candlestick/candlestick-right-on-2.png" }, 
+                                                                3),
+                        },
+                        new Collision[] { CollisionList.SMALL_CUBE_BOTTOM, CollisionList.SMALL_CUBE_BOTTOM, CollisionList.SMALL_CUBE_BOTTOM, CollisionList.SMALL_CUBE_BOTTOM, CollisionList.SMALL_CUBE_BOTTOM, CollisionList.SMALL_CUBE_BOTTOM },
+                        new Property[] { new PropertyLight(
+                                        new LightSource(new ColorRGB(1, 0.6, 0.2), 0.6, 0.7, 0.1)), },
+                        new BlockBehavior[] { new BlockBehaviorSwitchTexture(), 
+                                new BlockBehaviorLever(), 
+                                new BlockBehaviorActivableProperty(PropertyLight.NAME),
+                                new BlockBehaviorActivableSound(SoundType.CANDLE_OFF, SoundType.CANDLE_ON) 
+                        })),
         
         ;
 

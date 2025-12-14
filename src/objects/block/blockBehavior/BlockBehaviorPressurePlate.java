@@ -1,8 +1,6 @@
 package objects.block.blockBehavior;
 
 import objects.collision.CollisionList;
-import audio.SoundManager;
-import audio.SoundType;
 import objects.block.Block;
 import objects.entity.Entity;
 import tools.Vector;
@@ -17,7 +15,6 @@ public class BlockBehaviorPressurePlate extends BlockBehaviorConnected {
         if (activationState && !entityOn) {
             int network = getNetwork(block);
             world.desactivate(network);
-            SoundManager.playSoundFromCoordinates(SoundType.LEVER, position.x, position.y, position.z);
             world.executeAfterUpdate(() -> block.setState(ACTIVATION_STATE, false));
         }
         entityOn = false;
@@ -31,7 +28,6 @@ public class BlockBehaviorPressurePlate extends BlockBehaviorConnected {
                 boolean activationState = getActivationState(block);
                 if (!activationState) {
                     world.activate(network);
-                    SoundManager.playSoundFromCoordinates(SoundType.LEVER, position.x, position.y, position.z);
                 }
                 world.executeAfterUpdate(() -> block.setState(ACTIVATION_STATE, true));
                 entityOn = true;

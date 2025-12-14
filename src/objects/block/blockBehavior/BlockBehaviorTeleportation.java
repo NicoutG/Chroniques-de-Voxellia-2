@@ -15,14 +15,8 @@ public class BlockBehaviorTeleportation extends BlockBehaviorActivable {
     private ArrayList<Entity> teleportedEntities = new ArrayList<>();
 
     @Override
-    protected void activate(World world, Block block, Vector position, int network) {
-        SoundManager.playSoundFromCoordinates(SoundType.TELEPORTER_ACTIVATION, position.x, position.y, position.z);
-    }
-
-    @Override
     protected void desactivate(World world, Block block, Vector position, int network) {
         teleportedEntities.clear();
-        SoundManager.playSoundFromCoordinates(SoundType.TELEPORTER_ACTIVATION, position.x, position.y, position.z);
     }
 
     @Override

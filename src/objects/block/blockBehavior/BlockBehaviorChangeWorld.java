@@ -1,7 +1,5 @@
 package objects.block.blockBehavior;
 
-import audio.SoundManager;
-import audio.SoundType;
 import objects.block.Block;
 import objects.entity.Entity;
 import objects.entity.Player;
@@ -11,16 +9,6 @@ import world.World;
 public class BlockBehaviorChangeWorld extends BlockBehaviorActivable {
     protected final static String NEW_WORLD = "world";
     protected final static String SPAWNPOINT = "spawnPoint";
-
-     @Override
-    protected void activate(World world, Block block, Vector position, int network) {
-        SoundManager.playSoundFromCoordinates(SoundType.WORLD_LOADER_ACTIVATION, position.x, position.y, position.z);
-    }
-    
-    @Override
-    protected void desactivate(World world, Block block, Vector position, int network) {
-        SoundManager.playSoundFromCoordinates(SoundType.WORLD_LOADER_ACTIVATION, position.x, position.y, position.z);
-    }
 
     @Override
     public void onAttachTo(Block block) {

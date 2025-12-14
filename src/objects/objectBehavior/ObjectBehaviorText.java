@@ -16,7 +16,6 @@ public class ObjectBehaviorText<
 
     @Override
     public void onAttachTo(I objectInstance) {
-        objectInstance.setState(TEXT, null);
         objectInstance.setState(TEXTS, new String[0]);
     }
 

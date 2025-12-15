@@ -30,7 +30,6 @@ public class BlockBehaviorLiquid extends BlockBehavior {
     @Override
     public void onAttachTo(Block block) {
         block.setState(LIQUID, MAX_LIQUID);
-        block.setState(CONFLICTS, new ArrayList<BlockFlow>());
     }
 
     @Override
@@ -46,12 +45,14 @@ public class BlockBehaviorLiquid extends BlockBehavior {
     private void propageLiquid(World world, Block block, int x, int y, int z) {
         Block[][][] blocks = world.getBlocks();
         int liquid = getLiquid(block);
-        if (liquid <= 0)
-            if (getConflicts(block).isEmpty()) {
+        if (liquid <= 0) {
+            ArrayList<BlockFlow> conflicts = getConflicts(block);
+            if (conflicts == null || conflicts.isEmpty()) {
                 blocks[x][y][z] = null;
                 updateLiquid(world, block, x, y, z, 0);
                 return;
             }
+        }
         
         // falling liquid
         if (z > 0) {
@@ -66,6 +67,10 @@ public class BlockBehaviorLiquid extends BlockBehavior {
                 int liquidDown = getLiquid(blockDown);
                 if (liquidDown < MAX_LIQUID) {
                     ArrayList<BlockFlow> conflicts = getConflicts(blockDown);
+                    if (conflicts == null) {
+                        conflicts = new ArrayList<>();
+                        blockDown.setState(CONFLICTS, conflicts);
+                    }
                     if (conflicts.isEmpty())
                         world.executeAfterUpdate(() -> solveConflicts(world, x, y , z-1));
                     conflicts.add(new BlockFlow(block, x, y, z));
@@ -90,6 +95,10 @@ public class BlockBehaviorLiquid extends BlockBehavior {
                     blocks[xFlow][yFlow][z] = blockFlow;
                 }
                 ArrayList<BlockFlow> conflicts = getConflicts(blockFlow);
+                if (conflicts == null) {
+                    conflicts = new ArrayList<>();
+                    blockFlow.setState(CONFLICTS, conflicts);
+                }
                 if (conflicts.isEmpty())
                     world.executeAfterUpdate(() -> solveConflicts(world, xFlow, yFlow , z));
                 conflicts.add(new BlockFlow(block, x, y, z));
@@ -167,7 +176,7 @@ public class BlockBehaviorLiquid extends BlockBehavior {
     private void solveConflicts(World world, int x, int y, int z) {
         Block block = world.getBlocks()[x][y][z];
         ArrayList<BlockFlow> conflicts = getConflicts(block);
-        if (!conflicts.isEmpty()) {
+        if (conflicts != null && !conflicts.isEmpty()) {
             int liquid = getLiquid(block);
             for (BlockFlow confBlockFlow : conflicts) {
                 if (z < confBlockFlow.z) {

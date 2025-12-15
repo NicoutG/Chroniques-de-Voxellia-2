@@ -238,7 +238,7 @@ public final class SoundManager {
         eventSounds.add(st);
     }
 
-    public static void playSoundFromCoordinates(SoundType st,
+    public static void playSoundFromCoordinates(ISoundType st,
             double sx, double sy, double sz) {
 
         if (world == null)
@@ -252,15 +252,15 @@ public final class SoundManager {
             return; // too far to hear
 
         double d = Math.sqrt(d2);
-        double vol = st.ambient
-                ? globalVolume * st.volume // full for ambients
-                : (1.0 - (d / MAX_DISTANCE)) * globalVolume * st.volume;
+        double vol = st.isAmbient()
+                ? globalVolume * st.getVolume() // full for ambients
+                : (1.0 - (d / MAX_DISTANCE)) * globalVolume * st.getVolume();
 
         /* -------- play exactly like the queued event path -------- */
         ManagedClip mc = clips.get(st);
             if (mc == null)
                 return;
-        if (st.looping) { // use managed clip
+        if (st.isLooping()) { // use managed clip
             if (mc.clip.isRunning())
                 mc.clip.stop();
             mc.clip.setFramePosition(0);

@@ -17,6 +17,8 @@ public enum SoundType implements ISoundType {
     TELEPORTER_ACTIVATION("teleporter-activation.wav", false, 4), 
     TYPING("typing.wav", false, 0.5), 
     EXPLOSION("explosion.wav", false, 2), 
+    CANDLE_ON("candle-on.wav", false, 1), 
+    CANDLE_OFF("candle-off.wav", false, 1), 
 
     // Ambient : 
     AMBIENT1("ambient/moon-origin-loop.wav", true, 1, true), 

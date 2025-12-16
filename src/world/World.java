@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import engine.GameControls;
+import engine.GameControlsGPU;
 import graphics.fog.FogManager;
 
 public class World {
@@ -245,19 +245,19 @@ public class World {
     private void updateControls() {
         Player player = getPlayer();
         ArrayList<EntityAction> actions = new ArrayList<>();
-        if (GameControls.isPressed(KeyEvent.VK_Z))
+        if (GameControlsGPU.isPressed(KeyEvent.VK_Z))
             actions.add(EntityAction.TOP);
-        if (GameControls.isPressed(KeyEvent.VK_S))
+        if (GameControlsGPU.isPressed(KeyEvent.VK_S))
             actions.add(EntityAction.BOTTOM);
-        if (GameControls.isPressed(KeyEvent.VK_Q))
+        if (GameControlsGPU.isPressed(KeyEvent.VK_Q))
             actions.add(EntityAction.LEFT);
-        if (GameControls.isPressed(KeyEvent.VK_D))
+        if (GameControlsGPU.isPressed(KeyEvent.VK_D))
             actions.add(EntityAction.RIGHT);
-        if (GameControls.isPressed(KeyEvent.VK_A) || GameControls.isPressed(KeyEvent.VK_SPACE))
+        if (GameControlsGPU.isPressed(KeyEvent.VK_A) || GameControlsGPU.isPressed(KeyEvent.VK_SPACE))
             actions.add(EntityAction.JUMP);
-        if (GameControls.isPressed(KeyEvent.VK_E))
+        if (GameControlsGPU.isPressed(KeyEvent.VK_E))
             actions.add(EntityAction.INTERACT);
-        if (GameControls.isPressed(KeyEvent.VK_R))
+        if (GameControlsGPU.isPressed(KeyEvent.VK_R))
             reloadWorld();
         
         if (!actions.isEmpty())

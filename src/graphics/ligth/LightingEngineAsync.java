@@ -18,6 +18,8 @@ public class LightingEngineAsync extends LightingEngine {
                     threadFree = true;
                 }).start();
             }
+            if (faceLightings.length != world.getX() || faceLightings[0].length != world.getY() || faceLightings[0][0].length != world.getZ())
+                return super.getLightings(world, tick);
             return faceLightings;
         }
     }

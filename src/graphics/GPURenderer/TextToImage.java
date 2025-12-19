@@ -19,6 +19,10 @@ public class TextToImage {
         PIXEL_FONT = f.deriveFont(Font.PLAIN, 36f);
     }
 
+    public static void init() {
+        
+    }
+
     /**
      * Crée un BufferedImage à partir du texte, avec contour noir et intérieur blanc semi-transparent.
      */

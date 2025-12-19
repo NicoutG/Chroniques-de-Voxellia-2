@@ -13,6 +13,7 @@ import graphics.ligth.ColorRGB;
 import graphics.ligth.FaceLighting;
 import graphics.ligth.LightingEngineAsync;
 import graphics.shape.Face;
+import graphics.shape.Shape;
 import objects.block.Block;
 import objects.entity.Entity;
 import tools.Vector;
@@ -36,6 +37,7 @@ public class GPURenderer {
     public GPURenderer(World world) {
         this.world = world;
         this.lighthingEngine = new LightingEngineAsync();
+        TextToImage.init();
     }
 
     public void render(int w, int h, long tick) {
@@ -46,7 +48,7 @@ public class GPURenderer {
             return;
 
         ArrayList<Entity> entities = world.getEntities();
-        FaceLighting[][][] faceLightings = lighthingEngine.getLightings(world, tick);
+
 
         double originXi;
         double originYi;
@@ -54,18 +56,24 @@ public class GPURenderer {
         List<Sprite> sprites = null;
 
         synchronized (world) {
+            FaceLighting[][][] faceLightings = lighthingEngine.getLightings(world, tick);
+
             /* ---------- compute camera offset ---------- */
             double camX = w / 2.0;
             double camY = h / 2.0;
 
             Entity player = world.getPlayer();
             if (player != null) {
+                // convert player coords to screen
                 IsoMath.toScreen(player.getX(), player.getY(), player.getZ(), scratchPoint);
+
+                // centrer caméra sur le joueur
                 camX -= scratchPoint.x;
                 camY -= scratchPoint.y;
             } else {
                 camY = h / 4.0;
             }
+
 
             /* ── snap the camera once ───────────────────────────────────── */
             originXi = Math.floor(camX);
@@ -105,12 +113,8 @@ public class GPURenderer {
                         continue;
 
                     String lbl = (String) b.getState("text");
-                    if (lbl != null && !lbl.isBlank()) {
-                        double[] xy = transformation3DTo2D(x, y, z, w, h);
-                        Sprite sprite = new Sprite(xy[0], xy[1], TextToImage.createTextImage(lbl));
-                        sprite.set3D(x, y, z);
-                        labels.add(sprite);
-                    }
+                    if (lbl != null && !lbl.isBlank())
+                        labels.add(createSpriteLabel(lbl, x, y, z, w, h));
 
                     if (b.getTexture() == null)
                         continue;
@@ -121,22 +125,22 @@ public class GPURenderer {
                     if (!getVisibleFace(blocks, x, y, z, maxX, maxY, maxZ))
                         continue;
 
-                    FaceLighting faceLighting = faceLightings[x][y][z];
+                    FaceLighting faceLighting = getFaceLighting(faceLightings, x, y, z);
 
                     Texture text = b.getTexture();
                     int[] color = b.getColor();
                     boolean alwaysBehind = (b.getProperty("floor") != null);
                     double[] xy = transformation3DTo2D(x, y, z, w, h);
-                    for (Face face : Face.values()) {
-                        BufferedImage image = text.face(face, tick - b.getTickFrame0());
-                        Sprite sprite = new Sprite((int)xy[0], (int)xy[1], image);
-                        sprite.set3D(x, y, z);
-                        sprite.alwaysBehind = alwaysBehind;
-                        sprite.color = shade(color, faceLighting, face);
-                        sprite.setSize(IsoMath.DRAW_TILE_SIZE);
-                        sprites.add(sprite);
-                    }
-                    
+                    BufferedImage image = text.full(tick - b.getTickFrame0());
+                    Sprite sprite = new Sprite((int)xy[0], (int)xy[1], image);
+                    sprite.set3D(x, y, z);
+                    sprite.alwaysBehind = alwaysBehind;
+                    sprite.color = color;
+                    sprite = addMask(sprite, text.getShape(), faceLighting);
+                    sprite.setSize(IsoMath.DRAW_TILE_SIZE);
+                    sprites.add(sprite);
+                    if (sprite.maskLeft == null || sprite.maskRight == null || sprite.maskTop == null)
+                        System.out.println(b.getName());
                 }
             }
         }
@@ -186,30 +190,25 @@ public class GPURenderer {
                 double z = e.getZ() - 0.5;
 
                 String lbl = (String) e.getState("text");
-                if (lbl != null && !lbl.isBlank()) {
-                    double[] xy = transformation3DTo2D(x, y, z, w, h);
-                    Sprite sprite = new Sprite(xy[0], xy[1], TextToImage.createTextImage(lbl));
-                    sprite.set3D(x, y, z);
-                    labels.add(sprite);
-                }
+                if (lbl != null && !lbl.isBlank())
+                    labels.add(createSpriteLabel(lbl, x, y, z, w, h));
 
                 if (e.getTexture() == null)
                     continue;
 
 
                 FaceLighting faceLighting = sampleLighting(faceLightings, x, y, z);
-
                 Texture text = e.getTexture();
                 int[] color = e.getColor();
                 double[] xy = transformation3DTo2D(x, y, z, w, h);
-                for (Face face : Face.values()) {
-                    BufferedImage image = text.face(face, tick - e.getTickFrame0());
-                    Sprite sprite = new Sprite(xy[0], xy[1], image);
-                    sprite.set3D(x, y, z);
-                    sprite.color = shade(color, faceLighting, face);
-                    sprite.setSize(IsoMath.DRAW_TILE_SIZE);
-                    sprites.add(sprite);
-                }
+                BufferedImage image = text.full(tick - e.getTickFrame0());
+                Sprite sprite = new Sprite((int)xy[0], (int)xy[1], image);
+                sprite.set3D(x + 0.5, y + 0.5, z + 0.5);
+                sprite.color = color;
+                sprite.requiresCorrection = true;
+                sprite = addMask(sprite, text.getShape(), faceLighting);
+                sprite.setSize(IsoMath.DRAW_TILE_SIZE);
+                sprites.add(sprite);
             }
         }
 
@@ -220,39 +219,38 @@ public class GPURenderer {
         return sprites;
     }
 
-    private int[] shade(int[] color, FaceLighting faceLighting, Face face) {
-        ColorRGB colorRGB = null;
-        switch (face) {
-            case LEFT:
-                colorRGB = faceLighting.left();
-                break;
-            case RIGHT:
-                colorRGB = faceLighting.right();
-                break;
-            case TOP:
-                colorRGB = faceLighting.top();
-                break;
-        }
-        if (color == null) {
-            int[] result = new int[3];
-            result[0] = (int)(255 * colorRGB.r());
-            result[1] = (int)(255 * colorRGB.g());
-            result[2] = (int)(255 * colorRGB.b());
-            return result;
-        }
-        int[] result = new int[3];
-        result[0] = (int)(color[0] * colorRGB.r());
-        result[1] = (int)(color[1] * colorRGB.g());
-        result[2] = (int)(color[2] * colorRGB.b());
-        return result;
+    private FaceLighting getFaceLighting(FaceLighting[][][] faceLightings,int x, int y, int z) {
+        if ((0 <= x && x < faceLightings.length) && (0 <= y && y < faceLightings[0].length) && (0 <= z && z < faceLightings[0][0].length))
+            return faceLightings[x][y][z];
+        return new FaceLighting();
     }
 
-    private double[] transformation3DTo2D(double x, double y, double z, int w, int h) {
-        IsoMath.toScreen(x, y, z, scratchPoint);
-        int dx = (int) (lastOriginX + scratchPoint.x);
-        int dy = (int) (lastOriginY + scratchPoint.y);
+    private Sprite createSpriteLabel(String label, double x, double y, double z, int w, int h) {
+        double[] xy = transformation3DTo2D(x, y, z, w, h);
+        BufferedImage img = TextToImage.createTextImage(label);
+        Sprite sprite = new Sprite(xy[0] - img.getWidth() / 2 + 50, xy[1] -10, img);
+        sprite.set3D(x, y, z);
+        return sprite;
+    }
 
-        return new double[] { dx, dy };
+    private Sprite addMask(Sprite sprite, Shape shape, FaceLighting faceLighting) {
+        sprite.maskLeft = shape.getLeftMask();
+        ColorRGB colorLight = faceLighting.left();
+        sprite.lightLeft = new float[] {(float)colorLight.r(), (float)colorLight.g(), (float)colorLight.b()};
+        sprite.maskRight = shape.getRightMask();
+        colorLight = faceLighting.right();
+        sprite.lightRight = new float[] {(float)colorLight.r(), (float)colorLight.g(), (float)colorLight.b()};
+        sprite.maskTop = shape.getTopMask();
+        colorLight = faceLighting.top();
+        sprite.lightTop = new float[] {(float)colorLight.r(), (float)colorLight.g(), (float)colorLight.b()};
+        return sprite;
+    }
+
+    private double[] transformation3DTo2D(double x, double y, double z, int w, int h) { 
+        IsoMath.toScreen(x, y, z, scratchPoint); 
+        int dx = (int) (lastOriginX + scratchPoint.x); 
+        int dy = (int) (lastOriginY + scratchPoint.y); 
+        return new double[] { dx, dy }; 
     }
 
     private static FaceLighting sampleLighting(FaceLighting[][][] grid,

@@ -6,20 +6,27 @@ import java.awt.geom.Point2D;
 /** Lightweight utilities shared by the renderer(s). */
 public final class IsoMath {
 
-    public static final int TILE_SIZE      = 16;
-    public static final int DRAW_TILE_SIZE = 116;
-    private static final double HALF_TILE  = DRAW_TILE_SIZE / 2.0;
-    private static final double QUART_TILE = DRAW_TILE_SIZE / 4.0;
+    private static double ZOOM = 1 ;
+    public static int DRAW_TILE_SIZE;
+
+    static {
+        setTileSize(1);
+    }
 
     /** Converts world grid coordinates to screen pixel coordinates. */
-    public static Point2D.Double toScreen(double x, double y, double z,
-                                          Point2D.Double dst) {
-        double isoX = (x - y) * HALF_TILE;
-        double isoY = (x + y) * QUART_TILE - z * HALF_TILE;
-        if (dst == null) dst = new Point2D.Double();
-        dst.setLocation(isoX, isoY);
-        return dst;
+    public static void toScreen(double x, double y, double z, Point2D.Double out) {
+        out.x = (x - y) * DRAW_TILE_SIZE / 2.0; 
+        out.y = (x + y) * DRAW_TILE_SIZE / 4.0 - z * DRAW_TILE_SIZE / 2.0; 
     }
 
     private IsoMath() { }           // static only
+
+    public static void setTileSize(double tileSize) {
+        ZOOM      = Math.max(0.5, Math.min(tileSize, 2));
+        DRAW_TILE_SIZE = (int)(116.0/ZOOM);
+    }
+
+    public static double getTileSize() {
+        return ZOOM;
+    }
 }

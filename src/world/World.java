@@ -10,12 +10,13 @@ import tools.Vector;
 import world.WorldLoader.SpawnPoint;
 import world.WorldLoader.WorldData;
 
-import java.awt.event.KeyEvent;
+import static org.lwjgl.glfw.GLFW.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import engine.GameControlsGPU;
+import engine.GameControls;
+import graphics.IsoMath;
 import graphics.fog.FogManager;
 
 public class World {
@@ -245,20 +246,26 @@ public class World {
     private void updateControls() {
         Player player = getPlayer();
         ArrayList<EntityAction> actions = new ArrayList<>();
-        if (GameControlsGPU.isPressed(KeyEvent.VK_Z))
+        if (GameControls.isPressed(GLFW_KEY_Z))
             actions.add(EntityAction.TOP);
-        if (GameControlsGPU.isPressed(KeyEvent.VK_S))
+        if (GameControls.isPressed(GLFW_KEY_S))
             actions.add(EntityAction.BOTTOM);
-        if (GameControlsGPU.isPressed(KeyEvent.VK_Q))
+        if (GameControls.isPressed(GLFW_KEY_Q))
             actions.add(EntityAction.LEFT);
-        if (GameControlsGPU.isPressed(KeyEvent.VK_D))
+        if (GameControls.isPressed(GLFW_KEY_D))
             actions.add(EntityAction.RIGHT);
-        if (GameControlsGPU.isPressed(KeyEvent.VK_A) || GameControlsGPU.isPressed(KeyEvent.VK_SPACE))
+        if (GameControls.isPressed(GLFW_KEY_A) || GameControls.isPressed(GLFW_KEY_SPACE))
             actions.add(EntityAction.JUMP);
-        if (GameControlsGPU.isPressed(KeyEvent.VK_E))
+        if (GameControls.isPressed(GLFW_KEY_E))
             actions.add(EntityAction.INTERACT);
-        if (GameControlsGPU.isPressed(KeyEvent.VK_R))
+
+        if (GameControls.isPressed(GLFW_KEY_R))
             reloadWorld();
+
+        if (GameControls.isPressed(GLFW_KEY_UP))
+            IsoMath.setTileSize(IsoMath.getTileSize() - 0.1);
+        if (GameControls.isPressed(GLFW_KEY_DOWN))
+            IsoMath.setTileSize(IsoMath.getTileSize() + 0.1);
         
         if (!actions.isEmpty())
             player.doActions(this, actions.toArray(new EntityAction[0]));

@@ -17,6 +17,8 @@ public class PathManager {
     public static final String WORLD_PATH = "src/resources/worlds/";
     public static final String SOUND_PATH = "src/resources/sounds/";
     public static final String DOC_PATH = "doc/";
+    public static final String LIB_PATH = "lib/native/";
+    public static final String SHADER_PATH = "src/graphics/GPURenderer/shaders/";
 
     public static BufferedImage loadImage(String filePath) {
         try {

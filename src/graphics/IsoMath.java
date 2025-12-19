@@ -15,14 +15,14 @@ public final class IsoMath {
 
     /** Converts world grid coordinates to screen pixel coordinates. */
     public static void toScreen(double x, double y, double z, Point2D.Double out) {
-        out.x = (x - y) * DRAW_TILE_SIZE / 2.0; 
-        out.y = (x + y) * DRAW_TILE_SIZE / 4.0 - z * DRAW_TILE_SIZE / 2.0; 
+        out.x = (x - y); 
+        out.y = ((x + y) / 2.0 - z); 
     }
 
     private IsoMath() { }           // static only
 
     public static void setTileSize(double tileSize) {
-        ZOOM      = Math.max(0.5, Math.min(tileSize, 2));
+        ZOOM      = Math.max(0.3, Math.min(tileSize, 2));
         DRAW_TILE_SIZE = (int)(116.0/ZOOM);
     }
 

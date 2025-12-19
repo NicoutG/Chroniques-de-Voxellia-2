@@ -11,6 +11,8 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import org.lwjgl.opengl.GL;
 
+import tools.PathManager;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -39,7 +41,7 @@ public class GLImageRenderer {
 
 
     static {
-        String path = new File("lib/native").getAbsolutePath();
+        String path = new File(PathManager.LIB_PATH).getAbsolutePath();
         System.setProperty("org.lwjgl.librarypath", path);
 
         if (!glfwInit())
@@ -57,6 +59,9 @@ public class GLImageRenderer {
         window = glfwCreateWindow(width, height, "Chroniques de Voxellia 2", 0, 0);
         glfwMakeContextCurrent(window);
         GL.createCapabilities();
+
+        glfwShowWindow(window);
+        glfwFocusWindow(window);
 
         initGL(width, height);
         initShaders();
@@ -85,6 +90,9 @@ public class GLImageRenderer {
 
         glfwMakeContextCurrent(window);
         GL.createCapabilities();
+
+        glfwShowWindow(window);
+        glfwFocusWindow(window);
 
         initGL(windowWidth, windowHeight);
         initShaders();
@@ -119,8 +127,8 @@ public class GLImageRenderer {
     private static void initShaders() {
         shaderProgram = glCreateProgram();
 
-        int vert = loadShader("src/graphics/GPURenderer/shaders/sprite.vert", GL_VERTEX_SHADER);
-        int frag = loadShader("src/graphics/GPURenderer/shaders/sprite.frag", GL_FRAGMENT_SHADER);
+        int vert = loadShader(PathManager.SHADER_PATH + "sprite.vert", GL_VERTEX_SHADER);
+        int frag = loadShader(PathManager.SHADER_PATH + "sprite.frag", GL_FRAGMENT_SHADER);
 
         glAttachShader(shaderProgram, vert);
         glAttachShader(shaderProgram, frag);

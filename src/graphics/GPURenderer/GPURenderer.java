@@ -49,18 +49,14 @@ public class GPURenderer {
 
         ArrayList<Entity> entities = world.getEntities();
 
-
-        double originXi;
-        double originYi;
-
         List<Sprite> sprites = null;
 
         synchronized (world) {
             FaceLighting[][][] faceLightings = lighthingEngine.getLightings(world, tick);
 
             /* ---------- compute camera offset ---------- */
-            double camX = w / 2.0;
-            double camY = h / 2.0;
+            double camX = lastOriginX;
+            double camY = lastOriginY;
 
             Entity player = world.getPlayer();
             if (player != null) {
@@ -68,17 +64,12 @@ public class GPURenderer {
                 IsoMath.toScreen(player.getX(), player.getY(), player.getZ(), scratchPoint);
 
                 // centrer caméra sur le joueur
-                camX -= scratchPoint.x;
-                camY -= scratchPoint.y;
-            } else {
-                camY = h / 4.0;
+                camX = scratchPoint.x + 1;
+                camY = scratchPoint.y + 1;
             }
 
-
             /* ── snap the camera once ───────────────────────────────────── */
-            originXi = Math.floor(camX);
-            originYi = Math.floor(camY);
-            updateOrigin(originXi, originYi);
+            updateOrigin(camX, camY);
 
             /* ---------- depth sort & draw ---------- */
            sprites = getSprites(w, h, tick, blocks, entities, faceLightings);
@@ -98,7 +89,7 @@ public class GPURenderer {
         final int maxY = blocks[0].length - 1;
         final int maxZ = blocks[0][0].length - 1;
 
-        boolean[][][] visibles = getVisibleBlocks(blocks, lastOriginX, lastOriginY, w, h);
+        boolean[][][] visibles = getVisibleBlocks(blocks, w, h);
 
         /*
          * =================================================================
@@ -130,9 +121,9 @@ public class GPURenderer {
                     Texture text = b.getTexture();
                     int[] color = b.getColor();
                     boolean alwaysBehind = (b.getProperty("floor") != null);
-                    double[] xy = transformation3DTo2D(x, y, z, w, h);
+                    transformation3DTo2D(x, y, z, w, h);
                     BufferedImage image = text.full(tick - b.getTickFrame0());
-                    Sprite sprite = new Sprite((int)xy[0], (int)xy[1], image);
+                    Sprite sprite = new Sprite((int)scratchPoint.x, (int)scratchPoint.y, image);
                     sprite.set3D(x, y, z);
                     sprite.alwaysBehind = alwaysBehind;
                     sprite.color = color;
@@ -160,9 +151,9 @@ public class GPURenderer {
             double y = v.y;
             double z = v.z;
 
-            double[] xy = transformation3DTo2D(x, y, z, w, h);
-            double drawX = xy[0];
-            double drawY = xy[1];
+            transformation3DTo2D(x, y, z, w, h);
+            double drawX = scratchPoint.x;
+            double drawY = scratchPoint.y;
             if (drawX + IsoMath.DRAW_TILE_SIZE < 0 || drawX > w ||
                     drawY + IsoMath.DRAW_TILE_SIZE < 0 || drawY > h)
                 continue;
@@ -200,9 +191,9 @@ public class GPURenderer {
                 FaceLighting faceLighting = sampleLighting(faceLightings, x, y, z);
                 Texture text = e.getTexture();
                 int[] color = e.getColor();
-                double[] xy = transformation3DTo2D(x, y, z, w, h);
+                transformation3DTo2D(x, y, z, w, h);
                 BufferedImage image = text.full(tick - e.getTickFrame0());
-                Sprite sprite = new Sprite((int)xy[0], (int)xy[1], image);
+                Sprite sprite = new Sprite((int)scratchPoint.x, (int)scratchPoint.y, image);
                 sprite.set3D(x + 0.5, y + 0.5, z + 0.5);
                 sprite.color = color;
                 sprite.requiresCorrection = true;
@@ -226,9 +217,10 @@ public class GPURenderer {
     }
 
     private Sprite createSpriteLabel(String label, double x, double y, double z, int w, int h) {
-        double[] xy = transformation3DTo2D(x, y, z, w, h);
+        transformation3DTo2D(x, y, z, w, h);
         BufferedImage img = TextToImage.createTextImage(label);
-        Sprite sprite = new Sprite(xy[0] - img.getWidth() / 2 + 50, xy[1] -10, img);
+        // Sprite sprite = new Sprite(scratchPoint.x - img.getWidth() / 2 + 60, scratchPoint.y -10, img);
+        Sprite sprite = new Sprite(scratchPoint.x - img.getWidth() / 2 + IsoMath.DRAW_TILE_SIZE / 2, scratchPoint.y, img);
         sprite.set3D(x, y, z);
         return sprite;
     }
@@ -246,11 +238,11 @@ public class GPURenderer {
         return sprite;
     }
 
-    private double[] transformation3DTo2D(double x, double y, double z, int w, int h) { 
+    private Point2D.Double transformation3DTo2D(double x, double y, double z, int w, int h) { 
         IsoMath.toScreen(x, y, z, scratchPoint); 
-        int dx = (int) (lastOriginX + scratchPoint.x); 
-        int dy = (int) (lastOriginY + scratchPoint.y); 
-        return new double[] { dx, dy }; 
+        scratchPoint.x = (int) (w/2.0 - IsoMath.DRAW_TILE_SIZE / 2.0 * (lastOriginX - scratchPoint.x)); 
+        scratchPoint.y = (int) (h/2.0 - IsoMath.DRAW_TILE_SIZE / 2.0 * (lastOriginY - scratchPoint.y)); 
+        return scratchPoint; 
     }
 
     private static FaceLighting sampleLighting(FaceLighting[][][] grid,
@@ -317,21 +309,17 @@ public class GPURenderer {
         return new FaceLighting(cRight, cLeft, cTop);
     }
 
-    private boolean isInScreenRange(int x, int y, int z,
-            double originX, double originY,
-            int screenW, int screenH) {
+    private boolean isInScreenRange(int x, int y, int z, int screenW, int screenH) {
 
         // project the tile’s centre to 2-D screen space
-        IsoMath.toScreen(x, y, z, scratchPoint);
-        double drawX = originX + scratchPoint.x;
-        double drawY = originY + scratchPoint.y;
+        transformation3DTo2D(x, y, z, screenW, screenH);
 
         // the tile is a fixed DRAW_TILE_SIZE × DRAW_TILE_SIZE quad; it is visible
         // iff that quad overlaps the viewport bounds in either axis
-        return drawX + IsoMath.DRAW_TILE_SIZE >= 0 && // not completely left
-                drawX <= screenW && // not completely right
-                drawY + IsoMath.DRAW_TILE_SIZE >= 0 && // not completely above
-                drawY <= screenH; // not completely below
+        return scratchPoint.x + IsoMath.DRAW_TILE_SIZE >= 0 && // not completely left
+                scratchPoint.x <= screenW && // not completely right
+                scratchPoint.y + IsoMath.DRAW_TILE_SIZE >= 0 && // not completely above
+                scratchPoint.y <= screenH; // not completely below
     }
 
     private boolean visibilityChecker(Block b, int direction) {
@@ -342,7 +330,7 @@ public class GPURenderer {
         return false;
     }
 
-    private boolean[][][] getVisibleBlocks(Block[][][] b, double originX, double originY, int screenW, int screenH) {
+    private boolean[][][] getVisibleBlocks(Block[][][] b, int screenW, int screenH) {
         final int SIZE_X = b.length;
         final int SIZE_Y = b[0].length;
         final int SIZE_Z = b[0][0].length;
@@ -351,19 +339,19 @@ public class GPURenderer {
         final int zS = SIZE_Z - 1;
         for (int x = 0; x < SIZE_X; x++)
             for (int y = 0; y < SIZE_Y; y++)
-                if (isInScreenRange(x, y, zS, originX, originY, screenW, screenH))
+                if (isInScreenRange(x, y, zS, screenW, screenH))
                     getVisibleBlockLine(b, visibles, x, y, zS);
         // left
         final int yS = SIZE_Y - 1;
         for (int x = 0; x < SIZE_X; x++)
             for (int z = 0; z < SIZE_Z - 1; z++)
-                if (isInScreenRange(x, yS, z, originX, originY, screenW, screenH))
+                if (isInScreenRange(x, yS, z, screenW, screenH))
                     getVisibleBlockLine(b, visibles, x, yS, z);
         // right
         final int xS = SIZE_X - 1;
         for (int y = 0; y < SIZE_Y - 1; y++)
             for (int z = 0; z < SIZE_Z - 1; z++)
-                if (isInScreenRange(xS, y, z, originX, originY, screenW, screenH))
+                if (isInScreenRange(xS, y, z, screenW, screenH))
                     getVisibleBlockLine(b, visibles, xS, y, z);
         
         return visibles;
@@ -421,9 +409,10 @@ public class GPURenderer {
     }
     
     private void updateOrigin(double newOriginX, double newOriginY) {
+        final double EPSILON = 0.01;
         for (int i = 0; i < difLastRenderer; i++) {
             double difX = newOriginX - lastOriginX;
-            if (Math.abs(difX) < 2) {
+            if (Math.abs(difX) < EPSILON) {
                 lastOriginX = newOriginX;
                 break;
             }
@@ -432,7 +421,7 @@ public class GPURenderer {
         }
         for (int i = 0; i < difLastRenderer; i++) {
             double difY = newOriginY - lastOriginY;
-            if (Math.abs(difY) < 2) {
+            if (Math.abs(difY) < EPSILON) {
                 lastOriginY = newOriginY;
                 break;
             }

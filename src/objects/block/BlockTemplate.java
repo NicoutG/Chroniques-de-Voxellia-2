@@ -578,8 +578,16 @@ public enum BlockTemplate {
                         null)),
         
         LIAN(new BlockType("lian",
-                        new Texture[] { new Texture(ShapeList.INSIDE, PathManager.loadImage("lian-left.png")),
-                                        new Texture(ShapeList.INSIDE, PathManager.loadImage("lian-right.png"))
+                        new Texture[] { new Texture(ShapeList.INSIDE, PathManager.loadImage("lian/lian-left.png")),
+                                        new Texture(ShapeList.INSIDE, PathManager.loadImage("lian/lian-right.png")),
+                                        new Texture(ShapeList.INSIDE, PathManager.loadImage("lian/lian-flower-left-1.png")),
+                                        new Texture(ShapeList.INSIDE, PathManager.loadImage("lian/lian-flower-right-1.png")),
+                                        new Texture(ShapeList.INSIDE, PathManager.loadImage("lian/lian-flower-left-2.png")),
+                                        new Texture(ShapeList.INSIDE, PathManager.loadImage("lian/lian-flower-right-2.png")),
+                                        new Texture(ShapeList.INSIDE, PathManager.loadImage("lian/lian-flower-left-3.png")),
+                                        new Texture(ShapeList.INSIDE, PathManager.loadImage("lian/lian-flower-right-3.png")),
+                                        new Texture(ShapeList.INSIDE, PathManager.loadImage("lian/lian-flower-left-4.png")),
+                                        new Texture(ShapeList.INSIDE, PathManager.loadImage("lian/lian-flower-right-4.png")),
                                 },
                         null,
                         new Property[] {new Property(PropertyList.NO_COLLISION), new Property(PropertyList.BURNABLE)},

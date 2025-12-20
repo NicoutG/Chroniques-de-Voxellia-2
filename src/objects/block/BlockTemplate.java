@@ -569,9 +569,14 @@ public enum BlockTemplate {
                         new BlockBehavior[] { new BlockBehaviorBlazable() })),
         
         HERBS(new BlockType("herbs",
-                        new Texture[] { new Texture(ShapeList.FLOWERS, PathManager.loadImage("herbs/flowers.png")),
+                        new Texture[] { new Texture(ShapeList.GRASS_SMALL, PathManager.loadImage("herbs/grass-small.png")),
                                 new Texture(ShapeList.GRASS_BIG, PathManager.loadImage("herbs/grass-big.png")),
-                                new Texture(ShapeList.GRASS_SMALL, PathManager.loadImage("herbs/grass-small.png"))
+                                new Texture(ShapeList.FLOWERS, PathManager.loadImage("herbs/flowers-1.png")),
+                                new Texture(ShapeList.FLOWERS, PathManager.loadImage("herbs/flowers-2.png")),
+                                new Texture(ShapeList.FLOWERS, PathManager.loadImage("herbs/flowers-3.png")),
+                                new Texture(ShapeList.FLOWERS, PathManager.loadImage("herbs/flowers-4.png")),
+                                new Texture(ShapeList.FLOWERS, PathManager.loadImage("herbs/flowers-5.png")),
+                                new Texture(ShapeList.FLOWERS, PathManager.loadImage("herbs/flowers-6.png")),
                         },
                         null,
                         new Property[] { new Property(PropertyList.NO_COLLISION), new Property("floor") },

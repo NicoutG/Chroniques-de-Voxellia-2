@@ -67,11 +67,57 @@ public enum EntityTemplate {
             new Collision[] { CollisionList.BARRIER_LEFT, CollisionList.BARRIER_RIGHT, CollisionList.BARRIER_HORIZONTAL },
             new Property[] { new Property(PropertyList.NO_COLLISION_SAME), new Property(PropertyList.NO_COLLISION_BLOCK)},
             new EntityBehavior[] { new EntityBehaviorActivableMoving() })),
-    FOLLOW_CRATE_WOOD(new EntityType("followCrateWood",
-            "crate-wood.png",
+    FOX(
+        apply(
+        new EntityType("fox",
+            new Texture[] {
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("fox/fox-rest-0.png"),
+                                        PathManager.loadImage("fox/fox-rest-1.png"),
+                                        PathManager.loadImage("fox/fox-rest-2.png"),
+                                        PathManager.loadImage("fox/fox-rest-3.png"),
+                                }, 3),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("fox/fox-left-0.png"),
+                                        PathManager.loadImage("fox/fox-left-1.png"),
+                                        PathManager.loadImage("fox/fox-left-2.png"),
+                                        PathManager.loadImage("fox/fox-left-3.png"),
+                                }, 3),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("fox/fox-right-0.png"),
+                                        PathManager.loadImage("fox/fox-right-1.png"),
+                                        PathManager.loadImage("fox/fox-right-2.png"),
+                                        PathManager.loadImage("fox/fox-right-3.png"),
+                                }, 3),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("fox/fox-top-0.png"),
+                                        PathManager.loadImage("fox/fox-top-1.png"),
+                                        PathManager.loadImage("fox/fox-top-2.png"),
+                                        PathManager.loadImage("fox/fox-top-3.png"),
+                                }, 3),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("fox/fox-bottom-0.png"),
+                                        PathManager.loadImage("fox/fox-bottom-1.png"),
+                                        PathManager.loadImage("fox/fox-bottom-2.png"),
+                                        PathManager.loadImage("fox/fox-bottom-3.png"),
+                                }, 3),
+            },
             new Collision[] { CollisionList.BLOCK_ENTITY },
-            null,
-            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorMovingObserver(new PathFindingFalling()) })),
+            new Property[] { 
+                new PropertySound(SoundType.FOX, 50, 300),
+            },
+            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorMovingAnimal(new PathFindingFalling(), 6),
+                new EntityBehaviorAnimation(0, 1, 2, 3, 4, -1, -1, -1, -1)
+            }),
+            entity -> {
+                entity.setSpeed(0.21);
+            }
+        )),
     FLYING_SLIME(new EntityType("flyingSlime",
             new Texture[] {
                     new Texture(

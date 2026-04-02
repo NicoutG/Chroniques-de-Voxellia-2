@@ -77,7 +77,7 @@ public enum EntityTemplate {
                                         PathManager.loadImage("fox/fox-rest-1.png"),
                                         PathManager.loadImage("fox/fox-rest-2.png"),
                                         PathManager.loadImage("fox/fox-rest-3.png"),
-                                }, 3),
+                                }, 6),
                         new Texture(
                                 ShapeList.ALL, new BufferedImage[] {
                                         PathManager.loadImage("fox/fox-left-0.png"),
@@ -133,11 +133,57 @@ public enum EntityTemplate {
                 new PropertyLight(
                     new LightSource(new ColorRGB(0.2, 0.9, 0.2), 0.5, 0.8, 0))},
             new EntityBehavior[] { new EntityBehaviorPushable(), new EntityBehaviorMovingPassive(new PathFindingFly()) })),
-    LILY(new EntityType("lily",
-            "lily.png",
+    CHICKEN(
+        apply(
+        new EntityType("chicken",
+            new Texture[] {
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("chicken/chicken-rest-0.png"),
+                                        PathManager.loadImage("chicken/chicken-rest-1.png"),
+                                        PathManager.loadImage("chicken/chicken-rest-2.png"),
+                                        PathManager.loadImage("chicken/chicken-rest-3.png"),
+                                }, 3),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("chicken/chicken-left-0.png"),
+                                        PathManager.loadImage("chicken/chicken-left-1.png"),
+                                        PathManager.loadImage("chicken/chicken-left-2.png"),
+                                        PathManager.loadImage("chicken/chicken-left-3.png"),
+                                }, 3),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("chicken/chicken-right-0.png"),
+                                        PathManager.loadImage("chicken/chicken-right-1.png"),
+                                        PathManager.loadImage("chicken/chicken-right-2.png"),
+                                        PathManager.loadImage("chicken/chicken-right-3.png"),
+                                }, 3),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("chicken/chicken-top-0.png"),
+                                        PathManager.loadImage("chicken/chicken-top-1.png"),
+                                        PathManager.loadImage("chicken/chicken-top-2.png"),
+                                        PathManager.loadImage("chicken/chicken-top-3.png"),
+                                }, 3),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("chicken/chicken-bottom-0.png"),
+                                        PathManager.loadImage("chicken/chicken-bottom-1.png"),
+                                        PathManager.loadImage("chicken/chicken-bottom-2.png"),
+                                        PathManager.loadImage("chicken/chicken-bottom-3.png"),
+                                }, 3),
+            },
             new Collision[] { CollisionList.BLOCK_ENTITY },
-            null,
-            new EntityBehavior[] { new EntityBehaviorApplyForce() })),
+            new Property[] { 
+                new PropertySound(SoundType.CHICKEN, 100, 300),
+            },
+            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorMovingAnimal(new PathFindingFalling(), 4, 2.2),
+                new EntityBehaviorAnimation(0, 1, 2, 3, 4, -1, -1, -1, -1)
+            }),
+            entity -> {
+                entity.setSpeed(0.08);
+            }
+        )),
 
     ;
 

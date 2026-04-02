@@ -19,7 +19,8 @@ public enum SoundType implements ISoundType {
     EXPLOSION("explosion.wav", false, 2), 
     CANDLE_ON("candle-on.wav", false, 1), 
     CANDLE_OFF("candle-off.wav", false, 1),
-    FOX("fox.wav", false, 0.5), 
+    FOX("fox.wav", false, 0.5),
+    CHICKEN("chicken.wav", false, 0.7), 
 
     // Ambient : 
     AMBIENT1("ambient/moon-origin-loop.wav", true, 1, true), 

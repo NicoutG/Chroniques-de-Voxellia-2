@@ -15,8 +15,8 @@ public final class IsoMath {
 
     /** Converts world grid coordinates to screen pixel coordinates. */
     public static void toScreen(double x, double y, double z, Point2D.Double out) {
-        out.x = (x - y); 
-        out.y = ((x + y) / 2.0 - z); 
+        out.x = 0.95 * (x - y); 
+        out.y = 0.95 * ((x + y) / 2.0 - z); 
     }
 
     private IsoMath() { }           // static only

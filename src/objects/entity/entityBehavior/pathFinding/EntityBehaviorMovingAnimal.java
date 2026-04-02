@@ -52,7 +52,7 @@ public class EntityBehaviorMovingAnimal extends EntityBehaviorMovingPassive {
                 entity.setSpeed(entity.getSpeed() * getSpeedChange(entity));
             entity.setState(MOVING_STATE, FLEE);
         }
-        else if (distanceToChange + 10 <= distance) {
+        else if (2 * distanceToChange <= distance) {
             if (!movingState.equals(WAIT) && !movingState.equals(MOVE_RANDOMLY)) {
                 entity.setSpeed(entity.getSpeed()/getSpeedChange(entity));
                 entity.setState(MOVING_STATE, MOVE_RANDOMLY);

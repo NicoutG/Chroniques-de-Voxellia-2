@@ -240,8 +240,8 @@ public class GPURenderer {
 
     private Point2D.Double transformation3DTo2D(double x, double y, double z, int w, int h) { 
         IsoMath.toScreen(x, y, z, scratchPoint); 
-        scratchPoint.x = (int) (w/2.0 - IsoMath.DRAW_TILE_SIZE / 2.0 * (lastOriginX - scratchPoint.x)); 
-        scratchPoint.y = (int) (h/2.0 - IsoMath.DRAW_TILE_SIZE / 2.0 * (lastOriginY - scratchPoint.y)); 
+        scratchPoint.x = Math.round(w/2.0 - IsoMath.DRAW_TILE_SIZE / 2.0 * (lastOriginX - scratchPoint.x)); 
+        scratchPoint.y = Math.round(h/2.0 - IsoMath.DRAW_TILE_SIZE / 2.0 * (lastOriginY - scratchPoint.y)); 
         return scratchPoint; 
     }
 

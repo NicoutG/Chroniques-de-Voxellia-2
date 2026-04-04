@@ -1,16 +1,12 @@
 package tools.PetriNet.States;
 
 public class PetriNetState extends PetriNetBase {
-    private Runnable action = null;
 
     public PetriNetState() {}
 
-    public PetriNetState(Runnable action) {
-        setAction(action);
-    }
-
-    public void setAction(Runnable action) {
-        this.action = action;
+    public PetriNetState(Runnable ... actions) {
+        for (Runnable action : actions)
+            addAction(action);
     }
 
     public int getCurrentStateId() {
@@ -22,11 +18,6 @@ public class PetriNetState extends PetriNetBase {
     }
 
     protected void transit() {}
-
-    protected void act() {
-        if (action != null)
-            action.run();
-    }
 
     protected void restart() {}
 }

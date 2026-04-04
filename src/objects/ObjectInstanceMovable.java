@@ -20,6 +20,7 @@ public class ObjectInstanceMovable <
 
     protected Vector position;
     protected Vector velocity = new Vector();
+    @SuppressWarnings("rawtypes")
     protected ObjectInstance floor = null;
     protected boolean moving = false;
 
@@ -97,6 +98,7 @@ public class ObjectInstanceMovable <
         return realMove;
     }
 
+    @SuppressWarnings("rawtypes")
     public ObjectInstance getFloor() {
         return floor;
     }
@@ -130,6 +132,7 @@ public class ObjectInstanceMovable <
         return null;
     }
 
+    @SuppressWarnings("rawtypes")
     public double getDistance(ObjectInstanceMovable objectInstanceMovable) {
         double x = position.x - objectInstanceMovable.getX();
         double y = position.y - objectInstanceMovable.getY();
@@ -154,18 +157,22 @@ public class ObjectInstanceMovable <
         return (this != entity && !noCollision(entity) && !noCollisionEntity(entity) && !(noCollisionSame(this) && entity.areSameType((Entity)this)));
     }
 
+    @SuppressWarnings("rawtypes")
     public static boolean noCollision(ObjectInstance objectInstance) {
         return (objectInstance.getProperty(PropertyList.NO_COLLISION) != null);
     }
 
+    @SuppressWarnings("rawtypes")
     public static boolean noCollisionBlock(ObjectInstance objectInstance) {
         return (objectInstance.getProperty(PropertyList.NO_COLLISION_BLOCK) != null);
     }
 
+    @SuppressWarnings("rawtypes")
     public static boolean noCollisionEntity(ObjectInstance objectInstance) {
         return (objectInstance.getProperty(PropertyList.NO_COLLISION_ENTITY) != null);
     }
 
+    @SuppressWarnings("rawtypes")
     public static boolean noCollisionSame(ObjectInstance objectInstance) {
         return (objectInstance.getProperty(PropertyList.NO_COLLISION_SAME) != null);
     }
@@ -217,6 +224,7 @@ public class ObjectInstanceMovable <
         return moveAxis;
     }
 
+    @SuppressWarnings("rawtypes")
     private ObjectInstance findFloor(World world) {
         position.z -= 0.1;
         ObjectInstance floorInstance = getCollidingBlock(world);

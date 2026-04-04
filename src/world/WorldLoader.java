@@ -108,6 +108,7 @@ public class WorldLoader {
     /*  Apply parameters from JSON                                         */
     /* ------------------------------------------------------------------ */
 
+    @SuppressWarnings("rawtypes")
     private static void applyParameters(ObjectInstance instance, JSONArray params) {
 
         for (int i = 0; i < params.length(); i++) {

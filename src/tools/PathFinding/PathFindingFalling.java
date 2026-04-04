@@ -41,9 +41,9 @@ public class PathFindingFalling extends PathFindingType {
     }
 
     @Override
-    public Vector getRandomDestination(World world, Entity entity, int distance) {
+    public Vector getRandomDestination(World world, Entity entity, double minDistance, double maxDistance) {
         Random random = new Random();
-        int nbSteps = Math.max(1, distance/2 + random.nextInt(Math.max(1,distance/2)));
+        int nbSteps = Math.max(1, (int)minDistance + random.nextInt((int) (maxDistance - minDistance)));
         ArrayList<Vector> closedList = new ArrayList<>();
         closedList.add(0,PathFinding.adaptPosition(world, entity.getPosition()));
         for (int i = 0; i < nbSteps; i++) {

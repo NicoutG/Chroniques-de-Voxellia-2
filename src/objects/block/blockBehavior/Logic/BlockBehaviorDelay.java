@@ -44,6 +44,7 @@ public class BlockBehaviorDelay extends BlockBehaviorConnectedExit {
         delays.add(new AbstractMap.SimpleEntry<>(tick + delay, false));
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public BlockBehavior clone() {
         BlockBehaviorDelay behavior = (BlockBehaviorDelay)super.clone();

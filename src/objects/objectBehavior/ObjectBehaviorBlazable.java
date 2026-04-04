@@ -86,6 +86,7 @@ public class ObjectBehaviorBlazable<
         return PROBA_FIRE + (1 - PROBA_FIRE)  * coef * coef * coef;
     }
 
+    @SuppressWarnings("rawtypes")
     public boolean getBurning(ObjectInstance objectInstance) {
         Object state = objectInstance.getState(BURNING);
         if (state != null && state instanceof Boolean)

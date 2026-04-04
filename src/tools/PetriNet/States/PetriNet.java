@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
 
-import tools.PetriNet.Transitions.ITransition;
+import tools.PetriNet.Transitions.TransitionBase;
 
 public class PetriNet extends PetriNetBase {
     private int currentStateId = 0;
@@ -17,6 +17,13 @@ public class PetriNet extends PetriNetBase {
     private BooleanSupplier resetOnRestart;
     private List<PetriNetBase> states = new ArrayList<PetriNetBase>();
     private HashMap<Integer, List<Edge>> edges = new HashMap<Integer, List<Edge>>();
+
+    public PetriNet(Runnable ... actions) {
+        setRestartStateId(0);
+        setResetOnRestart(true);
+        for (Runnable a : actions)
+            addAction(a);
+    }
     
     public PetriNet() {
         setRestartStateId(0);
@@ -73,6 +80,7 @@ public class PetriNet extends PetriNetBase {
     protected void act() {
         currentStateTick++;
         getCurrentState().act();
+        super.act();
     }
 
     public int getTick() {
@@ -87,7 +95,7 @@ public class PetriNet extends PetriNetBase {
         states.add(state);
     }
 
-    public void addEdge(int start, int end, int priority, ITransition transition) {
+    public void addEdge(int start, int end, int priority, TransitionBase transition) {
         verifyStateId(start);
         verifyStateId(end);
         edges
@@ -95,7 +103,7 @@ public class PetriNet extends PetriNetBase {
             .add(new Edge(transition, end, priority));
     }
 
-    public void addEdge(int start, int end, ITransition transition) {
+    public void addEdge(int start, int end, TransitionBase transition) {
         addEdge(start, end, 0, transition);
     }
 
@@ -103,6 +111,16 @@ public class PetriNet extends PetriNetBase {
         if (0 < getTick())
             transit();
         act();
+    }
+
+    protected boolean randomTrueBeetween(int minTick, int maxTick) {
+        int tick = getTick();
+        if (tick < minTick)
+            return false;
+        if (tick >= maxTick)
+            return true;
+        double proba = 1.0 / (maxTick - tick + 1);
+        return (random.nextDouble() <= proba);
     }
 
     private List<Edge> getSortedEdges(int source) {
@@ -137,11 +155,11 @@ public class PetriNet extends PetriNetBase {
     }
 
     class Edge {
-        public ITransition transition;
+        public TransitionBase transition;
         public int destination;
         public int priority;
 
-        public Edge(ITransition transition, int destination, int priority) {
+        public Edge(TransitionBase transition, int destination, int priority) {
             this.transition = transition;
             this.destination = destination;
             this.priority = priority;

@@ -19,13 +19,13 @@ public class PetriNetTest extends PetriNet {
     private PetriNet createSubPetriNet() {
         PetriNet subPetriNet = new PetriNet();
         PetriNetState state0 = new PetriNetState();
-        state0.setAction(() -> System.out.println(getCurrentStateId()+"."+subPetriNet.getCurrentStateId()));
+        state0.addAction(() -> System.out.println(getCurrentStateId()+"."+subPetriNet.getCurrentStateId()));
         subPetriNet.addState(state0);
         PetriNetState state1 = new PetriNetState();
-        state1.setAction(() -> System.out.println(getCurrentStateId()+"."+subPetriNet.getCurrentStateId()));
+        state1.addAction(() -> System.out.println(getCurrentStateId()+"."+subPetriNet.getCurrentStateId()));
         subPetriNet.addState(state1);
         PetriNetState state2 = new PetriNetState();
-        state2.setAction(() -> System.out.println(getCurrentStateId()+"."+subPetriNet.getCurrentStateId()));
+        state2.addAction(() -> System.out.println(getCurrentStateId()+"."+subPetriNet.getCurrentStateId()));
         subPetriNet.addState(state2);
 
         subPetriNet.addEdge(0, 1, 1, new ProbaTransition(0.2));

@@ -12,7 +12,7 @@ public abstract class PathFindingType {
 
     public abstract ArrayList<Vector> getNeighboors(World world, Entity entity, Vector position, Vector destination);
 
-    public abstract Vector getRandomDestination(World world, Entity entity, int distance);
+    public abstract Vector getRandomDestination(World world, Entity entity, double minDistance, double maxDistance);
 
     public abstract ArrayList<Vector> refinePath(World world, Entity entity, ArrayList<Vector> path);
 

@@ -78,6 +78,7 @@ public class LightingEngine {
     /* ===================================================================== */
     /* ENGINE */
     /* ===================================================================== */
+    @SuppressWarnings("rawtypes")
     private FaceLighting[][][] compute(Block[][][] blocks, ArrayList<Entity> entities, long tick) {
 
         final int X = blocks.length;
@@ -223,6 +224,7 @@ public class LightingEngine {
         return out;
     }
 
+    @SuppressWarnings("rawtypes")
     private ColorRGB addIfLightSource(ColorRGB ambient, ArrayDeque<Voxel> sources, long tick, ObjectInstance objectInstance, int x, int y, int z) {
         if (objectInstance == null)
             return ambient;

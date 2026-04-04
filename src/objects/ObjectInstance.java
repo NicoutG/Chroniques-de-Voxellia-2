@@ -100,6 +100,7 @@ public class ObjectInstance<
             return (ColorRGB) state;
     }
 
+    @SuppressWarnings("rawtypes")
     public boolean collision(Vector position1, ObjectInstance objectInstance, Vector position2) {
         Collision collision1 = getCollision();
         if (collision1 != null) {

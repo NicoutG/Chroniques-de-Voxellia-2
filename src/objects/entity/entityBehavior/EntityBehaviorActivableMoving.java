@@ -24,8 +24,6 @@ public class EntityBehaviorActivableMoving extends EntityBehaviorActivable {
     }
 
     @Override
-    
-
     public void onUpdate(World world, Entity entity) {
         if (getActivationState(entity)) 
             move(world, entity, getPosition2(entity));

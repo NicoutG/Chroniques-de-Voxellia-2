@@ -13,6 +13,7 @@ public class ObjectBehaviorConnected<
     public final static String NETWORK = "network";
 
     private static int numNetwork = 1000000;
+    @SuppressWarnings("rawtypes")
     private static ObjectInstance lastObject = null;
 
     @Override

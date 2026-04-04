@@ -39,7 +39,7 @@ public class World {
     private ArrayList<Entity> entities;
     private ArrayList<SpawnPoint> spawnPoints;
 
-    private Map<Vector, Block> fogMap = new HashMap();
+    private Map<Vector, Block> fogMap = new HashMap<Vector, Block>();
 
     private HashMap<String,WorldData> worlds = new HashMap<>();
     private ArrayList<Runnable> afterUpdateTasks = new ArrayList<>();

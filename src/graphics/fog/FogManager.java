@@ -58,11 +58,11 @@ public final class FogManager {
         };
 
         /* convenient handles */
-        private static final Block FOG100 = FOG_TYPES[0].getInstance();
+        // private static final Block FOG100 = FOG_TYPES[0].getInstance();
         private static final Block FOG75 = FOG_TYPES[1].getInstance();
         private static final Block FOG50 = FOG_TYPES[2].getInstance();
         private static final Block FOG25 = FOG_TYPES[3].getInstance();
-        private static final Block FOG10 = FOG_TYPES[4].getInstance();
+        // private static final Block FOG10 = FOG_TYPES[4].getInstance();
 
         /* -------------------------------------------------------------- */
         /* Utilitaires internes */

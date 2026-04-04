@@ -213,6 +213,7 @@ public class BlockBehaviorLiquid extends BlockBehavior {
         return -1;
     }
 
+    @SuppressWarnings("unchecked")
     public ArrayList<BlockFlow> getConflicts(Block block) {
         Object state = block.getState(CONFLICTS);
         if (state != null && state instanceof ArrayList)

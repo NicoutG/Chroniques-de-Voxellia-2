@@ -9,10 +9,9 @@ import graphics.ligth.ColorRGB;
 import graphics.ligth.LightSource;
 import graphics.shape.ShapeList;
 import objects.entity.entityBehavior.*;
-import objects.entity.entityBehavior.pathFinding.*;
+import objects.entity.entityBehavior.AI.*;
 import objects.property.*;
 import tools.PathManager;
-import tools.PathFinding.*;
 import objects.collision.*;
 
 public enum EntityTemplate {
@@ -111,7 +110,7 @@ public enum EntityTemplate {
             new Property[] { 
                 new PropertySound(SoundType.FOX, 50, 300),
             },
-            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorMovingAnimal(new PathFindingFalling(), 6),
+            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorExecuteAI((world, entity) -> new AIFox(world, entity)),
                 new EntityBehaviorAnimation(0, 1, 2, 3, 4, -1, -1, -1, -1)
             }),
             entity -> {
@@ -132,7 +131,7 @@ public enum EntityTemplate {
                 new PropertySound(SoundType.HELICOPTER) ,
                 new PropertyLight(
                     new LightSource(new ColorRGB(0.2, 0.9, 0.2), 0.5, 0.8, 0))},
-            new EntityBehavior[] { new EntityBehaviorPushable(), new EntityBehaviorMovingPassive(new PathFindingFly()) })),
+            new EntityBehavior[] { new EntityBehaviorPushable(), new EntityBehaviorExecuteAI((world, entity) -> new AISlime(world, entity)) })),
     CHICKEN(
         apply(
         new EntityType("chicken",
@@ -177,7 +176,7 @@ public enum EntityTemplate {
             new Property[] { 
                 new PropertySound(SoundType.CHICKEN, 100, 300),
             },
-            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorMovingAnimal(new PathFindingFalling(), 4, 2.2),
+            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorExecuteAI((world, entity) -> new AIChicken(world, entity)),
                 new EntityBehaviorAnimation(0, 1, 2, 3, 4, -1, -1, -1, -1)
             }),
             entity -> {

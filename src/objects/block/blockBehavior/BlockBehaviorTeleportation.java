@@ -65,6 +65,7 @@ public class BlockBehaviorTeleportation extends BlockBehaviorActivable {
         }
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public BlockBehavior clone() {
         BlockBehaviorTeleportation behavior = (BlockBehaviorTeleportation)super.clone();

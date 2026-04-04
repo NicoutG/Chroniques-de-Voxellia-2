@@ -2,7 +2,7 @@ package tools.PetriNet.Transitions;
 
 import java.util.Random;
 
-public class ProbaTransition implements ITransition {
+public class ProbaTransition extends TransitionBase {
     private double proba = 1;
     private static Random random = new Random();
 
@@ -14,7 +14,7 @@ public class ProbaTransition implements ITransition {
         this.proba = proba;
     }
     
-    public boolean isEnabled() {
+    protected boolean condition() {
         if (1 <= proba)
             return true;
         return (random.nextDouble() <= proba);

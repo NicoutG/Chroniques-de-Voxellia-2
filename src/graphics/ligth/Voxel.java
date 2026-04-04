@@ -39,6 +39,7 @@ public final class Voxel {
     /* ──────────────────── state ──────────────────── */
 
     private final int x, y, z;
+    @SuppressWarnings("rawtypes")
     private final ObjectInstance objectInstance;
     private final ColorRGB color;
     private double intensity;
@@ -54,6 +55,7 @@ public final class Voxel {
     /* ──────────────────── constructors ──────────────────── */
 
     /** Internal ctor used when we already have an encoded rule-set. */
+    @SuppressWarnings("rawtypes")
     private Voxel(ObjectInstance o, int x, int y, int z,
             ColorRGB col, double I, double f,
             byte originIdx, long inheritedMask) {
@@ -76,6 +78,7 @@ public final class Voxel {
     }
 
     /** Public ctor used by light-source voxels (no rules, no origin). */
+    @SuppressWarnings("rawtypes")
     public Voxel(ObjectInstance o, int x, int y, int z,
             ColorRGB col, double intensity, double fallOff) {
         this(o, x, y, z, col, intensity, fallOff, (byte) -1, 0L);
@@ -149,7 +152,7 @@ public final class Voxel {
     }
 
     /* ──────────────────── API identical to original ──────────────────── */
-
+    @SuppressWarnings("rawtypes")
     public ObjectInstance getObjectInstance() {
         return objectInstance;
     }

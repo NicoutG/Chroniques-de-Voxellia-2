@@ -111,7 +111,6 @@ public enum EntityTemplate {
                 new PropertySound(SoundType.FOX, 50, 300),
             },
             new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorExecuteAI((world, entity) -> new AIFox(world, entity)),
-                new EntityBehaviorAnimation(0, 1, 2, 3, 4, -1, -1, -1, -1)
             }),
             entity -> {
                 entity.setSpeed(0.21);
@@ -177,7 +176,6 @@ public enum EntityTemplate {
                 new PropertySound(SoundType.CHICKEN, 100, 300),
             },
             new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorExecuteAI((world, entity) -> new AIChicken(world, entity)),
-                new EntityBehaviorAnimation(0, 1, 2, 3, 4, -1, -1, -1, -1)
             }),
             entity -> {
                 entity.setSpeed(0.08);

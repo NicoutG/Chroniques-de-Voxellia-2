@@ -38,6 +38,6 @@ public class EntityBehaviorExecuteAI extends EntityBehavior {
         Object state = entity.getState(STATE);
         if (state instanceof Integer)
             return (Integer) state;
-        return -1;
+        return 0;
     }
 }

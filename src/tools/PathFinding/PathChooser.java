@@ -26,6 +26,7 @@ public class PathChooser {
 
     public void resetSearch() {
         openList = null;
+        state = PathState.FAILED;
     }
 
     public void resetPath() {
@@ -73,7 +74,7 @@ public class PathChooser {
         return state;
     }
 
-    public void moveToDestination(World world, Entity entity) {
+    public EntityAction[] moveToDestination(World world, Entity entity) {
         if (path != null && !path.isEmpty()) {
             Vector nextStep = path.get(0);
             EntityAction[] actions = pathFindingType.convertToAction(entity, nextStep, entity.getSpeed());
@@ -82,7 +83,9 @@ public class PathChooser {
                 path.remove(0);
             if (getDistanceToDestination() <= 0)
                 state = PathState.REACHED;
+            return actions;
         }
+        return new EntityAction[0];
     }
 
     private void initPathFinding(World world, Vector position) {

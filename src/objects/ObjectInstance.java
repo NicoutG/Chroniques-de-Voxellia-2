@@ -11,6 +11,7 @@ import objects.collision.Collision;
 import objects.objectBehavior.ObjectBehavior;
 import objects.property.Property;
 import tools.Vector;
+import world.World;
 
 public class ObjectInstance<
     T extends ObjectType<?, ?>,
@@ -172,4 +173,27 @@ public class ObjectInstance<
             return (int)state;
         return 0;
     }
+
+    //#region animation
+    
+    private ObjectAnimation currentAnimation = null;
+    private int lastTickAnimation = 0;
+
+    public boolean isAnimated() {
+        if (currentAnimation == null)
+            return false;
+        return (lastTickAnimation + currentAnimation.getTickDuration() > World.getTick());
+    }
+
+    public boolean playAnimation(ObjectAnimation animation) {
+        if (!isAnimated() || (animation.getPriority() > currentAnimation.getPriority() || (currentAnimation.keepIfSamePriority() && animation.getPriority() == currentAnimation.getPriority()))) {
+            currentAnimation = animation;
+            lastTickAnimation = World.getTick();
+            setIndexTexture(animation.getTexture());
+            return true;
+        }
+        return false;
+    }
+
+    //#endregion
 }

@@ -9,6 +9,6 @@ import world.World;
 public class AIFox extends AICoward {
     public AIFox(World world, Entity entity) {
         super(world, entity, new PathFindingFalling(), 1.2, 5, 10, 80, 100, 60, 80);
-        addAction(() -> IPetriNetExecuteActions.decideTextureDefault(entity, ((IPetriNetExecuteActions)getCurrentState()).getCurrentActions(), IPetriNetExecuteActions.getTickWithoutAction(getCurrentState()), 0, 1, 2, 3, 4, -1, -1, -1, -1));
+        addAction(() -> IPetriNetExecuteActions.decideTextureDefault(entity, ((IPetriNetExecuteActions)getCurrentState()).getCurrentActions(), 0, 1, 2, 3, 4, -1, -1, -1, -1));
     }
 }

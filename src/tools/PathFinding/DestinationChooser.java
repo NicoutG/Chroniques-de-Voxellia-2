@@ -8,6 +8,8 @@ public class DestinationChooser {
     private Vector destination;
     private PathFindingType pathFindingType;
 
+    private final static int NB_RANDOM_SEARCH = 10;
+
     public DestinationChooser(PathFindingType pathFindingType) {
         this.pathFindingType = pathFindingType;
     }
@@ -36,7 +38,7 @@ public class DestinationChooser {
     public Vector chooseFurthestPosition(World world, Entity entity, Vector positionToFlee, double minDistance, double maxDistance) {
         Vector furthestPos = null;
         double furthestDist = -1;
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < NB_RANDOM_SEARCH; i++) {
             Vector goal = chooseRandomPosition(world, entity, minDistance, maxDistance);
             double dist = goal.sub(positionToFlee).getNorm();
             if (furthestDist < dist) {
@@ -55,7 +57,7 @@ public class DestinationChooser {
     public Vector chooseClosestPosition(World world, Entity entity, Vector positionToFollow, double minDistance, double maxDistance) {
         Vector closestPos = null;
         double closestDist = Double.MAX_VALUE;
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < NB_RANDOM_SEARCH; i++) {
             Vector goal = chooseRandomPosition(world, entity, minDistance, maxDistance);
             double dist = goal.sub(positionToFollow).getNorm();
             if (closestDist > dist) {

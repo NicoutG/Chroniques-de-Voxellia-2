@@ -181,6 +181,81 @@ public enum EntityTemplate {
                 entity.setSpeed(0.08);
             }
         )),
+   BALL_PROJECTILE(new EntityType("ballProjectile",
+            new Texture[] { new Texture(ShapeList.ALL, PathManager.loadImage("projectile/ball.png")) },
+            new Collision[] { CollisionList.SMALL_CUBE },
+            new Property[] {
+                new PropertyLight(new LightSource(new ColorRGB(0.2, 0.2, 0.2), 0.5, 0.8, 0))},
+            new EntityBehavior[] { new EntityBehaviorConstantVelocity(), new EntityBehaviorKill(), new EntityBehaviorFragile() }
+        )),
+   EARTH_DEFENSER(
+        apply(
+        new EntityType("earthDefenser",
+            new Texture[] {
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("earthDefenser/earthDefenser-rest-0.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-rest-1.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-rest-0.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-rest-2.png"),
+                                }, 10),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("earthDefenser/earthDefenser-left-0.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-left-1.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-left-2.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-left-3.png"),
+                                }, 3),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("earthDefenser/earthDefenser-right-0.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-right-1.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-right-2.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-right-3.png"),
+                                }, 3),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("earthDefenser/earthDefenser-top-0.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-top-1.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-top-2.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-top-3.png"),
+                                }, 3),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("earthDefenser/earthDefenser-bottom-0.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-bottom-1.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-bottom-2.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-bottom-3.png"),
+                                }, 3),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("earthDefenser/earthDefenser-left-0.png"),
+                                }, 10),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("earthDefenser/earthDefenser-charge-right-0.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-charge-right-1.png"),
+                                }, 10),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("earthDefenser/earthDefenser-top-0.png"),
+                                }, 10),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("earthDefenser/earthDefenser-charge-bottom-0.png"),
+                                        PathManager.loadImage("earthDefenser/earthDefenser-charge-bottom-1.png"),
+                                }, 10),
+            },
+            new Collision[] { CollisionList.BLOCK_ENTITY },
+            new Property[] { 
+                new PropertySound(SoundType.CHICKEN, 100, 300),
+            },
+            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorExecuteAI((world, entity) -> new AIEarthDefenser(world, entity)),
+            }),
+            entity -> {
+                entity.setSpeed(0.08);
+            }
+        )),
 
     ;
 

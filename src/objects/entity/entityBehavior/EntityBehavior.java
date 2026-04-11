@@ -30,6 +30,12 @@ public abstract class EntityBehavior extends ObjectBehavior<EntityType, Entity, 
     public void onDesactivated(World world, Entity entity, int network) {
     }
 
+    public void onBorderCollision(World world, Entity entity) {
+    }
+
+    public void onBlockCollision(World world, Entity entity) {
+    }
+
     public void onEntityCollision(World world, Entity entity, Entity entityCollision) {
     }
 

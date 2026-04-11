@@ -312,4 +312,12 @@ public class World {
     public static int getTick() {
         return tick;
     }
+
+    public void addEntity(Entity entity) {
+        executeAfterUpdate(() -> getEntities().add(entity));
+    }
+
+    public void removeEntity(Entity entity) {
+        executeAfterUpdate(() -> getEntities().remove(entity));
+    }
 }

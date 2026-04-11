@@ -74,7 +74,7 @@ public class ObjectBehaviorBlazable<
                         world.executeAfterUpdate(() -> entities.remove(entity));
                         Entity fire = world.getEntity(FIRE_BLOCK_NAME);
                         fire.setPosition(entity.getX(), entity.getY(), entity.getZ());
-                        world.executeAfterUpdate(() -> entities.add(fire));
+                        world.addEntity(fire);
                     }
                 }
             }

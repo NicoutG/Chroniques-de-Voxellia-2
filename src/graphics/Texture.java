@@ -83,7 +83,7 @@ public final class Texture {
     /* ======================== RUNTIME ACCESS =========================== */
 
     private int frameIndex(long tick) {
-        return (int) ((tick / ticksPerFrame) % full.length);
+        return Math.max(0, (int) ((tick / ticksPerFrame) % full.length));
     }
 
     /** Whole 64×64 frame suitable for the given game tick. */

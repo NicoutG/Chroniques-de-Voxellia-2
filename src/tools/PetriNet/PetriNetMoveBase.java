@@ -9,7 +9,7 @@ import tools.PathFinding.PathChooser;
 import tools.PetriNet.States.PetriNetState;
 import world.World;
 
-public abstract class PetriNetMoveBase extends PetriNetState implements IPetriNetExecuteActions {
+public abstract class PetriNetMoveBase extends PetriNetState {
     private PathChooser pathChooser;
     private EntityAction[] currentActions = new EntityAction[0];
     private int lastActionTick = Integer.MIN_VALUE;

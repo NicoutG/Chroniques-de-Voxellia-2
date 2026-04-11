@@ -195,5 +195,13 @@ public class ObjectInstance<
         return false;
     }
 
+    public boolean playEffectAnimation(ObjectAnimation animation, int tickStart) {
+        if (playAnimation(animation)) {
+            initTickFrame0(lastTickAnimation - tickStart);
+            return true;
+        }
+        return false;
+    }
+
     //#endregion
 }

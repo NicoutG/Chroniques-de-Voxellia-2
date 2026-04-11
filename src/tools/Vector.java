@@ -41,6 +41,13 @@ public class Vector {
         return new Vector(x,y,z);
     }
 
+    public Vector getDirectionTo(Vector dest) {
+        Vector diff = dest.sub(this);
+        if (diff.x == 0 && diff.y == 0 && diff.z == 0)
+            return diff;
+        return diff.norm();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) 

@@ -1,6 +1,9 @@
 package tools.PetriNet.States;
 
-public class PetriNetState extends PetriNetBase {
+import objects.entity.EntityAction;
+import tools.PetriNet.IPetriNetExecuteActions;
+
+public class PetriNetState extends PetriNetBase implements IPetriNetExecuteActions {
 
     public PetriNetState() {}
 
@@ -15,6 +18,10 @@ public class PetriNetState extends PetriNetBase {
 
     public PetriNetBase getCurrentState() {
         return this;
+    }
+
+    public EntityAction[] getCurrentActions() {
+        return new EntityAction[0];
     }
 
     protected void transit() {}

@@ -204,6 +204,8 @@ public class ObjectInstanceMovable <
             boolean colliding = boundingBox[0] < 0 || X <= boundingBox[1] || boundingBox[2] < 0 || Y <= boundingBox[3];
             if (!colliding)
                 colliding = isCollidingBlock(world);
+            else
+                ((Entity)this).onBorderCollision(world);
             if (!colliding)
                 colliding = isCollidingEntity(world, stepX, stepY, stepZ);
             if (colliding) {
@@ -253,8 +255,10 @@ public class ObjectInstanceMovable <
     }
 
     private boolean isCollidingBlock(World world) {
-        if (!noCollision(this) && !noCollisionBlock(this))
-            return getCollidingBlock(world) != null;
+        if (getCollidingBlock(world) != null) {
+            ((Entity)this).onBlockCollision(world);
+            return (!noCollision(this) && !noCollisionBlock(this));
+        }
         return false;
     }
 

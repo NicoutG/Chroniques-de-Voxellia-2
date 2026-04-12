@@ -81,14 +81,6 @@ public enum SoundType implements ISoundType {
     public boolean isAmbient() { return ambient; }
 }
 
-// Interface commune pour tous les sons
-interface ISoundType {
-    String getPath();
-    boolean isLooping();
-    double getVolume();
-    boolean isAmbient();
-}
-
 // Classe pour les sons dynamiques
 class DynamicSound implements ISoundType {
     private final String path;

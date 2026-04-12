@@ -13,6 +13,7 @@ public class Player extends Entity {
     @Override
     public void onDeath(World world) {
         super.onDeath(world);
+        SoundManager.stopAllSoundFromCoordinates();
         SoundManager.playSound(SoundType.DEATH);
         world.reloadWorld();
     }

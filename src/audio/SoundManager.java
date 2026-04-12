@@ -12,6 +12,7 @@ import javax.sound.sampled.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,8 @@ public final class SoundManager {
 
     /* ------------------------------------------------------------------ */
 
-    private static final Map<ISoundType, ManagedClip> clips = new HashMap<>();
+    private static final Map<ISoundType, ManagedClip> managedClips = new HashMap<>();
+    private static final HashSet<Clip> clipsFromCoordinates = new HashSet<>();
 
     private static List<SoundType> eventSounds = new ArrayList<>();
 
@@ -50,7 +52,7 @@ public final class SoundManager {
     private static void loadSound(ISoundType sound) {
         ManagedClip manC = PathManager.loadSound(sound.getPath(), sound.isLooping());
         if (manC != null)
-            clips.put(sound, manC);
+            managedClips.put(sound, manC);
     }
 
     /* Fonction pour démarrer le mixeur audio à l'avance */
@@ -85,7 +87,6 @@ public final class SoundManager {
      * Call once per game‑loop iteration (e.g. from {@code GamePanel.tick()}).
      */
     public void tick() {
-
         /*
          * ----------------------------------------------------------
          * 1) Handle queued per-tick sounds
@@ -95,7 +96,7 @@ public final class SoundManager {
 
             // Copy to avoid concurrent-mod with World.removeSound()
             for (SoundType st : new ArrayList<>(eventSounds)) {
-                ManagedClip mc = clips.get(st);
+                ManagedClip mc = managedClips.get(st);
                 if (mc == null)
                     continue; // no clip loaded
 
@@ -195,10 +196,10 @@ public final class SoundManager {
          * ----------------------------------------------------------
          */
         for (ISoundType sound : SoundType.getOtherSounds())
-            if (!clips.containsKey(sound))
+            if (!managedClips.containsKey(sound))
                 loadSound(sound);
 
-        for (Map.Entry<ISoundType, ManagedClip> entry : clips.entrySet()) {
+        for (Map.Entry<ISoundType, ManagedClip> entry : managedClips.entrySet()) {
             ISoundType st = entry.getKey();
             ManagedClip mc = entry.getValue();
             Double d2 = nearestSq.get(st); // null = no source this frame
@@ -231,6 +232,15 @@ public final class SoundManager {
                 setVolume(mc.clip, volLinear); 
             }
         }
+
+        freeSpace();
+    }
+
+    private static int MAX_CLIPS_FROM_COORDINATES = 10;
+
+    private void freeSpace() {
+        if (clipsFromCoordinates.size() >= MAX_CLIPS_FROM_COORDINATES)
+            clipsFromCoordinates.removeIf(clip -> !clip.isActive());
     }
 
     public static void playSound(SoundType st) {
@@ -259,15 +269,17 @@ public final class SoundManager {
                 : (1.0 - (d / MAX_DISTANCE)) * globalVolume * st.getVolume();
 
         /* -------- play exactly like the queued event path -------- */
-        ManagedClip mc = clips.get(st);
+        ManagedClip mc = managedClips.get(st);
             if (mc == null)
                 return null;
+        
         if (st.isLooping()) { // use managed clip
             if (mc.clip.isRunning())
                 mc.clip.stop();
             mc.clip.setFramePosition(0);
             setVolume(mc.clip, vol);
             mc.clip.loop(Clip.LOOP_CONTINUOUSLY);
+            clipsFromCoordinates.add(mc.clip);
             return mc.clip;
         } else { // spawn throw-away
             Clip c = cloneClip(mc);
@@ -276,6 +288,7 @@ public final class SoundManager {
             setVolume(c, vol);
             c.setFramePosition(0);
             c.start();
+            clipsFromCoordinates.add(c);
             return c;
         }
     }
@@ -285,14 +298,18 @@ public final class SoundManager {
     }
 
     public static void stopSound(SoundType soundType) {
-        ManagedClip mc = clips.get(soundType);
+        ManagedClip mc = managedClips.get(soundType);
         if (mc != null && mc.clip.isRunning())
             mc.clip.stop();
     }
 
+    public static void stopAllSoundFromCoordinates() {
+        clipsFromCoordinates.forEach(c -> c.stop());
+    }
+
     /** Close every {@link Clip}. Call once when your program exits. */
     public void shutdown() {
-        clips.values().forEach(mc -> {
+        managedClips.values().forEach(mc -> {
             mc.clip.stop();
             mc.clip.close();
         });

@@ -1,6 +1,5 @@
 package objects.entity;
 
-import audio.SoundManager;
 import audio.SoundType;
 import objects.ObjectInstanceMovable;
 import objects.block.Block;
@@ -122,7 +121,7 @@ public class Entity extends ObjectInstanceMovable<EntityType, Entity, EntityBeha
             if (getFloor() != null) {
                 addVelocity(0, 0, 1.05);
                 lastJump = now;
-                SoundManager.playSoundFromCoordinates(SoundType.JUMP2, this.getX(), this.getY(), this.getZ());
+                playSound(SoundType.JUMP2);
                 return true;
             }
         }

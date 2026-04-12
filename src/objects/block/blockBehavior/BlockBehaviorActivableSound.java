@@ -1,6 +1,5 @@
 package objects.block.blockBehavior;
 
-import audio.SoundManager;
 import audio.SoundType;
 import objects.block.Block;
 import tools.Vector;
@@ -37,7 +36,7 @@ public class BlockBehaviorActivableSound extends BlockBehaviorConnected {
         if (getNetwork(block) == network) {
             String soundOn = getSoundOn(block);
             if (soundOn != null)
-                SoundManager.playSoundFromCoordinates(SoundType.getSoundType(soundOn), position.x, position.y, position.z);
+                block.playSound(SoundType.getSoundType(soundOn), position.x, position.y, position.z);
         }
     }
 
@@ -46,7 +45,7 @@ public class BlockBehaviorActivableSound extends BlockBehaviorConnected {
         if (getNetwork(block) == network) {
             String soundOff = getSoundOff(block);
             if (soundOff != null)
-                SoundManager.playSoundFromCoordinates(SoundType.getSoundType(soundOff), position.x, position.y, position.z);
+                block.playSound(SoundType.getSoundType(soundOff), position.x, position.y, position.z);
         }
     }
 

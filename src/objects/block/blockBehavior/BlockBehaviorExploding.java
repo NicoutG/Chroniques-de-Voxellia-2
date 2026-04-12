@@ -2,7 +2,6 @@ package objects.block.blockBehavior;
 
 import java.util.ArrayList;
 
-import audio.SoundManager;
 import audio.SoundType;
 import objects.block.Block;
 import objects.entity.Entity;
@@ -33,7 +32,7 @@ public class BlockBehaviorExploding extends BlockBehaviorActivable {
 
     @Override
     public void activate(World world, Block block, Vector position, int network) {
-        SoundManager.playSoundFromCoordinates(SoundType.EXPLOSION, position.x, position.y, position.z);
+        block.playSound(SoundType.EXPLOSION, position.x, position.y, position.z);
         double radius = getRadius(block);
         int minX = Math.max(0,(int)(position.x - radius));
         int maxX = Math.min(world.getX() - 1, (int)(position.x + radius));

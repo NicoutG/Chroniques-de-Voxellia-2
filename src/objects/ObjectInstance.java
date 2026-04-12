@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javax.sound.sampled.Clip;
+
+import audio.ISoundType;
+import audio.SoundManager;
 import graphics.Texture;
 import graphics.ligth.ColorRGB;
 import objects.collision.Collision;
@@ -200,6 +204,39 @@ public class ObjectInstance<
             initTickFrame0(lastTickAnimation - tickStart);
             return true;
         }
+        return false;
+    }
+
+    //#endregion
+
+    //#region Sons
+
+    private HashMap<ISoundType, Clip> playedSound = new HashMap<ISoundType,Clip>();
+
+    public void playSound(ISoundType sound, double x, double y, double z) {
+        Clip clip = SoundManager.playSoundFromCoordinates(sound, x, y, z);
+        playedSound.put(sound, clip);
+    }
+
+    public boolean playSoundIfNotPlayed(ISoundType sound, double x, double y, double z) {
+        if (!isPlayedSound(sound)) {
+            playSound(sound, x, y, z);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean stopSound(ISoundType sound) {
+        if (isPlayedSound(sound)) {
+            playedSound.get(sound).stop();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isPlayedSound(ISoundType sound) {
+        if (playedSound.containsKey(sound))
+            return playedSound.get(sound).isActive();
         return false;
     }
 

@@ -1,6 +1,6 @@
 package objects.entity.entityBehavior.AI.utils;
 
-import audio.SoundType;
+import audio.ISoundType;
 import objects.ObjectAnimation;
 import objects.entity.Entity;
 import tools.Vector;
@@ -15,7 +15,7 @@ public abstract class AIShooterDefenser extends AI {
         double detectionDistance, double safeDistance, 
         int minTickWait, int maxTickWait, int minTickMove, int maxTickMove, 
         int loadShootDuration, int afterShootDuration,
-        String projectileName, double projectileSpeed, SoundType shootSound,
+        String projectileName, double projectileSpeed, ISoundType loadSound, ISoundType shootSound,
         int leftLoadTexture, int rightLoadTexture, int topLoadTexture, int bottomLoadTexture,
         int leftShootTexture, int rightShootTexture, int topShootTexture, int bottomShootTexture
     ) {
@@ -33,6 +33,7 @@ public abstract class AIShooterDefenser extends AI {
             Vector direction = entity.getPosition().getDirectionTo(world.getPlayer().getPosition());
             int textureIndex = PetriNetShoot.getDirectedShootTexture(direction, leftLoadTexture, rightLoadTexture, topLoadTexture, bottomLoadTexture);
             entity.playEffectAnimation(new ObjectAnimation(textureIndex, 1, 2), getTick() - 1);
+            entity.playSoundIfNotPlayed(loadSound);
         });
         addState(state1);
 
@@ -45,6 +46,7 @@ public abstract class AIShooterDefenser extends AI {
         addEdge(0, 1, randomToLoadTransition);
 
         TransitionBase loadToRandomTransition = new Transition(() -> safeDistance < (world.getPlayer().getPosition().sub(entity.getPosition()).getNorm()));
+        loadToRandomTransition.addAction(() -> entity.stopSound(loadSound));
         addEdge(1, 0, loadToRandomTransition);
         TransitionBase loadToShootTransition = new Transition(() -> loadShootDuration <= getTick());
         loadToShootTransition.addAction(() -> {
@@ -52,6 +54,7 @@ public abstract class AIShooterDefenser extends AI {
             PetriNetShoot.shoot(world, entity, direction, projectileName, projectileSpeed);
             int textureIndex = PetriNetShoot.getDirectedShootTexture(direction, leftShootTexture, rightShootTexture, topShootTexture, bottomShootTexture);
             entity.playAnimation(new ObjectAnimation(textureIndex, afterShootDuration, 3));
+            entity.stopSound(loadSound);
             entity.playSound(shootSound);
         });
         addEdge(1, 2, loadToShootTransition);

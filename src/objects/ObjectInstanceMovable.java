@@ -2,8 +2,7 @@ package objects;
 
 import java.util.ArrayList;
 
-import audio.SoundManager;
-import audio.SoundType;
+import audio.ISoundType;
 import objects.block.Block;
 import objects.collision.Collision;
 import objects.entity.Entity;
@@ -301,7 +300,11 @@ public class ObjectInstanceMovable <
         return false;
     }
 
-    public void playSound(SoundType sound) {
-        SoundManager.playSoundFromCoordinates(sound, getPosition().x, getPosition().y, getPosition().z);
+    public void playSound(ISoundType sound) {
+        playSound(sound, getX(), getY(), getZ());
+    }
+
+    public void playSoundIfNotPlayed(ISoundType sound) {
+        playSoundIfNotPlayed(sound, getX(), getY(), getZ());
     }
 }

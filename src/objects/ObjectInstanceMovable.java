@@ -2,6 +2,8 @@ package objects;
 
 import java.util.ArrayList;
 
+import audio.SoundManager;
+import audio.SoundType;
 import objects.block.Block;
 import objects.collision.Collision;
 import objects.entity.Entity;
@@ -297,5 +299,9 @@ public class ObjectInstanceMovable <
                     return true;
         }
         return false;
+    }
+
+    public void playSound(SoundType sound) {
+        SoundManager.playSoundFromCoordinates(sound, getPosition().x, getPosition().y, getPosition().z);
     }
 }

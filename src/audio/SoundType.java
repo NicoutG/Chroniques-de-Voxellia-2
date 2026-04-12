@@ -21,6 +21,9 @@ public enum SoundType implements ISoundType {
     CANDLE_OFF("candle-off.wav", false, 1),
     FOX("fox.wav", false, 0.5),
     CHICKEN("chicken.wav", false, 0.7), 
+    ELECTRIC_DISCHARGE("electric-discharge.wav", false, 0.8),
+    ELECTRIC_LOAD("electric-load.wav", false, 0.8),
+
 
     // Ambient : 
     AMBIENT1("ambient/moon-origin-loop.wav", true, 1, true), 

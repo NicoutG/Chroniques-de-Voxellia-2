@@ -185,7 +185,7 @@ public enum EntityTemplate {
             new Texture[] { new Texture(ShapeList.ALL, PathManager.loadImage("projectile/ball.png")) },
             new Collision[] { CollisionList.SMALL_CUBE },
             new Property[] {
-                new PropertyLight(new LightSource(new ColorRGB(0.2, 0.2, 0.2), 0.5, 0.8, 0))},
+                new PropertyLight(new LightSource(new ColorRGB(0.2, 0.2, 0.2), 1, 0.8, 0))},
             new EntityBehavior[] { new EntityBehaviorConstantVelocity(), new EntityBehaviorKill(), new EntityBehaviorFragile() }
         )),
    EARTH_DEFENSER(
@@ -248,7 +248,7 @@ public enum EntityTemplate {
             },
             new Collision[] { CollisionList.BLOCK_ENTITY },
             new Property[] { 
-                new PropertySound(SoundType.CHICKEN, 100, 300),
+                // new PropertySound(SoundType.CHICKEN, 100, 300),
             },
             new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorExecuteAI((world, entity) -> new AIEarthDefenser(world, entity)),
             }),

@@ -186,7 +186,7 @@ public class ObjectInstance<
     }
 
     public boolean playAnimation(ObjectAnimation animation) {
-        if (!isAnimated() || (animation.getPriority() > currentAnimation.getPriority() || (currentAnimation.keepIfSamePriority() && animation.getPriority() == currentAnimation.getPriority()))) {
+        if (!isAnimated() || (animation.getPriority() > currentAnimation.getPriority() || (!currentAnimation.keepIfSamePriority() && animation.getPriority() == currentAnimation.getPriority()))) {
             currentAnimation = animation;
             lastTickAnimation = World.getTick();
             setIndexTexture(animation.getTexture());

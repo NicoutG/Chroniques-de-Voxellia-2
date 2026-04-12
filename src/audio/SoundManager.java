@@ -234,22 +234,24 @@ public final class SoundManager {
     }
 
     public static void playSound(SoundType st) {
+        if (st == null)
+            return;
         stopSound(st);
         eventSounds.add(st);
     }
 
-    public static void playSoundFromCoordinates(ISoundType st,
+    public static Clip playSoundFromCoordinates(ISoundType st,
             double sx, double sy, double sz) {
 
-        if (world == null)
-            return;
+        if (world == null || st == null)
+            return null;
         Player p = world.getPlayer();
         if (p == null)
-            return;
+            return null;
 
         double d2 = dist2(p.getX(), p.getY(), p.getZ(), sx, sy, sz);
         if (d2 > MAX_DISTANCE * MAX_DISTANCE)
-            return; // too far to hear
+            return null; // too far to hear
 
         double d = Math.sqrt(d2);
         double vol = st.isAmbient()
@@ -259,20 +261,22 @@ public final class SoundManager {
         /* -------- play exactly like the queued event path -------- */
         ManagedClip mc = clips.get(st);
             if (mc == null)
-                return;
+                return null;
         if (st.isLooping()) { // use managed clip
             if (mc.clip.isRunning())
                 mc.clip.stop();
             mc.clip.setFramePosition(0);
             setVolume(mc.clip, vol);
             mc.clip.loop(Clip.LOOP_CONTINUOUSLY);
+            return mc.clip;
         } else { // spawn throw-away
             Clip c = cloneClip(mc);
             if (c == null)
-                return;
+                return null;
             setVolume(c, vol);
             c.setFramePosition(0);
             c.start();
+            return c;
         }
     }
 

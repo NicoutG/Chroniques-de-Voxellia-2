@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum SoundType implements ISoundType { 
-    FIRE("fire-loop.wav", true, 0.35), 
-    LAVA("lava-loop.wav", true, 1.15), 
+    FIRE("fire-loop.wav", true, 0.35, true), 
+    LAVA("lava-loop.wav", true, 1.15, true), 
     LEVER("lever.wav", false, 0.85), 
-    WATER("water-loop.wav", true, 6), 
+    WATER("water-loop.wav", true, 6, true), 
     HELICOPTER("helicopter-loop.wav", true, 0.7), 
     TELEPORTATION("teleportation.wav", false, 15), 
     JUMP1("movements/jump1.wav", false, 0.2), 
@@ -29,7 +29,7 @@ public enum SoundType implements ISoundType {
     AMBIENT1("ambient/moon-origin-loop.wav", true, 1, true), 
     AMBIENT2("ambient/lost-in-forest-loop.wav", true, 1, true), 
     BACKGROUND_NATURE("ambient/nature-background-loop.wav", true, 4, true), 
-    PIRATE_MUSIC("ambient/pirate-music-loop.wav", true, 2, true), 
+    PIRATE_MUSIC("ambient/pirate-music-loop.wav", true, 1, true), 
     
     ;
 

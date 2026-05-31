@@ -301,10 +301,10 @@ public class ObjectInstanceMovable <
     }
 
     public void playSound(ISoundType sound) {
-        playSound(sound, getX(), getY(), getZ());
+        playSound(sound, position);
     }
 
     public void playSoundIfNotPlayed(ISoundType sound) {
-        playSoundIfNotPlayed(sound, getX(), getY(), getZ());
+        playSoundIfNotPlayed(sound, position);
     }
 }

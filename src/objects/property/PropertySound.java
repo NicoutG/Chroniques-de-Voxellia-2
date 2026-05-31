@@ -43,6 +43,8 @@ public class PropertySound extends Property {
 
     public SoundType getSound() {
         int currentTick = World.getTick();
+        if (currentTick + waitingTick < lastTick)
+            lastTick = currentTick;
         if (lastTick == currentTick || lastTick + waitingTick <= currentTick) {
             lastTick = currentTick;
             waitingTick = getWaitingTick();

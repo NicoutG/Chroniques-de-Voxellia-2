@@ -36,7 +36,7 @@ public class BlockBehaviorActivableSound extends BlockBehaviorConnected {
         if (getNetwork(block) == network) {
             String soundOn = getSoundOn(block);
             if (soundOn != null)
-                block.playSound(SoundType.getSoundType(soundOn), position.x, position.y, position.z);
+                block.playSound(SoundType.getSoundType(soundOn), position);
         }
     }
 
@@ -45,7 +45,7 @@ public class BlockBehaviorActivableSound extends BlockBehaviorConnected {
         if (getNetwork(block) == network) {
             String soundOff = getSoundOff(block);
             if (soundOff != null)
-                block.playSound(SoundType.getSoundType(soundOff), position.x, position.y, position.z);
+                block.playSound(SoundType.getSoundType(soundOff), position);
         }
     }
 

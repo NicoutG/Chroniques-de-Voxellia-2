@@ -4,7 +4,6 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -30,16 +29,30 @@ public class PathManager {
         return null;
     }
 
-    public static ManagedClip loadSound(String path, boolean looping) {
-        try (AudioInputStream ais = AudioSystem.getAudioInputStream(new File(SOUND_PATH + path))) {
+    public static Data loadSound(String path) {
+        try {
+            File file = new File(SOUND_PATH + path);
+
+            if (!file.exists()) {
+                System.err.println("Sound not found: " + file.getAbsolutePath());
+                return null;
+            }
+
+            AudioInputStream ais = AudioSystem.getAudioInputStream(file);
+
             AudioFormat format = ais.getFormat();
-            byte[] data = ais.readAllBytes();
-            Clip clip = AudioSystem.getClip();
-            clip.open(format, data, 0, data.length);
-            return new ManagedClip(clip, data, looping);
+            byte[] bytes = ais.readAllBytes();
+
+            ais.close();
+
+            return new Data(bytes, format);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return null;
     }
+
+    public record Data(byte[] bytes, AudioFormat format) {}
 }

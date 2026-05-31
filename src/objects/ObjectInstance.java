@@ -5,9 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
-import javax.sound.sampled.Clip;
-
 import audio.ISoundType;
+import audio.SimpleAudioSource;
 import audio.SoundManager;
 import graphics.Texture;
 import graphics.ligth.ColorRGB;
@@ -211,16 +210,16 @@ public class ObjectInstance<
 
     //#region Sons
 
-    private HashMap<ISoundType, Clip> playedSound = new HashMap<ISoundType,Clip>();
+    private HashMap<ISoundType, SimpleAudioSource> playedSound = new HashMap<>();
 
-    public void playSound(ISoundType sound, double x, double y, double z) {
-        Clip clip = SoundManager.playSoundFromCoordinates(sound, x, y, z);
-        playedSound.put(sound, clip);
+    public void playSound(ISoundType sound, Vector position) {
+        SimpleAudioSource sas = SoundManager.playSound(sound, position);
+        playedSound.put(sound, sas);
     }
 
-    public boolean playSoundIfNotPlayed(ISoundType sound, double x, double y, double z) {
+    public boolean playSoundIfNotPlayed(ISoundType sound, Vector position) {
         if (!isPlayedSound(sound)) {
-            playSound(sound, x, y, z);
+            playSound(sound, position);
             return true;
         }
         return false;
@@ -236,7 +235,7 @@ public class ObjectInstance<
 
     public boolean isPlayedSound(ISoundType sound) {
         if (playedSound.containsKey(sound))
-            return playedSound.get(sound).isActive();
+            return playedSound.get(sound).isPlaying();
         return false;
     }
 

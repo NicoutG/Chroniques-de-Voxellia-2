@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import audio.SoundManager;
 import engine.GameControls;
 import graphics.IsoMath;
 import graphics.fog.FogManager;
@@ -138,6 +139,7 @@ public class World {
         startingWorld = filename;
         startingSpawnPoint = spawnPoint;
         loadWorld(filename, spawnPoint);
+        SoundManager.stopAll();
     }
 
     public void loadWorld0(String filename) {

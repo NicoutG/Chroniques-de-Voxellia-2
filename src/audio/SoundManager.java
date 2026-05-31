@@ -1,137 +1,48 @@
 package audio;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+
+import objects.ObjectInstance;
 import objects.block.Block;
 import objects.entity.Entity;
 import objects.entity.Player;
 import objects.property.PropertySound;
 import tools.PathManager;
-import tools.ManagedClip;
+import tools.PathManager.Data;
+import tools.Vector;
 import world.World;
 
-import javax.sound.sampled.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
-public final class SoundManager {
-
+public class SoundManager {
     private static World world;
-
     private static double globalVolume;
+    private static boolean needToResetAllSounds = true;
+    private static boolean needToResetAllSoundsFromPositions = true;
 
-    /** Maximum distance (in world units) at which a sound is audible. */
-    private static final double MAX_DISTANCE = 25.0;
-
-    /** If the linear volume falls below this threshold the clip is paused. */
-    private static final double EPSILON = 0.04;
-
-    /* ------------------------------------------------------------------ */
-
-    private static final Map<ISoundType, ManagedClip> managedClips = new HashMap<>();
-    private static final HashSet<Clip> clipsFromCoordinates = new HashSet<>();
-
-    private static List<SoundType> eventSounds = new ArrayList<>();
-
+    private static final double MAX_DISTANCE = 15.0;
     private final static String SOUND = "ambientSound";
 
+    private static HashMap<ISoundType, Data> sounds = new HashMap<>();
+    private static HashMap<ISoundType, ArrayList<SimpleAudioSource>> playingSounds = new HashMap<>();
+    private static HashMap<SimpleAudioSource, SoundTypeAndCoordinates> playingSoundsFromCoordinates = new HashMap<>();
+
     public SoundManager(World world) {
-
+        if (world == null)
+            return;
         SoundManager.world = world;
-        SoundManager.globalVolume = 0.2;
+        globalVolume = 0.2;
 
-        /* ----------- load & cache every clip once -------------- */
         for (ISoundType st : SoundType.values())
             loadSound(st);
-
-        warmupAudio();
     }
 
-    private static void loadSound(ISoundType sound) {
-        ManagedClip manC = PathManager.loadSound(sound.getPath(), sound.isLooping());
-        if (manC != null)
-            managedClips.put(sound, manC);
-    }
-
-    /* Fonction pour démarrer le mixeur audio à l'avance */
-    public static void warmupAudio() {
-        try {
-            AudioFormat format = new AudioFormat(44100, 16, 1, true, false);
-            Clip clip = AudioSystem.getClip();
-
-            byte[] silence = new byte[4410]; // 0.1 s
-            clip.open(format, silence, 0, silence.length);
-            clip.start();
-            Thread.sleep(10);
-            clip.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static Clip cloneClip(ManagedClip mClip) {
-        try {
-            Clip clip = AudioSystem.getClip();
-            clip.open(mClip.clip.getFormat(), mClip.data, 0, mClip.data.length);
-            return clip;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * Call once per game‑loop iteration (e.g. from {@code GamePanel.tick()}).
-     */
     public void tick() {
-        /*
-         * ----------------------------------------------------------
-         * 1) Handle queued per-tick sounds
-         * ----------------------------------------------------------
-         */
-        if (eventSounds != null && !eventSounds.isEmpty()) {
+        // update volume
+        for (var sas : new HashSet<SimpleAudioSource>(playingSoundsFromCoordinates.keySet()))
+            updateSound(sas);
 
-            // Copy to avoid concurrent-mod with World.removeSound()
-            for (SoundType st : new ArrayList<>(eventSounds)) {
-                ManagedClip mc = managedClips.get(st);
-                if (mc == null)
-                    continue; // no clip loaded
-
-                /* play only if stopped */
-                if (!mc.clip.isRunning()) {
-                    mc.clip.setFramePosition(0);
-                    setVolume(mc.clip, globalVolume * st.volume); // ① gain FIRST
-                    if (st.looping) {
-                        mc.clip.loop(Clip.LOOP_CONTINUOUSLY);
-                    } else {
-                        mc.clip.start();
-                    }
-                }
-
-                /* remove one-shots through the World API */ // ② proper removal
-                if (!st.looping) {
-                    removeSound(st);
-                }
-            }
-        }
-
-        /*
-         * --------------------------------------------------------------
-         * 2) Spatialised ambiences: only the closest emitter of each type.
-         * --------------------------------------------------------------
-         */
-
-        Player player = world.getPlayer();
-        if (player == null || world == null)
-            return;
-
-        /* 1) Find the closest source for each SoundType. */
-        Map<ISoundType, Double> nearestSq = new HashMap<ISoundType, Double>();
-
-        /* ---- blocks ---- */
+        // find sounds in property and states
         Block[][][] blocks = world.getBlocks();
         if (blocks != null) {
             for (int x = 0; x < blocks.length; x++)
@@ -141,214 +52,217 @@ public final class SoundManager {
                         if (b == null)
                             continue;
 
-                        ArrayList<ISoundType> sounds = new ArrayList<>();
-
-                        if (b.getProperty(PropertySound.NAME) != null) {
-                            PropertySound soundProp = (PropertySound) b.getProperty(PropertySound.NAME);
-                            if (soundProp.getSound() != null)
-                                sounds.add(soundProp.getSound());
-                        }
-
-                        Object state = b.getState(SOUND);
-                        if (state != null && state instanceof String soundPath) {
-                            ISoundType sound = SoundType.getSoundType(soundPath);
-                            if (sound != null)
-                                sounds.add(sound);
-                        }
-
-                        for (ISoundType sound : sounds) {
-                            double d2 = dist2(player.getX(), player.getY(), player.getZ(),
-                                    x + 0.5, y + 0.5, z + 0.5);
-                            nearestSq.merge(sound, d2, Math::min);
-                        }
+                        playObjectInstanceSounds(b, new Vector(x + 0.5, y + 0.5, z + 0.5));
                     }
         }
-
-        /* ---- entities ---- */
         for (Entity e : world.getEntities()) {
             if (e == null)
                 continue;
-            ArrayList<ISoundType> sounds = new ArrayList<>();
-
-            if (e.getProperty(PropertySound.NAME) != null) {
-                PropertySound soundProp = (PropertySound) e.getProperty(PropertySound.NAME);
-                if (soundProp.getSound() != null)
-                    sounds.add(soundProp.getSound());
-            }
-
-            Object state = e.getState(SOUND);
-            if (state != null && state instanceof String soundPath) {
-                ISoundType sound = SoundType.getSoundType(soundPath);
-                if (sound != null)
-                    sounds.add(sound);
-            }
-
-            for (ISoundType sound : sounds) {
-                double d2 = dist2(player.getX(), player.getY(), player.getZ(),
-                        e.getX(), e.getY(), e.getZ());
-                nearestSq.merge(sound, d2, Math::min);
-            }
+            playObjectInstanceSounds(e, e.getPosition());
         }
 
-        /*
-         * ----------------------------------------------------------
-         *  Load unknown sounds
-         * ----------------------------------------------------------
-         */
-        for (ISoundType sound : SoundType.getOtherSounds())
-            if (!managedClips.containsKey(sound))
-                loadSound(sound);
+        needToResetAllSounds = false;
+        needToResetAllSoundsFromPositions = false;
+    }
 
-        for (Map.Entry<ISoundType, ManagedClip> entry : managedClips.entrySet()) {
-            ISoundType st = entry.getKey();
-            ManagedClip mc = entry.getValue();
-            Double d2 = nearestSq.get(st); // null = no source this frame
+    //#region play
 
-            /* ---------- 1) AMBIENT LOOP HANDLING ------------------------- */
-            if (st.isAmbient()) {
-                if (d2 == null) { // no ambient block -> stop
-                    pause(mc);
-                } else { // at least one present
-                    double vol = globalVolume * st.getVolume();
-                    ensurePlaying(mc, vol);
-                    setVolume(mc.clip, vol);
-                }
-                continue;
-            }
+    public static SimpleAudioSource playSound(ISoundType st) {
+        return playSound(st, st.getVolume() * globalVolume);
+    }
 
-            /* ---------- 2) NORMAL (non-ambient) HANDLING ----------------- */
-            if (d2 == null || d2 > MAX_DISTANCE * MAX_DISTANCE) {
-                pause(mc);
-                continue;
-            }
-
-            double d = Math.sqrt(d2);
-            double volLinear = (1.0 - (d / MAX_DISTANCE)) * globalVolume * st.getVolume();
-
-            if (volLinear < EPSILON) {
-                pause(mc);
-            } else {
-                ensurePlaying(mc, volLinear); // may (re)start the clip
-                setVolume(mc.clip, volLinear); 
-            }
+    public static SimpleAudioSource playSound(ISoundType st, Vector pos) {
+        double d2 = getVolumeFromDistance2(st, dist2(world.getPlayer().getPosition(), pos));
+        SimpleAudioSource sas = playSound(st, d2);
+        if (sas == null)
+            return null;
+        ArrayList<Vector> positions;
+        if (playingSoundsFromCoordinates.containsKey(sas))
+            positions = playingSoundsFromCoordinates.get(sas).pos();
+        else {
+            positions = new ArrayList<>();
+            playingSoundsFromCoordinates.put(sas, new SoundTypeAndCoordinates(st, positions));
+            sas.onFinish(() -> playingSoundsFromCoordinates.remove(sas));
         }
-
-        freeSpace();
+        positions.add(pos);
+        return sas;
     }
 
-    private static int MAX_CLIPS_FROM_COORDINATES = 10;
-
-    private void freeSpace() {
-        if (clipsFromCoordinates.size() >= MAX_CLIPS_FROM_COORDINATES)
-            clipsFromCoordinates.removeIf(clip -> !clip.isActive());
-    }
-
-    public static void playSound(SoundType st) {
+    private static SimpleAudioSource playSound(ISoundType st, double volume) {
         if (st == null)
-            return;
-        stopSound(st);
-        eventSounds.add(st);
+            return null;
+        try {
+            if (st.isAmbient() && playingSounds.containsKey(st)) {
+                var audios = playingSounds.get(st);
+                if (audios.size() > 0) {
+                    SimpleAudioSource sas = audios.get(0);
+                    sas.setVolume(volume);
+                    if (!st.isLooping())
+                        sas.play(st.isLooping());
+                    return sas;
+                }
+            }
+            Data data = getData(st);
+            SimpleAudioSource sas = new SimpleAudioSource(data.bytes(), data.format());
+            sas.setVolume(volume);
+            sas.play(st.isLooping());
+            ArrayList<SimpleAudioSource> audioList;
+            if (playingSounds.containsKey(st))
+                audioList = playingSounds.get(st);
+            else {
+                audioList = new ArrayList<>();
+                playingSounds.put(st, audioList);
+            }
+            audioList.add(sas);
+            sas.onFinish(() -> removeFromPlayingSound(st, sas));
+            return sas;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public static Clip playSoundFromCoordinates(ISoundType st,
-            double sx, double sy, double sz) {
+    //#endregion
 
-        if (world == null || st == null)
-            return null;
-        Player p = world.getPlayer();
-        if (p == null)
-            return null;
+    //#region stop
 
-        double d2 = dist2(p.getX(), p.getY(), p.getZ(), sx, sy, sz);
-        if (d2 > MAX_DISTANCE * MAX_DISTANCE)
-            return null; // too far to hear
+    public static void stopAll() {
+        HashMap<ISoundType, ArrayList<SimpleAudioSource>> snapshot =
+                new HashMap<>(playingSounds);
 
-        double d = Math.sqrt(d2);
-        double vol = st.isAmbient()
-                ? globalVolume * st.getVolume() // full for ambients
-                : (1.0 - (d / MAX_DISTANCE)) * globalVolume * st.getVolume();
+        playingSounds.clear();
+        playingSoundsFromCoordinates.clear();
 
-        /* -------- play exactly like the queued event path -------- */
-        ManagedClip mc = managedClips.get(st);
-            if (mc == null)
-                return null;
-        
-        if (st.isLooping()) { // use managed clip
-            if (mc.clip.isRunning())
-                mc.clip.stop();
-            mc.clip.setFramePosition(0);
-            setVolume(mc.clip, vol);
-            mc.clip.loop(Clip.LOOP_CONTINUOUSLY);
-            clipsFromCoordinates.add(mc.clip);
-            return mc.clip;
-        } else { // spawn throw-away
-            Clip c = cloneClip(mc);
-            if (c == null)
-                return null;
-            setVolume(c, vol);
-            c.setFramePosition(0);
-            c.start();
-            clipsFromCoordinates.add(c);
-            return c;
+        needToResetAllSounds = true;
+
+        for (ArrayList<SimpleAudioSource> audioList : snapshot.values()) {
+
+            for (SimpleAudioSource sas : new ArrayList<>(audioList)) {
+                try {
+                    sas.stop();
+                } catch (Exception ignored) {}
+            }
         }
     }
 
-    public static void removeSound(SoundType st) {
-        eventSounds.remove(st);
-    }
+    public static void stopAllFromCoordinates() {
 
-    public static void stopSound(SoundType soundType) {
-        ManagedClip mc = managedClips.get(soundType);
-        if (mc != null && mc.clip.isRunning())
-            mc.clip.stop();
-    }
+        HashSet<SimpleAudioSource> snapshot =
+                new HashSet<>(playingSoundsFromCoordinates.keySet());
 
-    public static void stopAllSoundFromCoordinates() {
-        clipsFromCoordinates.forEach(c -> c.stop());
-    }
+        playingSoundsFromCoordinates.clear();
 
-    /** Close every {@link Clip}. Call once when your program exits. */
-    public void shutdown() {
-        managedClips.values().forEach(mc -> {
-            mc.clip.stop();
-            mc.clip.close();
-        });
-    }
+        needToResetAllSoundsFromPositions = true;
 
-    private void ensurePlaying(ManagedClip mc, double volLin) {
-        if (mc.clip.isRunning())
-            return;
-        mc.clip.setFramePosition(0);
-        setVolume(mc.clip, volLin); // gain FIRST
-        if (mc.looping) {
-            mc.clip.loop(Clip.LOOP_CONTINUOUSLY);
-        } else {
-            mc.clip.start();
+        for (SimpleAudioSource sas : snapshot) {
+            try {
+                sas.stop();
+            } catch (Exception ignored) {}
         }
     }
 
-    private void pause(ManagedClip mc) {
-        if (!mc.looping)
-            return;
-        if (mc.clip.isRunning())
-            mc.clip.stop();
+    //#endregion
+
+    //#region utils
+
+    private static double getVolumeFromDistance2(ISoundType st, double d2) {
+        double vol = 0;
+        if (d2 <= MAX_DISTANCE * MAX_DISTANCE) {
+            double d = Math.sqrt(d2);
+            float t = (float)(d / MAX_DISTANCE);
+            t = Math.min(1f, t);
+
+            float smooth = t * t * (3 - 2 * t);
+
+            vol = (globalVolume * st.getVolume() * (1.0 - smooth));
+        }
+        return vol;
     }
 
-    private static void setVolume(Clip clip, double lin) {
-        if (!clip.isControlSupported(FloatControl.Type.MASTER_GAIN))
+    private static void updateSound(SimpleAudioSource sas) {
+        if (!playingSoundsFromCoordinates.containsKey(sas))
             return;
-        FloatControl ctrl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        /* convert linear 0‑1 → dB ; clamp to the line’s legal range */
-        float dB = (float) (20.0 * Math.log10(Math.max(0.0001, lin)));
-        dB = Math.max(ctrl.getMinimum(), Math.min(ctrl.getMaximum(), dB));
-        ctrl.setValue(dB);
+        SoundTypeAndCoordinates stc = playingSoundsFromCoordinates.get(sas);
+        if (stc.pos.size() <= 0)
+            return;
+        Player player = world.getPlayer();
+
+        double closestDistance = Double.MAX_VALUE;
+        for (Vector pos : stc.pos) {
+            double d2 = dist2(player.getPosition(), pos);
+            if (d2 < closestDistance)
+                closestDistance = d2;
+        }
+        sas.setVolume(getVolumeFromDistance2(stc.st, closestDistance));
     }
 
-    private static double dist2(double x1, double y1, double z1,
-            double x2, double y2, double z2) {
-        double dx = x1 - x2;
-        double dy = y1 - y2;
-        double dz = z1 - z2;
+    private static void loadSound(ISoundType sound) {
+        Data data = PathManager.loadSound(sound.getPath());
+        if (data != null)
+            sounds.put(sound, data);
+    }
+
+    private static Data getData(ISoundType soundType) {
+        if (!sounds.containsKey(soundType))
+            loadSound(soundType);
+        return sounds.get(soundType);
+    }
+
+    private record SoundTypeAndCoordinates(ISoundType st, ArrayList<Vector> pos) {}
+
+    private static double dist2(Vector pos1, Vector pos2) {
+        double dx = pos1.x - pos2.x;
+        double dy = pos1.y - pos2.y;
+        double dz = pos1.z - pos2.z;
         return dx * dx + dy * dy + dz * dz;
     }
+
+    private static void playObjectInstanceSounds(ObjectInstance<?,?,?> oi, Vector pos) {
+        ISoundType st = getAmbientSoundFromObjectInstance(oi);
+        if (st != null)
+            if (needToResetAllSounds) {
+                    playSound(st);
+            }
+        st = getSoundFromObjectInstance(oi);
+        if (st != null) {
+            if (!st.isLooping() || needToResetAllSoundsFromPositions || needToResetAllSounds)
+                playSound(st, pos);
+        }
+    }
+
+    private static ISoundType getSoundFromObjectInstance(ObjectInstance<?,?,?> oi) {
+
+        if (oi.getProperty(PropertySound.NAME) != null) {
+            PropertySound soundProp = (PropertySound) oi.getProperty(PropertySound.NAME);
+            ISoundType st = soundProp.getSound();
+            if (st != null)
+                return st;
+        }
+
+        return null;
+    }
+
+    private static ISoundType getAmbientSoundFromObjectInstance(ObjectInstance<?,?,?> oi) {
+        Object state = oi.getState(SOUND);
+        if (state != null && state instanceof String soundPath) {
+            ISoundType sound = SoundType.getSoundType(soundPath);
+            if (sound != null)
+                return sound;
+        }
+
+        return null;
+    }
+
+    private static void removeFromPlayingSound(ISoundType st, SimpleAudioSource sas) {
+        var audioList = playingSounds.get(st);
+        if (audioList == null)
+            return;
+        if (audioList.size() <= 1)
+            playingSounds.remove(st);
+        else
+            audioList.remove(sas);
+    }
+
+    //#endregion
 }

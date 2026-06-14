@@ -29,8 +29,8 @@ public class GameApp {
         this.soundManager = new SoundManager(world);
         this.renderer = new GPURenderer(world);
 
-        long window = GLImageRenderer.createWindow(windowWidth, windowHeight);
-        // long window = GLImageRenderer.createFullWindow();
+        // long window = GLImageRenderer.createWindow(windowWidth, windowHeight);
+        long window = GLImageRenderer.createFullWindow();
         windowWidth = GLImageRenderer.getWidth();
         windowHeight = GLImageRenderer.getHeight();
 

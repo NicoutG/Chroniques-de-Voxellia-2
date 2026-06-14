@@ -247,13 +247,56 @@ public enum EntityTemplate {
                                 }, 10),
             },
             new Collision[] { CollisionList.BLOCK_ENTITY },
-            new Property[] { 
-                // new PropertySound(SoundType.CHICKEN, 100, 300),
-            },
+            new Property[] {},
             new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorPushable(), new EntityBehaviorExecuteAI((world, entity) -> new AIEarthDefenser(world, entity)),
             }),
             entity -> {
                 entity.setSpeed(0.08);
+            }
+        )),
+    DARK_KNIGHT(
+        apply(
+        new EntityType("darkKnight",
+            new Texture[] {
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("darkKnight/darkKnight-rest-0.png"),
+                                }, 5),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("darkKnight/darkKnight-left-0.png"),
+                                        PathManager.loadImage("darkKnight/darkKnight-left-1.png"),
+                                        PathManager.loadImage("darkKnight/darkKnight-left-2.png"),
+                                        PathManager.loadImage("darkKnight/darkKnight-left-3.png"),
+                                }, 5),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("darkKnight/darkKnight-right-0.png"),
+                                        PathManager.loadImage("darkKnight/darkKnight-right-1.png"),
+                                        PathManager.loadImage("darkKnight/darkKnight-right-2.png"),
+                                        PathManager.loadImage("darkKnight/darkKnight-right-3.png"),
+                                }, 5),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("darkKnight/darkKnight-top-0.png"),
+                                        PathManager.loadImage("darkKnight/darkKnight-top-1.png"),
+                                        PathManager.loadImage("darkKnight/darkKnight-top-2.png"),
+                                        PathManager.loadImage("darkKnight/darkKnight-top-3.png"),
+                                }, 5),
+                        new Texture(
+                                ShapeList.ALL, new BufferedImage[] {
+                                        PathManager.loadImage("darkKnight/darkKnight-bottom-0.png"),
+                                        PathManager.loadImage("darkKnight/darkKnight-bottom-1.png"),
+                                        PathManager.loadImage("darkKnight/darkKnight-bottom-2.png"),
+                                        PathManager.loadImage("darkKnight/darkKnight-bottom-3.png"),
+                                }, 5),
+            },
+            new Collision[] { CollisionList.BLOCK_ENTITY },
+            new Property[] {},
+            new EntityBehavior[] { new EntityBehaviorApplyForce(), new EntityBehaviorKill(), new EntityBehaviorPushable(), new EntityBehaviorExecuteAI((world, entity) -> new AIKnight(world, entity)),
+            }),
+            entity -> {
+                entity.setSpeed(0.1);
             }
         )),
 

@@ -30,6 +30,8 @@ public enum SoundType implements ISoundType {
     AMBIENT2("ambient/lost-in-forest-loop.wav", true, 1, true), 
     BACKGROUND_NATURE("ambient/nature-background-loop.wav", true, 4, true), 
     PIRATE_MUSIC("ambient/pirate-music-loop.wav", true, 1, true), 
+    RITES_OF_SPRING("ambient/the-rites-of-spring.wav", true, 1, true), 
+    THE_TOURNAMENT("ambient/the-tournament.wav", true, 1, true), 
     
     ;
 

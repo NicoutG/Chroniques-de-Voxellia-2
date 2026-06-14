@@ -1,8 +1,8 @@
 package audio;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import objects.ObjectInstance;
 import objects.block.Block;
@@ -23,15 +23,22 @@ public class SoundManager {
     private static final double MAX_DISTANCE = 15.0;
     private final static String SOUND = "ambientSound";
 
-    private static HashMap<ISoundType, Data> sounds = new HashMap<>();
-    private static HashMap<ISoundType, ArrayList<SimpleAudioSource>> playingSounds = new HashMap<>();
-    private static HashMap<SimpleAudioSource, SoundTypeAndCoordinates> playingSoundsFromCoordinates = new HashMap<>();
+    private static final ConcurrentHashMap<ISoundType, Data> sounds =
+        new ConcurrentHashMap<>();
+
+    private static final ConcurrentHashMap<ISoundType,
+            CopyOnWriteArrayList<SimpleAudioSource>> playingSounds =
+            new ConcurrentHashMap<>();
+
+    private static final ConcurrentHashMap<SimpleAudioSource,
+            SoundTypeAndCoordinates> playingSoundsFromCoordinates =
+            new ConcurrentHashMap<>();
 
     public SoundManager(World world) {
         if (world == null)
             return;
         SoundManager.world = world;
-        globalVolume = 0.2;
+        globalVolume = 0.5;
 
         for (ISoundType st : SoundType.values())
             loadSound(st);
@@ -39,7 +46,7 @@ public class SoundManager {
 
     public void tick() {
         // update volume
-        for (var sas : new HashSet<SimpleAudioSource>(playingSoundsFromCoordinates.keySet()))
+        for (SimpleAudioSource sas : playingSoundsFromCoordinates.keySet())
             updateSound(sas);
 
         // find sounds in property and states
@@ -92,9 +99,10 @@ public class SoundManager {
         if (st == null)
             return null;
         try {
-            if (st.isAmbient() && playingSounds.containsKey(st)) {
+            if (st.isAmbient()) {
                 var audios = playingSounds.get(st);
-                if (audios.size() > 0) {
+
+                if (audios != null && !audios.isEmpty()) {
                     SimpleAudioSource sas = audios.get(0);
                     sas.setVolume(volume);
                     if (!st.isLooping())
@@ -106,11 +114,11 @@ public class SoundManager {
             SimpleAudioSource sas = new SimpleAudioSource(data.bytes(), data.format());
             sas.setVolume(volume);
             sas.play(st.isLooping());
-            ArrayList<SimpleAudioSource> audioList;
+            CopyOnWriteArrayList<SimpleAudioSource> audioList;
             if (playingSounds.containsKey(st))
                 audioList = playingSounds.get(st);
             else {
-                audioList = new ArrayList<>();
+                audioList = new CopyOnWriteArrayList<>();
                 playingSounds.put(st, audioList);
             }
             audioList.add(sas);
@@ -128,38 +136,25 @@ public class SoundManager {
     //#region stop
 
     public static void stopAll() {
-        HashMap<ISoundType, ArrayList<SimpleAudioSource>> snapshot =
-                new HashMap<>(playingSounds);
-
-        playingSounds.clear();
-        playingSoundsFromCoordinates.clear();
 
         needToResetAllSounds = true;
 
-        for (ArrayList<SimpleAudioSource> audioList : snapshot.values()) {
+        for (var audioList : playingSounds.values())
+            for (SimpleAudioSource sas : audioList)
+                sas.stop();
 
-            for (SimpleAudioSource sas : new ArrayList<>(audioList)) {
-                try {
-                    sas.stop();
-                } catch (Exception ignored) {}
-            }
-        }
+        playingSounds.clear();
+        playingSoundsFromCoordinates.clear();
     }
 
     public static void stopAllFromCoordinates() {
 
-        HashSet<SimpleAudioSource> snapshot =
-                new HashSet<>(playingSoundsFromCoordinates.keySet());
-
-        playingSoundsFromCoordinates.clear();
-
         needToResetAllSoundsFromPositions = true;
 
-        for (SimpleAudioSource sas : snapshot) {
-            try {
-                sas.stop();
-            } catch (Exception ignored) {}
-        }
+        for (SimpleAudioSource sas : playingSoundsFromCoordinates.keySet())
+            sas.stop();
+
+        playingSoundsFromCoordinates.clear();
     }
 
     //#endregion
@@ -254,14 +249,19 @@ public class SoundManager {
         return null;
     }
 
-    private static void removeFromPlayingSound(ISoundType st, SimpleAudioSource sas) {
+    private static void removeFromPlayingSound(
+        ISoundType st,
+        SimpleAudioSource sas) {
+
         var audioList = playingSounds.get(st);
+
         if (audioList == null)
             return;
-        if (audioList.size() <= 1)
+
+        audioList.remove(sas);
+
+        if (audioList.isEmpty())
             playingSounds.remove(st);
-        else
-            audioList.remove(sas);
     }
 
     //#endregion
